@@ -14,8 +14,14 @@ define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 // @todo Organize this in a meaningful way.
 function cboxol_init() {
 	// @todo cbox checks
+	if ( version_compare( PHP_VERSION, '5.3', '<' ) && current_user_can( 'install_plugins' ) ) {
+		add_action( 'admin_notices', 'bhssh_php_admin_notice' );
+		return;
+	}
 
-	include CBOXOL_PLUGIN_DIR . 'includes/member-types.php';
+	require dirname( __FILE__ ) . '/autoload.php';
+
+	require CBOXOL_PLUGIN_DIR . 'includes/member-types.php';
 
 	if ( is_admin() ) {
 		include CBOXOL_PLUGIN_DIR . 'includes/admin.php';
