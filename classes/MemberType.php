@@ -4,6 +4,8 @@ namespace CBOX\OL;
 
 class MemberType {
 	protected $data = array(
+		'name' => '',
+		'description' => '',
 		'labels' => array(),
 	);
 
@@ -13,6 +15,9 @@ class MemberType {
 
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
+
+		$this->set_name( $post->post_title );
+		$this->set_description( $post->post_content );
 
 		$saved_labels = get_post_meta( $post->ID, 'cboxol_member_type_labels', true );
 		if ( empty( $saved_labels ) ) {
@@ -28,6 +33,14 @@ class MemberType {
 		}
 
 		return $type;
+	}
+
+	protected function set_name( $name ) {
+		$this->data['name'] = $name;
+	}
+
+	protected function set_description( $description ) {
+		$this->data['description'] = $description;
 	}
 
 	protected function set_label( $label_type, $label ) {
