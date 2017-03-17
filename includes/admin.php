@@ -92,7 +92,7 @@ function cboxol_admin_header( $parent_page, $sub_page ) {
 	$parent_title = $sub_title = '';
 
 	$title = sprintf(
-		'<h2 class="page-title">%s: %s</h2>',
+		'<h1>%s: %s</h1>',
 		cboxol_admin_page_label( $parent_page ),
 		cboxol_admin_subpage_label( $parent_page, $sub_page )
 	);
@@ -124,7 +124,7 @@ function cboxol_admin_tabs( $parent_page, $active_tab = '' ) {
 		$tabs_html .= '<a href="' . esc_url( $tab_data['href'] ) . '" class="' . esc_attr( $tab_class ) . '">' . esc_html( $tab_data['label'] ) . '</a>';
 	}
 
-	echo $tabs_html;
+	echo '<h2 class="nav-tab-wrapper">' . $tabs_html . '</h2>';
 }
 
 /**
