@@ -25,7 +25,7 @@ function cboxol_register_admin_menu() {
 		__( 'Member Settings', 'cbox-openlab-core' ),
 		__( 'Member Settings', 'cbox-openlab-core' ),
 		'manage_network_options',
-		cboxol_admin_slug( 'member-settings' ),
+		cboxol_admin_slug( 'member-settings', 'types' ),
 		'cboxol_membertypes_admin_page',
 		'',
 		2
@@ -138,22 +138,22 @@ function cboxol_get_admin_tabs( $parent_page ) {
 		case 'member-settings' :
 			$tabs = array(
 				'0' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'types' ), 'admin.php' ) ) ),
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'types' ) ), 'admin.php' ) ),
 					'name' => 'types',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'types' ),
 				),
 				'1' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'signup-codes' ), 'admin.php' ) ) ),
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'signup-codes' ) ), 'admin.php' ) ),
 					'name' => 'signup-codes',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'signup-codes' ),
 				),
 				'2' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'categories' ), 'admin.php' ) ) ),
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'categories' ) ), 'admin.php' ) ),
 					'name' => 'categories',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'categories' ),
 				),
 				'3' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'profile-fields' ), 'admin.php' ) ) ),
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'profile-fields' ) ), 'admin.php' ) ),
 					'name' => 'profile-fields',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'profile-fields' ),
 				),
