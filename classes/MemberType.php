@@ -16,8 +16,8 @@ class MemberType {
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 
-		$this->set_name( $post->post_title );
-		$this->set_description( $post->post_content );
+		$type->set_name( $post->post_title );
+		$type->set_description( $post->post_content );
 
 		$saved_labels = get_post_meta( $post->ID, 'cboxol_member_type_labels', true );
 		if ( empty( $saved_labels ) ) {
