@@ -36,38 +36,131 @@ function cboxol_admin_about_page() {
 	echo 'This is the about page.';
 }
 
-function cboxol_admin_slug( $page = '' ) {
-	switch ( $page ) {
+function cboxol_admin_slug( $parent_page = '', $sub_page = '' ) {
+	switch ( $parent_page ) {
 		case 'member-settings' :
-			return 'cbox-ol-member-settings';
+			switch ( $sub_page ) {
+				case 'types' :
+					return 'cbox-ol-member-types';
+
+				case 'signup-codes' :
+					return 'cbox-ol-signup-codes';
+
+				case 'categories' :
+					return 'cbox-ol-member-categories';
+
+				// @todo this will probably go to the BP screen?
+				case 'profile-fields' :
+					return 'cbox-ol-profile-fields';
+
+				default :
+					return 'cbox-ol-member-settings';
+			}
 
 		default :
 			return 'cbox-ol';
 	}
 }
 
+function cboxol_admin_page_label( $page ) {
+	switch ( $page ) {
+		case 'member-settings' :
+			return __( 'Member Settings', 'cbox-openlab-core' );
+	}
+}
+
+function cboxol_admin_subpage_label( $parent_page, $page ) {
+	switch ( $parent_page ) {
+		case 'member-settings' :
+			switch ( $page ) {
+				case 'types' :
+					return _x( 'Types', 'Member Types admin label', 'cbox-openlab-core' );
+
+				case 'signup-codes' :
+					return _x( 'Signup Codes', 'Signup Codes admin label', 'cbox-openlab-core' );
+
+				case 'categories' :
+					return _x( 'Categories', 'Member categories admin label', 'cbox-openlab-core' );
+
+				case 'profile-fields' :
+					return _x( 'Profile Fields', 'Member profile fields admin label', 'cbox-openlab-core' );
+			}
+	}
+}
+
 function cboxol_admin_header( $parent_page, $sub_page ) {
 	$parent_title = $sub_title = '';
 
+	$title = sprintf(
+		'<h2 class="page-title">%s: %s</h2>',
+		cboxol_admin_page_label( $parent_page ),
+		cboxol_admin_subpage_label( $parent_page, $sub_page )
+	);
+
+	echo $title;
+
+	cboxol_admin_tabs( $parent_page, $sub_page );
+}
+
+/**
+ * Output the tabs in the admin area.
+ *
+ * @since 1.5.0
+ *
+ * @param string $parent_page Parent page.
+ * @param string $active_tab  Name of the tab that is active. Optional.
+ */
+function cboxol_admin_tabs( $parent_page, $active_tab = '' ) {
+	$tabs_html    = '';
+	$idle_class   = 'nav-tab';
+	$active_class = 'nav-tab nav-tab-active';
+
+	$tabs = cboxol_get_admin_tabs( $parent_page );
+
+	// Loop through tabs and build navigation.
+	foreach ( array_values( $tabs ) as $tab_data ) {
+		$is_current = (bool) ( $tab_data['name'] == $active_tab );
+		$tab_class  = $is_current ? $active_class : $idle_class;
+		$tabs_html .= '<a href="' . esc_url( $tab_data['href'] ) . '" class="' . esc_attr( $tab_class ) . '">' . esc_html( $tab_data['label'] ) . '</a>';
+	}
+
+	echo $tabs_html;
+}
+
+/**
+ * Get the data for the tabs in the admin area.
+ *
+ * @param string $parent_page Name of the tab that is active. Optional.
+ * @return array
+ */
+function cboxol_get_admin_tabs( $parent_page ) {
 	switch ( $parent_page ) {
 		case 'member-settings' :
-			$parent_title = __( 'Member Settings', 'cbox-openlab-core' );
+			$tabs = array(
+				'0' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'types' ), 'admin.php' ) ) ),
+					'name' => 'types',
+					'label' => cboxol_admin_subpage_label( 'member-settings', 'types' ),
+				),
+				'1' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'signup-codes' ), 'admin.php' ) ) ),
+					'name' => 'signup-codes',
+					'label' => cboxol_admin_subpage_label( 'member-settings', 'signup-codes' ),
+				),
+				'2' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'categories' ), 'admin.php' ) ) ),
+					'name' => 'categories',
+					'label' => cboxol_admin_subpage_label( 'member-settings', 'categories' ),
+				),
+				'3' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'profile-fields' ), 'admin.php' ) ) ),
+					'name' => 'profile-fields',
+					'label' => cboxol_admin_subpage_label( 'member-settings', 'profile-fields' ),
+				),
+			);
 
-			switch ( $sub_page ) {
-				case 'types' :
-					$sub_title = _x( 'Types', 'Member Types subnav title', 'cbox-openlab-core' );
-					break;
-			}
 			break;
 	}
 
-	$title = sprintf(
-		'<h2 class="page-title">%s: %s</h2>',
-		$parent_title,
-		$sub_title
-	);
-
-	$html = $title;
-
-	echo $html;
+	return $tabs;
 }
