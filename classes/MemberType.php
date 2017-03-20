@@ -10,10 +10,20 @@ class MemberType {
 		'labels' => array(),
 		'can_create_courses' => false,
 		'selectable_types' => array(),
+		'is_enabled' => true,
+		'wp_post_id' => 0,
 	);
 
 	public function get_slug() {
 		return $this->data['slug'];
+	}
+
+	public function get_name() {
+		return $this->data['name'];
+	}
+
+	public function get_description() {
+		return $this->data['description'];
 	}
 
 	public function get_label( $label_type ) {
@@ -36,6 +46,38 @@ class MemberType {
 	public function get_selectable_types() {
 		// @todo Should validate types here (can't do on setup because it will trigger a loop).
 		return $this->data['selectable_types'];
+	}
+
+	/**
+	 * Get a human-readable, comma-separated list of labels for this type's selectable types.
+	 *
+	 * @return string
+	 */
+	public function get_selectable_types_list() {
+		$list = '';
+
+		$selectable_types = $this->get_selectable_types();
+		$labels = array();
+		foreach ( $selectable_types as $selectable_type ) {
+			$selectable_type_obj = cboxol_get_member_type( $selectable_type );
+			if ( $selectable_type_obj ) {
+				$labels[] = $selectable_type_obj->get_name();
+			}
+		}
+
+		if ( $labels ) {
+			$list = implode( ', ', $labels );
+		}
+
+		return $list;
+	}
+
+	public function get_is_enabled() {
+		return (bool) $this->data['is_enabled'];
+	}
+
+	public function get_wp_post_id() {
+		return (int) $this->data['wp_post_id'];
 	}
 
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
@@ -68,6 +110,12 @@ class MemberType {
 		$selectable_types_db = get_post_meta( $post->ID, 'cboxol_member_type_selectable_types', true );
 		$type->set_selectable_types( $selectable_types_db );
 
+		// Enabled.
+		$type->set_is_enabled( 'publish' === $post->post_status );
+
+		// WP post ID.
+		$type->set_wp_post_id( $post->ID );
+
 		return $type;
 	}
 
@@ -97,6 +145,14 @@ class MemberType {
 		}
 
 		$this->data['selectable_types'] = $types;
+	}
+
+	protected function set_is_enabled( $is_enabled ) {
+		$this->data['is_enabled'] = (bool) $is_enabled;
+	}
+
+	protected function set_wp_post_id( $wp_post_id ) {
+		$this->data['wp_post_id'] = (int) $wp_post_id;
 	}
 
 	protected static function get_label_types() {

@@ -1,3 +1,37 @@
+/** Type summary page */
+.cboxol-types-admin li {
+	margin-bottom: 2em;
+}
+
+input.enabled-type-checkbox {
+	float: left;
+	margin-top: 2px;
+}
+
+.cboxol-types-admin .type-content {
+	padding-left: 30px;
+}
+
+.type-header label {
+	font-size: 1rem;
+	font-weight: bold;
+	margin-right: 10px;
+	vertical-align: top;
+}
+
+.type-description {
+	font-style: italic;
+}
+
+.cboxol-types-admin table.widefat.cboxol-metabox-table {
+	box-shadow: none;
+}
+
+.cboxol-types-admin table.widefat.cboxol-metabox-table th {
+	padding-left: 0;
+}
+
+/** Single Type admin page */
 table.widefat.cboxol-metabox-table {
 	background: transparent;
 	border: none;

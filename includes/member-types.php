@@ -31,10 +31,49 @@ function cboxol_membertypes_register_post_type() {
 	) );
 }
 
-function cboxol_get_member_types() {
+
+/**
+ * Get a single registered Member Type.
+ *
+ * @param string $type Slug of the type.
+ * @return \CBOX\OL\MemberType|null
+ */
+function cboxol_get_member_type( $slug ) {
+	$types = cboxol_get_member_types( array(
+		'enabled' => null,
+	) );
+
+	if ( isset( $types[ $slug ] ) ) {
+		return $types[ $slug ];
+	}
+
+	return null;
+}
+
+/**
+ * Get registered Member Types.
+ *
+ * @params array $args {
+ *     Array of optional arguments.
+ *     @type bool|null $enabled Filter by 'enabled' status. True returns only enabled Types, false returns
+ *                              only disabled types. Null returns all.
+ * }
+ */
+function cboxol_get_member_types( $args = array() ) {
+	$r = array_merge( array(
+		'enabled' => true,
+	), $args );
+
+	$post_status = 'publish';
+	if ( false === $r['enabled'] ) {
+		$post_status = 'draft';
+	} elseif ( null === $r['enabled'] ) {
+		$post_status = 'any';
+	}
+
 	$type_posts = get_posts( array(
 		'post_type' => 'cboxol_member_type',
-		'post_status' => 'publish',
+		'post_status' => 'any',
 		'posts_per_page' => -1,
 		'orderby' => 'title',
 		'order' => 'ASC',
@@ -50,14 +89,63 @@ function cboxol_get_member_types() {
 
 function cboxol_membertypes_admin_page() {
 
-	$types = cboxol_get_member_types();
+	$types = cboxol_get_member_types( array(
+		'enabled' => null,
+	) );
 
 	?>
 	<div class="wrap">
 		<?php cboxol_admin_header( 'member-settings', 'types' ); ?>
 
 		<?php /* @todo */ ?>
-		<p>Et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+		<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+
+		<form method="post" action="">
+			<ul class="cboxol-types-admin">
+			<?php foreach ( $types as $type ) : ?>
+				<li>
+					<input type="checkbox" id="enabled-types-<?php echo esc_attr( $type->get_slug() ); ?>" name="enabled-types[]" value="<?php echo $type->get_slug(); ?>" class="enabled-type-checkbox" <?php checked( $type->get_is_enabled() ); ?> />
+					<div class="type-content">
+						<div class="type-header">
+							<label for="enabled-types-<?php echo esc_attr( $type->get_slug() ); ?>"><?php echo esc_html( $type->get_name() ); ?></label> <a class="type-edit-link" href="<?php echo esc_url( get_edit_post_link( $type->get_wp_post_id() ) ); ?>"><?php echo esc_html( _x( 'Edit', 'Edit link for member/group type', 'cbox-openlab' ) ); ?></a>
+						</div>
+
+						<?php if ( $description = $type->get_description() ) : ?>
+							<div class="type-description">
+								<?php echo wpautop( $description ); ?>
+							</div>
+						<?php endif; ?>
+
+						<table class="widefat cboxol-metabox-table">
+							<?php /* @todo needs a Courses check */ ?>
+							<tr>
+								<th scope="row">
+									<?php esc_html_e( 'Member may create Courses', 'cbox-openlab' ); ?>
+								</th>
+
+								<td>
+									<strong><?php echo esc_attr( $type->get_can_create_courses() ? __( 'Yes', 'cbox-openlab' ) : __( 'No', 'cbox-openlab' ) ); ?></strong>
+								</td>
+							</tr>
+
+							<tr>
+								<th scope="row">
+									<?php esc_html_e( 'Member may change Type to', 'cbox-openlab' ); ?>
+								</th>
+
+								<td>
+									<strong><?php echo esc_html( $type->get_selectable_types_list() ); ?></strong>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</li>
+			<?php endforeach; ?>
+			</ul>
+
+			<?php wp_nonce_field( 'types_enable', 'types-enable-nonce', false ); ?>
+			<?php submit_button( 'Save Changes' ); ?>
+		</form>
 	</div>
 	<?php
 }
@@ -81,6 +169,39 @@ function cboxol_membertypes_register_meta_boxes() {
 		'cboxol_member_type',
 		'advanced'
 	);
+}
+
+function cboxol_membertypes_process_form_submit() {
+	if ( ! current_user_can( 'manage_network_settings' ) ) {
+		return;
+	}
+
+	if ( ! isset( $_POST['types-enable-nonce'] ) || ! wp_verify_nonce( $_POST['types-enable-nonce'], 'types_enable' ) ) {
+		return;
+	}
+
+	$enabled_types = array();
+	if ( isset( $_POST['enabled-types'] ) ) {
+		$enabled_types = wp_unslash( $_POST['enabled-types'] );
+	}
+
+	$all_types = cboxol_get_member_types( array(
+		'enabled' => null,
+	) );
+
+	foreach ( $all_types as $type ) {
+		if ( $type->get_is_enabled() && ! in_array( $type->get_slug(), $enabled_types, true ) ) {
+			wp_update_post( array(
+				'ID' => $type->get_wp_post_id(),
+				'post_status' => 'draft',
+			) );
+		} elseif ( ! $type->get_is_enabled() && in_array( $type->get_slug(), $enabled_types, true ) ) {
+			wp_update_post( array(
+				'ID' => $type->get_wp_post_id(),
+				'post_status' => 'publish',
+			) );
+		}
+	}
 }
 
 // @todo should be abstracted for group types
