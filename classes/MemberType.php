@@ -4,11 +4,26 @@ namespace CBOX\OL;
 
 class MemberType {
 	protected $data = array(
+		'slug' => '',
 		'name' => '',
 		'description' => '',
 		'labels' => array(),
 		'can_create_courses' => false,
+		'selectable_types' => array(),
 	);
+
+	public function get_slug() {
+		return $this->data['slug'];
+	}
+
+	public function get_label( $label_type ) {
+		$label = null;
+		if ( isset( $this->data['labels'][ $label_type ] ) ) {
+			$label = $this->data['labels'][ $label_type ]['value'];
+		}
+
+		return $label;
+	}
 
 	public function get_labels() {
 		return $this->data['labels'];
@@ -18,9 +33,15 @@ class MemberType {
 		return (bool) $this->data['can_create_courses'];
 	}
 
+	public function get_selectable_types() {
+		// @todo Should validate types here (can't do on setup because it will trigger a loop).
+		return $this->data['selectable_types'];
+	}
+
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 
+		$type->set_slug( $post->post_name );
 		$type->set_name( $post->post_title );
 		$type->set_description( $post->post_content );
 
@@ -43,7 +64,15 @@ class MemberType {
 		$can_create_courses = 'yes' === $can_create_courses_db;
 		$type->set_can_create_courses( $can_create_courses );
 
+		// Selectable types ("Member may change Type to...").
+		$selectable_types_db = get_post_meta( $post->ID, 'cboxol_member_type_selectable_types', true );
+		$type->set_selectable_types( $selectable_types_db );
+
 		return $type;
+	}
+
+	protected function set_slug( $slug ) {
+		$this->data['slug'] = $slug;
 	}
 
 	protected function set_name( $name ) {
@@ -60,6 +89,14 @@ class MemberType {
 
 	protected function set_can_create_courses( $can ) {
 		$this->data['can_create_courses'] = (bool) $can;
+	}
+
+	protected function set_selectable_types( $types ) {
+		if ( ! is_array( $types ) ) {
+			$types = array();
+		}
+
+		$this->data['selectable_types'] = $types;
 	}
 
 	protected static function get_label_types() {

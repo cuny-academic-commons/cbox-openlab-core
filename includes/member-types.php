@@ -44,6 +44,8 @@ function cboxol_get_member_types() {
 	foreach ( $type_posts as $type_post ) {
 		$types[ $type_post->post_name ] = \CBOX\OL\MemberType::get_instance_from_wp_post( $type_post );
 	}
+
+	return $types;
 }
 
 function cboxol_membertypes_admin_page() {
@@ -130,6 +132,16 @@ function cboxol_membertypes_settings_metabox( WP_Post $post ) {
 
 	$can_create_courses = $type->get_can_create_courses();
 
+	// Exclude current type from list. @todo add exclude as option in cboxol_get_member_types()?
+	$member_types_raw = cboxol_get_member_types();
+	$member_types = array();
+	foreach ( $member_types_raw as $member_type_slug => $member_type_raw ) {
+		if ( $type->get_slug() !== $member_type_raw->get_slug() ) {
+			$member_types[ $member_type_slug ] = $member_type_raw;
+		}
+	}
+	$can_change_to = $type->get_selectable_types();
+
 	wp_enqueue_style( 'cbox-ol-admin' );
 
 	?>
@@ -148,6 +160,21 @@ function cboxol_membertypes_settings_metabox( WP_Post $post ) {
 			</tr>
 		</fieldset>
 
+		<tr>
+			<th scope="row">
+				<label for="member-type-can-change-to"><?php esc_html_e( 'Member may change Type to', 'cbox-openlab-core' ); ?></legend>
+			</th>
+
+			<td>
+				<ul>
+				<?php foreach ( $member_types as $member_type ) : ?>
+					<li>
+						<input type="checkbox" id="member-type-can-change-to-<?php echo esc_attr( $member_type->get_slug() ); ?>" name="member-type-can-change-to[]" value="<?php echo esc_attr( $member_type->get_slug() ); ?>" <?php checked( in_array( $member_type->get_slug(), $can_change_to, true ) ); ?> /> <label for="member-type-can-change-to-<?php echo esc_attr( $member_type->get_slug() ); ?>"><?php echo esc_html( $member_type->get_label( 'singular' ) ); ?></label>
+					</li>
+				<?php endforeach; ?>
+				</ul>
+			</td>
+		</tr>
 	</table>
 	<?php
 
@@ -163,10 +190,15 @@ function cboxol_membertypes_save_settings( $post_id ) {
 		return;
 	}
 
-	if ( isset( $_POST['member-type-can-create-courses'] ) ) {
-		$can_create_courses = 'yes' === $_POST['member-type-can-create-courses'] ? 'yes' : 'no';
-		update_post_meta( $post_id, 'cboxol_member_type_can_create_courses', $can_create_courses );
+	$can_create_courses = 'yes' === isset( $_POST['member-type-can-create-courses'] ) && $_POST['member-type-can-create-courses'] ? 'yes' : 'no';
+	update_post_meta( $post_id, 'cboxol_member_type_can_create_courses', $can_create_courses );
+
+	// @todo validate
+	$can_change_to = array();
+	if ( ! empty( $_POST['member-type-can-change-to'] ) ) {
+		foreach ( $_POST['member-type-can-change-to'] as $change_to_type ) {
+			$can_change_to[] = wp_unslash( $change_to_type );
+		}
 	}
-//	$can_create_courses = isset( $_POST['type-labels'] ) ? wp_unslash( $_POST['type-labels'] ) : array();
-//	update_post_meta( $post_id, 'cboxol_member_type_labels', $labels );
+	update_post_meta( $post_id, 'cboxol_member_type_selectable_types', $can_change_to );
 }
