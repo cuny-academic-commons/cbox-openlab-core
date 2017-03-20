@@ -290,7 +290,7 @@ function cboxol_membertypes_settings_metabox( WP_Post $post ) {
 				<ul>
 				<?php foreach ( $member_types as $member_type ) : ?>
 					<li>
-						<input type="checkbox" id="member-type-can-change-to-<?php echo esc_attr( $member_type->get_slug() ); ?>" name="member-type-can-change-to[]" value="<?php echo esc_attr( $member_type->get_slug() ); ?>" <?php checked( in_array( $member_type->get_slug(), $can_change_to, true ) ); ?> /> <label for="member-type-can-change-to-<?php echo esc_attr( $member_type->get_slug() ); ?>"><?php echo esc_html( $member_type->get_label( 'singular' ) ); ?></label>
+						<input type="checkbox" id="member-type-can-change-to-<?php echo esc_attr( $member_type->get_slug() ); ?>" name="member-type-can-change-to[]" value="<?php echo esc_attr( $member_type->get_slug() ); ?>" <?php checked( in_array( $member_type->get_slug(), $can_change_to, true ) ); ?> /> <label for="member-type-can-change-to-<?php echo esc_attr( $member_type->get_slug() ); ?>"><?php echo esc_html( $member_type->get_name() ); ?></label>
 					</li>
 				<?php endforeach; ?>
 				</ul>
