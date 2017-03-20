@@ -8,6 +8,7 @@ add_action( 'init', 'cboxol_membertypes_register_post_type' );
 
 add_action( 'add_meta_boxes', 'cboxol_membertypes_register_meta_boxes' );
 add_action( 'save_post', 'cboxol_membertypes_save_labels' );
+add_action( 'save_post', 'cboxol_membertypes_save_settings' );
 
 function cboxol_membertypes_register_post_type() {
 	register_post_type( 'cboxol_member_type', array(
@@ -69,6 +70,15 @@ function cboxol_membertypes_register_meta_boxes() {
 		'advanced',
 		'high'
 	);
+
+	// Settings.
+	add_meta_box(
+		'cbox-ol-member-type-settings',
+		_x( 'Settings', 'Member type settings metabox title', 'cbox-openlab-core' ),
+		'cboxol_membertypes_settings_metabox',
+		'cboxol_member_type',
+		'advanced'
+	);
 }
 
 // @todo should be abstracted for group types
@@ -78,7 +88,7 @@ function cboxol_membertypes_labels_metabox( WP_Post $post ) {
 	?>
 	<p><?php esc_html_e( 'Provide the labels that will be used in the interface when describing members of this type.', 'cbox-openlab-core' ); ?></p>
 
-	<table class="widefat">
+	<table class="widefat cboxol-metabox-table">
 	<?php foreach ( $type->get_labels() as $label_type => $label_labels ) : ?>
 		<tr>
 			<th>
@@ -113,4 +123,51 @@ function cboxol_membertypes_save_labels( $post_id ) {
 
 	$labels = isset( $_POST['type-labels'] ) ? wp_unslash( $_POST['type-labels'] ) : array();
 	update_post_meta( $post_id, 'cboxol_member_type_labels', $labels );
+}
+
+function cboxol_membertypes_settings_metabox( WP_Post $post ) {
+	$type = \CBOX\OL\MemberType::get_instance_from_wp_post( $post );
+
+	$can_create_courses = $type->get_can_create_courses();
+
+	wp_enqueue_style( 'cbox-ol-admin' );
+
+	?>
+
+	<table class="widefat cboxol-metabox-table">
+		<?php /* @todo When Group Types are in place, check for Courses */ ?>
+		<fieldset>
+			<tr>
+				<th scope="row">
+					<?php /* <legend><?php esc_html_e( 'Member may create courses', 'cbox-openlab-core' ); ?></legend> */ ?>
+					<?php esc_html_e( 'Member may create courses', 'cbox-openlab-core' ); ?>
+				</th>
+
+				<td>
+					<label for="member-type-can-create-courses-yes"><input type="radio" name="member-type-can-create-courses" value="yes" id="member-type-can-create-courses-yes" <?php checked( $can_create_courses ); ?> /> <?php esc_html_e( 'Yes', 'cbox-openlab-core' ); ?> &nbsp; <label for="member-type-can-create-courses-no"><input type="radio" name="member-type-can-create-courses" value="no" id="member-type-can-create-courses-no" <?php checked( ! $can_create_courses ); ?> /><?php esc_html_e( 'No', 'cbox-openlab-core' ); ?></label>
+				</td>
+			</tr>
+		</fieldset>
+
+	</table>
+	<?php
+
+	wp_nonce_field( 'type_settings-' . $post->ID, 'type-settings-nonce', false );
+}
+
+function cboxol_membertypes_save_settings( $post_id ) {
+	if ( ! isset( $_POST['type-settings-nonce'] ) || ! wp_verify_nonce( $_POST['type-settings-nonce'], 'type_settings-' . $post_id ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+
+	if ( isset( $_POST['member-type-can-create-courses'] ) ) {
+		$can_create_courses = 'yes' === $_POST['member-type-can-create-courses'] ? 'yes' : 'no';
+		update_post_meta( $post_id, 'cboxol_member_type_can_create_courses', $can_create_courses );
+	}
+//	$can_create_courses = isset( $_POST['type-labels'] ) ? wp_unslash( $_POST['type-labels'] ) : array();
+//	update_post_meta( $post_id, 'cboxol_member_type_labels', $labels );
 }

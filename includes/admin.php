@@ -5,6 +5,7 @@
  */
 
 add_action( 'admin_menu', 'cboxol_register_admin_menu' );
+add_action( 'admin_enqueue_scripts', 'cboxol_register_assets' );
 
 function cboxol_register_admin_menu() {
 	// @todo only add on "main" site
@@ -30,6 +31,12 @@ function cboxol_register_admin_menu() {
 		'',
 		2
 	);
+}
+
+function cboxol_register_assets() {
+	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );
+	// @todo More specific.
+	wp_enqueue_style( 'cbox-ol-admin' );
 }
 
 function cboxol_admin_about_page() {
