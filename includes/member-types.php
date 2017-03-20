@@ -139,8 +139,7 @@ function cboxol_membertypes_settings_metabox( WP_Post $post ) {
 		<fieldset>
 			<tr>
 				<th scope="row">
-					<?php /* <legend><?php esc_html_e( 'Member may create courses', 'cbox-openlab-core' ); ?></legend> */ ?>
-					<?php esc_html_e( 'Member may create courses', 'cbox-openlab-core' ); ?>
+					<legend><?php esc_html_e( 'Member may create courses', 'cbox-openlab-core' ); ?></legend>
 				</th>
 
 				<td>
