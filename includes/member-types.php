@@ -360,3 +360,23 @@ function cboxol_get_user_member_type_label( $user_id ) {
 
 	return $label;
 }
+
+/**
+ * Get a list of selectable member types for a given user.
+ *
+ * @param int $user_id
+ * @return array
+ */
+function cboxol_get_selectable_member_types_for_user( $user_id ) {
+	$selectable_types = array();
+
+	$type = bp_get_member_type( $user_id );
+	if ( $type ) {
+		$type_obj = cboxol_get_member_type( $type );
+		if ( $type_obj ) {
+			$selectable_types = $type_obj->get_selectable_types();
+		}
+	}
+
+	return $selectable_types;
+}
