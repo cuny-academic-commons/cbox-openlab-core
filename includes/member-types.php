@@ -341,3 +341,22 @@ function cboxol_membertypes_save_settings( $post_id ) {
 	}
 	update_post_meta( $post_id, 'cboxol_member_type_selectable_types', $can_change_to );
 }
+
+/**
+ * Get the (singular) label corresponding to a user's member type.
+ *
+ * @param int $user_id
+ * @return string
+ */
+function cboxol_get_user_member_type_label( $user_id ) {
+	$label = '';
+	$member_type = bp_get_member_type( $user_id );
+	if ( $member_type ) {
+		$member_type_obj = bp_get_member_type_object( $member_type );
+		if ( $member_type_obj ) {
+			$label = $member_type_obj->labels['singular_name'];
+		}
+	}
+
+	return $label;
+}
