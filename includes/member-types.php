@@ -5,6 +5,7 @@
  */
 
 add_action( 'init', 'cboxol_membertypes_register_post_type' );
+add_action( 'bp_register_member_types', 'cboxol_membertypes_register_member_types' );
 
 add_action( 'add_meta_boxes', 'cboxol_membertypes_register_meta_boxes' );
 add_action( 'save_post', 'cboxol_membertypes_save_labels' );
@@ -31,6 +32,23 @@ function cboxol_membertypes_register_post_type() {
 	) );
 }
 
+/**
+ * Register member types with BuddyPress.
+ */
+function cboxol_membertypes_register_member_types() {
+	$saved_types = cboxol_get_member_types();
+
+	// @todo Conflict checking? Prefixing?
+	foreach ( $saved_types as $saved_type ) {
+		bp_register_member_type( $saved_type->get_slug(), array(
+			'labels' => array(
+				'name' => $saved_type->get_label( 'plural' ),
+				'singular_name' => $saved_type->get_label( 'singular' ),
+			),
+			'has_directory' => true,
+		) );
+	}
+}
 
 /**
  * Get a single registered Member Type.
