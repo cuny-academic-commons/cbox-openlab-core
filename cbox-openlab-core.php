@@ -22,7 +22,12 @@ function cboxol_init() {
 
 	require dirname( __FILE__ ) . '/autoload.php';
 
+	require CBOXOL_PLUGIN_DIR . 'includes/functions.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/member-types.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/group-types.php';
+
+	// @todo Better loading for these libraries.
+	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';
 
 	if ( is_admin() ) {
 		include CBOXOL_PLUGIN_DIR . 'includes/admin.php';
