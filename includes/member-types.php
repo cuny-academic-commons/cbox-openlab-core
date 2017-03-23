@@ -11,6 +11,8 @@ add_action( 'add_meta_boxes', 'cboxol_membertypes_register_meta_boxes' );
 add_action( 'save_post', 'cboxol_membertypes_save_labels' );
 add_action( 'save_post', 'cboxol_membertypes_save_settings' );
 
+add_action( 'xprofile_updated_profile', 'cboxol_membertypes_process_change' );
+
 function cboxol_membertypes_register_post_type() {
 	register_post_type( 'cboxol_member_type', array(
 		'labels' => array(
@@ -379,4 +381,31 @@ function cboxol_get_selectable_member_types_for_user( $user_id ) {
 	}
 
 	return $selectable_types;
+}
+
+/**
+ * Process a change in member type initiated from the profile edit screen.
+ *
+ * @param int $user_id
+ */
+function cboxol_membertypes_process_change( $user_id ) {
+	if ( ! isset( $_POST['member-type'] ) ) {
+		return;
+	}
+
+	$new_type = wp_unslash( $_POST['member-type'] );
+
+	// Ensure that user has the ability to do this.
+	$can_change = current_user_can( 'bp_moderate' );
+	if ( ! $can_change ) {
+		$selectable_types = cboxol_get_selectable_member_types_for_user( $user_id );
+		$can_change = in_array( $new_type, $selectable_types, true );
+	}
+
+	// Will return here if there's no change.
+	if ( ! $can_change ) {
+		return;
+	}
+
+	bp_set_member_type( $user_id, $new_type );
 }
