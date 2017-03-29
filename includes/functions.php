@@ -91,3 +91,22 @@ function openlab_is_my_profile() {
 
 	return false;
 }
+
+/** Upgrade/install **********************************************************/
+
+/**
+ * Detect whether CBOX-OL must install or upgrade, and run upgrader.
+ */
+function cboxol_maybe_install() {
+	$ver = get_site_option( 'cboxol_ver' );
+
+	if ( ! $ver ) {
+		$install = \CBOX\OL\Install::get_instance();
+		$install->install();
+	} elseif ( version_compare( CBOXOL_PLUGIN_VER, $ver, '>' ) ) {
+		$install = \CBOX\OL\Install::get_instance();
+		$install->upgrade();
+	}
+
+	update_site_option( 'cboxol_ver', CBOXOL_PLUGIN_VER );
+}

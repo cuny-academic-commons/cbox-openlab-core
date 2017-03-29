@@ -11,6 +11,7 @@
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'CBOXOL_PLUGIN_VER', '1.0-alpha-20170329' );
 
 // @todo Organize this in a meaningful way.
 function cboxol_init() {
@@ -32,5 +33,7 @@ function cboxol_init() {
 	if ( is_admin() ) {
 		include CBOXOL_PLUGIN_DIR . 'includes/admin.php';
 	}
+
+	cboxol_maybe_install();
 }
 add_action( 'plugins_loaded', 'cboxol_init' );
