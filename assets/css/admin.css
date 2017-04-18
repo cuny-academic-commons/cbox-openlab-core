@@ -1,4 +1,48 @@
 /** Type summary page */
+
+.types-ui {
+	background: #fff;
+}
+
+.cboxol-item-type {
+	margin-bottom: 14px;
+}
+
+.cboxol-item-type-header {
+	background: #ededed;
+	border: 1px solid #ccc;
+	font-size: 12pt;
+	overflow: hidden;
+	padding: 8px 12px;
+	width: 90%;
+}
+
+.cboxol-item-type-header-label {
+	float: left;
+	width: 75%;
+}
+
+.cboxol-item-type-header-actions {
+	float: left;
+	width: 20%;
+	text-align: right;
+}
+
+.cboxol-item-type.collapsed .cboxol-item-type-header {
+	background: transparent;
+}
+
+.cboxol-item-type.collapsed .cboxol-item-type-content {
+	display: none;
+}
+
+.cboxol-item-type-content {
+	border: 1px solid #ccc;
+	border-top: none;
+	padding: 8px 12px;
+	width: 90%;
+}
+
 .cboxol-types-admin li {
 	margin-bottom: 2em;
 }

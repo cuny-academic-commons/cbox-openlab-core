@@ -35,6 +35,42 @@ function cboxol_register_admin_menu() {
 }
 
 function cboxol_register_assets() {
+	/*
+	wp_register_script(
+		'cbox-ol-types-ui',
+		CBOXOL_PLUGIN_URL . 'assets/js/types-ui.js',
+		array(
+			'jquery',
+			'jquery-ui-core',
+			'jquery-ui-accordion',
+			'jquery-ui-sortable',
+			'jquery-ui-draggable',
+		)
+	);
+	wp_enqueue_script( 'cbox-ol-types-ui' );
+
+	wp_register_script(
+		'cbox-ol-member-types-ui',
+		CBOXOL_PLUGIN_URL . 'build.js',
+		array(
+			'cbox-ol-types-ui',
+		)
+	);
+	wp_enqueue_script( 'cbox-ol-member-types-ui' );
+	*/
+
+	wp_enqueue_script(
+		'cbox-ol-admin',
+		CBOXOL_PLUGIN_URL . 'assets/js/build.js',
+		array(),
+		123, // @todo
+		true
+	);
+
+	wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
+		'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
+	) );
+
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );
 	// @todo More specific.
 	wp_enqueue_style( 'cbox-ol-admin' );

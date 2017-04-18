@@ -113,12 +113,30 @@ function cboxol_membertypes_admin_page() {
 		'enabled' => null,
 	) );
 
+	$type_data = array();
+	foreach ( $types as $type ) {
+		$type_data[ $type->get_slug() ] = array(
+			'isCollapsed' => true,
+			'isEnabled' => $type->get_is_enabled(),
+			'name' => $type->get_name(),
+			'slug' => $type->get_slug(),
+		);
+	}
+
 	?>
 	<div class="wrap">
 		<?php cboxol_admin_header( 'member-settings', 'types' ); ?>
 
 		<?php /* @todo */ ?>
 		<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+
+		<script type="text/javascript">
+			var CBOXOL_Types = <?php echo json_encode( $type_data ); ?>;
+		</script>
+
+		<div id="cboxol-types-admin">
+			<cboxol-types-admin></cboxol-types-admin>
+		</div>
 
 		<form method="post" action="">
 			<ul class="cboxol-types-admin">
