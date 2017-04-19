@@ -68,7 +68,14 @@ function cboxol_register_assets() {
 	);
 
 	wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
-		'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
+		'strings' => array(
+			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
+			'mayCreateCoursesLegend' => _x( 'Members may create courses', 'cbox-openlab-core' ),
+			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
+			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
+			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
+		),
 	) );
 
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );

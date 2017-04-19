@@ -21,6 +21,11 @@
 			types() {
 				return this.$store.state.types
 			}
+		},
+		data() {
+			return {
+				objectType: CBOXOL_ObjectType
+			}
 		}
 	}
 </script>

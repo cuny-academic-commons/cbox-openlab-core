@@ -20,9 +20,18 @@
 				v-bind:for="data.slug + '-name'"
 			>{{ strings.itemTypeNameLabel }}</label>
 			<input
+				v-bind:placeholder="strings.addNewType"
 				v-bind:id="data.slug + '-name'"
 				v-model="data.name"
 			>
+
+			<div class="cboxol-item-type-content-section item-type-settings">
+				<h3>{{ strings.settings }}</h3>
+
+				<div v-for="setting in data.settings">
+					<component :is="setting.component" v-bind:slug="data.slug" v-bind:value="setting.value"></component>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -30,10 +39,13 @@
 <script>
 	import OnOffSwitch from './OnOffSwitch.vue'
 
+	// All settings components must be available.
+	import MayCreateCourses from './settings/MayCreateCourses.vue'
+
 	export default {
 		data() {
 			return {
-				strings: CBOXOLStrings,
+				strings: CBOXOLStrings.strings,
 				data: this.$store.state.types[ this.slug ]
 			}
 		},
@@ -41,7 +53,8 @@
 		props: ['slug'],
 
 		components: {
-			OnOffSwitch
+			OnOffSwitch,
+			MayCreateCourses
 		},
 
 		computed: {

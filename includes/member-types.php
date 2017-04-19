@@ -118,6 +118,12 @@ function cboxol_membertypes_admin_page() {
 		$type_data[ $type->get_slug() ] = array(
 			'isCollapsed' => true,
 			'isEnabled' => $type->get_is_enabled(),
+			'settings' => array(
+				array(
+					'component' => 'MayCreateCourses',
+					'value' => $type->get_can_create_courses(),
+				),
+			),
 			'name' => $type->get_name(),
 			'slug' => $type->get_slug(),
 		);
@@ -131,11 +137,12 @@ function cboxol_membertypes_admin_page() {
 		<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
 
 		<script type="text/javascript">
+			var CBOXOL_ObjectType = 'member';
 			var CBOXOL_Types = <?php echo json_encode( $type_data ); ?>;
 		</script>
 
 		<div id="cboxol-types-admin">
-			<cboxol-types-admin></cboxol-types-admin>
+			<cboxol-types-admin object="member"></cboxol-types-admin>
 		</div>
 
 		<form method="post" action="">
