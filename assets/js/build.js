@@ -26,6 +26,9 @@ var store = new _vuex2.default.Store({
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
 			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
 		},
+		setTypeProperty: function setTypeProperty(state, payload) {
+			state.types[payload.slug][payload.property] = payload.value;
+		},
 		setOrder: function setOrder(state, payload) {
 			state.types[payload.slug].settings.Order.data = payload.value;
 		},
@@ -34,10 +37,6 @@ var store = new _vuex2.default.Store({
 		},
 		toggleCollapsed: function toggleCollapsed(state, payload) {
 			state.types[payload.slug].isCollapsed = !state.types[payload.slug].isCollapsed;
-		},
-		toggleTypeEnabled: function toggleTypeEnabled(state, payload) {
-			// here is where we modify the state itself
-			state.types[payload.slug].isEnabled = payload.isEnabled;
 		}
 	}
 });
@@ -103,6 +102,15 @@ exports.default = {
 		},
 		isEnabled: function isEnabled() {
 			return this.data.isEnabled;
+		},
+
+		name: {
+			get: function get() {
+				return this.$store.state.types[this.slug].name;
+			},
+			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'name', value: value });
+			}
 		}
 	},
 
@@ -131,7 +139,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.getItemClass()},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.data.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.data.name),expression:"data.name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.data.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.data.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2)],1)])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.getItemClass()},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2)],1)])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -154,7 +162,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
 	data: function data() {
 		return {
-			isEnabled: this.$store.state.types[this.slug].isEnabled,
 			uniqueId: 'onoffswitch-' + this.slug
 		};
 	},
@@ -162,18 +169,22 @@ exports.default = {
 
 	props: ['slug'],
 
-	methods: {
-		onEnabledClick: function onEnabledClick() {
-			this.$store.commit('toggleTypeEnabled', { slug: this.slug, isEnabled: this.isEnabled });
+	computed: {
+		isEnabled: {
+			get: function get() {
+				return this.$store.state.types[this.slug].isEnabled;
+			},
+			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isEnabled', value: value });
+			}
 		}
-
 	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"onoffswitch"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.isEnabled),expression:"isEnabled"}],staticClass:"onoffswitch-checkbox",attrs:{"type":"checkbox","name":"onoffswitch","id":_vm.uniqueId},domProps:{"checked":Array.isArray(_vm.isEnabled)?_vm._i(_vm.isEnabled,null)>-1:(_vm.isEnabled)},on:{"change":_vm.onEnabledClick,"__c":function($event){var $$a=_vm.isEnabled,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.isEnabled=$$a.concat($$v))}else{$$i>-1&&(_vm.isEnabled=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.isEnabled=$$c}}}}),_vm._v(" "),_c('label',{staticClass:"onoffswitch-label",attrs:{"for":_vm.uniqueId}},[_c('span',{staticClass:"onoffswitch-inner"}),_vm._v(" "),_c('span',{staticClass:"onoffswitch-switch"})])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"onoffswitch"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.isEnabled),expression:"isEnabled"}],staticClass:"onoffswitch-checkbox",attrs:{"type":"checkbox","name":"onoffswitch","id":_vm.uniqueId},domProps:{"checked":Array.isArray(_vm.isEnabled)?_vm._i(_vm.isEnabled,null)>-1:(_vm.isEnabled)},on:{"__c":function($event){var $$a=_vm.isEnabled,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.isEnabled=$$a.concat($$v))}else{$$i>-1&&(_vm.isEnabled=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.isEnabled=$$c}}}}),_vm._v(" "),_c('label',{staticClass:"onoffswitch-label",attrs:{"for":_vm.uniqueId}},[_c('span',{staticClass:"onoffswitch-inner"}),_vm._v(" "),_c('span',{staticClass:"onoffswitch-switch"})])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

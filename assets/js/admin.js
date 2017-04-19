@@ -14,6 +14,10 @@ const store = new Vuex.Store({
 			state.types[ payload.slug ].settings.MayCreateCourses.data = payload.value === 'yes'
 		},
 
+		setTypeProperty ( state, payload ) {
+			state.types[ payload.slug ][ payload.property ] = payload.value
+		},
+
 		setOrder ( state, payload ) {
 			state.types[ payload.slug ].settings.Order.data = payload.value
 		},
@@ -24,11 +28,6 @@ const store = new Vuex.Store({
 
 		toggleCollapsed ( state, payload ) {
 			state.types[ payload.slug ].isCollapsed = ! state.types[ payload.slug ].isCollapsed
-		},
-
-		toggleTypeEnabled ( state, payload ) {
-			// here is where we modify the state itself
-			state.types[ payload.slug ].isEnabled = payload.isEnabled
 		}
 	}
 })

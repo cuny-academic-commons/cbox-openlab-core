@@ -2,7 +2,7 @@
 	<div v-bind:class="getItemClass()">
 		<div class="cboxol-item-type-header">
 			<div class="cboxol-item-type-header-label">
-				{{ data.name }}
+				{{ name }}
 			</div>
 
 			<div class="cboxol-item-type-header-actions">
@@ -22,7 +22,7 @@
 			<input
 				v-bind:placeholder="strings.addNewType"
 				v-bind:id="data.slug + '-name'"
-				v-model="data.name"
+				v-model="name"
 			>
 
 			<div class="cboxol-item-type-content-section item-type-settings">
@@ -67,6 +67,14 @@
 			},
 			isEnabled() {
 				return this.data.isEnabled
+			},
+			name: {
+				get() {
+					return this.$store.state.types[ this.slug ].name
+				},
+				set( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'name', value: value } )
+				}
 			}
 		},
 

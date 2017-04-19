@@ -6,7 +6,6 @@
 					class="onoffswitch-checkbox"
 					v-bind:id="uniqueId"
 					v-model="isEnabled"
-					@change="onEnabledClick"
 				>
         <label class="onoffswitch-label" v-bind:for="uniqueId">
             <span class="onoffswitch-inner"></span>
@@ -67,18 +66,21 @@
 	export default {
 		data() {
 			return {
-					isEnabled: this.$store.state.types[ this.slug ].isEnabled,
 					uniqueId: 'onoffswitch-' + this.slug
 			}
 		},
 
 		props: ['slug'],
 
-		methods: {
-			onEnabledClick: function() {
-				this.$store.commit( 'toggleTypeEnabled', { slug: this.slug, isEnabled: this.isEnabled } );
+		computed: {
+			isEnabled: {
+				get () {
+					return this.$store.state.types[ this.slug ].isEnabled
+				},
+				set (value) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isEnabled', value: value } )
+				}
 			}
-
 		}
 	}
 </script>
