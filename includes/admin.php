@@ -68,6 +68,7 @@ function cboxol_register_assets() {
 	);
 
 	wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
+		'nonce' => wp_create_nonce( 'wp_rest' ),
 		'strings' => array(
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
 			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
@@ -79,6 +80,9 @@ function cboxol_register_assets() {
 
 			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
 			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
+			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
+			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
+			'saving' => __( 'Saving', 'cbox-openlab-core' ),
 			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
 			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
 		),

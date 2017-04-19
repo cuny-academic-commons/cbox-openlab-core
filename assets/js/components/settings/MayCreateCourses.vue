@@ -30,6 +30,7 @@
 					return this.$store.state.types[ this.slug ].settings.MayCreateCourses.data ? 'yes' : 'no'
 				},
 				set ( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
 					this.$store.commit( 'setMayCreateCourses', { slug: this.slug, value: value } )
 				}
 			}

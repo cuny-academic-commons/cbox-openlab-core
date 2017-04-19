@@ -5,6 +5,15 @@
  */
 
 /**
+ * Init REST endpoints.
+ */
+function openlab_rest_api_init() {
+	$endpoint = new \CBOX\OL\APIEndpoint();
+	$endpoint->register_routes();
+}
+add_action( 'rest_api_init', 'openlab_rest_api_init' );
+
+/**
  * Utility function for getting a default user id when none has been passed to the function
  *
  * The logic is this: If there is a displayed user, return it. If not, check to see whether we're

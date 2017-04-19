@@ -43,6 +43,7 @@
 					return this.$store.state.types[ this.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes
 				},
 				set ( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
 					this.$store.commit( 'setSelectableTypes', { slug: this.slug, selectableTypes: value } )
 				}
 			}

@@ -1,5 +1,5 @@
 <template>
-	<div v-bind:class="getItemClass()">
+	<div v-bind:class="itemClass">
 		<div class="cboxol-item-type-header">
 			<div class="cboxol-item-type-header-label">
 				{{ name }}
@@ -23,6 +23,7 @@
 				v-bind:placeholder="strings.addNewType"
 				v-bind:id="data.slug + '-name'"
 				v-model="name"
+				v-on:change="setIsModified"
 			>
 
 			<div class="cboxol-item-type-content-section item-type-settings">
@@ -39,6 +40,10 @@
 				<div v-for="label in data.labels">
 					<type-label v-bind:typeSlug="data.slug" v-bind:labelSlug="label.slug"></type-label>
 				</div>
+			</div>
+
+			<div class="cboxol-item-type-submit">
+				<button class="button button-primary" v-on:click="onSubmit" v-bind:disabled="isLoading || ! isModified">{{ saveButtonText }}</button>
 			</div>
 		</div>
 	</div>
@@ -57,7 +62,7 @@
 		data() {
 			return {
 				strings: CBOXOLStrings.strings,
-				data: this.$store.state.types[ this.slug ]
+				data: this.$store.state.types[ this.slug ],
 			}
 		},
 
@@ -78,12 +83,55 @@
 			isEnabled() {
 				return this.data.isEnabled
 			},
+			itemClass() {
+				let itemClass = 'cboxol-item-type'
+
+				if ( this.isCollapsed ) {
+					itemClass += ' collapsed'
+				}
+
+				if ( this.isLoading ) {
+					itemClass += ' loading'
+				}
+
+				return itemClass
+			},
+
+			isLoading: {
+				get() {
+					return this.$store.state.types[ this.slug ].isLoading
+				},
+				set( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isLoading', value: value } )
+				}
+			},
+
+			isModified: {
+				get() {
+					return this.$store.state.types[ this.slug ].isModified
+				},
+				set( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: value } )
+				}
+			},
+
 			name: {
 				get() {
 					return this.$store.state.types[ this.slug ].name
 				},
 				set( value ) {
+					this.setIsModified()
 					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'name', value: value } )
+				}
+			},
+
+			saveButtonText() {
+				if ( this.isLoading ) {
+					return this.strings.saving
+				} else if ( this.isModified ) {
+					return this.strings.saveChanges
+				} else {
+					return this.strings.saved
 				}
 			}
 		},
@@ -97,16 +145,22 @@
 				return this.slug + '-' . base
 			},
 
-			getItemClass: function() {
-				let itemClass = 'cboxol-item-type'
+			onSubmit: function() {
+				this.isLoading = true
+				this.$store.dispatch( 'submitForm', { slug: this.slug } ).then( response => {
+					if ( response.status >= 200 && response.status < 300 ) {
+						this.isModified = false
+					} else {
 
-				if ( this.isCollapsed ) {
-					itemClass += ' collapsed'
-				}
+					}
 
-				return itemClass
+					this.isLoading = false
+				} )
+			},
+
+			setIsModified() {
+				this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
 			}
-
 		}
 	}
 </script>

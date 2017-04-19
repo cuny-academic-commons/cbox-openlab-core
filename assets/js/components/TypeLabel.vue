@@ -27,6 +27,7 @@
 					return this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].value
 				},
 				set ( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.typeSlug, property: 'isModified', value: true } )
 					this.$store.commit( 'setLabel', { typeSlug: this.typeSlug, labelSlug: this.labelSlug, value } )
 				}
 			}

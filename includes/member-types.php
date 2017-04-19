@@ -124,8 +124,11 @@ function cboxol_membertypes_admin_page() {
 	$type_data = array();
 	foreach ( $types as $type ) {
 		$type_data[ $type->get_slug() ] = array(
+			'id' => $type->get_wp_post_id(),
 			'isCollapsed' => true,
 			'isEnabled' => $type->get_is_enabled(),
+			'isLoading' => false,
+			'isModified' => false,
 			'settings' => array(
 				'MayCreateCourses' => array(
 					'component' => 'MayCreateCourses',

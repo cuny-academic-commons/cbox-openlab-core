@@ -6,6 +6,7 @@
 					class="onoffswitch-checkbox"
 					v-bind:id="uniqueId"
 					v-model="isEnabled"
+					v-on:change="setIsModified"
 				>
         <label class="onoffswitch-label" v-bind:for="uniqueId">
             <span class="onoffswitch-inner"></span>
@@ -80,6 +81,12 @@
 				set (value) {
 					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isEnabled', value: value } )
 				}
+			}
+		},
+
+		methods: {
+			setIsModified() {
+				this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
 			}
 		}
 	}

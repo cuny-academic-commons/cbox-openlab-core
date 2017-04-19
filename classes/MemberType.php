@@ -127,27 +127,60 @@ class MemberType {
 		return $type;
 	}
 
-	protected function set_slug( $slug ) {
+	public function save() {
+		// @todo slug?
+
+		$wp_post_id = $this->get_wp_post_id();
+
+		$post_params = array(
+			'ID' => $wp_post_id,
+			'post_title' => $this->get_name(),
+			'menu_order' => $this->get_order(),
+		);
+
+		if ( $this->get_is_enabled() ) {
+			$post_params['post_status'] = 'publish';
+		} else {
+			$post_params['post_stauts'] = 'draft';
+		}
+
+		wp_update_post( $post_params );
+
+		update_post_meta( $wp_post_id, 'cboxol_member_type_selectable_types', $this->get_selectable_types() );
+
+		delete_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses' );
+		if ( $this->get_can_create_courses() ) {
+			add_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses', 'yes' );
+		}
+
+		$meta_value = array();
+		foreach ( $this->get_labels() as $label_type => $label_data ) {
+			$meta_value[ $label_type ] = $label_data;
+		}
+		update_post_meta( $wp_post_id, 'cboxol_member_type_labels', $meta_value );
+	}
+
+	public function set_slug( $slug ) {
 		$this->data['slug'] = $slug;
 	}
 
-	protected function set_name( $name ) {
+	public function set_name( $name ) {
 		$this->data['name'] = $name;
 	}
 
-	protected function set_description( $description ) {
+	public function set_description( $description ) {
 		$this->data['description'] = $description;
 	}
 
-	protected function set_label( $label_type, $label ) {
+	public function set_label( $label_type, $label ) {
 		$this->data['labels'][ $label_type ] = $label;
 	}
 
-	protected function set_can_create_courses( $can ) {
+	public function set_can_create_courses( $can ) {
 		$this->data['can_create_courses'] = (bool) $can;
 	}
 
-	protected function set_selectable_types( $types ) {
+	public function set_selectable_types( $types ) {
 		if ( ! is_array( $types ) ) {
 			$types = array();
 		}
@@ -155,11 +188,11 @@ class MemberType {
 		$this->data['selectable_types'] = $types;
 	}
 
-	protected function set_is_enabled( $is_enabled ) {
+	public function set_is_enabled( $is_enabled ) {
 		$this->data['is_enabled'] = (bool) $is_enabled;
 	}
 
-	protected function set_order( $order ) {
+	public function set_order( $order ) {
 		$this->data['order'] = (int) $order;
 	}
 

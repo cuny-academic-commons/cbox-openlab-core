@@ -23,6 +23,7 @@
 					return this.$store.state.types[ this.slug ].settings.Order.data
 				},
 				set ( value ) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
 					this.$store.commit( 'setOrder', { slug: this.slug, value: value } )
 				}
 			}

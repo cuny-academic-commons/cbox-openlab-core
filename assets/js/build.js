@@ -9,6 +9,10 @@ var _vuex = require('vuex');
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
+var _isomorphicFetch = require('isomorphic-fetch');
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
 var _TypesUI = require('./components/TypesUI.vue');
 
 var _TypesUI2 = _interopRequireDefault(_TypesUI);
@@ -19,8 +23,24 @@ _vue2.default.use(_vuex2.default);
 
 var store = new _vuex2.default.Store({
 	state: {
-		types: CBOXOL_Types,
-		collapsed: []
+		types: CBOXOL_Types
+	},
+	actions: {
+		submitForm: function submitForm(commit, payload) {
+			var typeData = commit.state.types[payload.slug];
+			var endpoint = 'http://boone.cool/neh/wp-json/cboxol/v1/item-type/' + typeData.id;
+			var nonce = CBOXOLStrings.nonce;
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce
+				},
+				body: JSON.stringify(typeData)
+			});
+		}
 	},
 	mutations: {
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
@@ -55,7 +75,7 @@ new _vue2.default({
 	}
 });
 
-},{"./components/TypesUI.vue":5,"vue":10,"vuex":12}],2:[function(require,module,exports){
+},{"./components/TypesUI.vue":5,"isomorphic-fetch":9,"vue":11,"vuex":13}],2:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -111,13 +131,56 @@ exports.default = {
 		isEnabled: function isEnabled() {
 			return this.data.isEnabled;
 		},
+		itemClass: function itemClass() {
+			var itemClass = 'cboxol-item-type';
+
+			if (this.isCollapsed) {
+				itemClass += ' collapsed';
+			}
+
+			if (this.isLoading) {
+				itemClass += ' loading';
+			}
+
+			return itemClass;
+		},
+
+
+		isLoading: {
+			get: function get() {
+				return this.$store.state.types[this.slug].isLoading;
+			},
+			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isLoading', value: value });
+			}
+		},
+
+		isModified: {
+			get: function get() {
+				return this.$store.state.types[this.slug].isModified;
+			},
+			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: value });
+			}
+		},
 
 		name: {
 			get: function get() {
 				return this.$store.state.types[this.slug].name;
 			},
 			set: function set(value) {
+				this.setIsModified();
 				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'name', value: value });
+			}
+		},
+
+		saveButtonText: function saveButtonText() {
+			if (this.isLoading) {
+				return this.strings.saving;
+			} else if (this.isModified) {
+				return this.strings.saveChanges;
+			} else {
+				return this.strings.saved;
 			}
 		}
 	},
@@ -131,23 +194,29 @@ exports.default = {
 			return this.slug + '-'.base;
 		},
 
-		getItemClass: function getItemClass() {
-			var itemClass = 'cboxol-item-type';
+		onSubmit: function onSubmit() {
+			var _this = this;
 
-			if (this.isCollapsed) {
-				itemClass += ' collapsed';
-			}
+			this.isLoading = true;
+			this.$store.dispatch('submitForm', { slug: this.slug }).then(function (response) {
+				if (response.status >= 200 && response.status < 300) {
+					_this.isModified = false;
+				} else {}
 
-			return itemClass;
+				_this.isLoading = false;
+			});
+		},
+
+		setIsModified: function setIsModified() {
+			this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
 		}
-
 	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.getItemClass()},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2)],1)])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])],1)])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -159,7 +228,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.rerender("data-v-920509b8", __vue__options__)
   }
 })()}
-},{"./OnOffSwitch.vue":3,"./TypeLabel.vue":4,"./settings/MayChangeMemberTypeTo.vue":6,"./settings/MayCreateCourses.vue":7,"./settings/Order.vue":8,"vue":10,"vue-hot-reload-api":9}],3:[function(require,module,exports){
+},{"./OnOffSwitch.vue":3,"./TypeLabel.vue":4,"./settings/MayChangeMemberTypeTo.vue":6,"./settings/MayCreateCourses.vue":7,"./settings/Order.vue":8,"vue":11,"vue-hot-reload-api":10}],3:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -186,13 +255,19 @@ exports.default = {
 				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isEnabled', value: value });
 			}
 		}
+	},
+
+	methods: {
+		setIsModified: function setIsModified() {
+			this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
+		}
 	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"onoffswitch"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.isEnabled),expression:"isEnabled"}],staticClass:"onoffswitch-checkbox",attrs:{"type":"checkbox","name":"onoffswitch","id":_vm.uniqueId},domProps:{"checked":Array.isArray(_vm.isEnabled)?_vm._i(_vm.isEnabled,null)>-1:(_vm.isEnabled)},on:{"__c":function($event){var $$a=_vm.isEnabled,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.isEnabled=$$a.concat($$v))}else{$$i>-1&&(_vm.isEnabled=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.isEnabled=$$c}}}}),_vm._v(" "),_c('label',{staticClass:"onoffswitch-label",attrs:{"for":_vm.uniqueId}},[_c('span',{staticClass:"onoffswitch-inner"}),_vm._v(" "),_c('span',{staticClass:"onoffswitch-switch"})])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"onoffswitch"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.isEnabled),expression:"isEnabled"}],staticClass:"onoffswitch-checkbox",attrs:{"type":"checkbox","name":"onoffswitch","id":_vm.uniqueId},domProps:{"checked":Array.isArray(_vm.isEnabled)?_vm._i(_vm.isEnabled,null)>-1:(_vm.isEnabled)},on:{"change":_vm.setIsModified,"__c":function($event){var $$a=_vm.isEnabled,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.isEnabled=$$a.concat($$v))}else{$$i>-1&&(_vm.isEnabled=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.isEnabled=$$c}}}}),_vm._v(" "),_c('label',{staticClass:"onoffswitch-label",attrs:{"for":_vm.uniqueId}},[_c('span',{staticClass:"onoffswitch-inner"}),_vm._v(" "),_c('span',{staticClass:"onoffswitch-switch"})])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -205,7 +280,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":9,"vueify/lib/insert-css":11}],4:[function(require,module,exports){
+},{"vue":11,"vue-hot-reload-api":10,"vueify/lib/insert-css":12}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -230,6 +305,7 @@ exports.default = {
 				return this.$store.state.types[this.typeSlug].labels[this.labelSlug].value;
 			},
 			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.typeSlug, property: 'isModified', value: true });
 				this.$store.commit('setLabel', { typeSlug: this.typeSlug, labelSlug: this.labelSlug, value: value });
 			}
 		}
@@ -251,7 +327,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-11c5a333", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":9}],5:[function(require,module,exports){
+},{"vue":11,"vue-hot-reload-api":10}],5:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -296,7 +372,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./ItemType.vue":2,"vue":10,"vue-hot-reload-api":9}],6:[function(require,module,exports){
+},{"./ItemType.vue":2,"vue":11,"vue-hot-reload-api":10}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -328,6 +404,7 @@ exports.default = {
 				return this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.selectableTypes;
 			},
 			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
 				this.$store.commit('setSelectableTypes', { slug: this.slug, selectableTypes: value });
 			}
 		}
@@ -348,10 +425,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.reload("data-v-ae10b222", __vue__options__)
+    hotAPI.rerender("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":9}],7:[function(require,module,exports){
+},{"vue":11,"vue-hot-reload-api":10}],7:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -372,6 +449,7 @@ exports.default = {
 				return this.$store.state.types[this.slug].settings.MayCreateCourses.data ? 'yes' : 'no';
 			},
 			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
 				this.$store.commit('setMayCreateCourses', { slug: this.slug, value: value });
 			}
 		}
@@ -395,7 +473,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":9}],8:[function(require,module,exports){
+},{"vue":11,"vue-hot-reload-api":10}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -416,6 +494,7 @@ exports.default = {
 				return this.$store.state.types[this.slug].settings.Order.data;
 			},
 			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
 				this.$store.commit('setOrder', { slug: this.slug, value: value });
 			}
 		}
@@ -439,7 +518,15 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":9}],9:[function(require,module,exports){
+},{"vue":11,"vue-hot-reload-api":10}],9:[function(require,module,exports){
+// the whatwg-fetch polyfill installs the fetch() function
+// on the global object (window or self)
+//
+// Return that as the export for use in Webpack, Browserify etc.
+require('whatwg-fetch');
+module.exports = self.fetch.bind(self);
+
+},{"whatwg-fetch":14}],10:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -585,7 +672,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.2.6
@@ -7420,7 +7507,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":13}],11:[function(require,module,exports){
+},{"_process":15}],12:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -7445,7 +7532,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /**
  * vuex v2.3.0
  * (c) 2017 Evan You
@@ -8256,7 +8343,470 @@ return index;
 
 })));
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+(function(self) {
+  'use strict';
+
+  if (self.fetch) {
+    return
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob()
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  }
+
+  if (support.arrayBuffer) {
+    var viewClasses = [
+      '[object Int8Array]',
+      '[object Uint8Array]',
+      '[object Uint8ClampedArray]',
+      '[object Int16Array]',
+      '[object Uint16Array]',
+      '[object Int32Array]',
+      '[object Uint32Array]',
+      '[object Float32Array]',
+      '[object Float64Array]'
+    ]
+
+    var isDataView = function(obj) {
+      return obj && DataView.prototype.isPrototypeOf(obj)
+    }
+
+    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
+    }
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = String(name)
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name')
+    }
+    return name.toLowerCase()
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = String(value)
+    }
+    return value
+  }
+
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function() {
+        var value = items.shift()
+        return {done: value === undefined, value: value}
+      }
+    }
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function() {
+        return iterator
+      }
+    }
+
+    return iterator
+  }
+
+  function Headers(headers) {
+    this.map = {}
+
+    if (headers instanceof Headers) {
+      headers.forEach(function(value, name) {
+        this.append(name, value)
+      }, this)
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function(header) {
+        this.append(header[0], header[1])
+      }, this)
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function(name) {
+        this.append(name, headers[name])
+      }, this)
+    }
+  }
+
+  Headers.prototype.append = function(name, value) {
+    name = normalizeName(name)
+    value = normalizeValue(value)
+    var oldValue = this.map[name]
+    this.map[name] = oldValue ? oldValue+','+value : value
+  }
+
+  Headers.prototype['delete'] = function(name) {
+    delete this.map[normalizeName(name)]
+  }
+
+  Headers.prototype.get = function(name) {
+    name = normalizeName(name)
+    return this.has(name) ? this.map[name] : null
+  }
+
+  Headers.prototype.has = function(name) {
+    return this.map.hasOwnProperty(normalizeName(name))
+  }
+
+  Headers.prototype.set = function(name, value) {
+    this.map[normalizeName(name)] = normalizeValue(value)
+  }
+
+  Headers.prototype.forEach = function(callback, thisArg) {
+    for (var name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        callback.call(thisArg, this.map[name], name, this)
+      }
+    }
+  }
+
+  Headers.prototype.keys = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push(name) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.values = function() {
+    var items = []
+    this.forEach(function(value) { items.push(value) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.entries = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push([name, value]) })
+    return iteratorFor(items)
+  }
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'))
+    }
+    body.bodyUsed = true
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function(resolve, reject) {
+      reader.onload = function() {
+        resolve(reader.result)
+      }
+      reader.onerror = function() {
+        reject(reader.error)
+      }
+    })
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader()
+    var promise = fileReaderReady(reader)
+    reader.readAsArrayBuffer(blob)
+    return promise
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader()
+    var promise = fileReaderReady(reader)
+    reader.readAsText(blob)
+    return promise
+  }
+
+  function readArrayBufferAsText(buf) {
+    var view = new Uint8Array(buf)
+    var chars = new Array(view.length)
+
+    for (var i = 0; i < view.length; i++) {
+      chars[i] = String.fromCharCode(view[i])
+    }
+    return chars.join('')
+  }
+
+  function bufferClone(buf) {
+    if (buf.slice) {
+      return buf.slice(0)
+    } else {
+      var view = new Uint8Array(buf.byteLength)
+      view.set(new Uint8Array(buf))
+      return view.buffer
+    }
+  }
+
+  function Body() {
+    this.bodyUsed = false
+
+    this._initBody = function(body) {
+      this._bodyInit = body
+      if (!body) {
+        this._bodyText = ''
+      } else if (typeof body === 'string') {
+        this._bodyText = body
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString()
+      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+        this._bodyArrayBuffer = bufferClone(body.buffer)
+        // IE 10-11 can't handle a DataView body.
+        this._bodyInit = new Blob([this._bodyArrayBuffer])
+      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+        this._bodyArrayBuffer = bufferClone(body)
+      } else {
+        throw new Error('unsupported BodyInit type')
+      }
+
+      if (!this.headers.get('content-type')) {
+        if (typeof body === 'string') {
+          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+        } else if (this._bodyBlob && this._bodyBlob.type) {
+          this.headers.set('content-type', this._bodyBlob.type)
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+        }
+      }
+    }
+
+    if (support.blob) {
+      this.blob = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob')
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]))
+        }
+      }
+
+      this.arrayBuffer = function() {
+        if (this._bodyArrayBuffer) {
+          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
+        } else {
+          return this.blob().then(readBlobAsArrayBuffer)
+        }
+      }
+    }
+
+    this.text = function() {
+      var rejected = consumed(this)
+      if (rejected) {
+        return rejected
+      }
+
+      if (this._bodyBlob) {
+        return readBlobAsText(this._bodyBlob)
+      } else if (this._bodyArrayBuffer) {
+        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
+      } else if (this._bodyFormData) {
+        throw new Error('could not read FormData body as text')
+      } else {
+        return Promise.resolve(this._bodyText)
+      }
+    }
+
+    if (support.formData) {
+      this.formData = function() {
+        return this.text().then(decode)
+      }
+    }
+
+    this.json = function() {
+      return this.text().then(JSON.parse)
+    }
+
+    return this
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase()
+    return (methods.indexOf(upcased) > -1) ? upcased : method
+  }
+
+  function Request(input, options) {
+    options = options || {}
+    var body = options.body
+
+    if (input instanceof Request) {
+      if (input.bodyUsed) {
+        throw new TypeError('Already read')
+      }
+      this.url = input.url
+      this.credentials = input.credentials
+      if (!options.headers) {
+        this.headers = new Headers(input.headers)
+      }
+      this.method = input.method
+      this.mode = input.mode
+      if (!body && input._bodyInit != null) {
+        body = input._bodyInit
+        input.bodyUsed = true
+      }
+    } else {
+      this.url = String(input)
+    }
+
+    this.credentials = options.credentials || this.credentials || 'omit'
+    if (options.headers || !this.headers) {
+      this.headers = new Headers(options.headers)
+    }
+    this.method = normalizeMethod(options.method || this.method || 'GET')
+    this.mode = options.mode || this.mode || null
+    this.referrer = null
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests')
+    }
+    this._initBody(body)
+  }
+
+  Request.prototype.clone = function() {
+    return new Request(this, { body: this._bodyInit })
+  }
+
+  function decode(body) {
+    var form = new FormData()
+    body.trim().split('&').forEach(function(bytes) {
+      if (bytes) {
+        var split = bytes.split('=')
+        var name = split.shift().replace(/\+/g, ' ')
+        var value = split.join('=').replace(/\+/g, ' ')
+        form.append(decodeURIComponent(name), decodeURIComponent(value))
+      }
+    })
+    return form
+  }
+
+  function parseHeaders(rawHeaders) {
+    var headers = new Headers()
+    rawHeaders.split(/\r?\n/).forEach(function(line) {
+      var parts = line.split(':')
+      var key = parts.shift().trim()
+      if (key) {
+        var value = parts.join(':').trim()
+        headers.append(key, value)
+      }
+    })
+    return headers
+  }
+
+  Body.call(Request.prototype)
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {}
+    }
+
+    this.type = 'default'
+    this.status = 'status' in options ? options.status : 200
+    this.ok = this.status >= 200 && this.status < 300
+    this.statusText = 'statusText' in options ? options.statusText : 'OK'
+    this.headers = new Headers(options.headers)
+    this.url = options.url || ''
+    this._initBody(bodyInit)
+  }
+
+  Body.call(Response.prototype)
+
+  Response.prototype.clone = function() {
+    return new Response(this._bodyInit, {
+      status: this.status,
+      statusText: this.statusText,
+      headers: new Headers(this.headers),
+      url: this.url
+    })
+  }
+
+  Response.error = function() {
+    var response = new Response(null, {status: 0, statusText: ''})
+    response.type = 'error'
+    return response
+  }
+
+  var redirectStatuses = [301, 302, 303, 307, 308]
+
+  Response.redirect = function(url, status) {
+    if (redirectStatuses.indexOf(status) === -1) {
+      throw new RangeError('Invalid status code')
+    }
+
+    return new Response(null, {status: status, headers: {location: url}})
+  }
+
+  self.Headers = Headers
+  self.Request = Request
+  self.Response = Response
+
+  self.fetch = function(input, init) {
+    return new Promise(function(resolve, reject) {
+      var request = new Request(input, init)
+      var xhr = new XMLHttpRequest()
+
+      xhr.onload = function() {
+        var options = {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+        }
+        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
+        var body = 'response' in xhr ? xhr.response : xhr.responseText
+        resolve(new Response(body, options))
+      }
+
+      xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.ontimeout = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.open(request.method, request.url, true)
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob'
+      }
+
+      request.headers.forEach(function(value, name) {
+        xhr.setRequestHeader(name, value)
+      })
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+    })
+  }
+  self.fetch.polyfill = true
+})(typeof self !== 'undefined' ? self : this);
+
+},{}],15:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
