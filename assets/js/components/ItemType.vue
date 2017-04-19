@@ -7,8 +7,8 @@
 
 			<div class="cboxol-item-type-header-actions">
 				<a href="" v-on:click="onAccordionClick">
-					<span v-if="isCollapsed">Edit</span>
-					<span v-else>Editing</span>
+					<span v-if="isCollapsed">{{ strings.edit }}</span>
+					<span v-else>{{ strings.editing }}</span>
 				</a>
 			</div>
 		</div>

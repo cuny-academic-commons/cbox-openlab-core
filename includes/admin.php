@@ -71,6 +71,8 @@ function cboxol_register_assets() {
 		'nonce' => wp_create_nonce( 'wp_rest' ),
 		'strings' => array(
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+			'edit' => __( 'Edit', 'cbox-openlab-core' ),
+			'editing' => __( 'Editing', 'cbox-openlab-core' ),
 			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
 			'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
 			'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
