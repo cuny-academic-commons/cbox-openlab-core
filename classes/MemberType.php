@@ -127,6 +127,60 @@ class MemberType {
 		return $type;
 	}
 
+	public static function get_dummy() {
+		$dummy = new self();
+
+		foreach ( self::get_label_types() as $label_type => $label_labels ) {
+			$label_labels['value'] = '';
+			$dummy->set_label( $label_type, $label_labels );
+		}
+
+		return $dummy;
+	}
+
+	public function get_for_endpoint() {
+		// @todo This doesn't need to go in every one.
+		$types = cboxol_get_member_types( array(
+			'enabled' => null,
+		) );
+
+		$all_types = array_map( function( $type ) {
+			return array(
+				'slug' => $type->get_slug(),
+				'name' => $type->get_name(),
+				'id' => $type->get_wp_post_id(),
+			);
+		}, $types );
+
+		return array(
+			'id' => $this->get_wp_post_id(),
+			'isCollapsed' => true,
+			'isEnabled' => $this->get_is_enabled(),
+			'isLoading' => false,
+			'isModified' => false,
+			'settings' => array(
+				'MayCreateCourses' => array(
+					'component' => 'MayCreateCourses',
+					'data' => $this->get_can_create_courses(),
+				),
+				'MayChangeMemberTypeTo' => array(
+					'component' => 'MayChangeMemberTypeTo',
+					'data' => array(
+						'selectableTypes' => $this->get_selectable_types(),
+						'allTypes' => $all_types,
+					),
+				),
+				'Order' => array(
+					'component' => 'Order',
+					'data' => $this->get_order(),
+				),
+			),
+			'name' => $this->get_name(),
+			'slug' => $this->get_slug(),
+			'labels' => $this->get_labels(),
+		);
+	}
+
 	public function save() {
 		// @todo slug?
 

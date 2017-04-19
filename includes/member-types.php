@@ -113,44 +113,13 @@ function cboxol_membertypes_admin_page() {
 		'enabled' => null,
 	) );
 
-	$all_types = array_map( function( $type ) {
-		return array(
-			'slug' => $type->get_slug(),
-			'name' => $type->get_name(),
-			'id' => $type->get_wp_post_id(),
-		);
-	}, $types );
-
 	$type_data = array();
 	foreach ( $types as $type ) {
-		$type_data[ $type->get_slug() ] = array(
-			'id' => $type->get_wp_post_id(),
-			'isCollapsed' => true,
-			'isEnabled' => $type->get_is_enabled(),
-			'isLoading' => false,
-			'isModified' => false,
-			'settings' => array(
-				'MayCreateCourses' => array(
-					'component' => 'MayCreateCourses',
-					'data' => $type->get_can_create_courses(),
-				),
-				'MayChangeMemberTypeTo' => array(
-					'component' => 'MayChangeMemberTypeTo',
-					'data' => array(
-						'selectableTypes' => $type->get_selectable_types(),
-						'allTypes' => $all_types,
-					),
-				),
-				'Order' => array(
-					'component' => 'Order',
-					'data' => $type->get_order(),
-				),
-			),
-			'name' => $type->get_name(),
-			'slug' => $type->get_slug(),
-			'labels' => $type->get_labels(),
-		);
+		$type_data[ $type->get_slug() ] = $type->get_for_endpoint();
 	}
+
+	$dummy = \CBOX\OL\MemberType::get_dummy();
+	$dummy_data = $dummy->get_for_endpoint();
 
 	?>
 	<div class="wrap cboxol-admin-wrap">
