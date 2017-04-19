@@ -167,53 +167,6 @@ function cboxol_membertypes_admin_page() {
 		<div id="cboxol-types-admin">
 			<cboxol-types-admin object="member"></cboxol-types-admin>
 		</div>
-
-		<form method="post" action="">
-			<ul class="cboxol-types-admin">
-			<?php foreach ( $types as $type ) : ?>
-				<li>
-					<input type="checkbox" id="enabled-types-<?php echo esc_attr( $type->get_slug() ); ?>" name="enabled-types[]" value="<?php echo $type->get_slug(); ?>" class="enabled-type-checkbox" <?php checked( $type->get_is_enabled() ); ?> />
-					<div class="type-content">
-						<div class="type-header">
-							<label for="enabled-types-<?php echo esc_attr( $type->get_slug() ); ?>"><?php echo esc_html( $type->get_name() ); ?></label> <a class="type-edit-link" href="<?php echo esc_url( get_edit_post_link( $type->get_wp_post_id() ) ); ?>"><?php echo esc_html( _x( 'Edit', 'Edit link for member/group type', 'cbox-openlab' ) ); ?></a>
-						</div>
-
-						<?php if ( $description = $type->get_description() ) : ?>
-							<div class="type-description">
-								<?php echo wpautop( $description ); ?>
-							</div>
-						<?php endif; ?>
-
-						<table class="widefat cboxol-metabox-table">
-							<?php /* @todo needs a Courses check */ ?>
-							<tr>
-								<th scope="row">
-									<?php esc_html_e( 'Member may create Courses', 'cbox-openlab' ); ?>
-								</th>
-
-								<td>
-									<strong><?php echo esc_attr( $type->get_can_create_courses() ? __( 'Yes', 'cbox-openlab' ) : __( 'No', 'cbox-openlab' ) ); ?></strong>
-								</td>
-							</tr>
-
-							<tr>
-								<th scope="row">
-									<?php esc_html_e( 'Member may change Type to', 'cbox-openlab' ); ?>
-								</th>
-
-								<td>
-									<strong><?php echo esc_html( $type->get_selectable_types_list() ); ?></strong>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</li>
-			<?php endforeach; ?>
-			</ul>
-
-			<?php wp_nonce_field( 'types_enable', 'types-enable-nonce', false ); ?>
-			<?php submit_button( 'Save Changes' ); ?>
-		</form>
 	</div>
 	<?php
 }

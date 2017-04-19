@@ -1,11 +1,16 @@
 <template>
 	<div class="cboxol-item-type-setting">
-		<label v-bind:for="'order-' + slug">{{ strings.orderLegend }}</label>
+		<div class="cboxol-setting-label">
+			<label v-bind:for="'order-' + slug">{{ strings.orderLegend }}</label>
+			<p class="description">{{ strings.orderDescription }}</p>
+		</div>
 
-		<input
-			v-bind:id="'order-' + slug"
-			v-model='order'
-		>
+		<div class="cboxol-setting-content">
+			<input
+				v-bind:id="'order-' + slug"
+				v-model='order'
+			>
+		</div>
 	</div>
 </template>
 

@@ -1,11 +1,16 @@
 <template>
 	<div class="cboxol-item-type-label">
-		<label v-bind:for="typeSlug + '-label-' + labelSlug">{{ label }}</label>
-		<input
-			v-bind:id="typeSlug + '-label-' + labelSlug"
-			v-model="labelValue"
-		>
-		{{ description }}
+		<div class="cboxol-setting-label">
+			<label v-bind:for="typeSlug + '-label-' + labelSlug">{{ label }}</label>
+		</div>
+
+		<div class="cboxol-setting-content">
+			<input
+				v-bind:id="typeSlug + '-label-' + labelSlug"
+				v-model="labelValue"
+			>
+			<p class="description">{{ description }}</p>
+		</div>
 	</div>
 </template>
 

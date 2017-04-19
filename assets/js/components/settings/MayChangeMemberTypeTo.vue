@@ -1,19 +1,23 @@
 <template>
 	<div class="cboxol-item-type-setting">
 		<fieldset>
-		  <legend>{{ strings.mayChangeMemberTypeToLegend }}</legend>
+			<div class="cboxol-setting-label">
+				<legend>{{ strings.mayChangeMemberTypeToLegend }}</legend>
+			</div>
 
-			<ul class="cboxol-item-type-setting-checkbox-list">
-				<li v-for="type in allTypes">
-					<input
-						type="checkbox"
-						v-bind:value="type.id"
-						v-bind:id="slug + '-may-change-member-type-to-' + type.slug"
-						v-model="selectableTypes"
-						>
-					<label v-bind:for="slug + '-may-change-member-type-to-' + type.slug">{{ type.name }}</label>
-				</li>
-			</ul>
+			<div class="cboxol-setting-content">
+				<ul class="cboxol-item-type-setting-checkbox-list">
+					<li v-for="type in allTypes">
+						<input
+							type="checkbox"
+							v-bind:value="type.id"
+							v-bind:id="slug + '-may-change-member-type-to-' + type.slug"
+							v-model="selectableTypes"
+							>
+						<label v-bind:for="slug + '-may-change-member-type-to-' + type.slug">{{ type.name }}</label>
+					</li>
+				</ul>
+			</div>
 
 		</fieldset>
 	</div>

@@ -14,7 +14,6 @@
 	font-weight: bold;
 	overflow: hidden;
 	padding: 8px 12px;
-	width: 90%;
 }
 
 .cboxol-item-type-header-label {
@@ -82,48 +81,30 @@ a .action-arrow {
 .cboxol-item-type-content {
 	border: 1px solid #ccc;
 	border-top: none;
-	padding: 8px 12px;
-	width: 90%;
+	padding: 30px 20px;
 }
 
-.cboxol-types-admin li {
-	margin-bottom: 2em;
+.cboxol-item-type-content-section {
+	clear: both;
+	margin-bottom: 30px;
+	overflow: hidden;
 }
 
-input.enabled-type-checkbox {
-	float: left;
-	margin-top: 2px;
-}
-
-.cboxol-types-admin .type-content {
-	padding-left: 30px;
-}
-
-.type-header label {
-	font-size: 1rem;
+.cboxol-item-type-content-section-header {
+	display: block;
+	font-size: 12pt;
 	font-weight: bold;
-	margin-right: 10px;
-	vertical-align: top;
 }
 
-.type-description {
-	font-style: italic;
+.cboxol-item-type-setting {
+	margin-bottom: 15px;
 }
 
-.cboxol-types-admin table.widefat.cboxol-metabox-table {
-	box-shadow: none;
-}
-
-.cboxol-types-admin table.widefat.cboxol-metabox-table th {
-	padding-left: 0;
-}
-
-/** Single Type admin page */
-table.widefat.cboxol-metabox-table {
-	background: transparent;
-	border: none;
-}
-
-.cboxol-metabox-table th {
+.cboxol-setting-label {
+	float: left;
 	width: 200px;
+}
+
+.cboxol-setting-content {
+	margin-left: 220px;
 }

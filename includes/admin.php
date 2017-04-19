@@ -80,6 +80,7 @@ function cboxol_register_assets() {
 
 			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
 			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
+			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
 			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
 			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
 			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
