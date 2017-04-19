@@ -138,6 +138,10 @@ function cboxol_membertypes_admin_page() {
 						'allTypes' => $all_types,
 					),
 				),
+				'Order' => array(
+					'component' => 'Order',
+					'data' => $type->get_order(),
+				),
 			),
 			'name' => $type->get_name(),
 			'slug' => $type->get_slug(),

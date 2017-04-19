@@ -14,6 +14,10 @@ const store = new Vuex.Store({
 			state.types[ payload.slug ].settings.MayCreateCourses.data = payload.value === 'yes'
 		},
 
+		setOrder ( state, payload ) {
+			state.types[ payload.slug ].settings.Order.data = payload.value
+		},
+
 		setSelectableTypes ( state, payload ) {
 			state.types[ payload.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes
 		},

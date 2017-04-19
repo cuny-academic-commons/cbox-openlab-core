@@ -42,6 +42,7 @@
 	// All settings components must be available.
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
 	import MayChangeMemberTypeTo from './settings/MayChangeMemberTypeTo.vue'
+	import Order from './settings/Order.vue'
 
 	export default {
 		data() {
@@ -56,7 +57,8 @@
 		components: {
 			OnOffSwitch,
 			MayCreateCourses,
-			MayChangeMemberTypeTo
+			MayChangeMemberTypeTo,
+			Order
 		},
 
 		computed: {

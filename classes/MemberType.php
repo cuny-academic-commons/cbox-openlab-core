@@ -11,6 +11,7 @@ class MemberType {
 		'can_create_courses' => false,
 		'selectable_types' => array(),
 		'is_enabled' => true,
+		'order' => 0,
 		'wp_post_id' => 0,
 	);
 
@@ -80,6 +81,10 @@ class MemberType {
 		return (int) $this->data['wp_post_id'];
 	}
 
+	public function get_order() {
+		return (int) $this->data['order'];
+	}
+
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 
@@ -112,6 +117,9 @@ class MemberType {
 
 		// Enabled.
 		$type->set_is_enabled( 'publish' === $post->post_status );
+
+		// Order
+		$type->set_order( $post->menu_order );
 
 		// WP post ID.
 		$type->set_wp_post_id( $post->ID );
@@ -149,6 +157,10 @@ class MemberType {
 
 	protected function set_is_enabled( $is_enabled ) {
 		$this->data['is_enabled'] = (bool) $is_enabled;
+	}
+
+	protected function set_order( $order ) {
+		$this->data['order'] = (int) $order;
 	}
 
 	protected function set_wp_post_id( $wp_post_id ) {

@@ -26,6 +26,9 @@ var store = new _vuex2.default.Store({
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
 			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
 		},
+		setOrder: function setOrder(state, payload) {
+			state.types[payload.slug].settings.Order.data = payload.value;
+		},
 		setSelectableTypes: function setSelectableTypes(state, payload) {
 			state.types[payload.slug].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes;
 		},
@@ -50,7 +53,7 @@ new _vue2.default({
 	}
 });
 
-},{"./components/TypesUI.vue":4,"vue":8,"vuex":10}],2:[function(require,module,exports){
+},{"./components/TypesUI.vue":4,"vue":9,"vuex":11}],2:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -70,6 +73,10 @@ var _MayChangeMemberTypeTo = require('./settings/MayChangeMemberTypeTo.vue');
 
 var _MayChangeMemberTypeTo2 = _interopRequireDefault(_MayChangeMemberTypeTo);
 
+var _Order = require('./settings/Order.vue');
+
+var _Order2 = _interopRequireDefault(_Order);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -86,7 +93,8 @@ exports.default = {
 	components: {
 		OnOffSwitch: _OnOffSwitch2.default,
 		MayCreateCourses: _MayCreateCourses2.default,
-		MayChangeMemberTypeTo: _MayChangeMemberTypeTo2.default
+		MayChangeMemberTypeTo: _MayChangeMemberTypeTo2.default,
+		Order: _Order2.default
 	},
 
 	computed: {
@@ -135,7 +143,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.rerender("data-v-920509b8", __vue__options__)
   }
 })()}
-},{"./OnOffSwitch.vue":3,"./settings/MayChangeMemberTypeTo.vue":5,"./settings/MayCreateCourses.vue":6,"vue":8,"vue-hot-reload-api":7}],3:[function(require,module,exports){
+},{"./OnOffSwitch.vue":3,"./settings/MayChangeMemberTypeTo.vue":5,"./settings/MayCreateCourses.vue":6,"./settings/Order.vue":7,"vue":9,"vue-hot-reload-api":8}],3:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -178,7 +186,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":8,"vue-hot-reload-api":7,"vueify/lib/insert-css":9}],4:[function(require,module,exports){
+},{"vue":9,"vue-hot-reload-api":8,"vueify/lib/insert-css":10}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -223,7 +231,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./ItemType.vue":2,"vue":8,"vue-hot-reload-api":7}],5:[function(require,module,exports){
+},{"./ItemType.vue":2,"vue":9,"vue-hot-reload-api":8}],5:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -278,7 +286,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"vue":8,"vue-hot-reload-api":7}],6:[function(require,module,exports){
+},{"vue":9,"vue-hot-reload-api":8}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -322,7 +330,51 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":8,"vue-hot-reload-api":7}],7:[function(require,module,exports){
+},{"vue":9,"vue-hot-reload-api":8}],7:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	data: function data() {
+		return {
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+
+	computed: {
+		order: {
+			get: function get() {
+				return this.$store.state.types[this.slug].settings.Order.data;
+			},
+			set: function set(value) {
+				this.$store.commit('setOrder', { slug: this.slug, value: value });
+			}
+		}
+	},
+
+	props: ['slug']
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"cboxol-item-type-setting"},[_c('label',{attrs:{"for":'order-' + _vm.slug}},[_vm._v(_vm._s(_vm.strings.orderLegend))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.order),expression:"order"}],attrs:{"id":'order-' + _vm.slug},domProps:{"value":(_vm.order)},on:{"input":function($event){if($event.target.composing){ return; }_vm.order=$event.target.value}}})])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5d0da2ce", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-5d0da2ce", __vue__options__)
+  }
+})()}
+},{"vue":9,"vue-hot-reload-api":8}],8:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -468,7 +520,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.2.6
@@ -7303,7 +7355,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":11}],9:[function(require,module,exports){
+},{"_process":12}],10:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -7328,7 +7380,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * vuex v2.3.0
  * (c) 2017 Evan You
@@ -8139,7 +8191,7 @@ return index;
 
 })));
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
