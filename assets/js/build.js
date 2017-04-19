@@ -23,6 +23,9 @@ var store = new _vuex2.default.Store({
 		collapsed: []
 	},
 	mutations: {
+		setMayCreateCourses: function setMayCreateCourses(state, payload) {
+			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
+		},
 		setSelectableTypes: function setSelectableTypes(state, payload) {
 			state.types[payload.slug].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes;
 		},
@@ -281,8 +284,13 @@ exports.default = {
 
 
 	computed: {
-		mayCreateCourses: function mayCreateCourses() {
-			return this.data ? 'yes' : 'no';
+		mayCreateCourses: {
+			get: function get() {
+				return this.$store.state.types[this.slug].settings.MayCreateCourses.data ? 'yes' : 'no';
+			},
+			set: function set(value) {
+				this.$store.commit('setMayCreateCourses', { slug: this.slug, value: value });
+			}
 		}
 	},
 

@@ -10,6 +10,10 @@ const store = new Vuex.Store({
 		collapsed: [],
 	},
 	mutations: {
+		setMayCreateCourses ( state, payload ) {
+			state.types[ payload.slug ].settings.MayCreateCourses.data = payload.value === 'yes'
+		},
+
 		setSelectableTypes ( state, payload ) {
 			state.types[ payload.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes
 		},
