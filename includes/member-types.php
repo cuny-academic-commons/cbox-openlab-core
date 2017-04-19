@@ -113,15 +113,30 @@ function cboxol_membertypes_admin_page() {
 		'enabled' => null,
 	) );
 
+	$all_types = array_map( function( $type ) {
+		return array(
+			'slug' => $type->get_slug(),
+			'name' => $type->get_name(),
+			'id' => $type->get_wp_post_id(),
+		);
+	}, $types );
+
 	$type_data = array();
 	foreach ( $types as $type ) {
 		$type_data[ $type->get_slug() ] = array(
 			'isCollapsed' => true,
 			'isEnabled' => $type->get_is_enabled(),
 			'settings' => array(
-				array(
+				'MayCreateCourses' => array(
 					'component' => 'MayCreateCourses',
-					'value' => $type->get_can_create_courses(),
+					'data' => $type->get_can_create_courses(),
+				),
+				'MayChangeMemberTypeTo' => array(
+					'component' => 'MayChangeMemberTypeTo',
+					'data' => array(
+						'selectableTypes' => $type->get_selectable_types(),
+						'allTypes' => $all_types,
+					),
 				),
 			),
 			'name' => $type->get_name(),

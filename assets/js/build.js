@@ -23,6 +23,9 @@ var store = new _vuex2.default.Store({
 		collapsed: []
 	},
 	mutations: {
+		setSelectableTypes: function setSelectableTypes(state, payload) {
+			state.types[payload.slug].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes;
+		},
 		toggleCollapsed: function toggleCollapsed(state, payload) {
 			state.types[payload.slug].isCollapsed = !state.types[payload.slug].isCollapsed;
 		},
@@ -44,7 +47,7 @@ new _vue2.default({
 	}
 });
 
-},{"./components/TypesUI.vue":4,"vue":7,"vuex":9}],2:[function(require,module,exports){
+},{"./components/TypesUI.vue":4,"vue":8,"vuex":10}],2:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -59,6 +62,10 @@ var _OnOffSwitch2 = _interopRequireDefault(_OnOffSwitch);
 var _MayCreateCourses = require('./settings/MayCreateCourses.vue');
 
 var _MayCreateCourses2 = _interopRequireDefault(_MayCreateCourses);
+
+var _MayChangeMemberTypeTo = require('./settings/MayChangeMemberTypeTo.vue');
+
+var _MayChangeMemberTypeTo2 = _interopRequireDefault(_MayChangeMemberTypeTo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -75,7 +82,8 @@ exports.default = {
 
 	components: {
 		OnOffSwitch: _OnOffSwitch2.default,
-		MayCreateCourses: _MayCreateCourses2.default
+		MayCreateCourses: _MayCreateCourses2.default,
+		MayChangeMemberTypeTo: _MayChangeMemberTypeTo2.default
 	},
 
 	computed: {
@@ -112,7 +120,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.getItemClass()},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.data.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.data.name),expression:"data.name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.data.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.data.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug,"value":setting.value}})],1)})],2)],1)])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.getItemClass()},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.data.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.data.name),expression:"data.name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.data.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.data.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2)],1)])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -124,7 +132,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.rerender("data-v-920509b8", __vue__options__)
   }
 })()}
-},{"./OnOffSwitch.vue":3,"./settings/MayCreateCourses.vue":5,"vue":7,"vue-hot-reload-api":6}],3:[function(require,module,exports){
+},{"./OnOffSwitch.vue":3,"./settings/MayChangeMemberTypeTo.vue":5,"./settings/MayCreateCourses.vue":6,"vue":8,"vue-hot-reload-api":7}],3:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -167,7 +175,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":7,"vue-hot-reload-api":6,"vueify/lib/insert-css":8}],4:[function(require,module,exports){
+},{"vue":8,"vue-hot-reload-api":7,"vueify/lib/insert-css":9}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -212,7 +220,52 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./ItemType.vue":2,"vue":7,"vue-hot-reload-api":6}],5:[function(require,module,exports){
+},{"./ItemType.vue":2,"vue":8,"vue-hot-reload-api":7}],5:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	data: function data() {
+		return {
+			allTypes: this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.allTypes,
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+
+	computed: {
+		selectableTypes: {
+			get: function get() {
+				return this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.selectableTypes;
+			},
+			set: function set(value) {
+				this.$store.commit('setSelectableTypes', { slug: this.slug, selectableTypes: value });
+			}
+		}
+	},
+
+	props: ['slug', 'data']
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"cboxol-item-type-setting"},[_c('fieldset',[_c('legend',[_vm._v(_vm._s(_vm.strings.mayChangeMemberTypeToLegend))]),_vm._v("\n\t\t"+_vm._s(_vm.selectableTypes)+"\n\n\t\t"),_c('ul',{staticClass:"cboxol-item-type-setting-checkbox-list"},_vm._l((_vm.allTypes),function(type){return _c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.selectableTypes),expression:"selectableTypes"}],attrs:{"type":"checkbox","id":_vm.slug + '-may-change-member-type-to-' + type.slug},domProps:{"value":type.id,"checked":Array.isArray(_vm.selectableTypes)?_vm._i(_vm.selectableTypes,type.id)>-1:(_vm.selectableTypes)},on:{"__c":function($event){var $$a=_vm.selectableTypes,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=type.id,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.selectableTypes=$$a.concat($$v))}else{$$i>-1&&(_vm.selectableTypes=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.selectableTypes=$$c}}}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.slug + '-may-change-member-type-to-' + type.slug}},[_vm._v(_vm._s(type.name))])])}))])])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ae10b222", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-ae10b222", __vue__options__)
+  }
+})()}
+},{"vue":8,"vue-hot-reload-api":7}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -229,11 +282,11 @@ exports.default = {
 
 	computed: {
 		mayCreateCourses: function mayCreateCourses() {
-			return this.value ? 'yes' : 'no';
+			return this.data ? 'yes' : 'no';
 		}
 	},
 
-	props: ['slug', 'value']
+	props: ['slug', 'data']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -251,7 +304,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":7,"vue-hot-reload-api":6}],6:[function(require,module,exports){
+},{"vue":8,"vue-hot-reload-api":7}],7:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -397,7 +450,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.2.6
@@ -7232,7 +7285,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":10}],8:[function(require,module,exports){
+},{"_process":11}],9:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -7257,7 +7310,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * vuex v2.3.0
  * (c) 2017 Evan You
@@ -8068,7 +8121,7 @@ return index;
 
 })));
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

@@ -10,6 +10,10 @@ const store = new Vuex.Store({
 		collapsed: [],
 	},
 	mutations: {
+		setSelectableTypes ( state, payload ) {
+			state.types[ payload.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes
+		},
+
 		toggleCollapsed ( state, payload ) {
 			state.types[ payload.slug ].isCollapsed = ! state.types[ payload.slug ].isCollapsed
 		},

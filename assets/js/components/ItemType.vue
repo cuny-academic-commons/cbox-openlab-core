@@ -29,7 +29,7 @@
 				<h3>{{ strings.settings }}</h3>
 
 				<div v-for="setting in data.settings">
-					<component :is="setting.component" v-bind:slug="data.slug" v-bind:value="setting.value"></component>
+					<component :is="setting.component" v-bind:slug="data.slug"></component>
 				</div>
 			</div>
 		</div>
@@ -41,6 +41,7 @@
 
 	// All settings components must be available.
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
+	import MayChangeMemberTypeTo from './settings/MayChangeMemberTypeTo.vue'
 
 	export default {
 		data() {
@@ -54,7 +55,8 @@
 
 		components: {
 			OnOffSwitch,
-			MayCreateCourses
+			MayCreateCourses,
+			MayChangeMemberTypeTo
 		},
 
 		computed: {

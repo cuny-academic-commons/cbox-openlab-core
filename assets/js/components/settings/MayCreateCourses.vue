@@ -26,10 +26,10 @@
 
 		computed: {
 			mayCreateCourses: function() {
-				return this.value ? 'yes' : 'no'
+				return this.data ? 'yes' : 'no'
 			}
 		},
 
-		props: ['slug', 'value']
+		props: ['slug', 'data']
 	}
 </script>
