@@ -35,6 +35,6 @@
 			}
 		},
 
-		props: ['slug', 'data']
+		props: ['slug']
 	}
 </script>

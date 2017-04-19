@@ -260,7 +260,7 @@ exports.default = {
 		}
 	},
 
-	props: ['slug', 'data']
+	props: ['slug']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -275,7 +275,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ae10b222", __vue__options__)
+    hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"vue":8,"vue-hot-reload-api":7}],6:[function(require,module,exports){
@@ -304,7 +304,7 @@ exports.default = {
 		}
 	},
 
-	props: ['slug', 'data']
+	props: ['slug']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
