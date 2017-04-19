@@ -233,13 +233,23 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
 	data: function data() {
 		return {
-			allTypes: this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.allTypes,
 			strings: CBOXOLStrings.strings
 		};
 	},
 
 
 	computed: {
+		allTypes: function allTypes() {
+			var retval = {},
+			    key;
+			for (key in this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.allTypes) {
+				if (key !== this.slug) {
+					retval[key] = this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.allTypes[key];
+				}
+			}
+
+			return retval;
+		},
 		selectableTypes: {
 			get: function get() {
 				return this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.selectableTypes;
@@ -256,7 +266,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"cboxol-item-type-setting"},[_c('fieldset',[_c('legend',[_vm._v(_vm._s(_vm.strings.mayChangeMemberTypeToLegend))]),_vm._v("\n\t\t"+_vm._s(_vm.selectableTypes)+"\n\n\t\t"),_c('ul',{staticClass:"cboxol-item-type-setting-checkbox-list"},_vm._l((_vm.allTypes),function(type){return _c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.selectableTypes),expression:"selectableTypes"}],attrs:{"type":"checkbox","id":_vm.slug + '-may-change-member-type-to-' + type.slug},domProps:{"value":type.id,"checked":Array.isArray(_vm.selectableTypes)?_vm._i(_vm.selectableTypes,type.id)>-1:(_vm.selectableTypes)},on:{"__c":function($event){var $$a=_vm.selectableTypes,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=type.id,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.selectableTypes=$$a.concat($$v))}else{$$i>-1&&(_vm.selectableTypes=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.selectableTypes=$$c}}}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.slug + '-may-change-member-type-to-' + type.slug}},[_vm._v(_vm._s(type.name))])])}))])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"cboxol-item-type-setting"},[_c('fieldset',[_c('legend',[_vm._v(_vm._s(_vm.strings.mayChangeMemberTypeToLegend))]),_vm._v(" "),_c('ul',{staticClass:"cboxol-item-type-setting-checkbox-list"},_vm._l((_vm.allTypes),function(type){return _c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.selectableTypes),expression:"selectableTypes"}],attrs:{"type":"checkbox","id":_vm.slug + '-may-change-member-type-to-' + type.slug},domProps:{"value":type.id,"checked":Array.isArray(_vm.selectableTypes)?_vm._i(_vm.selectableTypes,type.id)>-1:(_vm.selectableTypes)},on:{"__c":function($event){var $$a=_vm.selectableTypes,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=type.id,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.selectableTypes=$$a.concat($$v))}else{$$i>-1&&(_vm.selectableTypes=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.selectableTypes=$$c}}}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.slug + '-may-change-member-type-to-' + type.slug}},[_vm._v(_vm._s(type.name))])])}))])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -265,7 +275,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.reload("data-v-ae10b222", __vue__options__)
+    hotAPI.rerender("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"vue":8,"vue-hot-reload-api":7}],6:[function(require,module,exports){
