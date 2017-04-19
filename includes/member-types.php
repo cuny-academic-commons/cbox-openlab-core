@@ -145,6 +145,7 @@ function cboxol_membertypes_admin_page() {
 			),
 			'name' => $type->get_name(),
 			'slug' => $type->get_slug(),
+			'labels' => $type->get_labels(),
 		);
 	}
 

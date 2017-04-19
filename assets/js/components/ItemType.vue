@@ -32,12 +32,21 @@
 					<component :is="setting.component" v-bind:slug="data.slug"></component>
 				</div>
 			</div>
+
+			<div class="cboxol-item-type-content-section item-type-labels">
+				<h3>{{ strings.labels }}</h3>
+
+				<div v-for="label in data.labels">
+					<type-label v-bind:typeSlug="data.slug" v-bind:labelSlug="label.slug"></type-label>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
 	import OnOffSwitch from './OnOffSwitch.vue'
+	import TypeLabel from './TypeLabel.vue'
 
 	// All settings components must be available.
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
@@ -58,7 +67,8 @@
 			OnOffSwitch,
 			MayCreateCourses,
 			MayChangeMemberTypeTo,
-			Order
+			Order,
+			TypeLabel
 		},
 
 		computed: {

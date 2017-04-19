@@ -170,11 +170,13 @@ class MemberType {
 	protected static function get_label_types() {
 		return array(
 			'singular' => array(
+				'slug' => 'singular',
 				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
 				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'plural' => array(
+				'slug' => 'plural',
 				'label' => _x( 'Plural', 'Member Type plural label', 'cbox-openlab-core' ),
 				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
 				'value' => '',

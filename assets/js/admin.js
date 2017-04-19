@@ -14,12 +14,16 @@ const store = new Vuex.Store({
 			state.types[ payload.slug ].settings.MayCreateCourses.data = payload.value === 'yes'
 		},
 
-		setTypeProperty ( state, payload ) {
-			state.types[ payload.slug ][ payload.property ] = payload.value
+		setLabel ( state, payload ) {
+			state.types[ payload.typeSlug ].labels[ payload.labelSlug ].value = payload.value
 		},
 
 		setOrder ( state, payload ) {
 			state.types[ payload.slug ].settings.Order.data = payload.value
+		},
+
+		setTypeProperty ( state, payload ) {
+			state.types[ payload.slug ][ payload.property ] = payload.value
 		},
 
 		setSelectableTypes ( state, payload ) {
