@@ -79,6 +79,7 @@ function cboxol_register_assets() {
 			'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
 
 			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
+			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
 			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
 			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
 			'saved' => __( 'Saved!', 'cbox-openlab-core' ),

@@ -11,7 +11,7 @@
 .cboxol-item-type-header {
 	background: #ededed;
 	border: 1px solid #ccc;
-	font-size: 12pt;
+	font-weight: bold;
 	overflow: hidden;
 	padding: 8px 12px;
 	width: 90%;
@@ -22,10 +22,53 @@
 	width: 75%;
 }
 
+.cboxol-item-type.disabled .cboxol-item-type-header-label {
+	color: #888;
+	font-style: italic;
+}
+
 .cboxol-item-type-header-actions {
-	float: left;
+	float: right;
 	width: 20%;
 	text-align: right;
+}
+
+.cboxol-item-type-header-actions a {
+	display: inline-block;
+	position: relative;
+	height: 18px;
+	text-decoration: none;
+	width: 100%;
+}
+
+.cboxol-item-type-header-actions a span {
+	display: inline-block;
+	position: absolute;
+	right: 24px;
+	top: 8;
+	text-decoration: underline;
+}
+
+.cboxol-item-type-header-actions a:focus {
+	box-shadow: none;
+}
+
+.cboxol-item-type-header-actions a:after {
+	color: #666;
+	content: "\25B2";
+	font-size: 26px;
+	margin-left: 8px;
+	top: 14px;
+}
+
+.cboxol-item-type.collapsed .cboxol-item-type-header-actions a:after {
+	content: "\25BC";
+}
+
+a .action-arrow {
+	color: #999;
+	margin-left: 8px;
+	text-decoration: none;
 }
 
 .cboxol-item-type.collapsed .cboxol-item-type-header {

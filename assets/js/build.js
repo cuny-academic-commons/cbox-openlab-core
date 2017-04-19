@@ -128,8 +128,11 @@ exports.default = {
 		isCollapsed: function isCollapsed() {
 			return this.data.isCollapsed;
 		},
-		isEnabled: function isEnabled() {
-			return this.data.isEnabled;
+
+		isEnabled: {
+			get: function get() {
+				return this.$store.state.types[this.slug].isEnabled;
+			}
 		},
 		itemClass: function itemClass() {
 			var itemClass = 'cboxol-item-type';
@@ -140,6 +143,10 @@ exports.default = {
 
 			if (this.isLoading) {
 				itemClass += ' loading';
+			}
+
+			if (!this.isEnabled) {
+				itemClass += ' disabled';
 			}
 
 			return itemClass;
@@ -187,6 +194,7 @@ exports.default = {
 
 	methods: {
 		onAccordionClick: function onAccordionClick(event) {
+			event.preventDefault();
 			this.$store.commit('toggleCollapsed', { slug: this.slug });
 		},
 
@@ -216,7 +224,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+"\n\t\t")]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('span',{on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit ▼")]):_c('span',[_vm._v("Editing ▲")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])],1)])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('a',{attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v("Edit")]):_c('span',[_vm._v("Editing")])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}}),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])],1)])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -425,7 +433,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ae10b222", __vue__options__)
+    hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"vue":11,"vue-hot-reload-api":10}],7:[function(require,module,exports){

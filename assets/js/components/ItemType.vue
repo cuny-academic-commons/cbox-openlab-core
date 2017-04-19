@@ -2,14 +2,14 @@
 	<div v-bind:class="itemClass">
 		<div class="cboxol-item-type-header">
 			<div class="cboxol-item-type-header-label">
-				{{ name }}
+				{{ name }} <span class="item-type-off" v-if="! isEnabled">{{ strings.off }}</span>
 			</div>
 
 			<div class="cboxol-item-type-header-actions">
-				<span v-on:click="onAccordionClick">
-					<span v-if="isCollapsed">Edit &#x25BC;</span>
-					<span v-else>Editing &#x25B2;</span>
-				</span>
+				<a href="" v-on:click="onAccordionClick">
+					<span v-if="isCollapsed">Edit</span>
+					<span v-else>Editing</span>
+				</a>
 			</div>
 		</div>
 
@@ -80,8 +80,10 @@
 			isCollapsed() {
 				return this.data.isCollapsed
 			},
-			isEnabled() {
-				return this.data.isEnabled
+			isEnabled: {
+				get() {
+					return this.$store.state.types[ this.slug ].isEnabled
+				}
 			},
 			itemClass() {
 				let itemClass = 'cboxol-item-type'
@@ -92,6 +94,10 @@
 
 				if ( this.isLoading ) {
 					itemClass += ' loading'
+				}
+
+				if ( ! this.isEnabled ) {
+					itemClass += ' disabled'
 				}
 
 				return itemClass
@@ -138,6 +144,7 @@
 
 		methods: {
 			onAccordionClick: function( event ) {
+				event.preventDefault()
 				this.$store.commit( 'toggleCollapsed', { slug: this.slug } )
 			},
 
