@@ -1,3 +1,19 @@
+.cboxol-admin-content {
+	background: #fff;
+	border: 1px solid #ccc;
+	border-top: none;
+	padding: 30px 20px;
+}
+
+.cboxol-admin-wrap .nav-tab:first-child {
+	margin-left: 0;
+}
+
+.cboxol-admin-wrap .nav-tab-active {
+	background: #fff;
+	border-bottom: 1px solid #fff;
+}
+
 /** Type summary page */
 
 .types-ui {
