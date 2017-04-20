@@ -80,7 +80,7 @@ const store = new Vuex.Store({
 					return 0
 				}
 
-				return order_a < order_b
+				return order_a > order_b
 			} )
 		},
 
