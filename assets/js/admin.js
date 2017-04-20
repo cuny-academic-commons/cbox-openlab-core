@@ -71,6 +71,19 @@ const store = new Vuex.Store({
 			state.typeNames.push( key )
 		},
 
+		orderTypes ( state ) {
+			state.typeNames.sort( function( a, b ) {
+				const order_a = state.types[ a ].settings.Order.data
+				const order_b = state.types[ b ].settings.Order.data
+
+				if ( order_a == order_b ) {
+					return 0
+				}
+
+				return order_a > order_b
+			} )
+		},
+
 		removeType ( state, payload ) {
 			var index = state.typeNames.indexOf( payload.slug )
 			if ( index > -1 ) {

@@ -203,12 +203,13 @@
 				itemType.isLoading = true
 				if ( itemType.id > 0 ) {
 					itemType.$store.dispatch( 'submitDelete', { id: itemType.id } )
-						.then( itemType.checkStatus )
-						.then( itemType.parseJSON )
-						.then( function( data ) {
-							itemType.$store.commit( 'removeType', { slug: itemType.slug } )
-						} )
-					}
+					.then( itemType.checkStatus )
+					.then( itemType.parseJSON )
+					.then( function( data ) {
+						itemType.$store.commit( 'removeType', { slug: itemType.slug } )
+						itemType.$store.commit( 'orderTypes' )
+					} )
+				}
 			},
 
 			onSubmit: function() {
@@ -221,6 +222,7 @@
 						itemType.isModified = false
 
 						itemType.$store.commit( 'setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id } )
+						itemType.$store.commit( 'orderTypes' )
 					} )
 
 					itemType.isLoading = false

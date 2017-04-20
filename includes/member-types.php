@@ -95,8 +95,10 @@ function cboxol_get_member_types( $args = array() ) {
 		'post_type' => 'cboxol_member_type',
 		'post_status' => 'any',
 		'posts_per_page' => -1,
-		'orderby' => 'title',
-		'order' => 'ASC',
+		'orderby' => array(
+			'menu_order' => 'ASC',
+			'title' => 'ASC',
+		),
 	) );
 
 	$types = array();

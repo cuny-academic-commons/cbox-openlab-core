@@ -86,6 +86,18 @@ var store = new _vuex2.default.Store({
 			// Push to typeNames to force render.
 			state.typeNames.push(key);
 		},
+		orderTypes: function orderTypes(state) {
+			state.typeNames.sort(function (a, b) {
+				var order_a = state.types[a].settings.Order.data;
+				var order_b = state.types[b].settings.Order.data;
+
+				if (order_a == order_b) {
+					return 0;
+				}
+
+				return order_a > order_b;
+			});
+		},
 		removeType: function removeType(state, payload) {
 			var index = state.typeNames.indexOf(payload.slug);
 			if (index > -1) {
@@ -305,6 +317,7 @@ exports.default = {
 			if (itemType.id > 0) {
 				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON).then(function (data) {
 					itemType.$store.commit('removeType', { slug: itemType.slug });
+					itemType.$store.commit('orderTypes');
 				});
 			}
 		},
@@ -316,6 +329,7 @@ exports.default = {
 				itemType.isModified = false;
 
 				itemType.$store.commit('setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id });
+				itemType.$store.commit('orderTypes');
 			});
 
 			itemType.isLoading = false;
