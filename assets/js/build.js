@@ -167,10 +167,14 @@ exports.default = {
 	},
 
 	computed: {
-		isCollapsed: function isCollapsed() {
-			return this.data.isCollapsed;
+		isCollapsed: {
+			get: function get() {
+				return this.$store.state.types[this.slug].isCollapsed;
+			},
+			set: function set(value) {
+				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isCollapsed', value: value });
+			}
 		},
-
 		isEnabled: {
 			get: function get() {
 				return this.$store.state.types[this.slug].isEnabled;
@@ -268,6 +272,7 @@ exports.default = {
 			});
 
 			itemType.isLoading = false;
+			itemType.isCollapsed = true;
 		},
 
 		setIsModified: function setIsModified() {

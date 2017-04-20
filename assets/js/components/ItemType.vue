@@ -83,8 +83,13 @@
 		},
 
 		computed: {
-			isCollapsed() {
-				return this.data.isCollapsed
+			isCollapsed: {
+				get () {
+					return this.$store.state.types[ this.slug ].isCollapsed
+				},
+				set (value) {
+					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isCollapsed', value: value } )
+				}
 			},
 			isEnabled: {
 				get() {
@@ -185,6 +190,7 @@
 					} )
 
 					itemType.isLoading = false
+					itemType.isCollapsed = true
 			},
 
 			setIsModified() {
