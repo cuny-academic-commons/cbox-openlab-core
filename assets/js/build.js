@@ -244,17 +244,30 @@ exports.default = {
 			return this.slug + '-'.base;
 		},
 
+		checkStatus: function checkStatus(response) {
+			if (response.status >= 200 && response.status < 300) {
+				return response;
+			} else {
+				var error = new Error(response.statusText);
+				error.response = response;
+				throw error;
+			}
+		},
+		parseJSON: function parseJSON(response) {
+			return response.json();
+		},
+
+
 		onSubmit: function onSubmit() {
-			var _this = this;
+			var itemType = this;
+			itemType.isLoading = true;
+			itemType.$store.dispatch('submitForm', { slug: itemType.slug }).then(itemType.checkStatus).then(itemType.parseJSON).then(function (data) {
+				itemType.isModified = false;
 
-			this.isLoading = true;
-			this.$store.dispatch('submitForm', { slug: this.slug }).then(function (response) {
-				if (response.status >= 200 && response.status < 300) {
-					_this.isModified = false;
-				} else {}
-
-				_this.isLoading = false;
+				itemType.$store.commit('setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id });
 			});
+
+			itemType.isLoading = false;
 		},
 
 		setIsModified: function setIsModified() {
@@ -275,7 +288,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-920509b8", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-920509b8", __vue__options__)
+    hotAPI.reload("data-v-920509b8", __vue__options__)
   }
 })()}
 },{"./OnOffSwitch.vue":3,"./TypeLabel.vue":4,"./settings/MayChangeMemberTypeTo.vue":6,"./settings/MayCreateCourses.vue":7,"./settings/Order.vue":8,"vue":11,"vue-hot-reload-api":10}],3:[function(require,module,exports){

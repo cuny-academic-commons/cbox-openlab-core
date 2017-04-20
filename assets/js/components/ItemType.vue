@@ -158,17 +158,33 @@
 				return this.slug + '-' . base
 			},
 
+			checkStatus(response) {
+				if (response.status >= 200 && response.status < 300) {
+					return response
+				} else {
+					var error = new Error(response.statusText)
+					error.response = response
+					throw error
+				}
+			},
+
+			parseJSON(response) {
+				return response.json()
+			},
+
 			onSubmit: function() {
-				this.isLoading = true
-				this.$store.dispatch( 'submitForm', { slug: this.slug } ).then( response => {
-					if ( response.status >= 200 && response.status < 300 ) {
-						this.isModified = false
-					} else {
+				let itemType = this
+				itemType.isLoading = true
+				itemType.$store.dispatch( 'submitForm', { slug: itemType.slug } )
+					.then( itemType.checkStatus )
+					.then( itemType.parseJSON )
+					.then( function( data ) {
+						itemType.isModified = false
 
-					}
+						itemType.$store.commit( 'setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id } )
+					} )
 
-					this.isLoading = false
-				} )
+					itemType.isLoading = false
 			},
 
 			setIsModified() {

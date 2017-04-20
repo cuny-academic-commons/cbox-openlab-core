@@ -86,8 +86,9 @@ class APIEndpoint extends WP_REST_Controller {
 
 		$type->save();
 
-		$retval = array();
+		$retval = $type->get_for_endpoint();
 		$response = rest_ensure_response( $retval );
+		return $response;
 	}
 
 	public function create_item_permissions_check( $request ) {
