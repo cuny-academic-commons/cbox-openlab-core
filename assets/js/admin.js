@@ -11,6 +11,19 @@ const store = new Vuex.Store({
 		typeNames: []
 	},
 	actions: {
+		submitDelete ( commit, payload ) {
+			const nonce = CBOXOLStrings.nonce
+			const endpoint = CBOXOLStrings.endpoint + payload.id
+
+			return fetch( endpoint, {
+				method: 'DELETE',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce
+				}
+			} )
+		},
 		submitForm ( commit, payload ) {
 			const typeData = commit.state.types[ payload.slug ]
 			const nonce = CBOXOLStrings.nonce
@@ -56,6 +69,15 @@ const store = new Vuex.Store({
 
 			// Push to typeNames to force render.
 			state.typeNames.push( key )
+		},
+
+		removeType ( state, payload ) {
+			var index = state.typeNames.indexOf( payload.slug )
+			if ( index > -1 ) {
+				state.typeNames.splice( index, 1 )
+			}
+
+			delete state.types[ payload.slug ]
 		},
 
 		setMayCreateCourses ( state, payload ) {

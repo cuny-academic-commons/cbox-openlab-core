@@ -27,6 +27,19 @@ var store = new _vuex2.default.Store({
 		typeNames: []
 	},
 	actions: {
+		submitDelete: function submitDelete(commit, payload) {
+			var nonce = CBOXOLStrings.nonce;
+			var endpoint = CBOXOLStrings.endpoint + payload.id;
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'DELETE',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': nonce
+				}
+			});
+		},
 		submitForm: function submitForm(commit, payload) {
 			var typeData = commit.state.types[payload.slug];
 			var nonce = CBOXOLStrings.nonce;
@@ -72,6 +85,14 @@ var store = new _vuex2.default.Store({
 
 			// Push to typeNames to force render.
 			state.typeNames.push(key);
+		},
+		removeType: function removeType(state, payload) {
+			var index = state.typeNames.indexOf(payload.slug);
+			if (index > -1) {
+				state.typeNames.splice(index, 1);
+			}
+
+			delete state.types[payload.slug];
 		},
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
 			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
@@ -167,6 +188,16 @@ exports.default = {
 	},
 
 	computed: {
+		canBeDeleted: {
+			get: function get() {
+				return this.$store.state.types[this.slug].canBeDeleted;
+			}
+		},
+		id: {
+			get: function get() {
+				return this.$store.state.types[this.slug].id;
+			}
+		},
 		isCollapsed: {
 			get: function get() {
 				return this.$store.state.types[this.slug].isCollapsed;
@@ -262,6 +293,22 @@ exports.default = {
 		},
 
 
+		onDeleteClick: function onDeleteClick(event) {
+			event.preventDefault();
+
+			if (!confirm(this.strings.deleteConfirm)) {
+				return;
+			}
+
+			var itemType = this;
+			itemType.isLoading = true;
+			if (itemType.id > 0) {
+				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON).then(function (data) {
+					itemType.$store.commit('removeType', { slug: itemType.slug });
+				});
+			}
+		},
+
 		onSubmit: function onSubmit() {
 			var itemType = this;
 			itemType.isLoading = true;
@@ -284,7 +331,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('a',{attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

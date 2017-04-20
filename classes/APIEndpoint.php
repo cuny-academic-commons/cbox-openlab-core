@@ -5,6 +5,7 @@ namespace CBOX\OL;
 use \WP_REST_Controller;
 use \WP_REST_Server;
 use \WP_REST_Request;
+use \WP_REST_Response;
 
 class APIEndpoint extends WP_REST_Controller {
 	public function register_routes() {
@@ -88,6 +89,27 @@ class APIEndpoint extends WP_REST_Controller {
 
 		$retval = $type->get_for_endpoint();
 		$response = rest_ensure_response( $retval );
+		return $response;
+	}
+
+	public function delete_item( $request ) {
+		$params = $request->get_params();
+
+		$wp_post = get_post( $params['id'] );
+		$type = MemberType::get_instance_from_wp_post( $wp_post );
+
+		if ( ! $type->get_can_be_deleted() ) {
+			$data = __( 'Type cannot be deleted', 'cbox-openlab-core' );
+			$status = 403;
+		} else {
+			wp_delete_post( $params['id'] );
+			$data = __( 'OK', 'cbox-openlab-core' );
+			$status = 200;
+		}
+
+		$response = new WP_REST_Response( $data );
+		$response->set_status( $status );
+
 		return $response;
 	}
 

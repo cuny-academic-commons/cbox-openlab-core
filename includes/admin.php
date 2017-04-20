@@ -72,6 +72,8 @@ function cboxol_register_assets() {
 		'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
 		'strings' => array(
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+			'delete' => __( 'Delete', 'cbox-openlab-core' ),
+			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
 			'edit' => __( 'Edit', 'cbox-openlab-core' ),
 			'editing' => __( 'Editing', 'cbox-openlab-core' ),
 			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),

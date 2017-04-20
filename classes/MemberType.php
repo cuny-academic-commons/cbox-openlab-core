@@ -9,6 +9,7 @@ class MemberType {
 		'description' => '',
 		'labels' => array(),
 		'can_create_courses' => false,
+		'can_be_deleted' => false,
 		'selectable_types' => array(),
 		'is_enabled' => true,
 		'order' => 0,
@@ -85,6 +86,10 @@ class MemberType {
 		return (int) $this->data['order'];
 	}
 
+	public function get_can_be_deleted() {
+		return (bool) $this->data['can_be_deleted'];
+	}
+
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 
@@ -120,6 +125,11 @@ class MemberType {
 
 		// Order
 		$type->set_order( $post->menu_order );
+
+		// Can be deleted.
+		$can_be_deleted_db = get_post_meta( $post->ID, 'cboxol_member_type_is_builtin', true );
+		$can_be_deleted = 'yes' !== $can_be_deleted_db;
+		$type->set_can_be_deleted( $can_be_deleted );
 
 		// WP post ID.
 		$type->set_wp_post_id( $post->ID );
@@ -158,6 +168,7 @@ class MemberType {
 			'isEnabled' => $this->get_is_enabled(),
 			'isLoading' => false,
 			'isModified' => false,
+			'canBeDeleted' => $this->get_can_be_deleted(),
 			'settings' => array(
 				'MayCreateCourses' => array(
 					'component' => 'MayCreateCourses',
@@ -260,6 +271,10 @@ class MemberType {
 
 	protected function set_wp_post_id( $wp_post_id ) {
 		$this->data['wp_post_id'] = (int) $wp_post_id;
+	}
+
+	protected function set_can_be_deleted( $can_be_deleted ) {
+		$this->data['can_be_deleted'] = (bool) $can_be_deleted;
 	}
 
 	protected static function get_label_types() {

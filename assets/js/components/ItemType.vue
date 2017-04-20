@@ -6,10 +6,15 @@
 			</div>
 
 			<div class="cboxol-item-type-header-actions">
-				<a href="" v-on:click="onAccordionClick">
+				<a href="" v-on:click="onDeleteClick" v-if="canBeDeleted">
+					<span>{{ strings.delete }}</span>
+				</a>
+				<span v-if="canBeDeleted"> | </span>
+				<a class="cboxol-item-type-edit" href="" v-on:click="onAccordionClick">
 					<span v-if="isCollapsed">{{ strings.edit }}</span>
 					<span v-else>{{ strings.editing }}</span>
 				</a>
+				<a class="cboxol-item-type-edit-arrow" href="" v-on:click="onAccordionClick"></a>
 			</div>
 		</div>
 
@@ -83,6 +88,16 @@
 		},
 
 		computed: {
+			canBeDeleted: {
+				get() {
+					return this.$store.state.types[ this.slug ].canBeDeleted
+				}
+			},
+			id: {
+				get() {
+					return this.$store.state.types[ this.slug ].id
+				}
+			},
 			isCollapsed: {
 				get () {
 					return this.$store.state.types[ this.slug ].isCollapsed
@@ -175,6 +190,25 @@
 
 			parseJSON(response) {
 				return response.json()
+			},
+
+			onDeleteClick: function( event ) {
+				event.preventDefault()
+
+				if ( ! confirm( this.strings.deleteConfirm ) ) {
+					return
+				}
+
+				let itemType = this
+				itemType.isLoading = true
+				if ( itemType.id > 0 ) {
+					itemType.$store.dispatch( 'submitDelete', { id: itemType.id } )
+						.then( itemType.checkStatus )
+						.then( itemType.parseJSON )
+						.then( function( data ) {
+							itemType.$store.commit( 'removeType', { slug: itemType.slug } )
+						} )
+					}
 			},
 
 			onSubmit: function() {

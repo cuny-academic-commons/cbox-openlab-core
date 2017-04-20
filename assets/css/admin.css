@@ -44,23 +44,17 @@
 
 .cboxol-item-type-header-actions {
 	float: right;
+	position: relative;
 	width: 20%;
 	text-align: right;
 }
 
 .cboxol-item-type-header-actions a {
-	display: inline-block;
-	position: relative;
 	height: 18px;
 	text-decoration: none;
-	width: 100%;
 }
 
 .cboxol-item-type-header-actions a span {
-	display: inline-block;
-	position: absolute;
-	right: 24px;
-	top: 8;
 	text-decoration: underline;
 }
 
@@ -68,15 +62,21 @@
 	box-shadow: none;
 }
 
-.cboxol-item-type-header-actions a:after {
+.cboxol-item-type-edit {
+	padding-right: 26px;
+}
+
+a.cboxol-item-type-edit-arrow:after {
 	color: #666;
 	content: "\25B2";
 	font-size: 26px;
 	margin-left: 8px;
-	top: 14px;
+	position: absolute;
+	right: 0;
+	top: 0;
 }
 
-.cboxol-item-type.collapsed .cboxol-item-type-header-actions a:after {
+.cboxol-item-type.collapsed a.cboxol-item-type-edit-arrow:after {
 	content: "\25BC";
 }
 
