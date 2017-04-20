@@ -1,10 +1,12 @@
 <template>
 	<div>
 		<ul class="types-ui">
-			<li v-for="type in types">
-				<div is="itemType" :slug="type.slug"></div>
+			<li v-for="typeName in typeNames">
+				<div is="itemType" :slug="typeName"></div>
 			</li>
 		</ul>
+
+		<a href="" v-on:click="addNewType" class="add-new-type-toggle">+ {{ strings.addNewType }}</a>
 	</div>
 </template>
 
@@ -16,13 +18,29 @@
 			'itemType': ItemType
 		},
 		computed: {
-			types() {
-				return this.$store.state.types
+			typeNames: {
+				get () {
+					return this.$store.state.typeNames
+				},
+
+				set ( value ) {
+//					console.log('hr')
+//					this.$store.commit( 'addNewType', { value: value } )
+				}
 			}
 		},
 		data() {
 			return {
+				strings: CBOXOLStrings.strings,
 				objectType: CBOXOL_ObjectType
+			}
+		},
+		methods: {
+			addNewType( event ) {
+				event.preventDefault()
+//				console.log('ok')
+//				this.typeNames.push( '_new' )
+				this.$store.commit( 'addNewType' )
 			}
 		}
 	}

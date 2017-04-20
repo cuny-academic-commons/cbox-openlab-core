@@ -7,13 +7,18 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		types: CBOXOL_Types
+		types: CBOXOL_Types,
+		typeNames: []
 	},
 	actions: {
 		submitForm ( commit, payload ) {
 			const typeData = commit.state.types[ payload.slug ]
-			const endpoint = 'http://boone.cool/neh/wp-json/cboxol/v1/item-type/' + typeData.id
 			const nonce = CBOXOLStrings.nonce
+
+			let endpoint = CBOXOLStrings.endpoint
+			if ( typeData.id > 0 ) {
+				endpoint += typeData.id
+			}
 
 			return fetch( endpoint, {
 				method: 'POST',
@@ -27,6 +32,32 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations: {
+		addNewType ( state ) {
+			// Get unique key.
+			let isAvailable = false
+			let baseKey = '_new'
+			let key = baseKey
+			let incr = 1
+
+			do {
+				if ( state.types.hasOwnProperty( key ) ) {
+					key = baseKey + incr
+					incr++
+				} else {
+					isAvailable = true
+				}
+			} while ( ! isAvailable )
+
+			// Clone dummy data to that key.
+			let dummy = JSON.parse( JSON.stringify( CBOXOL_Dummy ) )
+			dummy.slug = key
+			dummy.isCollapsed = false
+			state.types[ key ] = dummy
+
+			// Push to typeNames to force render.
+			state.typeNames.push( key )
+		},
+
 		setMayCreateCourses ( state, payload ) {
 			state.types[ payload.slug ].settings.MayCreateCourses.data = payload.value === 'yes'
 		},
@@ -47,6 +78,15 @@ const store = new Vuex.Store({
 			state.types[ payload.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes
 		},
 
+		setUpTypeNames ( state ) {
+			var typeName
+			for ( typeName in state.types ) {
+				if ( state.types.hasOwnProperty( typeName ) ) {
+					state.typeNames.push( typeName )
+				}
+			}
+		},
+
 		toggleCollapsed ( state, payload ) {
 			state.types[ payload.slug ].isCollapsed = ! state.types[ payload.slug ].isCollapsed
 		}
@@ -58,6 +98,9 @@ new Vue( {
 	store,
 	components: {
 		app: TypesUI
+	},
+	mounted() {
+		this.$store.commit( 'setUpTypeNames' )
 	},
 	render: h => h('app')
 } );

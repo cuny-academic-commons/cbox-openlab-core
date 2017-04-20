@@ -55,7 +55,13 @@ class APIEndpoint extends WP_REST_Controller {
 		) );
 	}
 
-	public function create_item( $request ) {}
+	public function create_item( $request ) {
+		$params = $request->get_params();
+
+		$type = MemberType::get_dummy();
+
+		return $this->create_update_helper( $type, $params );
+	}
 
 	public function update_item( $request ) {
 		$params = $request->get_params();
@@ -63,8 +69,11 @@ class APIEndpoint extends WP_REST_Controller {
 		$wp_post = get_post( $params['id'] );
 		$type = MemberType::get_instance_from_wp_post( $wp_post );
 
+		return $this->create_update_helper( $type, $params );
+	}
+
+	public function create_update_helper( MemberType $type, $params ) {
 		$type->set_name( $params['name'] );
-		//$type->set_description( $params['description'] );
 
 		foreach ( $params['labels'] as $label_type => $label_data ) {
 			$type->set_label( $label_type, $label_data['value'] );
@@ -79,7 +88,6 @@ class APIEndpoint extends WP_REST_Controller {
 
 		$retval = array();
 		$response = rest_ensure_response( $retval );
-		return $response;
 	}
 
 	public function create_item_permissions_check( $request ) {

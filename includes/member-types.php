@@ -132,6 +132,7 @@ function cboxol_membertypes_admin_page() {
 			<script type="text/javascript">
 				var CBOXOL_ObjectType = 'member';
 				var CBOXOL_Types = <?php echo json_encode( $type_data ); ?>;
+				var CBOXOL_Dummy = <?php echo json_encode( $dummy_data ); ?>;
 			</script>
 
 			<div id="cboxol-types-admin">

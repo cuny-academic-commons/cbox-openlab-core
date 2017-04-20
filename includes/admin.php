@@ -69,6 +69,7 @@ function cboxol_register_assets() {
 
 	wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
 		'nonce' => wp_create_nonce( 'wp_rest' ),
+		'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
 		'strings' => array(
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
 			'edit' => __( 'Edit', 'cbox-openlab-core' ),

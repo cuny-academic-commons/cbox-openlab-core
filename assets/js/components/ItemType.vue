@@ -28,6 +28,7 @@
 					v-bind:id="data.slug + '-name'"
 					v-model="name"
 					v-on:change="setIsModified"
+					v-bind:autofocus="! name"
 				>
 			</div>
 

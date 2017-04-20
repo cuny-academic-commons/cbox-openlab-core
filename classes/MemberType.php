@@ -187,7 +187,6 @@ class MemberType {
 		$wp_post_id = $this->get_wp_post_id();
 
 		$post_params = array(
-			'ID' => $wp_post_id,
 			'post_title' => $this->get_name(),
 			'menu_order' => $this->get_order(),
 		);
@@ -198,7 +197,16 @@ class MemberType {
 			$post_params['post_stauts'] = 'draft';
 		}
 
-		wp_update_post( $post_params );
+		if ( $wp_post_id ) {
+			$post_params['ID'] = $wp_post_id;
+			wp_update_post( $post_params );
+		} else {
+			$post_params['post_type'] = 'cboxol_member_type';
+			$wp_post_id = wp_insert_post( $post_params );
+			$wp_post = get_post( $wp_post_id );
+			$this->set_wp_post_id( $wp_post_id );
+			$this->set_slug( $wp_post->post_name );
+		}
 
 		update_post_meta( $wp_post_id, 'cboxol_member_type_selectable_types', $this->get_selectable_types() );
 

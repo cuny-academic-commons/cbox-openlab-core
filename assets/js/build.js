@@ -23,13 +23,18 @@ _vue2.default.use(_vuex2.default);
 
 var store = new _vuex2.default.Store({
 	state: {
-		types: CBOXOL_Types
+		types: CBOXOL_Types,
+		typeNames: []
 	},
 	actions: {
 		submitForm: function submitForm(commit, payload) {
 			var typeData = commit.state.types[payload.slug];
-			var endpoint = 'http://boone.cool/neh/wp-json/cboxol/v1/item-type/' + typeData.id;
 			var nonce = CBOXOLStrings.nonce;
+
+			var endpoint = CBOXOLStrings.endpoint;
+			if (typeData.id > 0) {
+				endpoint += typeData.id;
+			}
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
@@ -43,6 +48,31 @@ var store = new _vuex2.default.Store({
 		}
 	},
 	mutations: {
+		addNewType: function addNewType(state) {
+			// Get unique key.
+			var isAvailable = false;
+			var baseKey = '_new';
+			var key = baseKey;
+			var incr = 1;
+
+			do {
+				if (state.types.hasOwnProperty(key)) {
+					key = baseKey + incr;
+					incr++;
+				} else {
+					isAvailable = true;
+				}
+			} while (!isAvailable);
+
+			// Clone dummy data to that key.
+			var dummy = JSON.parse(JSON.stringify(CBOXOL_Dummy));
+			dummy.slug = key;
+			dummy.isCollapsed = false;
+			state.types[key] = dummy;
+
+			// Push to typeNames to force render.
+			state.typeNames.push(key);
+		},
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
 			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
 		},
@@ -58,6 +88,14 @@ var store = new _vuex2.default.Store({
 		setSelectableTypes: function setSelectableTypes(state, payload) {
 			state.types[payload.slug].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes;
 		},
+		setUpTypeNames: function setUpTypeNames(state) {
+			var typeName;
+			for (typeName in state.types) {
+				if (state.types.hasOwnProperty(typeName)) {
+					state.typeNames.push(typeName);
+				}
+			}
+		},
 		toggleCollapsed: function toggleCollapsed(state, payload) {
 			state.types[payload.slug].isCollapsed = !state.types[payload.slug].isCollapsed;
 		}
@@ -70,6 +108,10 @@ new _vue2.default({
 	components: {
 		app: _TypesUI2.default
 	},
+	mounted: function mounted() {
+		this.$store.commit('setUpTypeNames');
+	},
+
 	render: function render(h) {
 		return h('app');
 	}
@@ -224,7 +266,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('a',{attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name'},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[_c('a',{attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])])])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -332,7 +374,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-11c5a333", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-11c5a333", __vue__options__)
+    hotAPI.reload("data-v-11c5a333", __vue__options__)
   }
 })()}
 },{"vue":11,"vue-hot-reload-api":10}],5:[function(require,module,exports){
@@ -354,21 +396,33 @@ exports.default = {
 		'itemType': _ItemType2.default
 	},
 	computed: {
-		types: function types() {
-			return this.$store.state.types;
+		typeNames: {
+			get: function get() {
+				return this.$store.state.typeNames;
+			},
+			set: function set(value) {}
 		}
 	},
 	data: function data() {
 		return {
+			strings: CBOXOLStrings.strings,
 			objectType: CBOXOL_ObjectType
 		};
+	},
+
+	methods: {
+		addNewType: function addNewType(event) {
+			event.preventDefault();
+
+			this.$store.commit('addNewType');
+		}
 	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.types),function(type){return _c('li',[_c("itemType",{tag:"div",attrs:{"slug":type.slug}})])}))])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.typeNames),function(typeName){return _c('li',[_c("itemType",{tag:"div",attrs:{"slug":typeName}})])})),_vm._v(" "),_c('a',{staticClass:"add-new-type-toggle",attrs:{"href":""},on:{"click":_vm.addNewType}},[_vm._v("+ "+_vm._s(_vm.strings.addNewType))])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -377,7 +431,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-3f7822e6", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3f7822e6", __vue__options__)
+    hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
 },{"./ItemType.vue":2,"vue":11,"vue-hot-reload-api":10}],6:[function(require,module,exports){
@@ -433,7 +487,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ae10b222", __vue__options__)
+    hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"vue":11,"vue-hot-reload-api":10}],7:[function(require,module,exports){
@@ -478,7 +532,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-677df33c", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-677df33c", __vue__options__)
+    hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
 },{"vue":11,"vue-hot-reload-api":10}],8:[function(require,module,exports){
@@ -523,7 +577,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-5d0da2ce", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-5d0da2ce", __vue__options__)
+    hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
 },{"vue":11,"vue-hot-reload-api":10}],9:[function(require,module,exports){
