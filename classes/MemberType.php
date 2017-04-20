@@ -9,7 +9,7 @@ class MemberType {
 		'description' => '',
 		'labels' => array(),
 		'can_create_courses' => false,
-		'can_be_deleted' => false,
+		'can_be_deleted' => true,
 		'selectable_types' => array(),
 		'is_enabled' => true,
 		'order' => 0,
