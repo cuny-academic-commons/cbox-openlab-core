@@ -59,41 +59,43 @@ function cboxol_register_assets() {
 	wp_enqueue_script( 'cbox-ol-member-types-ui' );
 	*/
 
-	wp_enqueue_script(
-		'cbox-ol-admin',
-		CBOXOL_PLUGIN_URL . 'assets/js/build.js',
-		array(),
-		123, // @todo
-		true
-	);
+	if ( isset( $_GET['page'] ) && 'cbox-ol-member-types' === $_GET['page'] ) {
+		wp_enqueue_script(
+			'cbox-ol-admin',
+			CBOXOL_PLUGIN_URL . 'assets/js/build.js',
+			array(),
+			123, // @todo
+			true
+		);
 
-	wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
-		'nonce' => wp_create_nonce( 'wp_rest' ),
-		'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
-		'strings' => array(
-			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
-			'delete' => __( 'Delete', 'cbox-openlab-core' ),
-			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
-			'edit' => __( 'Edit', 'cbox-openlab-core' ),
-			'editing' => __( 'Editing', 'cbox-openlab-core' ),
-			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
-			'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
-			'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
+		wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
+			'strings' => array(
+				'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+				'delete' => __( 'Delete', 'cbox-openlab-core' ),
+				'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
+				'edit' => __( 'Edit', 'cbox-openlab-core' ),
+				'editing' => __( 'Editing', 'cbox-openlab-core' ),
+				'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
+				'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
+				'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
 
-			// @todo This probably will not translate.
-			'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
+				// @todo This probably will not translate.
+				'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
 
-			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
-			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
-			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
-			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
-			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
-			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
-			'saving' => __( 'Saving', 'cbox-openlab-core' ),
-			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
-			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
-		),
-	) );
+				'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
+				'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
+				'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
+				'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
+				'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
+				'saved' => __( 'Saved!', 'cbox-openlab-core' ),
+				'saving' => __( 'Saving', 'cbox-openlab-core' ),
+				'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
+				'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
+			),
+		) );
+	}
 
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );
 	// @todo More specific.

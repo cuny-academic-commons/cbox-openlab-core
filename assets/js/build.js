@@ -441,7 +441,13 @@ exports.default = {
 	computed: {
 		labelValue: {
 			get: function get() {
-				return this.$store.state.types[this.typeSlug].labels[this.labelSlug].value;
+				var value = this.$store.state.types[this.typeSlug].labels[this.labelSlug].value;
+
+				if (0 == value.length) {
+					value = this.$store.state.types[this.typeSlug].name;
+				}
+
+				return value;
 			},
 			set: function set(value) {
 				this.$store.commit('setTypeProperty', { slug: this.typeSlug, property: 'isModified', value: true });

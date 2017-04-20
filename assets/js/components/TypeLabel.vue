@@ -29,7 +29,14 @@
 		computed: {
 			labelValue: {
 				get () {
-					return this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].value
+					let value = this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].value
+
+					// Fall back on name.
+					if ( 0 == value.length ) {
+						value = this.$store.state.types[ this.typeSlug ].name
+					}
+
+					return value
 				},
 				set ( value ) {
 					this.$store.commit( 'setTypeProperty', { slug: this.typeSlug, property: 'isModified', value: true } )
