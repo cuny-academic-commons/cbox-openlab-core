@@ -117,6 +117,16 @@ var store = new _vuex2.default.Store({
 		},
 		setTypeProperty: function setTypeProperty(state, payload) {
 			state.types[payload.slug][payload.property] = payload.value;
+
+			if ('isModified' == payload.property) {
+				if (payload.value) {
+					window.onbeforeunload = function () {
+						return true;
+					};
+				} else {
+					window.onbeforeunload = null;
+				}
+			}
 		},
 		setSelectableTypes: function setSelectableTypes(state, payload) {
 			state.types[payload.slug].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes;

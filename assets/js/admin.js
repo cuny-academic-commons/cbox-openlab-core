@@ -107,6 +107,14 @@ const store = new Vuex.Store({
 
 		setTypeProperty ( state, payload ) {
 			state.types[ payload.slug ][ payload.property ] = payload.value
+
+			if ( 'isModified' == payload.property ) {
+				if ( payload.value ) {
+					window.onbeforeunload = function() { return true }	
+				} else {
+					window.onbeforeunload = null
+				}
+			}
 		},
 
 		setSelectableTypes ( state, payload ) {
