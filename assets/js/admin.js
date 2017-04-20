@@ -80,7 +80,7 @@ const store = new Vuex.Store({
 					return 0
 				}
 
-				return order_a > order_b
+				return order_a < order_b
 			} )
 		},
 
@@ -110,7 +110,7 @@ const store = new Vuex.Store({
 
 			if ( 'isModified' == payload.property ) {
 				if ( payload.value ) {
-					window.onbeforeunload = function() { return true }	
+					window.onbeforeunload = function() { return true }
 				} else {
 					window.onbeforeunload = null
 				}

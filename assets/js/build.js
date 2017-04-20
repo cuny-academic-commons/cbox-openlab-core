@@ -95,7 +95,7 @@ var store = new _vuex2.default.Store({
 					return 0;
 				}
 
-				return order_a > order_b;
+				return order_a < order_b;
 			});
 		},
 		removeType: function removeType(state, payload) {
