@@ -11,7 +11,7 @@
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'CBOXOL_PLUGIN_VER', '1.0-alpha-20170329' );
+define( 'CBOXOL_PLUGIN_VER', '1.0-alpha-20170419' );
 
 // @todo Organize this in a meaningful way.
 function cboxol_init() {

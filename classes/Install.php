@@ -20,6 +20,7 @@ class Install {
 	public function upgrade() { }
 
 	public function install_default_member_types() {
+		// todo - move to save() method
 		$types_data = array(
 			'faculty' => array(
 				'name' => __( 'Faculty', 'cbox-openlab-core' ),
@@ -103,6 +104,8 @@ class Install {
 			if ( $type_data['selectable_types'] ) {
 				add_post_meta( $post_id, 'cboxol_member_type_selectable_types', $type_data['selectable_types'] );
 			}
+
+			add_post_meta( $post_id, 'cboxol_member_type_is_builtin', 'yes' );
 		}
 	}
 }
