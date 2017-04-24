@@ -145,60 +145,6 @@ function cboxol_membertypes_admin_page() {
 	<?php
 }
 
-function cboxol_membertypes_register_meta_boxes() {
-	// Labels.
-	add_meta_box(
-		'cbox-ol-member-type-labels',
-		_x( 'Labels', 'Member type labels metabox title', 'cbox-openlab-core' ),
-		'cboxol_membertypes_labels_metabox',
-		'cboxol_member_type',
-		'advanced',
-		'high'
-	);
-
-	// Settings.
-	add_meta_box(
-		'cbox-ol-member-type-settings',
-		_x( 'Settings', 'Member type settings metabox title', 'cbox-openlab-core' ),
-		'cboxol_membertypes_settings_metabox',
-		'cboxol_member_type',
-		'advanced'
-	);
-}
-
-function cboxol_membertypes_process_form_submit() {
-	if ( ! current_user_can( 'manage_network_settings' ) ) {
-		return;
-	}
-
-	if ( ! isset( $_POST['types-enable-nonce'] ) || ! wp_verify_nonce( $_POST['types-enable-nonce'], 'types_enable' ) ) {
-		return;
-	}
-
-	$enabled_types = array();
-	if ( isset( $_POST['enabled-types'] ) ) {
-		$enabled_types = wp_unslash( $_POST['enabled-types'] );
-	}
-
-	$all_types = cboxol_get_member_types( array(
-		'enabled' => null,
-	) );
-
-	foreach ( $all_types as $type ) {
-		if ( $type->get_is_enabled() && ! in_array( $type->get_slug(), $enabled_types, true ) ) {
-			wp_update_post( array(
-				'ID' => $type->get_wp_post_id(),
-				'post_status' => 'draft',
-			) );
-		} elseif ( ! $type->get_is_enabled() && in_array( $type->get_slug(), $enabled_types, true ) ) {
-			wp_update_post( array(
-				'ID' => $type->get_wp_post_id(),
-				'post_status' => 'publish',
-			) );
-		}
-	}
-}
-
 /**
  * Get the (singular) label corresponding to a user's member type.
  *
