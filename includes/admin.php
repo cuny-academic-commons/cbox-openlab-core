@@ -24,6 +24,17 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
+		__( 'Group Settings', 'cbox-openlab-core' ),
+		__( 'Group Settings', 'cbox-openlab-core' ),
+		'manage_network_options',
+		cboxol_admin_slug( 'group-settings', 'types' ),
+		'cboxol_grouptypes_admin_page',
+		'',
+		2
+	);
+
+	add_submenu_page(
+		cboxol_admin_slug(),
 		__( 'Member Settings', 'cbox-openlab-core' ),
 		__( 'Member Settings', 'cbox-openlab-core' ),
 		'manage_network_options',
@@ -35,67 +46,41 @@ function cboxol_register_admin_menu() {
 }
 
 function cboxol_register_assets() {
-	/*
 	wp_register_script(
-		'cbox-ol-types-ui',
-		CBOXOL_PLUGIN_URL . 'assets/js/types-ui.js',
-		array(
-			'jquery',
-			'jquery-ui-core',
-			'jquery-ui-accordion',
-			'jquery-ui-sortable',
-			'jquery-ui-draggable',
-		)
+		'cbox-ol-app',
+		CBOXOL_PLUGIN_URL . 'assets/js/build.js',
+		array(),
+		123, // @todo
+		true
 	);
-	wp_enqueue_script( 'cbox-ol-types-ui' );
 
-	wp_register_script(
-		'cbox-ol-member-types-ui',
-		CBOXOL_PLUGIN_URL . 'build.js',
-		array(
-			'cbox-ol-types-ui',
-		)
-	);
-	wp_enqueue_script( 'cbox-ol-member-types-ui' );
-	*/
+	wp_localize_script( 'cbox-ol-app', 'CBOXOLStrings', array(
+		'nonce' => wp_create_nonce( 'wp_rest' ),
+		'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
+		'strings' => array(
+			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+			'delete' => __( 'Delete', 'cbox-openlab-core' ),
+			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
+			'edit' => __( 'Edit', 'cbox-openlab-core' ),
+			'editing' => __( 'Editing', 'cbox-openlab-core' ),
+			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
+			'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
+			'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
 
-	if ( isset( $_GET['page'] ) && 'cbox-ol-member-types' === $_GET['page'] ) {
-		wp_register_script(
-			'cbox-ol-app',
-			CBOXOL_PLUGIN_URL . 'assets/js/build.js',
-			array(),
-			123, // @todo
-			true
-		);
+			// @todo This probably will not translate.
+			'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
 
-		wp_localize_script( 'cbox-ol-app', 'CBOXOLStrings', array(
-			'nonce' => wp_create_nonce( 'wp_rest' ),
-			'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
-			'strings' => array(
-				'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
-				'delete' => __( 'Delete', 'cbox-openlab-core' ),
-				'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
-				'edit' => __( 'Edit', 'cbox-openlab-core' ),
-				'editing' => __( 'Editing', 'cbox-openlab-core' ),
-				'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
-				'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
-				'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
-
-				// @todo This probably will not translate.
-				'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
-
-				'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
-				'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
-				'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
-				'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
-				'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
-				'saved' => __( 'Saved!', 'cbox-openlab-core' ),
-				'saving' => __( 'Saving', 'cbox-openlab-core' ),
-				'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
-				'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
-			),
-		) );
-	}
+			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
+			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
+			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
+			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
+			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
+			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
+			'saving' => __( 'Saving', 'cbox-openlab-core' ),
+			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
+			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
+		),
+	) );
 
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );
 	// @todo More specific.
@@ -118,6 +103,7 @@ function cboxol_catch_form_submit() {
 	}
 
 	switch ( $_GET['page'] ) {
+		// @todo this is no longer correct
 		case cboxol_admin_slug( 'member-settings', 'types' ) :
 			cboxol_membertypes_process_form_submit();
 			break;
@@ -149,6 +135,18 @@ function cboxol_admin_slug( $parent_page = '', $sub_page = '' ) {
 					return 'cbox-ol-member-settings';
 			}
 
+		case 'group-settings' :
+			switch ( $sub_page ) {
+				case 'types' :
+					return 'cbox-ol-group-types';
+
+				case 'group-categories' :
+					return 'cbox-ol-group-categories';
+
+				case 'sort-group-categories' :
+					return 'cbox-ol-sort-group-categories';
+			}
+
 		default :
 			return 'cbox-ol';
 	}
@@ -158,6 +156,9 @@ function cboxol_admin_page_label( $page ) {
 	switch ( $page ) {
 		case 'member-settings' :
 			return __( 'Member Settings', 'cbox-openlab-core' );
+
+		case 'group-settings' :
+			return __( 'Group Settings', 'cbox-openlab-core' );
 	}
 }
 
@@ -176,6 +177,18 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 
 				case 'profile-fields' :
 					return _x( 'Profile Fields', 'Member profile fields admin label', 'cbox-openlab-core' );
+			}
+
+		case 'group-settings' :
+			switch ( $page ) {
+				case 'types' :
+					return _x( 'Types', 'Group Types admin label', 'cbox-openlab-core' );
+
+				case 'group-categories' :
+					return _x( 'Group Categories', 'Group categories admin label', 'cbox-openlab-core' );
+
+				case 'sort-group-categories' :
+					return _x( 'Sort Group Categories', 'Sort group categories admin label', 'cbox-openlab-core' );
 			}
 	}
 }
@@ -248,6 +261,27 @@ function cboxol_get_admin_tabs( $parent_page ) {
 					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'profile-fields' ) ), 'admin.php' ) ),
 					'name' => 'profile-fields',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'profile-fields' ),
+				),
+			);
+
+			break;
+
+		case 'group-settings' :
+			$tabs = array(
+				'0' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'group-settings', 'types' ) ), 'admin.php' ) ),
+					'name' => 'types',
+					'label' => cboxol_admin_subpage_label( 'group-settings', 'types' ),
+				),
+				'1' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'group-settings', 'group-categories' ) ), 'admin.php' ) ),
+					'name' => 'group-categories',
+					'label' => cboxol_admin_subpage_label( 'group-settings', 'group-categories' ),
+				),
+				'2' => array(
+					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'group-settings', 'sort-group-categories' ) ), 'admin.php' ) ),
+					'name' => 'sort-group-categories',
+					'label' => cboxol_admin_subpage_label( 'group-settings', 'sort-group-categories' ),
 				),
 			);
 
