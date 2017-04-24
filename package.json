@@ -2,7 +2,7 @@
   "name": "cbox-openlab-core",
   "version": "1.0.0",
   "description": "=== Cbox Openlab Core === Contributors: (this should be a list of wordpress.org userid's) Donate link: http://example.com/ Tags: comments, spam Requires at least: 3.7 Tested up to: 4.6.4 Stable tag: 0.1.0 License: GPLv2 or later License URI: http://www.gnu.org/licenses/gpl-2.0.html",
-  "main": "assets/js/admin.js",
+  "main": "assets/js/app.js",
   "directories": {
     "test": "tests"
   },
@@ -20,8 +20,8 @@
     "vueify": "^9.4.1"
   },
   "scripts": {
-    "build-js": "browserify -t vueify -e assets/js/admin.js -o assets/js/build.js",
-    "watch-js": "watchify -v -t vueify -e assets/js/admin.js -o assets/js/build.js"
+    "build-js": "browserify -t vueify -e assets/js/app.js -o assets/js/build.js",
+    "watch-js": "watchify -v -t vueify -e assets/js/app.js -o assets/js/build.js"
   },
   "repository": {
     "type": "git",

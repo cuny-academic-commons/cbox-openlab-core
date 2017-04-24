@@ -110,6 +110,7 @@ function cboxol_get_member_types( $args = array() ) {
 }
 
 function cboxol_membertypes_admin_page() {
+	wp_enqueue_script( 'cbox-ol-app' );
 
 	$types = cboxol_get_member_types( array(
 		'enabled' => null,

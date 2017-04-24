@@ -60,15 +60,15 @@ function cboxol_register_assets() {
 	*/
 
 	if ( isset( $_GET['page'] ) && 'cbox-ol-member-types' === $_GET['page'] ) {
-		wp_enqueue_script(
-			'cbox-ol-admin',
+		wp_register_script(
+			'cbox-ol-app',
 			CBOXOL_PLUGIN_URL . 'assets/js/build.js',
 			array(),
 			123, // @todo
 			true
 		);
 
-		wp_localize_script( 'cbox-ol-admin', 'CBOXOLStrings', array(
+		wp_localize_script( 'cbox-ol-app', 'CBOXOLStrings', array(
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 			'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
 			'strings' => array(
