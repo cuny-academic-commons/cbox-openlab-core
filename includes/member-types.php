@@ -7,10 +7,6 @@
 add_action( 'init', 'cboxol_membertypes_register_post_type' );
 add_action( 'bp_register_member_types', 'cboxol_membertypes_register_member_types' );
 
-add_action( 'add_meta_boxes', 'cboxol_membertypes_register_meta_boxes' );
-add_action( 'save_post', 'cboxol_membertypes_save_labels' );
-add_action( 'save_post', 'cboxol_membertypes_save_settings' );
-
 add_action( 'xprofile_updated_profile', 'cboxol_membertypes_process_change' );
 
 function cboxol_membertypes_register_post_type() {

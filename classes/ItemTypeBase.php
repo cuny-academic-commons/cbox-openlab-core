@@ -2,60 +2,93 @@
 
 namespace CBOX\OL;
 
-class MemberType extends ItemTypeBase implements ItemType {
-	protected $defaults = array(
+class ItemTypeBase {
+	protected $data = array(
+		'slug' => '',
+		'name' => '',
+		'labels' => array(),
 		'can_create_courses' => false,
 		'can_be_deleted' => true,
 		'selectable_types' => array(),
+		'is_enabled' => true,
+		'order' => 0,
+		'wp_post_id' => 0,
 	);
 
-	public function get_can_create_courses() {
-		return (bool) $this->data['can_create_courses'];
+	protected $defaults = array();
+
+	public function __construct() {
+		$this->data = array_merge( $this->data, $this->defaults );
 	}
 
-	public function get_selectable_types() {
-		// @todo Should validate types here (can't do on setup because it will trigger a loop).
-		return $this->data['selectable_types'];
+	public function get_slug() {
+		return $this->data['slug'];
 	}
 
-	/**
-	 * Get a human-readable, comma-separated list of labels for this type's selectable types.
-	 *
-	 * @return string
-	 */
-	public function get_selectable_types_list() {
-		$list = '';
+	public function get_name() {
+		return $this->data['name'];
+	}
 
-		$selectable_types = $this->get_selectable_types();
-		$labels = array();
-		foreach ( $selectable_types as $selectable_type ) {
-			$selectable_type_obj = cboxol_get_member_type( $selectable_type );
-			if ( $selectable_type_obj ) {
-				$labels[] = $selectable_type_obj->get_name();
+	public function get_label( $label_type ) {
+		$label = null;
+		if ( isset( $this->data['labels'][ $label_type ] ) ) {
+			$label = $this->data['labels'][ $label_type ]['value'];
+		}
+
+		return $label;
+	}
+
+	public function get_labels() {
+		return $this->data['labels'];
+	}
+
+	public function get_is_enabled() {
+		return (bool) $this->data['is_enabled'];
+	}
+
+	public function get_wp_post_id() {
+		return (int) $this->data['wp_post_id'];
+	}
+
+	public function get_order() {
+		return (int) $this->data['order'];
+	}
+
+	public function get_can_be_deleted() {
+		return (bool) $this->data['can_be_deleted'];
+	}
+
+	public function set_up_instance_from_wp_post( \WP_Post $post ) {
+		$this->set_slug( $post->post_name );
+		$this->set_name( $post->post_title );
+
+		// Labels.
+		$saved_labels = get_post_meta( $post->ID, 'cboxol_item_type_labels', true );
+		if ( empty( $saved_labels ) ) {
+			$saved_labels = array();
+		}
+
+		foreach ( self::get_label_types() as $label_type => $label_labels ) {
+			if ( isset( $saved_labels[ $label_type ] ) ) {
+				$label_labels['value'] = $saved_labels[ $label_type ];
 			}
+
+			$this->set_label( $label_type, $label_labels );
 		}
 
-		if ( $labels ) {
-			$list = implode( ', ', $labels );
-		}
+		// Enabled.
+		$this->set_is_enabled( 'publish' === $post->post_status );
 
-		return $list;
-	}
+		// Order
+		$this->set_order( $post->menu_order );
 
-	public static function get_instance_from_wp_post( \WP_Post $post ) {
-		$type = new self();
-		$type->set_up_instance_from_wp_post( $post );
+		// Can be deleted.
+		$can_be_deleted_db = get_post_meta( $post->ID, 'cboxol_item_type_is_builtin', true );
+		$can_be_deleted = 'yes' !== $can_be_deleted_db;
+		$this->set_can_be_deleted( $can_be_deleted );
 
-		// Can create courses.
-		$can_create_courses_db = get_post_meta( $post->ID, 'cboxol_member_type_can_create_courses', true );
-		$can_create_courses = 'yes' === $can_create_courses_db;
-		$type->set_can_create_courses( $can_create_courses );
-
-		// Selectable types ("Member may change Type to...").
-		$selectable_types_db = get_post_meta( $post->ID, 'cboxol_member_type_selectable_types', true );
-		$type->set_selectable_types( $selectable_types_db );
-
-		return $type;
+		// WP post ID.
+		$this->set_wp_post_id( $post->ID );
 	}
 
 	public static function get_dummy() {
@@ -151,7 +184,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 		foreach ( $this->get_labels() as $label_type => $label_data ) {
 			$meta_value[ $label_type ] = $label_data;
 		}
-		update_post_meta( $wp_post_id, 'cboxol_member_type_labels', $meta_value );
+		update_post_meta( $wp_post_id, 'cboxol_item_type_labels', $meta_value );
 	}
 
 	public function set_slug( $slug ) {
@@ -186,7 +219,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 		$this->data['order'] = (int) $order;
 	}
 
-	public function set_wp_post_id( $wp_post_id ) {
+	protected function set_wp_post_id( $wp_post_id ) {
 		$this->data['wp_post_id'] = (int) $wp_post_id;
 	}
 

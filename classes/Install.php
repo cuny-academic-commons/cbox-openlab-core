@@ -95,7 +95,7 @@ class Install {
 
 			$post_id = wp_insert_post( $post_data );
 
-			add_post_meta( $post_id, 'cboxol_member_type_labels', $type_data['labels'] );
+			add_post_meta( $post_id, 'cboxol_item_type_labels', $type_data['labels'] );
 
 			if ( $type_data['can_create_courses'] ) {
 				add_post_meta( $post_id, 'cboxol_member_type_can_create_courses', 'yes' );
@@ -105,7 +105,7 @@ class Install {
 				add_post_meta( $post_id, 'cboxol_member_type_selectable_types', $type_data['selectable_types'] );
 			}
 
-			add_post_meta( $post_id, 'cboxol_member_type_is_builtin', 'yes' );
+			add_post_meta( $post_id, 'cboxol_item_type_is_builtin', 'yes' );
 		}
 	}
 }
