@@ -24,7 +24,6 @@ class Install {
 		$types_data = array(
 			'faculty' => array(
 				'name' => __( 'Faculty', 'cbox-openlab-core' ),
-				'description' => '',
 				'labels' => array(
 					'singular' => __( 'Faculty', 'cbox-openlab-core' ),
 					'plural' => __( 'Faculty', 'cbox-openlab-core' ),
@@ -32,10 +31,10 @@ class Install {
 				'can_create_courses' => true,
 				'selectable_types' => array(),
 				'is_enabled' => true,
+				'order' => 1,
 			),
 			'staff' => array(
 				'name' => __( 'Staff', 'cbox-openlab-core' ),
-				'description' => '',
 				'labels' => array(
 					'singular' => __( 'Staff', 'cbox-openlab-core' ),
 					'plural' => __( 'Staff', 'cbox-openlab-core' ),
@@ -43,10 +42,10 @@ class Install {
 				'can_create_courses' => false,
 				'selectable_types' => array(),
 				'is_enabled' => true,
+				'order' => 2,
 			),
 			'student' => array(
 				'name' => __( 'Students', 'cbox-openlab-core' ),
-				'description' => '',
 				'labels' => array(
 					'singular' => __( 'Student', 'cbox-openlab-core' ),
 					'plural' => __( 'Students', 'cbox-openlab-core' ),
@@ -54,10 +53,10 @@ class Install {
 				'can_create_courses' => false,
 				'selectable_types' => array( 'student', 'alumni' ),
 				'is_enabled' => true,
+				'order' => 3,
 			),
 			'alumni' => array(
 				'name' => __( 'Alumni', 'cbox-openlab-core' ),
-				'description' => '',
 				'labels' => array(
 					'singular' => __( 'Alumni', 'cbox-openlab-core' ),
 					'plural' => __( 'Alumni', 'cbox-openlab-core' ),
@@ -65,6 +64,7 @@ class Install {
 				'can_create_courses' => false,
 				'selectable_types' => array( 'student', 'alumni' ),
 				'is_enabled' => true,
+				'order' => 4,
 			),
 		);
 
