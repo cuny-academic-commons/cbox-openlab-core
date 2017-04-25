@@ -111,6 +111,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
+			'my_groups' => array(
+				'slug' => 'my_groups',
+				'label' => _x( 'My Groups', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'Used in personal navigation and on member profiles.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
 		);
 	}
 
