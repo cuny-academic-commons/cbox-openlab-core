@@ -34,6 +34,7 @@ function cboxol_init() {
 		include CBOXOL_PLUGIN_DIR . 'includes/admin.php';
 	}
 
-	cboxol_maybe_install();
+	// Must wait until WP is set up.
+	add_action( 'init', 'cboxol_maybe_install' );
 }
 add_action( 'plugins_loaded', 'cboxol_init' );
