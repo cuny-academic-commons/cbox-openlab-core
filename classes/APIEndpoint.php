@@ -74,6 +74,11 @@ class APIEndpoint extends WP_REST_Controller {
 	}
 
 	public function create_update_helper( ItemType $type, $type_data, $object_type ) {
+		$old_name = $type->get_name();
+		if ( $old_name !== $type_data['name'] ) {
+			$type->set_slug( sanitize_title( $type_data['name'] ) );
+		}
+
 		$type->set_name( $type_data['name'] );
 
 		foreach ( $type_data['labels'] as $label_type => $label_data ) {

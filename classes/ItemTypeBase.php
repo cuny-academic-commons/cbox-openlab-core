@@ -138,12 +138,17 @@ class ItemTypeBase {
 	}
 
 	public function save_to_wp_post() {
-		// @todo slug?
-
 		$wp_post_id = $this->get_wp_post_id();
 
+		$name = $this->get_name();
+		$slug = $this->get_slug();
+		if ( ! $slug ) {
+			$slug = sanitize_title( $name );
+		}
+
 		$post_params = array(
-			'post_title' => $this->get_name(),
+			'post_title' => $name,
+			'post_name' => $slug,
 			'menu_order' => $this->get_order(),
 		);
 
