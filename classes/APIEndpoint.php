@@ -121,6 +121,12 @@ class APIEndpoint extends WP_REST_Controller {
 	}
 
 	public function create_item_permissions_check( $request ) {
+		$params = $request->get_params();
+
+		if ( ! isset( $params['object_type'] ) || 'member' !== $params['object_type'] ) {
+			return false;
+		}
+
 		return current_user_can( 'manage_network_options' );
 	}
 

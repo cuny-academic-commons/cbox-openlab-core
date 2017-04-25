@@ -499,6 +499,9 @@ exports.default = {
 		'itemType': _ItemType2.default
 	},
 	computed: {
+		canAddNew: function canAddNew() {
+			return 'member' === this.objectType;
+		},
 		typeNames: {
 			get: function get() {
 				return this.$store.state.typeNames;
@@ -523,7 +526,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.typeNames),function(typeName){return _c('li',[_c("itemType",{tag:"div",attrs:{"slug":typeName}})])})),_vm._v(" "),_c('a',{staticClass:"add-new-type-toggle",attrs:{"href":""},on:{"click":_vm.addNewType}},[_vm._v("+ "+_vm._s(_vm.strings.addNewType))])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.typeNames),function(typeName){return _c('li',[_c("itemType",{tag:"div",attrs:{"slug":typeName}})])})),_vm._v(" "),(_vm.canAddNew)?_c('a',{staticClass:"add-new-type-toggle",attrs:{"href":""},on:{"click":_vm.addNewType}},[_vm._v("\n\t\t+ "+_vm._s(_vm.strings.addNewType)+"\n\t")]):_vm._e()])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

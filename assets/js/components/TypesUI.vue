@@ -6,7 +6,14 @@
 			</li>
 		</ul>
 
-		<a href="" v-on:click="addNewType" class="add-new-type-toggle">+ {{ strings.addNewType }}</a>
+		<a
+			class="add-new-type-toggle"
+			href=""
+			v-if="canAddNew"
+			v-on:click="addNewType"
+		>
+			+ {{ strings.addNewType }}
+		</a>
 	</div>
 </template>
 
@@ -18,6 +25,9 @@
 			'itemType': ItemType
 		},
 		computed: {
+			canAddNew: function() {
+				return 'member' === this.objectType
+			},
 			typeNames: {
 				get () {
 					return this.$store.state.typeNames
