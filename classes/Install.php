@@ -80,32 +80,44 @@ class Install {
 				continue;
 			}
 
-			$post_data = array(
-				'post_type' => 'cboxol_member_type',
-				'post_title' => $type_data['name'],
-				'post_content' => $type_data['description'],
-				'post_name' => $type_slug,
-			);
+			$type = MemberType::get_dummy();
+			$type->set_name( $type_data['name'] );
+			$type->set_slug( $type_slug );
 
-			if ( $type_data['is_enabled'] ) {
-				$post_data['post_status'] = 'publish';
-			} else {
-				$post_data['post_status'] = 'draft';
+			foreach ( $type_data['labels'] as $label_type => $label_data ) {
+				$type->set_label( $label_type, $label_data );
 			}
 
-			$post_id = wp_insert_post( $post_data );
+			$type->set_order( $type_data['order'] );
+			$type->set_is_enabled( $type_data['is_enabled'] );
+			$type->set_can_create_courses( $type_data['can_create_courses'] );
+			$type->set_can_be_deleted( false );
 
-			add_post_meta( $post_id, 'cboxol_item_type_labels', $type_data['labels'] );
-
-			if ( $type_data['can_create_courses'] ) {
-				add_post_meta( $post_id, 'cboxol_member_type_can_create_courses', 'yes' );
-			}
-
-			if ( $type_data['selectable_types'] ) {
-				add_post_meta( $post_id, 'cboxol_member_type_selectable_types', $type_data['selectable_types'] );
-			}
-
-			add_post_meta( $post_id, 'cboxol_item_type_is_builtin', 'yes' );
+			$type->save();
 		}
+
+		// Selectable types must be set after creation to make ID associations.
+		foreach ( $types_data as $type_slug => $type_data ) {
+			if ( ! empty( $type_data['selectable_types'] ) ) {
+				$selectable_types = array_map( 'cboxol_get_member_type', $type_data['selectable_types'] );
+				if ( ! $selectable_types ) {
+					continue;
+				}
+
+				$type_ids = array();
+				foreach ( $selectable_types as $st ) {
+					$type_ids = $st->get_wp_post_id();
+				}
+
+				if ( ! $type_ids ) {
+					continue;
+				}
+
+				$this_type = cboxol_get_member_type( $type_slug );
+				$this_type->set_selectable_types( $type_ids );
+				$this_type->save();
+			}
+		}
+
 	}
 }

@@ -196,11 +196,11 @@ class ItemTypeBase {
 		$this->data['order'] = (int) $order;
 	}
 
-	protected function set_wp_post_id( $wp_post_id ) {
-		$this->data['wp_post_id'] = (int) $wp_post_id;
+	public function set_can_be_deleted( $can_be_deleted ) {
+		$this->data['can_be_deleted'] = (bool) $can_be_deleted;
 	}
 
-	protected function set_can_be_deleted( $can_be_deleted ) {
-		$this->data['can_be_deleted'] = (bool) $can_be_deleted;
+	protected function set_wp_post_id( $wp_post_id ) {
+		$this->data['wp_post_id'] = (int) $wp_post_id;
 	}
 }
