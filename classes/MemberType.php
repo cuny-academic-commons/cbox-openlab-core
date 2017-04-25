@@ -11,9 +11,9 @@ class MemberType extends ItemTypeBase implements ItemType {
 		'selectable_types' => array(),
 	);
 
-	public function get_can_create_courses() {
-		return (bool) $this->data['can_create_courses'];
-	}
+	protected $boolean_props = array(
+		'can_create_courses',
+	);
 
 	public function get_selectable_types() {
 		// @todo Should validate types here (can't do on setup because it will trigger a loop).
@@ -115,10 +115,6 @@ class MemberType extends ItemTypeBase implements ItemType {
 		if ( $this->get_can_create_courses() ) {
 			add_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses', 'yes' );
 		}
-	}
-
-	public function set_can_create_courses( $can ) {
-		$this->data['can_create_courses'] = (bool) $can;
 	}
 
 	public function set_selectable_types( $types ) {

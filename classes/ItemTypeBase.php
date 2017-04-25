@@ -9,18 +9,22 @@ class ItemTypeBase {
 		'slug' => '',
 		'name' => '',
 		'labels' => array(),
-		'can_create_courses' => false,
 		'can_be_deleted' => true,
-		'selectable_types' => array(),
 		'is_enabled' => true,
 		'order' => 0,
 		'wp_post_id' => 0,
 	);
 
+	// can_be_deleted and is_enabled have special logic, so can't be lumped in.
+	protected $_boolean_props = array();
+
+	protected $boolean_props = array();
+
 	protected $defaults = array();
 
 	public function __construct() {
 		$this->data = array_merge( $this->data, $this->defaults );
+		$this->boolean_props = array_merge( $this->_boolean_props, $this->boolean_props );
 	}
 
 	public function get_slug() {
@@ -84,6 +88,12 @@ class ItemTypeBase {
 		// Order
 		$this->set_order( $post->menu_order );
 
+		foreach ( $this->boolean_props as $bool ) {
+			$method = 'set_' . $bool;
+			$val = get_post_meta( $post->ID, 'cboxol_group_type_' . $bool, true );
+			$this->$method( 'yes' === $val );
+		}
+
 		// Can be deleted.
 		$can_be_deleted_db = get_post_meta( $post->ID, 'cboxol_item_type_is_builtin', true );
 		$can_be_deleted = 'yes' !== $can_be_deleted_db;
@@ -91,50 +101,6 @@ class ItemTypeBase {
 
 		// WP post ID.
 		$this->set_wp_post_id( $post->ID );
-	}
-
-	public function get_for_endpoint() {
-		// @todo This doesn't need to go in every one.
-		$types = cboxol_get_member_types( array(
-			'enabled' => null,
-		) );
-
-		$all_types = array_map( function( $type ) {
-			return array(
-				'slug' => $type->get_slug(),
-				'name' => $type->get_name(),
-				'id' => $type->get_wp_post_id(),
-			);
-		}, $types );
-
-		return array(
-			'id' => $this->get_wp_post_id(),
-			'isCollapsed' => true,
-			'isEnabled' => $this->get_is_enabled(),
-			'isLoading' => false,
-			'isModified' => false,
-			'canBeDeleted' => $this->get_can_be_deleted(),
-			'settings' => array(
-				'MayCreateCourses' => array(
-					'component' => 'MayCreateCourses',
-					'data' => $this->get_can_create_courses(),
-				),
-				'MayChangeMemberTypeTo' => array(
-					'component' => 'MayChangeMemberTypeTo',
-					'data' => array(
-						'selectableTypes' => $this->get_selectable_types(),
-						'allTypes' => $all_types,
-					),
-				),
-				'Order' => array(
-					'component' => 'Order',
-					'data' => $this->get_order(),
-				),
-			),
-			'name' => $this->get_name(),
-			'slug' => $this->get_slug(),
-			'labels' => $this->get_labels(),
-		);
 	}
 
 	public function save_to_wp_post() {
@@ -174,6 +140,17 @@ class ItemTypeBase {
 			$meta_value[ $label_type ] = $label_data;
 		}
 		update_post_meta( $wp_post_id, 'cboxol_item_type_labels', $meta_value );
+
+		// Boolean props are saved to 'yes' or deleted.
+		foreach ( $this->boolean_props as $bool ) {
+			$method = 'get_' . $bool;
+			$meta_key = 'cboxol_group_type_' . $bool;
+			if ( $this->$method() ) {
+				update_post_meta( $wp_post_id, $meta_key, 'yes' );
+			} else {
+				delete_post_meta( $wp_post_id, $meta_key, 'yes' );
+			}
+		}
 	}
 
 	public function set_slug( $slug ) {
@@ -188,19 +165,44 @@ class ItemTypeBase {
 		$this->data['labels'][ $label_type ] = $label;
 	}
 
-	public function set_is_enabled( $is_enabled ) {
-		$this->data['is_enabled'] = (bool) $is_enabled;
-	}
-
 	public function set_order( $order ) {
 		$this->data['order'] = (int) $order;
-	}
-
-	public function set_can_be_deleted( $can_be_deleted ) {
-		$this->data['can_be_deleted'] = (bool) $can_be_deleted;
 	}
 
 	protected function set_wp_post_id( $wp_post_id ) {
 		$this->data['wp_post_id'] = (int) $wp_post_id;
 	}
+
+	/**
+	 * Used to set boolean props.
+	 *
+	 * Most props are boolean. This helps to avoid boilerplate.
+	 */
+	public function __call( $name, $args ) {
+		$method_type = null;
+		if ( 'get_' === substr( $name, 0, 4 ) ) {
+			$method_type = 'get';
+		} elseif ( 'set_' === substr( $name, 0, 4 ) ) {
+			$method_type = 'set';
+		}
+
+		if ( ! $method_type ) {
+			return null;
+		}
+
+		$prop = substr( $name, 4 );
+		if ( ! in_array( $prop, $this->boolean_props, true ) ) {
+			return null;
+		}
+
+		switch ( $method_type ) {
+			case 'get' :
+				return (bool) $this->data[ $prop ];
+
+			case 'set' :
+				$this->data[ $prop ] = (bool) $args[0];
+				break;
+		}
+	}
+
 }

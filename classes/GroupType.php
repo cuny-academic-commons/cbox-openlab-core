@@ -5,9 +5,38 @@ namespace CBOX\OL;
 class GroupType extends ItemTypeBase implements ItemType {
 	protected $post_type = 'cboxol_group_type';
 
+	protected $defaults = array(
+		'can_be_cloned' => false,
+		'directory_filters' => array(),
+		'enable_portfolio_list' => false,
+		'enable_site_by_default' => false,
+		'is_course' => false,
+		'is_portfolio' => false,
+		'supports_additional_faculty' => false,
+		'supports_course_information' => false,
+		'supports_group_contact' => true,
+		'supports_mol_link' => false,
+		'supports_profile_column' => false,
+	);
+
+	protected $boolean_props = array(
+		'can_be_cloned',
+		'enable_portfolio_list',
+		'enable_site_by_default',
+		'is_course',
+		'is_portfolio',
+		'supports_additional_faculty',
+		'supports_course_information',
+		'supports_group_contact',
+		'supports_mol_link',
+		'supports_profile_column',
+	);
+
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 		$type->set_up_instance_from_wp_post( $post );
+
+		$type->set_directory_filters( get_post_meta( $post->ID, 'cboxol_group_type_directory_filters', true ) );
 
 		return $type;
 	}
@@ -45,8 +74,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 		);
 	}
 
+	public function get_directory_filters() {
+		return $this->data['directory_filters'];
+	}
+
 	public function save() {
 		$this->save_to_wp_post();
+
+		$wp_post_id = $this->get_wp_post_id();
+
+		update_post_meta( $wp_post_id, 'cboxol_group_type_directory_filters', $this->get_directory_filters() );
 	}
 
 	public static function get_dummy() {
@@ -75,5 +112,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 		);
+	}
+
+	public function set_directory_filters( $directory_filters ) {
+		$this->data['directory_filters'] = $directory_filters;
 	}
 }
