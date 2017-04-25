@@ -3,6 +3,8 @@
 namespace CBOX\OL;
 
 class MemberType extends ItemTypeBase implements ItemType {
+	protected $post_type = 'cboxol_member_type';
+
 	protected $defaults = array(
 		'can_create_courses' => false,
 		'can_be_deleted' => true,
@@ -58,17 +60,6 @@ class MemberType extends ItemTypeBase implements ItemType {
 		return $type;
 	}
 
-	public static function get_dummy() {
-		$dummy = new self();
-
-		foreach ( self::get_label_types() as $label_type => $label_labels ) {
-			$label_labels['value'] = '';
-			$dummy->set_label( $label_type, $label_labels );
-		}
-
-		return $dummy;
-	}
-
 	public function get_for_endpoint() {
 		// @todo This doesn't need to go in every one.
 		$types = cboxol_get_member_types( array(
@@ -114,31 +105,9 @@ class MemberType extends ItemTypeBase implements ItemType {
 	}
 
 	public function save() {
-		// @todo slug?
+		$this->save_to_wp_post();
 
 		$wp_post_id = $this->get_wp_post_id();
-
-		$post_params = array(
-			'post_title' => $this->get_name(),
-			'menu_order' => $this->get_order(),
-		);
-
-		if ( $this->get_is_enabled() ) {
-			$post_params['post_status'] = 'publish';
-		} else {
-			$post_params['post_stauts'] = 'draft';
-		}
-
-		if ( $wp_post_id ) {
-			$post_params['ID'] = $wp_post_id;
-			wp_update_post( $post_params );
-		} else {
-			$post_params['post_type'] = 'cboxol_member_type';
-			$wp_post_id = wp_insert_post( $post_params );
-			$wp_post = get_post( $wp_post_id );
-			$this->set_wp_post_id( $wp_post_id );
-			$this->set_slug( $wp_post->post_name );
-		}
 
 		update_post_meta( $wp_post_id, 'cboxol_member_type_selectable_types', $this->get_selectable_types() );
 
@@ -146,24 +115,6 @@ class MemberType extends ItemTypeBase implements ItemType {
 		if ( $this->get_can_create_courses() ) {
 			add_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses', 'yes' );
 		}
-
-		$meta_value = array();
-		foreach ( $this->get_labels() as $label_type => $label_data ) {
-			$meta_value[ $label_type ] = $label_data;
-		}
-		update_post_meta( $wp_post_id, 'cboxol_member_type_labels', $meta_value );
-	}
-
-	public function set_slug( $slug ) {
-		$this->data['slug'] = $slug;
-	}
-
-	public function set_name( $name ) {
-		$this->data['name'] = $name;
-	}
-
-	public function set_label( $label_type, $label ) {
-		$this->data['labels'][ $label_type ] = $label;
 	}
 
 	public function set_can_create_courses( $can ) {
@@ -178,23 +129,18 @@ class MemberType extends ItemTypeBase implements ItemType {
 		$this->data['selectable_types'] = $types;
 	}
 
-	public function set_is_enabled( $is_enabled ) {
-		$this->data['is_enabled'] = (bool) $is_enabled;
+	public static function get_dummy() {
+		$dummy = new self();
+
+		foreach ( $dummy->get_label_types() as $label_type => $label_labels ) {
+			$label_labels['value'] = '';
+			$dummy->set_label( $label_type, $label_labels );
+		}
+
+		return $dummy;
 	}
 
-	public function set_order( $order ) {
-		$this->data['order'] = (int) $order;
-	}
-
-	public function set_wp_post_id( $wp_post_id ) {
-		$this->data['wp_post_id'] = (int) $wp_post_id;
-	}
-
-	protected function set_can_be_deleted( $can_be_deleted ) {
-		$this->data['can_be_deleted'] = (bool) $can_be_deleted;
-	}
-
-	protected static function get_label_types() {
+	public function get_label_types() {
 		return array(
 			'singular' => array(
 				'slug' => 'singular',

@@ -58,32 +58,34 @@ class APIEndpoint extends WP_REST_Controller {
 
 	public function create_item( $request ) {
 		$params = $request->get_params();
-
-		$type = MemberType::get_dummy();
-
-		return $this->create_update_helper( $type, $params );
+		$class = $this->get_class_for_object_type( $params['objectType'] );
+		$type = $class::get_dummy();
+		return $this->create_update_helper( $type, $params['typeData'], $params['objectType'] );
 	}
 
 	public function update_item( $request ) {
 		$params = $request->get_params();
+		$class = $this->get_class_for_object_type( $params['objectType'] );
 
 		$wp_post = get_post( $params['id'] );
-		$type = MemberType::get_instance_from_wp_post( $wp_post );
+		$type = $class::get_instance_from_wp_post( $wp_post );
 
-		return $this->create_update_helper( $type, $params );
+		return $this->create_update_helper( $type, $params['typeData'], $params['objectType'] );
 	}
 
-	public function create_update_helper( MemberType $type, $params ) {
-		$type->set_name( $params['name'] );
+	public function create_update_helper( ItemType $type, $type_data, $object_type ) {
+		$type->set_name( $type_data['name'] );
 
-		foreach ( $params['labels'] as $label_type => $label_data ) {
+		foreach ( $type_data['labels'] as $label_type => $label_data ) {
 			$type->set_label( $label_type, $label_data['value'] );
 		}
 
-		$type->set_can_create_courses( $params['settings']['MayCreateCourses']['data'] );
-		$type->set_selectable_types( $params['settings']['MayChangeMemberTypeTo']['data']['selectableTypes'] );
+		$type->set_order( $type_data['settings']['Order']['data'] );
 
-		$type->set_order( $params['settings']['Order']['data'] );
+		if ( 'member' === $object_type ) {
+			$type->set_can_create_courses( $params['settings']['MayCreateCourses']['data'] );
+			$type->set_selectable_types( $params['settings']['MayChangeMemberTypeTo']['data']['selectableTypes'] );
+		}
 
 		$type->save();
 
@@ -127,5 +129,15 @@ class APIEndpoint extends WP_REST_Controller {
 
 	public function delete_item_permissions_check( $request ) {
 		return current_user_can( 'manage_network_options' );
+	}
+
+	protected function get_class_for_object_type( $object_type ) {
+		switch ( $object_type ) {
+			case 'member' :
+				return '\CBOX\OL\MemberType';
+
+			case 'group' :
+				return 'CBOX\OL\GroupType';
+		}
 	}
 }

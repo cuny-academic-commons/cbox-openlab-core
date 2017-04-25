@@ -3,6 +3,8 @@
 namespace CBOX\OL;
 
 class ItemTypeBase {
+	protected $post_type = '';
+
 	protected $data = array(
 		'slug' => '',
 		'name' => '',
@@ -68,7 +70,7 @@ class ItemTypeBase {
 			$saved_labels = array();
 		}
 
-		foreach ( self::get_label_types() as $label_type => $label_labels ) {
+		foreach ( $this->get_label_types() as $label_type => $label_labels ) {
 			if ( isset( $saved_labels[ $label_type ] ) ) {
 				$label_labels['value'] = $saved_labels[ $label_type ];
 			}
@@ -89,17 +91,6 @@ class ItemTypeBase {
 
 		// WP post ID.
 		$this->set_wp_post_id( $post->ID );
-	}
-
-	public static function get_dummy() {
-		$dummy = new self();
-
-		foreach ( self::get_label_types() as $label_type => $label_labels ) {
-			$label_labels['value'] = '';
-			$dummy->set_label( $label_type, $label_labels );
-		}
-
-		return $dummy;
 	}
 
 	public function get_for_endpoint() {
@@ -146,7 +137,7 @@ class ItemTypeBase {
 		);
 	}
 
-	public function save() {
+	public function save_to_wp_post() {
 		// @todo slug?
 
 		$wp_post_id = $this->get_wp_post_id();
@@ -166,18 +157,11 @@ class ItemTypeBase {
 			$post_params['ID'] = $wp_post_id;
 			wp_update_post( $post_params );
 		} else {
-			$post_params['post_type'] = 'cboxol_member_type';
+			$post_params['post_type'] = $this->post_type;
 			$wp_post_id = wp_insert_post( $post_params );
 			$wp_post = get_post( $wp_post_id );
 			$this->set_wp_post_id( $wp_post_id );
 			$this->set_slug( $wp_post->post_name );
-		}
-
-		update_post_meta( $wp_post_id, 'cboxol_member_type_selectable_types', $this->get_selectable_types() );
-
-		delete_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses' );
-		if ( $this->get_can_create_courses() ) {
-			add_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses', 'yes' );
 		}
 
 		$meta_value = array();
@@ -199,18 +183,6 @@ class ItemTypeBase {
 		$this->data['labels'][ $label_type ] = $label;
 	}
 
-	public function set_can_create_courses( $can ) {
-		$this->data['can_create_courses'] = (bool) $can;
-	}
-
-	public function set_selectable_types( $types ) {
-		if ( ! is_array( $types ) ) {
-			$types = array();
-		}
-
-		$this->data['selectable_types'] = $types;
-	}
-
 	public function set_is_enabled( $is_enabled ) {
 		$this->data['is_enabled'] = (bool) $is_enabled;
 	}
@@ -225,22 +197,5 @@ class ItemTypeBase {
 
 	protected function set_can_be_deleted( $can_be_deleted ) {
 		$this->data['can_be_deleted'] = (bool) $can_be_deleted;
-	}
-
-	protected static function get_label_types() {
-		return array(
-			'singular' => array(
-				'slug' => 'singular',
-				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
-				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
-				'value' => '',
-			),
-			'plural' => array(
-				'slug' => 'plural',
-				'label' => _x( 'Plural', 'Member Type plural label', 'cbox-openlab-core' ),
-				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
-				'value' => '',
-			),
-		);
 	}
 }

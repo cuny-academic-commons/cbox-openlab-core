@@ -42,21 +42,25 @@ var store = new _vuex2.default.Store({
 		},
 		submitForm: function submitForm(commit, payload) {
 			var typeData = commit.state.types[payload.slug];
-			var nonce = CBOXOLStrings.nonce;
 
 			var endpoint = CBOXOLStrings.endpoint;
 			if (typeData.id > 0) {
 				endpoint += typeData.id;
 			}
 
+			var body = {
+				typeData: typeData,
+				objectType: CBOXOL_ObjectType
+			};
+
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
 				credentials: 'same-origin',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-WP-Nonce': nonce
+					'X-WP-Nonce': CBOXOLStrings.nonce
 				},
-				body: JSON.stringify(typeData)
+				body: JSON.stringify(body)
 			});
 		}
 	},

@@ -6,6 +6,7 @@ interface ItemType {
 	public function get_slug();
 	public function get_name();
 	public function get_labels();
+	public function get_label_types();
 	public function get_label( $label_type );
 	public function get_is_enabled();
 	public function get_order();

@@ -26,11 +26,15 @@ const store = new Vuex.Store({
 		},
 		submitForm ( commit, payload ) {
 			const typeData = commit.state.types[ payload.slug ]
-			const nonce = CBOXOLStrings.nonce
 
 			let endpoint = CBOXOLStrings.endpoint
 			if ( typeData.id > 0 ) {
 				endpoint += typeData.id
+			}
+
+			const body = {
+				typeData,
+				objectType: CBOXOL_ObjectType
 			}
 
 			return fetch( endpoint, {
@@ -38,9 +42,9 @@ const store = new Vuex.Store({
 				credentials: 'same-origin',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-WP-Nonce': nonce
+					'X-WP-Nonce': CBOXOLStrings.nonce
 				},
-				body: JSON.stringify( typeData )
+				body: JSON.stringify( body )
 			} )
 		}
 	},
