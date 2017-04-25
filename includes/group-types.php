@@ -112,12 +112,13 @@ function cboxol_grouptypes_register_group_types() {
 
 	// @todo Conflict checking? Prefixing?
 	foreach ( $saved_types as $saved_type ) {
-		bp_register_member_type( $saved_type->get_slug(), array(
+		bp_groups_register_group_type( $saved_type->get_slug(), array(
 			'labels' => array(
 				'name' => $saved_type->get_label( 'plural' ),
 				'singular_name' => $saved_type->get_label( 'singular' ),
 			),
 			'has_directory' => true,
+			'show_in_create_screen' => false,
 		) );
 	}
 }
