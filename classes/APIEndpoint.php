@@ -88,8 +88,8 @@ class APIEndpoint extends WP_REST_Controller {
 		$type->set_order( $type_data['settings']['Order']['data'] );
 
 		if ( 'member' === $object_type ) {
-			$type->set_can_create_courses( $params['settings']['MayCreateCourses']['data'] );
-			$type->set_selectable_types( $params['settings']['MayChangeMemberTypeTo']['data']['selectableTypes'] );
+			$type->set_can_create_courses( $type_data['settings']['MayCreateCourses']['data'] );
+			$type->set_selectable_types( $type_data['settings']['MayChangeMemberTypeTo']['data']['selectableTypes'] );
 		}
 
 		$type->save();
