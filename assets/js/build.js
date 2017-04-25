@@ -23,6 +23,7 @@ _vue2.default.use(_vuex2.default);
 
 var store = new _vuex2.default.Store({
 	state: {
+		objectType: CBOXOL_ObjectType,
 		types: CBOXOL_Types,
 		typeNames: []
 	},
@@ -50,7 +51,7 @@ var store = new _vuex2.default.Store({
 
 			var body = {
 				typeData: typeData,
-				objectType: CBOXOL_ObjectType
+				objectType: commit.state.objectType
 			};
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
@@ -284,6 +285,10 @@ exports.default = {
 			}
 		},
 
+		objectType: function objectType() {
+			return this.$store.state.objectType;
+		},
+
 		saveButtonText: function saveButtonText() {
 			if (this.isLoading) {
 				return this.strings.saving;
@@ -292,6 +297,12 @@ exports.default = {
 			} else {
 				return this.strings.saved;
 			}
+		},
+		templateUrl: function templateUrl() {
+			return this.$store.state.types[this.slug].templateSite.url;
+		},
+		templateAdminUrl: function templateAdminUrl() {
+			return this.$store.state.types[this.slug].templateSite.adminUrl;
 		}
 	},
 
@@ -363,7 +374,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),('group' === _vm.objectType)?_c('div',{staticClass:"cboxol-item-type-content-section item-type-template"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.template))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.templateSiteDescription))]),_vm._v(" "),_c('div',{staticClass:"cboxol-template-site-links"},[_c('a',{attrs:{"href":_vm.templateAdminUrl}},[_vm._v(_vm._s(_vm.strings.templateDashboardLink))]),_vm._v(" | "),_c('a',{attrs:{"href":_vm.templateUrl}},[_vm._v(_vm._s(_vm.strings.templateViewLink))])])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

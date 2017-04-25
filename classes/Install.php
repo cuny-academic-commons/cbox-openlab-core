@@ -268,6 +268,8 @@ class Install {
 			$type->set_can_be_deleted( false );
 
 			$type->save();
+
+			$type->create_template_site();
 		}
 	}
 }

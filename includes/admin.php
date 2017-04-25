@@ -78,6 +78,10 @@ function cboxol_register_assets() {
 			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
 			'saving' => __( 'Saving', 'cbox-openlab-core' ),
 			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
+			'template' => _x( 'Template', 'subheader for template site settings section', 'cbox-openlab-core' ),
+			'templateDashboardLink' => _x( 'Dashboard', 'template site dashboard link', 'cbox-openlab-core' ),
+			'templateSiteDescription' => __( 'When a group of this type creates a site, default settings and data will be copied from the group type\'s template site. Use the links below to view and configure the template site.', 'cbox-openlab-core' ),
+			'templateViewLink' => _x( 'View Template', 'template site view link', 'cbox-openlab-core' ),
 			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
 		),
 	) );

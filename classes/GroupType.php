@@ -17,6 +17,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'supports_group_contact' => true,
 		'supports_mol_link' => false,
 		'supports_profile_column' => false,
+		'template_site_id' => 0,
 	);
 
 	protected $boolean_props = array(
@@ -37,6 +38,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$type->set_up_instance_from_wp_post( $post );
 
 		$type->set_directory_filters( get_post_meta( $post->ID, 'cboxol_group_type_directory_filters', true ) );
+		$type->set_template_site_id( get_post_meta( $post->ID, 'cboxol_group_type_template_site_id', true ) );
 
 		return $type;
 	}
@@ -73,11 +75,27 @@ class GroupType extends ItemTypeBase implements ItemType {
 			'name' => $this->get_name(),
 			'slug' => $this->get_slug(),
 			'labels' => $this->get_labels(),
+			'templateSite' => $this->get_template_site_info(),
 		);
 	}
 
 	public function get_directory_filters() {
 		return $this->data['directory_filters'];
+	}
+
+	public function get_template_site_id() {
+		return (int) $this->data['template_site_id'];
+	}
+
+	public function get_template_site_info() {
+		$site_id = $this->get_template_site_id();
+
+		return array(
+			'siteId' => $site_id,
+			'name' => get_site_option( $site_id, 'blogname' ),
+			'url' => get_home_url( $site_id ),
+			'adminUrl' => get_admin_url( $site_id ),
+		);
 	}
 
 	/**
@@ -211,5 +229,38 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	public function set_directory_filters( $directory_filters ) {
 		$this->data['directory_filters'] = $directory_filters;
+	}
+
+	public function set_template_site_id( $template_site_id ) {
+		$this->data['template_site_id'] = (int) $template_site_id;
+	}
+
+	public function create_template_site() {
+		$current_network = get_network();
+
+		// Use timestamp as a hash to ensure uniqueness.
+		$slug = sprintf( 'site-template-%s-%s', $this->get_slug(), time() );
+		if ( is_subdomain_install() ) {
+			$site_domain = preg_replace( '|^www\.|', '', $current_network->domain );
+			$domain = $slug . '.' . $site_domain;
+			$path = '/';
+		} else {
+			$domain = $current_network->domain;
+			$path = $current_network->path . $slug . '/';
+		}
+
+		$site_id = wpmu_create_blog(
+			$domain,
+			$path,
+			sprintf( __( 'Site Template - %s', 'cbox-openlab-core' ), $this->get_name() ),
+			get_current_user_id()
+		);
+
+		if ( ! $site_id ) {
+			return;
+		}
+
+		update_post_meta( $this->get_wp_post_id(), 'cboxol_group_type_template_site_id', $site_id );
+		$this->set_template_site_id( $site_id );
 	}
 }

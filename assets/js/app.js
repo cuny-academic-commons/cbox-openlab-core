@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		objectType: CBOXOL_ObjectType,
 		types: CBOXOL_Types,
 		typeNames: []
 	},
@@ -34,7 +35,7 @@ const store = new Vuex.Store({
 
 			const body = {
 				typeData,
-				objectType: CBOXOL_ObjectType
+				objectType: commit.state.objectType
 			}
 
 			return fetch( endpoint, {

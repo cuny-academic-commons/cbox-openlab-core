@@ -53,6 +53,17 @@
 				</div>
 			</div>
 
+			<div v-if="'group' === objectType" class="cboxol-item-type-content-section item-type-template">
+				<h3 class="cboxol-item-type-content-section-header">{{ strings.template }}</h3>
+
+				<p>{{ strings.templateSiteDescription }}</p>
+
+				<div class="cboxol-template-site-links">
+					<a v-bind:href="templateAdminUrl">{{ strings.templateDashboardLink }}</a> | <a v-bind:href="templateUrl">{{ strings.templateViewLink }}</a>
+				</div>
+
+			</div>
+
 			<div class="cboxol-item-type-submit">
 				<button class="button button-primary" v-on:click="onSubmit" v-bind:disabled="isLoading || ! isModified">{{ saveButtonText }}</button>
 			</div>
@@ -157,6 +168,10 @@
 				}
 			},
 
+			objectType: function() {
+				return this.$store.state.objectType;
+			},
+
 			saveButtonText() {
 				if ( this.isLoading ) {
 					return this.strings.saving
@@ -165,7 +180,15 @@
 				} else {
 					return this.strings.saved
 				}
-			}
+			},
+
+			templateUrl() {
+				return this.$store.state.types[ this.slug ].templateSite.url
+			},
+
+			templateAdminUrl() {
+				return this.$store.state.types[ this.slug ].templateSite.adminUrl
+			},
 		},
 
 		methods: {
