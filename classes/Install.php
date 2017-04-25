@@ -131,6 +131,10 @@ class Install {
 					'singular' => __( 'Course', 'cbox-openlab-core' ),
 					'plural' => __( 'Courses', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Courses', 'cbox-openlab-core' ),
+					'course_code' => __( 'Course Code', 'cbox-openlab-core' ),
+					'course_information' => __( 'Course Information', 'cbox-openlab-core' ),
+					'course_information_description' => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'cbox-openlab-core' ),
+					'section_code' => __( 'Section Code', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -160,7 +164,7 @@ class Install {
 				'labels' => array(
 					'singular' => __( 'Portfolio', 'cbox-openlab-core' ),
 					'plural' => __( 'Portfolios', 'cbox-openlab-core' ),
-					'my_groups' => __( 'My Portfolios', 'cbox-openlab-core' ),
+					'my_portfolio' => __( 'My Portfolio', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -255,6 +259,7 @@ class Install {
 			$type->set_directory_filters( $type_data['directory_filters'] );
 			$type->set_enable_portfolio_list( $type_data['enable_portfolio_list'] );
 			$type->set_is_course( $type_data['is_course'] );
+			$type->set_is_portfolio( $type_data['is_portfolio'] );
 			$type->set_supports_additional_faculty( $type_data['supports_additional_faculty'] );
 			$type->set_supports_course_information( $type_data['supports_course_information'] );
 			$type->set_supports_mol_link( $type_data['supports_mol_link'] );

@@ -124,3 +124,7 @@ a .action-arrow {
 .cboxol-setting-content {
 	margin-left: 220px;
 }
+
+.cboxol-item-type-label .cboxol-setting-content input {
+	width: 90%;
+}

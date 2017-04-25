@@ -58,6 +58,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 		return array(
 			'id' => $this->get_wp_post_id(),
 			'isCollapsed' => true,
+			'isCourse' => $this->get_is_course(),
+			'isPortfolio' => $this->get_is_portfolio(),
 			'isEnabled' => $this->get_is_enabled(),
 			'isLoading' => false,
 			'isModified' => false,
@@ -76,6 +78,63 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	public function get_directory_filters() {
 		return $this->data['directory_filters'];
+	}
+
+	/**
+	 * Overridden here because we filter based on group type.
+	 */
+	public function get_labels() {
+		$map = array(
+			'course' => array(
+				'singular',
+				'plural',
+				'my_groups',
+				'course_information',
+				'course_information_description',
+				'course_code',
+				'section_code',
+			),
+			'portfolio' => array(
+				'singular',
+				'plural',
+				'my_portfolio',
+			),
+			'default' => array(
+				'singular',
+				'plural',
+				'my_groups',
+			),
+		);
+
+		if ( $this->get_is_course() ) {
+			$type_labels = $map['course'];
+		} elseif ( $this->get_is_portfolio() ) {
+			$type_labels = $map['portfolio'];
+		} else {
+			$type_labels = $map['default'];
+		}
+
+		// this is a real mess
+		$retval = array();
+		foreach ( $this->data['labels'] as $label_slug => $label ) {
+			if ( is_array( $label ) && isset( $label['slug'] ) ) {
+				$ls = $label['slug'];
+			} else {
+				$ls = $label_slug;
+			}
+
+			if ( in_array( $ls, $type_labels, true ) ) {
+				$retval[ $ls ] = $label;
+			}
+		}
+
+		// this continues to be a real mess
+		$sorted = array();
+		foreach ( $type_labels as $value ) {
+			$sorted[ $value ] = $retval[ $value ];
+		}
+
+		return $sorted;
 	}
 
 	public function save() {
@@ -99,10 +158,34 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	public function get_label_types() {
 		return array(
-			'singular' => array(
-				'slug' => 'singular',
-				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
-				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
+			'course_code' => array(
+				'slug' => 'course_code',
+				'label' => _x( 'Course Code', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'The label for the "Course Code" input when editing Course settings.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'course_information' => array(
+				'slug' => 'course_information',
+				'label' => __( 'Course Information', 'cbox-openlab-core' ),
+				'description' => __( 'The label for the course settings section containing Course Code and other catalog data.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'course_information_description' => array(
+				'slug' => 'course_information_description',
+				'label' => __( 'Course Information Help Text', 'cbox-openlab-core' ),
+				'description' => __( 'The helper text in the Course Information admin section of a Course.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'my_groups' => array(
+				'slug' => 'my_groups',
+				'label' => _x( 'My Groups', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'Used in personal navigation and on member profiles.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'my_portfolio' => array(
+				'slug' => 'my_portfolio',
+				'label' => _x( 'My Portfolio', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'Used in personal navigation and on member profiles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'plural' => array(
@@ -111,10 +194,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
-			'my_groups' => array(
-				'slug' => 'my_groups',
-				'label' => _x( 'My Groups', 'Group Type label', 'cbox-openlab-core' ),
-				'description' => __( 'Used in personal navigation and on member profiles.', 'cbox-openlab-core' ),
+			'section_code' => array(
+				'slug' => 'section_code',
+				'label' => _x( 'Section Code', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'The label for the "Section Code" input when editing Course settings.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'singular' => array(
+				'slug' => 'singular',
+				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
+				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);
