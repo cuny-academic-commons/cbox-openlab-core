@@ -192,6 +192,12 @@
 				return response.json()
 			},
 
+			ajaxError( p ) {
+							// @todo better error handling
+							console.error( p )
+							throw 'Could not complete request.'
+			},
+
 			onDeleteClick: function( event ) {
 				event.preventDefault()
 
@@ -204,7 +210,7 @@
 				if ( itemType.id > 0 ) {
 					itemType.$store.dispatch( 'submitDelete', { id: itemType.id } )
 					.then( itemType.checkStatus )
-					.then( itemType.parseJSON )
+					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {
 						itemType.$store.commit( 'removeType', { slug: itemType.slug } )
 						itemType.$store.commit( 'orderTypes' )
@@ -217,16 +223,16 @@
 				itemType.isLoading = true
 				itemType.$store.dispatch( 'submitForm', { slug: itemType.slug } )
 					.then( itemType.checkStatus )
-					.then( itemType.parseJSON )
+					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {
 						itemType.isModified = false
 
 						itemType.$store.commit( 'setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id } )
 						itemType.$store.commit( 'orderTypes' )
-					} )
 
-					itemType.isLoading = false
-					itemType.isCollapsed = true
+						itemType.isLoading = false
+						itemType.isCollapsed = true
+					} )
 			},
 
 			setIsModified() {

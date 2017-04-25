@@ -317,6 +317,10 @@ exports.default = {
 		parseJSON: function parseJSON(response) {
 			return response.json();
 		},
+		ajaxError: function ajaxError(p) {
+			console.error(p);
+			throw 'Could not complete request.';
+		},
 
 
 		onDeleteClick: function onDeleteClick(event) {
@@ -329,7 +333,7 @@ exports.default = {
 			var itemType = this;
 			itemType.isLoading = true;
 			if (itemType.id > 0) {
-				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON).then(function (data) {
+				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
 					itemType.$store.commit('removeType', { slug: itemType.slug });
 					itemType.$store.commit('orderTypes');
 				});
@@ -339,15 +343,15 @@ exports.default = {
 		onSubmit: function onSubmit() {
 			var itemType = this;
 			itemType.isLoading = true;
-			itemType.$store.dispatch('submitForm', { slug: itemType.slug }).then(itemType.checkStatus).then(itemType.parseJSON).then(function (data) {
+			itemType.$store.dispatch('submitForm', { slug: itemType.slug }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
 				itemType.isModified = false;
 
 				itemType.$store.commit('setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id });
 				itemType.$store.commit('orderTypes');
-			});
 
-			itemType.isLoading = false;
-			itemType.isCollapsed = true;
+				itemType.isLoading = false;
+				itemType.isCollapsed = true;
+			});
 		},
 
 		setIsModified: function setIsModified() {
@@ -498,8 +502,7 @@ exports.default = {
 		typeNames: {
 			get: function get() {
 				return this.$store.state.typeNames;
-			},
-			set: function set(value) {}
+			}
 		}
 	},
 	data: function data() {
@@ -512,7 +515,6 @@ exports.default = {
 	methods: {
 		addNewType: function addNewType(event) {
 			event.preventDefault();
-
 			this.$store.commit('addNewType');
 		}
 	}

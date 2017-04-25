@@ -21,11 +21,6 @@
 			typeNames: {
 				get () {
 					return this.$store.state.typeNames
-				},
-
-				set ( value ) {
-//					console.log('hr')
-//					this.$store.commit( 'addNewType', { value: value } )
 				}
 			}
 		},
@@ -38,8 +33,6 @@
 		methods: {
 			addNewType( event ) {
 				event.preventDefault()
-//				console.log('ok')
-//				this.typeNames.push( '_new' )
 				this.$store.commit( 'addNewType' )
 			}
 		}
