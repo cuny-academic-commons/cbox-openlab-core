@@ -182,7 +182,7 @@ class Install {
 			),
 
 			'clubs' => array(
-				'name' => __( 'Club', 'cbox-openlab-core' ),
+				'name' => __( 'Clubs', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 3,
 
@@ -207,7 +207,7 @@ class Install {
 			),
 
 			'projects' => array(
-				'name' => __( 'Clubs', 'cbox-openlab-core' ),
+				'name' => __( 'Projects', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 4,
 
