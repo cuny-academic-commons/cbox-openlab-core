@@ -44,14 +44,14 @@ class Install {
 				'is_enabled' => true,
 				'order' => 2,
 			),
-			'students' => array(
+			'student' => array(
 				'name' => __( 'Students', 'cbox-openlab-core' ),
 				'labels' => array(
 					'singular' => __( 'Student', 'cbox-openlab-core' ),
 					'plural' => __( 'Students', 'cbox-openlab-core' ),
 				),
 				'can_create_courses' => false,
-				'selectable_types' => array( 'students', 'alumni' ),
+				'selectable_types' => array( 'student', 'alumni' ),
 				'is_enabled' => true,
 				'order' => 3,
 			),
@@ -62,7 +62,7 @@ class Install {
 					'plural' => __( 'Alumni', 'cbox-openlab-core' ),
 				),
 				'can_create_courses' => false,
-				'selectable_types' => array( 'students', 'alumni' ),
+				'selectable_types' => array( 'student', 'alumni' ),
 				'is_enabled' => true,
 				'order' => 4,
 			),
@@ -122,7 +122,7 @@ class Install {
 
 	public function install_default_group_types() {
 		$types_data = array(
-			'courses' => array(
+			'course' => array(
 				'name' => __( 'Courses', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 1,
@@ -156,7 +156,7 @@ class Install {
 			 * Portfolio-specific features into their own settings.
 			 * is_portfolio checks will be used as a proxy.
 			 */
-			'portfolios' => array(
+			'portfolio' => array(
 				'name' => __( 'Portfolios', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 2,
@@ -181,7 +181,7 @@ class Install {
 				'supports_profile_column' => false,
 			),
 
-			'clubs' => array(
+			'club' => array(
 				'name' => __( 'Clubs', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 3,
@@ -206,7 +206,7 @@ class Install {
 				'supports_profile_column' => true,
 			),
 
-			'projects' => array(
+			'project' => array(
 				'name' => __( 'Projects', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 4,
