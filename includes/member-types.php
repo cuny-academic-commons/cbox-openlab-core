@@ -52,7 +52,7 @@ function cboxol_membertypes_register_member_types() {
  * Get a single registered Member Type.
  *
  * @param string $type Slug of the type.
- * @return \CBOX\OL\MemberType|null
+ * @return \CBOX\OL\MemberType|WP_Error
  */
 function cboxol_get_member_type( $slug ) {
 	$types = cboxol_get_member_types( array(
@@ -63,7 +63,7 @@ function cboxol_get_member_type( $slug ) {
 		return $types[ $slug ];
 	}
 
-	return null;
+	return new WP_Error( 'no_member_type_found', __( 'No member type exists for this slug.', 'cbox-openlab-core' ), $slug );
 }
 
 /**
@@ -143,6 +143,21 @@ function cboxol_membertypes_admin_page() {
 }
 
 /**
+ * Get a user's MemberType object.
+ *
+ * @param int $user_id ID of the user.
+ * @return \CBOX\OL\MemberType|WP_Error
+ */
+function cboxol_get_user_member_type( $user_id ) {
+	$type = bp_get_member_type( $user_id );
+	if ( ! $type ) {
+		return new WP_Error( 'no_member_type', __( 'This user does not have a member type.', 'cbox-openlab-core' ), $user_id );
+	}
+
+	return cboxol_get_member_type( $type );
+}
+
+/**
  * Get the (singular) label corresponding to a user's member type.
  *
  * @param int $user_id
@@ -170,15 +185,36 @@ function cboxol_get_user_member_type_label( $user_id ) {
 function cboxol_get_selectable_member_types_for_user( $user_id ) {
 	$selectable_types = array();
 
-	$type = bp_get_member_type( $user_id );
-	if ( $type ) {
-		$type_obj = cboxol_get_member_type( $type );
-		if ( $type_obj ) {
-			$selectable_types = $type_obj->get_selectable_types();
-		}
+	$type_obj = cboxol_get_user_member_type( $user_id );
+	if ( ! is_wp_error( $type_obj ) ) {
+		$selectable_types = $type_obj->get_selectable_types();
 	}
 
 	return $selectable_types;
+}
+
+/**
+ * Get whether a user can create courses.
+ *
+ * Should map to meta caps at some point so that we don't have to do manual
+ * super admin checks, etc.
+ *
+ * @param int $user_id
+ * @return array
+ */
+function cboxol_user_can_create_courses( $user_id ) {
+	$can = false;
+
+	if ( is_super_admin( $user_id ) ) {
+		return true;
+	}
+
+	$type = cboxol_get_user_member_type( $user_id );
+	if ( is_wp_error( $type ) ) {
+		return $can;
+	}
+
+	return $type->get_can_create_courses();
 }
 
 /**
