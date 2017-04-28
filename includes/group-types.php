@@ -146,13 +146,15 @@ function cboxol_get_group_type( $slug ) {
  *
  * @params array $args {
  *     Array of optional arguments.
- *     @type bool|null $enabled Filter by 'enabled' status. True returns only enabled Types, false returns
- *                              only disabled types. Null returns all.
+ *     @type bool|null $enabled           Filter by 'enabled' status. True returns only enabled Types, false returns
+ *                                        only disabled types. Null returns all.
+ *     @type bool      $exclude_portfolio Whether to exclude group types where `is_portfolio` is true. Default false.
  * }
  */
 function cboxol_get_group_types( $args = array() ) {
 	$r = array_merge( array(
 		'enabled' => true,
+		'exclude_portfolio' => false,
 	), $args );
 
 	$post_status = 'publish';
@@ -174,7 +176,13 @@ function cboxol_get_group_types( $args = array() ) {
 
 	$types = array();
 	foreach ( $type_posts as $type_post ) {
-		$types[ $type_post->post_name ] = \CBOX\OL\GroupType::get_instance_from_wp_post( $type_post );
+		$group_type = \CBOX\OL\GroupType::get_instance_from_wp_post( $type_post );
+
+		if ( $r['exclude_portfolio'] && $group_type->get_is_portfolio() ) {
+			continue;
+		}
+
+		$types[ $type_post->post_name ] = $group_type;
 	}
 
 	return $types;
