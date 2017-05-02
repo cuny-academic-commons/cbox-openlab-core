@@ -165,6 +165,7 @@ class Install {
 					'singular' => __( 'Portfolio', 'cbox-openlab-core' ),
 					'plural' => __( 'Portfolios', 'cbox-openlab-core' ),
 					'my_portfolio' => __( 'My Portfolio', 'cbox-openlab-core' ),
+					'create_item' => __( 'Create Portfolio', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,

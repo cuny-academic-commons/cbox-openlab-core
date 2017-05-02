@@ -116,6 +116,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'singular',
 				'plural',
 				'my_portfolio',
+				'create_item',
 			),
 			'default' => array(
 				'singular',
@@ -192,6 +193,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'course_information_description',
 				'label' => __( 'Course Information Help Text', 'cbox-openlab-core' ),
 				'description' => __( 'The helper text in the Course Information admin section of a Course.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'create_item' => array(
+				'slug' => 'create_item',
+				'label' => __( 'Create Item', 'cbox-openlab-core' ),
+				'description' => __( 'The text used for "Create" links.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'my_groups' => array(
