@@ -1,19 +1,33 @@
 <?php
 
 /**
- * Functionality related to (e)Portfolio
+ * Functionality related to Portfolio
  *
  * Overview:
  *  - 'portfolio' is a group type, alongside 'course', 'project', and 'club'
  *  - Portfolios must have associated sites
- *  - In templates, the word 'portfolio' should always be used for faculty/staff, 'eportfolio' for
- *    students
  *  - One portfolio per user
  */
 
 /////////////////////////
 //  PORTFOLIO DETAILS  //
 /////////////////////////
+
+/**
+ * Get the portfolio group type.
+ *
+ * @return \CBOX\OL\GroupType|null Null if none is found.
+ */
+function cboxol_get_portfolio_group_type() {
+	$group_types = cboxol_get_group_types();
+	foreach ( $group_types as $group_type ) {
+		if ( $group_type->get_is_portfolio() ) {
+			return $group_type;
+		}
+	}
+
+	return null;
+}
 
 /**
  * Get a user's portfolio *group* id
