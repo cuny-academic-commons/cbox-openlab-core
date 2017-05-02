@@ -138,7 +138,7 @@ function cboxol_get_group_type( $slug ) {
 		return $types[ $slug ];
 	}
 
-	return null;
+	return new WP_Error( 'no_group_type_found', __( 'No group type found by that slug.', 'cbox-openlab-core' ), $slug );;
 }
 
 /**
@@ -186,4 +186,19 @@ function cboxol_get_group_types( $args = array() ) {
 	}
 
 	return $types;
+}
+
+/**
+ * Get the group type object for a given group.
+ *
+ * @param int $group_id ID of the group.
+ * @return \CBOX\OL\GroupType|WP_Error
+ */
+function cboxol_get_group_group_type( $group_id ) {
+	$type = bp_groups_get_group_type( $group_id );
+	if ( ! $type ) {
+		return new WP_Error( 'no_group_type', __( 'This group does not have a type.', 'cbox-openlab-core' ), $group_id );
+	}
+
+	return cboxol_get_group_type( $type );
 }
