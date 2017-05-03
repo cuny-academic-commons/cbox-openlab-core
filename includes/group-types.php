@@ -37,7 +37,15 @@ function openlab_is_course( $group_id = 0 ) { return openlab_is_group_type( $gro
 
 function openlab_is_project( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'project' ); }
 
-function openlab_is_portfolio( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'portfolio' ); }
+function cboxol_is_portfolio( $group_id = 0 ) {
+	if ( ! $group_id ) {
+		$group_id = openlab_fallback_group();
+	}
+
+	$group_type = cboxol_get_group_group_type( $group_id );
+
+	return ! is_wp_error( $group_type ) && $group_type->get_is_portfolio();
+}
 
 function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'club' ); }
 

@@ -221,7 +221,7 @@ function openlab_suggest_portfolio_path() {
  * Ensure that a suggested name is included in the Name input of the creation screen
  */
 function openlab_bp_get_new_group_name( $name ) {
-	if ( openlab_is_portfolio() || ( !empty( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+	if ( cboxol_is_portfolio() || ( !empty( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
 		if ( '' == $name ) {
 			$name = openlab_suggest_portfolio_name();
 		}
@@ -398,7 +398,7 @@ add_action('groups_leave_group','openlab_bust_group_portfolios_cache_on_self_rem
  * Bust group portfolio cache when membership changes
  */
 function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
-	if ( ! openlab_is_portfolio( $group_id ) ) {
+	if ( ! cboxol_is_portfolio( $group_id ) ) {
 		return;
 	}
 
@@ -567,7 +567,7 @@ function openlab_portfolio_creation_url() {
  * Remove BPGES settings from portfolio group admin and creation screens
  */
 function openlab_remove_bpges_settings_for_portfolios() {
-	if ( openlab_is_portfolio() || ( bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+	if ( cboxol_is_portfolio() || ( bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
 		remove_action( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
 		remove_action( 'bp_after_group_settings_creation_step' ,'ass_default_subscription_settings_form' );
 	}
@@ -588,7 +588,7 @@ function openlab_associate_portfolio_group_with_user( $group_id, $user_id ) {
  * Is this my portfolio?
  */
 function openlab_is_my_portfolio() {
-	return bp_is_group() && openlab_is_portfolio() && is_user_logged_in() && openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) == bp_loggedin_user_id();
+	return bp_is_group() && cboxol_is_portfolio() && is_user_logged_in() && openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) == bp_loggedin_user_id();
 }
 
 /**
@@ -597,7 +597,7 @@ function openlab_is_my_portfolio() {
  *  - Delete user metadata regarding portfolio affiliation
  */
 function openlab_delete_portfolio( $group_id ) {
-	if ( !openlab_is_portfolio( $group_id ) ) {
+	if ( !cboxol_is_portfolio( $group_id ) ) {
 		return;
 	}
 
@@ -638,7 +638,7 @@ add_action( 'bp_actions', 'openlab_enforce_one_portfolio_per_person', 1 );
  * Don't display Email settings on portfolio profile headers
  */
 function openlab_remove_email_settings_from_portfolios() {
-	if ( openlab_is_portfolio() ) {
+	if ( cboxol_is_portfolio() ) {
 		remove_action( 'bp_group_header_meta', 'ass_group_subscribe_button' );
 	}
 }
