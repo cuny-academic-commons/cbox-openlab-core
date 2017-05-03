@@ -397,19 +397,19 @@ function wds_bp_group_meta() {
 	global $wpdb, $bp, $current_site, $base;
 
 	$the_group_id = 0;
-
 	if ( bp_is_group() && ! bp_is_group_create() ) {
 		$the_group_id = bp_get_current_group_id();
 	}
 
-	$group_type_slug = '';
-	$group_type = cboxol_get_group_group_type( $the_group_id );
-	if ( ! is_wp_error( $group_type ) ) {
-		$group_type_slug = $group_type->get_slug();
+	$group_type = null;
+	if ( $the_group_id ) {
+		$group_type = cboxol_get_group_group_type( $the_group_id );
+	} elseif ( isset( $_GET['group_type'] ) ) {
+		$group_type = cboxol_get_group_type( wp_unslash( urldecode( $_GET['group_type'] ) ) );
 	}
 
-	if ( isset( $_GET['group_type'] ) && bp_is_group_create() ) {
-		$group_type_slug = wp_unslash( urldecode( $_GET['group_type'] ) );
+	if ( ! $group_type || is_wp_error( $group_type ) ) {
+		return;
 	}
 
 	// @todo Do this some other way.
@@ -450,14 +450,14 @@ function wds_bp_group_meta() {
 
 						if ( $maybe_site_id ) {
 							$group_site_name = get_blog_option( $maybe_site_id, 'blogname' );
-							$group_site_text = '<strong>' . $group_site_name . '</strong>';
+							$group_site_text = '<strong>' . esc_html( $group_site_name ) . '</strong>';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
 						} else {
 							$group_site_text = '';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
 						}
 						?>
-						<p>This <?php echo openlab_get_group_type_label() ?> is currently associated with the site <?php echo $group_site_text ?></p>
+						<p><?php printf( esc_html__( 'This group is currently associated with the site "%s"', 'openlab-theme' ), $group_site_text ) ?></p>
 						<ul id="change-group-site"><li><?php echo $group_site_url_out ?> <a class="button underline confirm" href="<?php echo wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ?>" id="change-group-site-toggle">Unlink</a></li></ul>
 
 					</div>
@@ -496,7 +496,7 @@ function wds_bp_group_meta() {
 							<?php $show_website = 'none' ?>
 							<div class="form-field form-required">
 								<div scope='row' class="site-details-query">
-									<label><input type="checkbox" id="wds_website_check" name="wds_website_check" value="yes" /> Set up a site?</label>
+									<label><input type="checkbox" id="wds_website_check" name="wds_website_check" value="yes" /> <?php esc_html_e( 'Set up a site?', 'openlab-theme' ); ?></label>
 								</div>
 							</div>
 						<?php else : ?>
