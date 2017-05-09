@@ -7,6 +7,9 @@ add_action( 'bp_groups_register_group_types', 'cboxol_grouptypes_register_group_
 add_action( 'bp_after_group_details_creation_step', 'cboxol_grouptypes_hidden_field' );
 add_action( 'groups_create_group_step_save_group-details', 'cboxol_grouptypes_save_group_type' );
 
+// Group creation must always have a group_type.
+add_action( 'bp_actions', 'cboxol_enforce_group_type_on_creation' );
+
 /**
  * Get a group type by group id
  *
@@ -255,9 +258,60 @@ function cboxol_grouptypes_save_group_type() {
 	}
 
 	// Should make this less dumb.
-	if ( $group_type->is_course() && ! cboxol_user_can_create_courses( bp_loggedin_user_id() ) ) {
+	if ( $group_type->get_is_course() && ! cboxol_user_can_create_courses( bp_loggedin_user_id() ) ) {
 		return;
 	}
 
 	bp_groups_set_group_type( bp_get_new_group_id(), $group_type->get_slug() );
+}
+
+/**
+ * Enforce that group creation always has an allowed type.
+ *
+ * If no group type is found, or if the specifed group type is non-existent or
+ * off-limits, redirect to the first legal one found.
+ */
+function cboxol_enforce_group_type_on_creation() {
+	if ( ! bp_is_group_create() ) {
+		return;
+	}
+
+	if ( ! bp_is_action_variable( 'group-details', 1 ) ) {
+		return;
+	}
+
+	$group_type = null;
+	if ( isset( $_GET['group_type'] ) ) {
+		$group_type = cboxol_get_group_type( wp_unslash( urldecode( $_GET['group_type'] ) ) );
+	}
+
+	$redirect = false;
+	if ( ! $group_type || is_wp_error( $group_type ) ) {
+		$redirect = true;
+	} elseif ( $group_type->get_is_course() && ! cboxol_user_can_create_courses( bp_loggedin_user_id() ) ) {
+		$redirect = true;
+	}
+
+	if ( ! $redirect ) {
+		return;
+	}
+
+	// Grab the first non-course, non-portfolio group type.
+	$types = cboxol_get_group_types();
+	$redirect_type = null;
+	foreach ( $types as $type ) {
+		if ( ! $type->get_is_portfolio() && ! $type->get_is_course() ) {
+			$redirect_type = $type;
+			break;
+		}
+	}
+
+	// Sanity check.
+	if ( ! $redirect_type ) {
+		return;
+	}
+
+	$redirect_url = add_query_arg( 'group_type', $redirect_type->get_slug(), bp_get_groups_directory_permalink() . 'create/step/group-details/' );
+	wp_redirect( $redirect_url );
+	die();
 }
