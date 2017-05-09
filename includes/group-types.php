@@ -21,7 +21,7 @@ function openlab_get_group_type( $group_id = 0 ) {
 		return '';
 	}
 
-	if ( !$group_id ) {
+	if ( ! $group_id ) {
 		$group_id = openlab_fallback_group();
 	}
 
@@ -218,6 +218,9 @@ function cboxol_get_group_group_type( $group_id ) {
 	return cboxol_get_group_type( $type );
 }
 
+/**
+ * Hidden field for group type.
+ */
 function cboxol_grouptypes_hidden_field() {
 	$group_type = null;
 
@@ -237,6 +240,9 @@ function cboxol_grouptypes_hidden_field() {
 	);
 }
 
+/**
+ * Save group type.
+ */
 function cboxol_grouptypes_save_group_type() {
 	if ( ! isset( $_POST['group-type'] ) ) {
 		return;
