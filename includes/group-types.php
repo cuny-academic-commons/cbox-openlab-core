@@ -3,6 +3,10 @@
 add_action( 'init', 'cboxol_grouptypes_register_post_type' );
 add_action( 'bp_groups_register_group_types', 'cboxol_grouptypes_register_group_types' );
 
+// Group creation. We roll our own because we skip BP's validation.
+add_action( 'bp_after_group_details_creation_step', 'cboxol_grouptypes_hidden_field' );
+add_action( 'groups_create_group_step_save_group-details', 'cboxol_grouptypes_save_group_type' );
+
 /**
  * Get a group type by group id
  *
@@ -209,4 +213,51 @@ function cboxol_get_group_group_type( $group_id ) {
 	}
 
 	return cboxol_get_group_type( $type );
+}
+
+function cboxol_grouptypes_hidden_field() {
+	$group_type = null;
+
+	if ( bp_is_group_create() && isset( $_GET['group_type'] ) ) {
+		$group_type = wp_unslash( urldecode( $_GET['group_type'] ) );
+	}
+
+	$group_type_object = cboxol_get_group_type( $group_type );
+	if ( is_wp_error( $group_type_object ) ) {
+		return;
+	}
+
+	printf(
+		'<input type="hidden" name="group-type" value="%s" /><input type="hidden" name="group-type-nonce" value="%s" />',
+		esc_attr( $group_type_object->get_slug() ),
+		wp_create_nonce( 'cboxol_set_group_type' )
+	);
+}
+
+function cboxol_grouptypes_save_group_type() {
+	if ( ! isset( $_POST['group-type'] ) ) {
+		return;
+	}
+
+	if ( ! isset( $_POST['group-type-nonce'] ) ) {
+		return;
+	}
+
+	if ( ! wp_verify_nonce( $_POST['group-type-nonce'], 'cboxol_set_group_type' ) ) {
+		return;
+	}
+
+	$group_type = cboxol_get_group_type( wp_unslash( $_POST['group-type'] ) );
+
+	// Errors from here down should send user back to previous screen.
+	if ( is_wp_error( $group_type ) ) {
+		return;
+	}
+
+	// Should make this less dumb.
+	if ( $group_type->is_course() && ! cboxol_user_can_create_courses( bp_loggedin_user_id() ) ) {
+		return;
+	}
+
+	bp_groups_set_group_type( bp_get_new_group_id(), $group_type->get_slug() );
 }
