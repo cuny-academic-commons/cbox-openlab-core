@@ -36,6 +36,10 @@ function cboxol_init() {
 		include CBOXOL_PLUGIN_DIR . 'includes/admin.php';
 	}
 
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		include CBOXOL_PLUGIN_DIR . 'tools/cli.php';
+	}
+
 	// Must wait until WP is set up.
 	add_action( 'init', 'cboxol_maybe_install' );
 }
