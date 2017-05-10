@@ -144,6 +144,7 @@ class Install {
 				'is_course' => true, // for "Can create course" member type field
 				'is_portfolio' => false,
 
+				'requires_site' => false,
 				'supports_additional_faculty' => true,
 				'supports_course_information' => true,
 				'supports_group_contact' => false,
@@ -175,6 +176,7 @@ class Install {
 				'is_course' => false,
 				'is_portfolio' => true,
 
+				'requires_site' => true,
 				'supports_additional_faculty' => false,
 				'supports_course_information' => false,
 				'supports_group_contact' => false,
@@ -200,6 +202,7 @@ class Install {
 				'is_course' => false,
 				'is_portfolio' => false,
 
+				'requires_site' => false,
 				'supports_additional_faculty' => false,
 				'supports_course_information' => false,
 				'supports_group_contact' => true,
@@ -225,6 +228,7 @@ class Install {
 				'is_course' => false,
 				'is_portfolio' => false,
 
+				'requires_site' => false,
 				'supports_additional_faculty' => false,
 				'supports_course_information' => false,
 				'supports_group_contact' => true,
