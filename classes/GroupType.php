@@ -27,7 +27,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'enable_site_by_default',
 		'is_course',
 		'is_portfolio',
-		'requires_site' => true,
+		'requires_site',
 		'supports_additional_faculty',
 		'supports_course_information',
 		'supports_group_contact',

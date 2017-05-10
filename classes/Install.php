@@ -263,8 +263,10 @@ class Install {
 			$type->set_can_be_cloned( $type_data['can_be_cloned'] );
 			$type->set_directory_filters( $type_data['directory_filters'] );
 			$type->set_enable_portfolio_list( $type_data['enable_portfolio_list'] );
+			$type->set_enable_site_by_default( $type_data['enable_site_by_default'] );
 			$type->set_is_course( $type_data['is_course'] );
 			$type->set_is_portfolio( $type_data['is_portfolio'] );
+			$type->set_requires_site( $type_data['requires_site'] );
 			$type->set_supports_additional_faculty( $type_data['supports_additional_faculty'] );
 			$type->set_supports_course_information( $type_data['supports_course_information'] );
 			$type->set_supports_mol_link( $type_data['supports_mol_link'] );
