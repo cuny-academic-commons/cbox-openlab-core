@@ -4,7 +4,9 @@
  */
 
 /**
- * Utility function for fetching the group id for a blog
+ * Utility function for fetching the group id for a blog.
+ *
+ * @todo Add caching.
  */
 function openlab_get_group_id_by_blog_id( $blog_id ) {
 	global $wpdb, $bp;
@@ -13,7 +15,7 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 		return 0;
 	}
 
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", $blog_id ) );
+	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id' AND meta_value = %d", $blog_id ) );
 
 	return (int) $group_id;
 }
@@ -22,15 +24,30 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
  * Utility function for fetching the site id for a group
  */
 function openlab_get_site_id_by_group_id( $group_id = 0 ) {
-	if ( ! bp_is_active( 'groups' ) ) {
-		return 0;
-	}
-
 	if ( ! $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	return (int) groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+	return (int) groups_get_groupmeta( $group_id, 'cboxol_group_site_id' );
+}
+
+/**
+ * Get a group's site ID.
+ *
+ * Alias of openlab_get_site_id_by_group_id() for naming consistency.
+ */
+function cboxol_get_group_site_id( $group_id = 0 ) {
+	return openlab_get_site_id_by_group_id( $group_id );
+}
+
+/**
+ * Set a group's site ID.
+ *
+ * @param int $group_id ID of the group.
+ * @param int $site_id  ID of the site.
+ */
+function cboxol_set_group_site_id( $group_id, $site_id ) {
+	return (bool) groups_update_groupmeta( $group_id, 'cboxol_group_site_id', (int) $site_id );
 }
 
 /**
@@ -60,6 +77,136 @@ function openlab_get_group_site_url( $group_id = false ) {
 	return $site_url;
 }
 
+/**
+ * Save group extras, including group blog creation.
+ *
+ * @todo Split up.
+ */
+function cboxol_save_group_extras( $group ) {
+	global $wpdb, $user_ID, $bp;
+
+	$is_editing = false;
+
+	if ( isset( $_POST['_wp_http_referer'] ) && strpos( $_POST['_wp_http_referer'], 'edit-details' ) !== false ) {
+		$is_editing = true;
+	}
+
+	if ( isset( $_POST['wds_faculty'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_faculty', $_POST['wds_faculty'] );
+	}
+	if ( isset( $_POST['wds_group_school'] ) ) {
+		$wds_group_school = implode( ',', $_POST['wds_group_school'] );
+
+		//fully deleting and then adding in school metadata so schools can be unchecked
+		groups_delete_groupmeta( $group->id, 'wds_group_school' );
+		groups_add_groupmeta( $group->id, 'wds_group_school', $wds_group_school, true );
+	} elseif ( ! isset( $_POST['wds_group_school'] ) ) {
+		//allows user to uncheck all schools (projects and clubs only)
+		//on edit only
+		if ( $is_editing ) {
+			groups_update_groupmeta( $group->id, 'wds_group_school', '' );
+		}
+	}
+
+	if ( isset( $_POST['wds_departments'] ) ) {
+		$wds_departments = implode( ',', $_POST['wds_departments'] );
+
+		//fully deleting and then adding in department metadata so departments can be unchecked
+		groups_delete_groupmeta( $group->id, 'wds_departments' );
+		groups_add_groupmeta( $group->id, 'wds_departments', $wds_departments, true );
+	} elseif ( ! isset( $_POST['wds_departments'] ) ) {
+		//allows user to uncheck all departments (projects and clubs only)
+		//on edit only
+		if ( $is_editing ) {
+			groups_update_groupmeta( $group->id, 'wds_departments', '' );
+		}
+	}
+
+	if ( isset( $_POST['wds_course_code'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_course_code', $_POST['wds_course_code'] );
+	}
+	if ( isset( $_POST['wds_section_code'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_section_code', $_POST['wds_section_code'] );
+	}
+	if ( isset( $_POST['wds_semester'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_semester', $_POST['wds_semester'] );
+	}
+	if ( isset( $_POST['wds_year'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_year', $_POST['wds_year'] );
+	}
+	if ( isset( $_POST['wds_course_html'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_course_html', $_POST['wds_course_html'] );
+	}
+	if ( isset( $_POST['group_project_type'] ) ) {
+		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type'] );
+	}
+
+	// Clear the active semester cache
+	delete_transient( 'openlab_active_semesters' );
+
+	// Site association. Non-portfolios have the option of not having associated sites (thus the
+	// set-up-site-toggle value).
+	$group_type = cboxol_get_group_group_type( $group->id );
+	if ( isset( $_POST['set-up-site-toggle'] ) || ( ! is_wp_error( $group_type ) && $group_type->get_requires_site() ) ) {
+		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
+
+			// Create a new site
+			cboxol_copy_blog_page( $group->id );
+		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
+
+			// Associate an existing site
+			cboxol_set_group_site_id( $group->id, (int) $_POST['groupblog-blogid'] );
+		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
+
+			// External site
+			// Some validation
+			$url = openlab_validate_url( $_POST['external-site-url'] );
+			groups_update_groupmeta( $group->id, 'external_site_url', $url );
+
+			if ( ! empty( $_POST['external-site-type'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_type', $_POST['external-site-type'] );
+			}
+
+			if ( ! empty( $_POST['external-posts-url'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-posts-url'] );
+			}
+
+			if ( ! empty( $_POST['external-comments-url'] ) ) {
+				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-comments-url'] );
+			}
+		}
+
+		if ( openlab_is_portfolio( $group->id ) ) {
+			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
+		}
+	}
+
+	// Site privacy
+	if ( isset( $_POST['blog_public'] ) ) {
+		$blog_public = (float) $_POST['blog_public'];
+		$site_id = openlab_get_site_id_by_group_id( $group->id );
+
+		if ( $site_id ) {
+			update_blog_option( $site_id, 'blog_public', $blog_public );
+		}
+	}
+
+	// Portfolio list display
+	if ( isset( $_POST['group-portfolio-list-heading'] ) ) {
+		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
+		groups_update_groupmeta( $group->id, 'portfolio_list_enabled', $enabled );
+
+		groups_update_groupmeta( $group->id, 'portfolio_list_heading', strip_tags( stripslashes( $_POST['group-portfolio-list-heading'] ) ) );
+	}
+
+	// Feed URLs ( step two of group creation )
+	if ( isset( $_POST['external-site-posts-feed'] ) || isset( $_POST['external-site-comments-feed'] ) ) {
+		groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-site-posts-feed'] );
+		groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-site-comments-feed'] );
+	}
+}
+add_action( 'groups_group_after_save', 'cboxol_save_group_extras' );
+
 ////////////////////////
 /// MEMBERSHIP SYNC ////
 ////////////////////////
@@ -68,7 +215,7 @@ function openlab_get_group_site_url( $group_id = false ) {
  * Add user to the group blog when joining the group
  */
 function openlab_add_user_to_groupblog( $group_id, $user_id ) {
-	$blog_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+	$blog_id = cboxol_get_group_site_id( $group_id );
 
 	if ( $blog_id ) {
 		$blog_public = get_blog_option( $blog_id, 'blog_public' );
@@ -132,7 +279,7 @@ function openlab_force_blog_role_sync() {
 	}
 
 	// Is this blog associated with a group?
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id' AND meta_value = %d", get_current_blog_id() ) );
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
 	if ( $group_id ) {
 
@@ -377,7 +524,7 @@ function openlab_process_unlink_site() {
 
 		$meta_to_delete = array(
 			'external_site_url',
-			'wds_bp_group_site_id',
+			'cboxol_group_site_id',
 			'external_site_comments_feed',
 			'external_site_posts_feed',
 		);
@@ -401,18 +548,25 @@ function openlab_validate_groupblog_url() {
 	global $current_blog;
 
 	/**
-     * This is terrifying.
-     * We check for a groupblog in the following cases:
-     * a ) 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
-     * b1 ) the 'Set up a site?' checkbox has been checked, OR
-     * b2 ) the group type is Portfolio, which requires a blog
-     */
+	 * This is terrifying.
+	 * We check for a groupblog in the following cases:
+	 * a)  'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'], and either
+	 * b1) the 'Set up a site?' checkbox has been checked, OR
+	 * b2) the group type is Portfolio, which requires a blog
+	 */
+	$group_type = isset( $_POST['group-type'] ) ? cboxol_get_group_type( wp_unslash( urldecode( $_POST['group-type'] ) ) ) : null;
+	$group_type_requires_site = false;
+	if ( $group_type && ! is_wp_error( $group_type ) && $group_type->get_requires_site() ) {
+		$group_type_requires_site = true;
+	}
+
 	if (
-			isset( $_POST['new_or_old'] ) &&
-			( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
-			( isset( $_POST['wds_website_check'] ) || in_array( $_POST['group_type'], array( 'portfolio' ) ) )
+		isset( $_POST['new_or_old'] ) &&
+		( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
+		( isset( $_POST['set-up-site-toggle'] ) || $group_type_requires_site )
 	) {
 		// Which field we check depends on whether this is a clone
+		// @todo Support subdomains
 		$path = '';
 		if ( 'clone' == $_POST['new_or_old'] ) {
 			$path = $_POST['clone-destination-path'];
@@ -431,7 +585,6 @@ function openlab_validate_groupblog_url() {
 		}
 	}
 }
-
 add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
 
 /**
@@ -459,7 +612,6 @@ function openlab_validate_groupblog_selection() {
 		}
 	}
 }
-
 add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
 
 /**
@@ -504,7 +656,7 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	$search_terms = $params['search_terms'];
 
 	// The magic: Pull up a list of blogs that have associated groups, and exclude them
-	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'wds_bp_group_site_id'" );
+	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id'" );
 
 	if ( ! empty( $exclude_blogs ) ) {
 		$exclude_sql = " AND b.blog_id NOT IN ( " . implode( ',', $exclude_blogs ) . " ) ";
@@ -572,7 +724,7 @@ function wds_site_can_be_viewed() {
 
 	$blog_public = false;
 	$group_id = bp_get_group_id();
-	$wds_bp_group_site_id = groups_get_groupmeta( $group_id, 'wds_bp_group_site_id' );
+	$wds_bp_group_site_id = cboxol_get_group_site_id( $group_id );
 
 	if ( $wds_bp_group_site_id != "" ) {
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
@@ -1147,3 +1299,180 @@ function openlab_catch_cloned_course_notice_dismissals() {
 	update_option( 'openlab-clone-notice-dismissed', 1 );
 }
 add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
+
+/**
+ * Copy blog from a template.
+ *
+ * @param int $group_id
+ */
+function cboxol_copy_blog_page( $group_id ) {
+	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
+	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
+
+	if ( ! empty( $blog['domain'] ) && $group_id ) {
+		$wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
+		if ( ! defined( 'SUNRISE' ) || $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->dmtable}'" ) != $wpdb->dmtable ) {
+			$join = $where = '';
+		} else {
+			$join = "LEFT JOIN {$wpdb->dmtable} d ON d.blog_id = b.blog_id ";
+			$where = 'AND d.domain IS NULL ';
+		}
+
+		$src_id = intval( $_POST['source_blog'] );
+
+		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
+		//$domain = str_replace( ".","", $domain );
+		$domain = friendly_url( $blog['domain'] );
+		$email = sanitize_email( $user_email );
+		$title = $_POST['group-name'];
+
+		if ( ! $src_id ) {
+			$msg = __( 'Select a source blog.' );
+		} elseif ( empty( $domain ) || empty( $email ) ) {
+			$msg = __( 'Missing blog address or email address.' );
+		} elseif ( ! is_email( $email ) ) {
+			$msg = __( 'Invalid email address' );
+		} else {
+			if ( constant( 'VHOST' ) == 'yes' ) {
+				$newdomain = $domain . '.' . $current_site->domain;
+				$path = $base;
+			} else {
+				$newdomain = $current_site->domain;
+				$path = $base . $domain . '/';
+			}
+
+			$password = 'N/A';
+			$user_id = email_exists( $email );
+			if ( ! $user_id ) {
+				$password = generate_random_password();
+				$user_id = wpmu_create_user( $domain, $password, $email );
+				if ( false == $user_id ) {
+					$msg = __( 'There was an error creating the user' );
+				} else {
+					wp_new_user_notification( $user_id, $password );
+				}
+			}
+			$wpdb->hide_errors();
+			$new_id = wpmu_create_blog( $newdomain, $path, $title, $user_id, array( 'public' => 1 ), $current_site->id );
+			$id = $new_id;
+			$wpdb->show_errors();
+			if ( ! is_wp_error( $id ) ) { //if it dont already exists then move over everything
+				$current_user = get_userdata( bp_loggedin_user_id() );
+
+				cboxol_set_group_site_id( $group_id, $id );
+				/* if ( get_user_option( $user_id, 'primary_blog' ) == 1 )
+                  update_user_option( $user_id, 'primary_blog', $id, true ); */
+				$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
+				wp_mail( get_site_option( 'admin_email' ), sprintf( __( '[%s] New Blog Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
+				wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ) );
+				$msg = __( 'Site Created' );
+				// now copy
+				$blogtables = $wpdb->base_prefix . $src_id . '_';
+				$newtables = $wpdb->base_prefix . $new_id . '_';
+				$query = "SHOW TABLES LIKE '{$blogtables}%'";
+				//				var_dump( $query );
+				$tables = $wpdb->get_results( $query, ARRAY_A );
+				if ( $tables ) {
+					reset( $tables );
+					$create = array();
+					$data = array();
+					$len = strlen( $blogtables );
+					$create_col = 'Create Table';
+					// add std wp tables to this array
+					$wptables = array(
+					$blogtables . 'links',
+					$blogtables . 'postmeta',
+					$blogtables . 'posts',
+						$blogtables . 'terms',
+					$blogtables . 'term_taxonomy',
+					$blogtables . 'term_relationships',
+					);
+					for ( $i = 0; $i < count( $tables ); $i++ ) {
+						$table = current( $tables[ $i ] );
+						if ( substr( $table, 0, $len ) == $blogtables ) {
+							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
+								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
+								$data[ $table ] = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+							}
+						}
+					}
+					//					var_dump( $create );
+					if ( $data ) {
+						switch_to_blog( $src_id );
+						$src_url = get_option( 'siteurl' );
+						$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
+						restore_current_blog();
+						$new_url = get_blog_option( $new_id, 'siteurl' );
+						foreach ( $data as $k => $v ) {
+							$table = str_replace( $blogtables, $newtables, $k );
+							if ( in_array( $k, $wptables ) ) { // drop new blog table
+								$query = "DROP TABLE IF EXISTS {$table}";
+								$wpdb->query( $query );
+							}
+							$key = (array) $create[ $k ];
+							$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
+							$wpdb->query( $query );
+							$is_post = ( $k == $blogtables . 'posts' );
+							if ( $v ) {
+								foreach ( $v as $row ) {
+									if ( $is_post ) {
+										$row['guid'] = str_replace( $src_url, $new_url, $row['guid'] );
+										$row['post_content'] = str_replace( $src_url, $new_url, $row['post_content'] );
+										$row['post_author'] = $user_id;
+									}
+									$wpdb->insert( $table, $row );
+								}
+							}
+						}
+						// copy media
+						$cp_base = ABSPATH . '/' . UPLOADBLOGSDIR . '/';
+						$cp_cmd = 'cp -r ' . $cp_base . $src_id . ' ' . $cp_base . $new_id;
+						exec( $cp_cmd );
+						// update options
+						$skip_options = array(
+						'admin_email',
+						'blogname',
+						'blogdescription',
+						'cron',
+						'db_version',
+						'doing_cron',
+							'fileupload_url',
+						'home',
+						'new_admin_email',
+						'nonce_salt',
+						'random_seed',
+						'rewrite_rules',
+						'secret',
+						'siteurl',
+						'upload_path',
+							'upload_url_path',
+						"{$wpdb->base_prefix}{$src_id}_user_roles",
+						);
+						$options = $wpdb->get_results( $option_query );
+						//new blog stuff
+						if ( $options ) {
+							switch_to_blog( $new_id );
+							update_option( 'wds_bp_group_id', $group_id );
+							foreach ( $options as $o ) {
+								//								var_dump( $o );
+								if ( ! in_array( $o->option_name, $skip_options ) && substr( $o->option_name, 0, 6 ) != '_trans' ) {
+									update_option( $o->option_name, maybe_unserialize( $o->option_value ) );
+								}
+							}
+							if ( version_compare( $GLOBALS['wp_version'], '2.8', '>' ) ) {
+								set_transient( 'rewrite_rules', '' );
+							} else {
+								update_option( 'rewrite_rules', '' );
+							}
+
+							restore_current_blog();
+							$msg = __( 'Blog Copied' );
+						}
+					}
+				}
+			} else {
+				$msg = $id->get_error_message();
+			}
+		}
+	}
+}
