@@ -219,6 +219,33 @@ function cboxol_get_group_group_type( $group_id ) {
 }
 
 /**
+ * Utility for getting group type of group currently being created or edited.
+ *
+ * @return WP_Error|\CBOX\OL\GroupType
+ */
+function cboxol_get_edited_group_group_type() {
+	$the_group_id = null;
+	if ( bp_is_group() ) {
+		$the_group_id = bp_get_current_group_id();
+	} elseif ( bp_is_group_create() ) {
+		$the_group_id = bp_get_new_group_id();
+	}
+
+	$group_type = null;
+	if ( $the_group_id ) {
+		$group_type = cboxol_get_group_group_type( $the_group_id );
+	} elseif ( isset( $_GET['group_type'] ) ) {
+		$group_type = cboxol_get_group_type( wp_unslash( urldecode( $_GET['group_type'] ) ) );
+	}
+
+	if ( ! $group_type ) {
+		return new WP_Error( 'no_group_type', __( 'No group type found.', 'cbox-openlab-core' ) );
+	}
+
+	return $group_type;
+}
+
+/**
  * Hidden field for group type.
  */
 function cboxol_grouptypes_hidden_field() {
