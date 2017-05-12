@@ -286,6 +286,10 @@ function cboxol_enforce_group_type_on_creation() {
 		return;
 	}
 
+	if ( ! empty( $_POST ) ) {
+		return;
+	}
+
 	$group_type = null;
 	if ( isset( $_GET['group_type'] ) ) {
 		$group_type = cboxol_get_group_type( wp_unslash( urldecode( $_GET['group_type'] ) ) );
