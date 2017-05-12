@@ -83,7 +83,7 @@ function openlab_get_group_site_url( $group_id = false ) {
  * @todo Split up.
  */
 function cboxol_save_group_extras( $group ) {
-	global $wpdb, $user_ID, $bp;
+	global $wpdb, $bp;
 
 	$is_editing = false;
 
@@ -176,7 +176,8 @@ function cboxol_save_group_extras( $group ) {
 			}
 		}
 
-		if ( openlab_is_portfolio( $group->id ) ) {
+		$group_type = cboxol_get_group_group_type( $group->id );
+		if ( ! is_wp_error( $group_type ) && $group_type->is_portfolio() ) {
 			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
 		}
 	}
@@ -1303,176 +1304,160 @@ add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
 /**
  * Copy blog from a template.
  *
+ * @todo Merge with course copy code, which is better than this.
+ *
  * @param int $group_id
  */
 function cboxol_copy_blog_page( $group_id ) {
-	global $bp, $wpdb, $current_site, $user_email, $base, $user_ID;
+	global $bp, $wpdb, $current_site, $user_email;
+
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
 
-	if ( ! empty( $blog['domain'] ) && $group_id ) {
-		$wpdb->dmtable = $wpdb->base_prefix . 'domain_mapping';
-		if ( ! defined( 'SUNRISE' ) || $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->dmtable}'" ) != $wpdb->dmtable ) {
-			$join = $where = '';
-		} else {
-			$join = "LEFT JOIN {$wpdb->dmtable} d ON d.blog_id = b.blog_id ";
-			$where = 'AND d.domain IS NULL ';
+	if ( empty( $blog['domain'] ) ) {
+		return;
+	}
+
+	$current_user = wp_get_current_user();
+	$group = groups_get_group( $group_id );
+
+	// Validate.
+	$validate = wpmu_validate_blog_signup( $blog['domain'], $group->name, $current_user );
+
+	if ( ! empty( $validate->errors ) ) {
+		return $validate;
+	}
+
+	// @todo subdomain support
+	$src_id = intval( $_POST['source_blog'] );
+
+	$title = $_POST['group-name'];
+
+	$msg = '';
+	if ( ! $src_id ) {
+		$msg = __( 'Select a source blog.' );
+	}
+
+	if ( $msg ) {
+		return $msg;
+	}
+
+	$wpdb->hide_errors();
+	$new_id = wpmu_create_blog( $validate['domain'], $validate['path'], $validate['blog_title'], $current_user->ID, array( 'public' => 1 ), $current_site->id );
+	$id = $new_id;
+
+	$wpdb->show_errors();
+
+	if ( is_wp_error( $id ) ) {
+		return $id;
+	}
+
+	cboxol_set_group_site_id( $group_id, $id );
+
+	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
+
+	wp_mail( get_site_option( 'admin_email' ), sprintf( __( '[%s] New Blog Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
+
+	$msg = __( 'Site Created' );
+	// now copy
+	$blogtables = $wpdb->base_prefix . $src_id . '_';
+	$newtables = $wpdb->base_prefix . $new_id . '_';
+	$query = "SHOW TABLES LIKE '{$blogtables}%'";
+	$tables = $wpdb->get_results( $query, ARRAY_A );
+	if ( $tables ) {
+		reset( $tables );
+		$create = array();
+		$data = array();
+		$len = strlen( $blogtables );
+		$create_col = 'Create Table';
+		// add std wp tables to this array
+		$wptables = array(
+			$blogtables . 'links',
+			$blogtables . 'postmeta',
+			$blogtables . 'posts',
+			$blogtables . 'terms',
+			$blogtables . 'term_taxonomy',
+			$blogtables . 'term_relationships',
+			$blogtables . 'termmeta',
+		);
+		for ( $i = 0; $i < count( $tables ); $i++ ) {
+			$table = current( $tables[ $i ] );
+			if ( substr( $table, 0, $len ) == $blogtables ) {
+				if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
+					$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
+					$data[ $table ] = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+				}
+			}
 		}
-
-		$src_id = intval( $_POST['source_blog'] );
-
-		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
-		//$domain = str_replace( ".","", $domain );
-		$domain = friendly_url( $blog['domain'] );
-		$email = sanitize_email( $user_email );
-		$title = $_POST['group-name'];
-
-		if ( ! $src_id ) {
-			$msg = __( 'Select a source blog.' );
-		} elseif ( empty( $domain ) || empty( $email ) ) {
-			$msg = __( 'Missing blog address or email address.' );
-		} elseif ( ! is_email( $email ) ) {
-			$msg = __( 'Invalid email address' );
-		} else {
-			if ( constant( 'VHOST' ) == 'yes' ) {
-				$newdomain = $domain . '.' . $current_site->domain;
-				$path = $base;
-			} else {
-				$newdomain = $current_site->domain;
-				$path = $base . $domain . '/';
-			}
-
-			$password = 'N/A';
-			$user_id = email_exists( $email );
-			if ( ! $user_id ) {
-				$password = generate_random_password();
-				$user_id = wpmu_create_user( $domain, $password, $email );
-				if ( false == $user_id ) {
-					$msg = __( 'There was an error creating the user' );
-				} else {
-					wp_new_user_notification( $user_id, $password );
+		//					var_dump( $create );
+		if ( $data ) {
+			switch_to_blog( $src_id );
+			$src_url = get_option( 'siteurl' );
+			$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
+			restore_current_blog();
+			$new_url = get_blog_option( $new_id, 'siteurl' );
+			foreach ( $data as $k => $v ) {
+				$table = str_replace( $blogtables, $newtables, $k );
+				if ( in_array( $k, $wptables ) ) { // drop new blog table
+					$query = "DROP TABLE IF EXISTS {$table}";
+					$wpdb->query( $query );
 				}
-			}
-			$wpdb->hide_errors();
-			$new_id = wpmu_create_blog( $newdomain, $path, $title, $user_id, array( 'public' => 1 ), $current_site->id );
-			$id = $new_id;
-			$wpdb->show_errors();
-			if ( ! is_wp_error( $id ) ) { //if it dont already exists then move over everything
-				$current_user = get_userdata( bp_loggedin_user_id() );
-
-				cboxol_set_group_site_id( $group_id, $id );
-				/* if ( get_user_option( $user_id, 'primary_blog' ) == 1 )
-                  update_user_option( $user_id, 'primary_blog', $id, true ); */
-				$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $newdomain . $path, stripslashes( $title ) );
-				wp_mail( get_site_option( 'admin_email' ), sprintf( __( '[%s] New Blog Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
-				wpmu_welcome_notification( $id, $user_id, $password, $title, array( 'public' => 1 ) );
-				$msg = __( 'Site Created' );
-				// now copy
-				$blogtables = $wpdb->base_prefix . $src_id . '_';
-				$newtables = $wpdb->base_prefix . $new_id . '_';
-				$query = "SHOW TABLES LIKE '{$blogtables}%'";
-				//				var_dump( $query );
-				$tables = $wpdb->get_results( $query, ARRAY_A );
-				if ( $tables ) {
-					reset( $tables );
-					$create = array();
-					$data = array();
-					$len = strlen( $blogtables );
-					$create_col = 'Create Table';
-					// add std wp tables to this array
-					$wptables = array(
-					$blogtables . 'links',
-					$blogtables . 'postmeta',
-					$blogtables . 'posts',
-						$blogtables . 'terms',
-					$blogtables . 'term_taxonomy',
-					$blogtables . 'term_relationships',
-					);
-					for ( $i = 0; $i < count( $tables ); $i++ ) {
-						$table = current( $tables[ $i ] );
-						if ( substr( $table, 0, $len ) == $blogtables ) {
-							if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' ) ) {
-								$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
-								$data[ $table ] = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
-							}
+				$key = (array) $create[ $k ];
+				$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
+				$wpdb->query( $query );
+				$is_post = ( $k == $blogtables . 'posts' );
+				if ( $v ) {
+					foreach ( $v as $row ) {
+						if ( $is_post ) {
+							$row['guid'] = str_replace( $src_url, $new_url, $row['guid'] );
+							$row['post_content'] = str_replace( $src_url, $new_url, $row['post_content'] );
+							$row['post_author'] = $current_user->ID;
 						}
-					}
-					//					var_dump( $create );
-					if ( $data ) {
-						switch_to_blog( $src_id );
-						$src_url = get_option( 'siteurl' );
-						$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
-						restore_current_blog();
-						$new_url = get_blog_option( $new_id, 'siteurl' );
-						foreach ( $data as $k => $v ) {
-							$table = str_replace( $blogtables, $newtables, $k );
-							if ( in_array( $k, $wptables ) ) { // drop new blog table
-								$query = "DROP TABLE IF EXISTS {$table}";
-								$wpdb->query( $query );
-							}
-							$key = (array) $create[ $k ];
-							$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
-							$wpdb->query( $query );
-							$is_post = ( $k == $blogtables . 'posts' );
-							if ( $v ) {
-								foreach ( $v as $row ) {
-									if ( $is_post ) {
-										$row['guid'] = str_replace( $src_url, $new_url, $row['guid'] );
-										$row['post_content'] = str_replace( $src_url, $new_url, $row['post_content'] );
-										$row['post_author'] = $user_id;
-									}
-									$wpdb->insert( $table, $row );
-								}
-							}
-						}
-						// copy media
-						$cp_base = ABSPATH . '/' . UPLOADBLOGSDIR . '/';
-						$cp_cmd = 'cp -r ' . $cp_base . $src_id . ' ' . $cp_base . $new_id;
-						exec( $cp_cmd );
-						// update options
-						$skip_options = array(
-						'admin_email',
-						'blogname',
-						'blogdescription',
-						'cron',
-						'db_version',
-						'doing_cron',
-							'fileupload_url',
-						'home',
-						'new_admin_email',
-						'nonce_salt',
-						'random_seed',
-						'rewrite_rules',
-						'secret',
-						'siteurl',
-						'upload_path',
-							'upload_url_path',
-						"{$wpdb->base_prefix}{$src_id}_user_roles",
-						);
-						$options = $wpdb->get_results( $option_query );
-						//new blog stuff
-						if ( $options ) {
-							switch_to_blog( $new_id );
-							update_option( 'wds_bp_group_id', $group_id );
-							foreach ( $options as $o ) {
-								//								var_dump( $o );
-								if ( ! in_array( $o->option_name, $skip_options ) && substr( $o->option_name, 0, 6 ) != '_trans' ) {
-									update_option( $o->option_name, maybe_unserialize( $o->option_value ) );
-								}
-							}
-							if ( version_compare( $GLOBALS['wp_version'], '2.8', '>' ) ) {
-								set_transient( 'rewrite_rules', '' );
-							} else {
-								update_option( 'rewrite_rules', '' );
-							}
-
-							restore_current_blog();
-							$msg = __( 'Blog Copied' );
-						}
+						$wpdb->insert( $table, $row );
 					}
 				}
-			} else {
-				$msg = $id->get_error_message();
+			}
+
+			// Copy uploaded files.
+			$upload_dir = wp_upload_dir();
+			cboxol_copyr( str_replace( $new_id, $src_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
+
+			// update options
+			$skip_options = array(
+				'admin_email',
+				'blogname',
+				'blogdescription',
+				'cron',
+				'db_version',
+				'doing_cron',
+				'fileupload_url',
+				'home',
+				'new_admin_email',
+				'nonce_salt',
+				'random_seed',
+				'rewrite_rules',
+				'secret',
+				'siteurl',
+				'upload_path',
+				'upload_url_path',
+				"{$wpdb->base_prefix}{$src_id}_user_roles",
+			);
+			$options = $wpdb->get_results( $option_query );
+
+			// new blog stuff
+			if ( $options ) {
+				switch_to_blog( $new_id );
+
+				foreach ( $options as $o ) {
+					if ( ! in_array( $o->option_name, $skip_options ) && substr( $o->option_name, 0, 6 ) != '_trans' ) {
+						update_option( $o->option_name, maybe_unserialize( $o->option_value ) );
+					}
+				}
+
+				restore_current_blog();
+				$msg = __( 'Blog Copied' );
 			}
 		}
 	}
+
+	return $msg;
 }
