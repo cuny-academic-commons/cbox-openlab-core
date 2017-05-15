@@ -117,8 +117,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 			'portfolio' => array(
 				'singular',
 				'plural',
-				'my_portfolio',
 				'create_item',
+				'my_portfolio',
+				'my_portfolio_site',
+				'visit_portfolio_site',
 			),
 			'default' => array(
 				'singular',
@@ -215,6 +217,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'description' => __( 'Used in personal navigation and on member profiles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
+			'my_portfolio_site' => array(
+				'slug' => 'my_portfolio_site',
+				'label' => _x( 'My Portfolio Site', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'Used as the link to a user\'s own portfolio site.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
 			'plural' => array(
 				'slug' => 'plural',
 				'label' => _x( 'Plural', 'Member Type plural label', 'cbox-openlab-core' ),
@@ -231,6 +239,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'singular',
 				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
 				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'visit_portfolio_site' => array(
+				'slug' => 'visit_portfolio_site',
+				'label' => _x( 'Visit Portfolio Site', 'Group Type label', 'cbox-openlab-core' ),
+				'description' => __( 'Used as the link to another user\'s portfolio site.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);
