@@ -177,7 +177,7 @@ function cboxol_save_group_extras( $group ) {
 		}
 
 		$group_type = cboxol_get_group_group_type( $group->id );
-		if ( ! is_wp_error( $group_type ) && $group_type->is_portfolio() ) {
+		if ( ! is_wp_error( $group_type ) && $group_type->get_is_portfolio() ) {
 			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
 		}
 	}
@@ -1460,4 +1460,29 @@ function cboxol_copy_blog_page( $group_id ) {
 	}
 
 	return $msg;
+}
+
+/**
+ * Is this group hidden?
+ */
+function cboxol_group_is_hidden( $group_id = 0 ) {
+	$is_hidden = false;
+
+	if ( !$group_id ) {
+		if ( bp_is_group() ) {
+			$group = groups_get_current_group();
+		} else {
+			$group_id = openlab_fallback_group();
+		}
+	}
+
+	if ( empty( $group ) ) {
+		$group = groups_get_group( array( 'group_id' => $group_id ) );
+	}
+
+	if ( empty( $group ) ) {
+		return $is_hidden;
+	} else {
+		return isset( $group->status ) && 'hidden' == $group->status;
+	}
 }
