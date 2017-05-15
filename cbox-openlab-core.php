@@ -40,6 +40,10 @@ function cboxol_init() {
 		include CBOXOL_PLUGIN_DIR . 'tools/cli.php';
 	}
 
+	if ( function_exists( 'bbpress' ) ) {
+		require CBOXOL_PLUGIN_DIR . 'includes/bbpress.php';
+	}
+
 	// Must wait until WP is set up.
 	add_action( 'init', 'cboxol_maybe_install' );
 }
