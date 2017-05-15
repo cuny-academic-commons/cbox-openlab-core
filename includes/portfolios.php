@@ -567,7 +567,7 @@ function openlab_portfolio_creation_url() {
  * Remove BPGES settings from portfolio group admin and creation screens
  */
 function openlab_remove_bpges_settings_for_portfolios() {
-	if ( cboxol_is_portfolio() || ( bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+	if ( cboxol_is_portfolio() || ( bp_is_group_create() && isset( $_GET['group_type'] ) && 'portfolio' == $_GET['group_type'] ) ) {
 		remove_action( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
 		remove_action( 'bp_after_group_settings_creation_step' ,'ass_default_subscription_settings_form' );
 	}
@@ -627,7 +627,7 @@ function openlab_delete_portfolio_redirect() {
  * Enforce one portfolio per person, by redirecting away from the portfolio creation page
  */
 function openlab_enforce_one_portfolio_per_person() {
-	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['type'] ) && 'portfolio' == $_GET['type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
+	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['group_type'] ) && 'portfolio' == $_GET['group_type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 		bp_core_add_message( sprintf( 'You already have %s', openlab_get_portfolio_label( 'leading_a=1' ) ), 'error' );
 		bp_core_redirect( bp_loggedin_user_domain() );
 	}
