@@ -269,6 +269,7 @@ class Install {
 			$type->set_is_course( $type_data['is_course'] );
 			$type->set_is_portfolio( $type_data['is_portfolio'] );
 			$type->set_requires_site( $type_data['requires_site'] );
+			$type->set_supports_group_contact( $type_data['supports_group_contact'] );
 			$type->set_supports_additional_faculty( $type_data['supports_additional_faculty'] );
 			$type->set_supports_course_information( $type_data['supports_course_information'] );
 			$type->set_supports_mol_link( $type_data['supports_mol_link'] );
