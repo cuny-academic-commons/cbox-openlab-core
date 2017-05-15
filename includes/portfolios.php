@@ -560,7 +560,7 @@ function openlab_portfolio_creation_url() {
 			return '';
 		}
 
-		return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?type=portfolio&new=true';
+		return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?group_type=portfolio&new=true';
 	}
 
 /**
