@@ -198,10 +198,7 @@ function openlab_portfolio_label( $args = array() ) {
  * Suggest a name for a portfolio, based on the user's FN + LN
  */
 function openlab_suggest_portfolio_name() {
-	$fname = xprofile_get_field_data( 'First Name', bp_loggedin_user_id() );
-	$lname = xprofile_get_field_data( 'Last Name', bp_loggedin_user_id() );
-
-	return sprintf( "%s %s's %s", $fname, $lname, openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ) );
+	return sprintf( __( "%s's Portfolio", 'cboxol-openlab-core' ), bp_loggedin_user_fullname() );
 }
 
 /**
@@ -221,7 +218,13 @@ function openlab_suggest_portfolio_path() {
  * Ensure that a suggested name is included in the Name input of the creation screen
  */
 function openlab_bp_get_new_group_name( $name ) {
-	if ( cboxol_is_portfolio() || ( !empty( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
+	$portfolio_group_type = cboxol_get_portfolio_group_type();
+
+	if ( ! $portfolio_group_type ) {
+		return $name;
+	}
+
+	if ( cboxol_is_portfolio() || ( ! empty( $_GET['group_type'] ) && $portfolio_group_type->get_slug() === $_GET['group_type'] ) ) {
 		if ( '' == $name ) {
 			$name = openlab_suggest_portfolio_name();
 		}
