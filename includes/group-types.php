@@ -181,7 +181,7 @@ function cboxol_get_group_types( $args = array() ) {
 
 	$type_posts = get_posts( array(
 		'post_type' => 'cboxol_group_type',
-		'post_status' => 'any',
+		'post_status' => $post_status,
 		'posts_per_page' => -1,
 		'orderby' => array(
 			'menu_order' => 'ASC',
