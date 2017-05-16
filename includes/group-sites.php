@@ -1393,7 +1393,9 @@ function cboxol_copy_blog_page( $group_id ) {
 			switch_to_blog( $src_id );
 			$src_url = get_option( 'siteurl' );
 			$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
+			$upload_dir = wp_upload_dir();
 			restore_current_blog();
+
 			$new_url = get_blog_option( $new_id, 'siteurl' );
 			foreach ( $data as $k => $v ) {
 				$table = str_replace( $blogtables, $newtables, $k );
@@ -1418,7 +1420,6 @@ function cboxol_copy_blog_page( $group_id ) {
 			}
 
 			// Copy uploaded files.
-			$upload_dir = wp_upload_dir();
 			cboxol_copyr( str_replace( $new_id, $src_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
 
 			// update options

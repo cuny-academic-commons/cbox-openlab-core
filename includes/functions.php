@@ -112,6 +112,10 @@ function openlab_is_my_profile() {
  * @return      bool     Returns TRUE on success, FALSE on failure
  */
 function cboxol_copyr( $source, $dest ) {
+	if ( ! file_exists( $source ) ) {
+		return;
+	}
+
 	// Check for symlinks
 	if ( is_link( $source ) ) {
 		return symlink( readlink( $source ), $dest );
