@@ -418,6 +418,11 @@ add_action( 'groups_group_settings_edited', 'openlab_bust_group_portfolios_cache
  * Check whether portfolio list display is enabled for a group.
  */
 function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
+	// Always bail if portfolios are not enabled.
+	if ( ! cboxol_get_portfolio_group_type ) {
+		return false;
+	}
+
 	if ( ! $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
