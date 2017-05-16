@@ -206,7 +206,7 @@ function cboxol_save_group_extras( $group ) {
 		groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-site-comments-feed'] );
 	}
 }
-add_action( 'groups_group_after_save', 'cboxol_save_group_extras' );
+add_action( 'groups_group_after_save', 'cboxol_save_group_extras', 20 );
 
 ////////////////////////
 /// MEMBERSHIP SYNC ////
