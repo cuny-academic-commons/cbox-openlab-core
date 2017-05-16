@@ -139,7 +139,7 @@ class Install {
 
 				'can_be_cloned' => true,
 				'directory_filters' => array( 'term' ),
-				'enable_portfolio_list' => true,
+				'enable_portfolio_list_by_default' => true,
 				'enable_site_by_default' => true,
 				'is_course' => true, // for "Can create course" member type field
 				'is_portfolio' => false,
@@ -173,7 +173,7 @@ class Install {
 
 				'can_be_cloned' => false,
 				'directory_filters' => array( 'member_type' ),
-				'enable_portfolio_list' => false,
+				'enable_portfolio_list_by_default' => false,
 				'enable_site_by_default' => true,
 				'is_course' => false,
 				'is_portfolio' => true,
@@ -199,7 +199,7 @@ class Install {
 
 				'can_be_cloned' => false,
 				'directory_filters' => array( 'category' ),
-				'enable_portfolio_list' => false,
+				'enable_portfolio_list_by_default' => false,
 				'enable_site_by_default' => false,
 				'is_course' => false,
 				'is_portfolio' => false,
@@ -225,7 +225,7 @@ class Install {
 
 				'can_be_cloned' => false,
 				'directory_filters' => array( 'category' ),
-				'enable_portfolio_list' => false,
+				'enable_portfolio_list_by_default' => false,
 				'enable_site_by_default' => false,
 				'is_course' => false,
 				'is_portfolio' => false,
@@ -264,7 +264,7 @@ class Install {
 
 			$type->set_can_be_cloned( $type_data['can_be_cloned'] );
 			$type->set_directory_filters( $type_data['directory_filters'] );
-			$type->set_enable_portfolio_list( $type_data['enable_portfolio_list'] );
+			$type->set_enable_portfolio_list_by_default( $type_data['enable_portfolio_list_by_default'] );
 			$type->set_enable_site_by_default( $type_data['enable_site_by_default'] );
 			$type->set_is_course( $type_data['is_course'] );
 			$type->set_is_portfolio( $type_data['is_portfolio'] );

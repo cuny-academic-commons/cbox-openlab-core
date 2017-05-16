@@ -8,7 +8,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 	protected $defaults = array(
 		'can_be_cloned' => false,
 		'directory_filters' => array(),
-		'enable_portfolio_list' => false,
+		'enable_portfolio_list_by_default' => false,
 		'enable_site_by_default' => false,
 		'is_course' => false,
 		'is_portfolio' => false,
@@ -23,7 +23,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	protected $boolean_props = array(
 		'can_be_cloned',
-		'enable_portfolio_list',
+		'enable_portfolio_list_by_default',
 		'enable_site_by_default',
 		'is_course',
 		'is_portfolio',

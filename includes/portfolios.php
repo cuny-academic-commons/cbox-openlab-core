@@ -422,15 +422,14 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	$group_type = openlab_get_group_type( $group_id );
+	$group_type = cboxol_get_group_group_type( $group_id );
 
 	// Portfolio groups never have the list enabled
-	if ( 'portfolios' === $group_type ) {
+	if ( $group_type->get_is_portfolio() ) {
 		return false;
 	}
 
-	// For courses, fall back on 'yes'
-	if ( 'course' === $group_type ) {
+	if ( $group_type->get_enable_portfolio_list_by_default() ) {
 		$enabled = 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
 
 	// Otherwise default to 'no'
