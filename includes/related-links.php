@@ -94,13 +94,13 @@ function openlab_related_links_list_group_display() {
 			</h2>
 		<?php endif ?>
 
-            <div class="sidebar-block">
-		<ul class="group-related-links-list group-data-list inline-element-list sidebar-sublinks">
-		<?php foreach ( $related_links as $rldata ) : ?>
-			<li><span class="fa fa-external-link"></span> <a href="<?php echo esc_url( $rldata['url'] ) ?>"><?php echo esc_html( $rldata['name'] ) ?></a></li>
-		<?php endforeach ?>
-		</ul>
-            </div>
+		<div class="sidebar-block">
+			<ul class="group-related-links-list group-data-list inline-element-list sidebar-sublinks">
+			<?php foreach ( $related_links as $rldata ) : ?>
+				<li><span class="fa fa-external-link"></span> <a href="<?php echo esc_url( $rldata['url'] ) ?>"><?php echo esc_html( $rldata['name'] ) ?></a></li>
+			<?php endforeach ?>
+			</ul>
+		</div>
 	</div>
 
 	<?php
