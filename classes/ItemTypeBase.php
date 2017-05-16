@@ -121,7 +121,7 @@ class ItemTypeBase {
 		if ( $this->get_is_enabled() ) {
 			$post_params['post_status'] = 'publish';
 		} else {
-			$post_params['post_stauts'] = 'draft';
+			$post_params['post_status'] = 'draft';
 		}
 
 		if ( $wp_post_id ) {
