@@ -419,7 +419,7 @@ add_action( 'groups_group_settings_edited', 'openlab_bust_group_portfolios_cache
  */
 function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 	// Always bail if portfolios are not enabled.
-	if ( ! cboxol_get_portfolio_group_type ) {
+	if ( ! cboxol_get_portfolio_group_type() ) {
 		return false;
 	}
 
