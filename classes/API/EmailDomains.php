@@ -24,10 +24,31 @@ class EmailDomains extends WP_REST_Controller {
 
 	public function create_item( $request ) {
 		$params = $request->get_params();
-		_b( $params );
-//		$class = $this->get_class_for_object_type( $params['objectType'] );
-//		$type = $class::get_dummy();
-//		return $this->create_update_helper( $type, $params['typeData'], $params['objectType'] );
+
+		$limited_email_domains = get_site_option( 'limited_email_domains' );
+		$old_led = $limited_email_domains;
+
+		if ( ! is_array( $limited_email_domains ) ) {
+			$limited_email_domains = explode( "\n", $limited_email_domains );
+		}
+
+		$limited_email_domains[] = trim( $params['domain'] );
+
+		$limited_email_domains = array_unique( $limited_email_domains );
+
+		update_site_option( 'limited_email_domains', $limited_email_domains );
+
+		// Verify that it was saved.
+		$new_led = get_site_option( 'limited_email_domains' );
+
+		$success = ( $new_led !== $old_led ) && in_array( $params['domain'], $new_led, true );
+
+		$response = rest_ensure_response( $new_led );
+		if ( ! $success ) {
+			$response->set_status( 500 );
+		}
+
+		return $response;
 	}
 
 	public function create_item_permissions_check( $request ) {

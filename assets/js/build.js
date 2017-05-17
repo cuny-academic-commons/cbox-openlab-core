@@ -31,9 +31,26 @@ var store = new _vuex2.default.Store({
 		typeNames: []
 	},
 	actions: {
+		submitAddEmailDomain: function submitAddEmailDomain(commit, payload) {
+			var endpoint = CBOXOLStrings.endpointBase + 'email-domain/';
+
+			var body = {
+				domain: payload.domain
+			};
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				},
+				body: JSON.stringify(body)
+			});
+		},
 		submitDelete: function submitDelete(commit, payload) {
 			var nonce = CBOXOLStrings.nonce;
-			var endpoint = CBOXOLStrings.endpoint + payload.id;
+			var endpoint = CBOXOLStrings.endpointBase + 'item-type/' + payload.id;
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'DELETE',
@@ -47,7 +64,7 @@ var store = new _vuex2.default.Store({
 		submitForm: function submitForm(commit, payload) {
 			var typeData = commit.state.types[payload.slug];
 
-			var endpoint = CBOXOLStrings.endpoint;
+			var endpoint = CBOXOLStrings.endpointBase + 'item-type/';
 			if (typeData.id > 0) {
 				endpoint += typeData.id;
 			}
@@ -86,7 +103,7 @@ var store = new _vuex2.default.Store({
 			} while (!isAvailable);
 
 			// Clone dummy data to that key.
-			var dummy = JSON.parse(JSON.stringify(CBOXOL_Dummy));
+			var dummy = JSON.parse(JSON.stringify(state.dummy));
 			dummy.slug = key;
 			dummy.isCollapsed = false;
 			state.types[key] = dummy;
@@ -544,8 +561,29 @@ exports.default = {
 
 
 	methods: {
+		ajaxError: function ajaxError(p) {
+			console.error(p);
+			throw 'Could not complete request.';
+		},
+		checkStatus: function checkStatus(response) {
+			if (response.status >= 200 && response.status < 300) {
+				return response;
+			} else {
+				var error = new Error(response.statusText);
+				error.response = response;
+				throw error;
+			}
+		},
+		parseJSON: function parseJSON(response) {
+			return response.json();
+		},
 		onAddEmailDomainSubmit: function onAddEmailDomainSubmit(e) {
-			this.isLoadingAddEmailDomain = true;
+			var registration = this;
+
+			registration.isLoadingAddEmailDomain = true;
+			registration.$store.dispatch('submitAddEmailDomain', { domain: registration.newDomain }).then(registration.checkStatus).then(registration.parseJSON, registration.ajaxError).then(function (data) {
+				console.log(data);
+			});
 		}
 	}
 };

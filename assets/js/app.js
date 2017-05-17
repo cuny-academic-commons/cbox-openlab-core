@@ -15,6 +15,24 @@ const store = new Vuex.Store({
 		typeNames: []
 	},
 	actions: {
+		submitAddEmailDomain ( commit, payload ) {
+			const endpoint = CBOXOLStrings.endpointBase + 'email-domain/'
+
+			const body = {
+				domain: payload.domain
+			}
+
+			return fetch( endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				},
+				body: JSON.stringify( body )
+			} )
+
+		},
 		submitDelete ( commit, payload ) {
 			const nonce = CBOXOLStrings.nonce
 			const endpoint = CBOXOLStrings.endpointBase + 'item-type/' + payload.id

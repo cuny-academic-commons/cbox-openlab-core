@@ -51,8 +51,38 @@
 		},
 
 		methods: {
+			ajaxError( p ) {
+				// @todo better error handling
+				console.error( p )
+				throw 'Could not complete request.'
+			},
+			checkStatus(response) {
+				if (response.status >= 200 && response.status < 300) {
+					return response
+				} else {
+					var error = new Error(response.statusText)
+					error.response = response
+					throw error
+				}
+			},
+
+			parseJSON(response) {
+				return response.json()
+			},
+
 			onAddEmailDomainSubmit( e ) {
-				this.isLoadingAddEmailDomain = true
+				// To avoid scope issues in the callback.
+				let registration = this
+
+				registration.isLoadingAddEmailDomain = true
+				registration.$store.dispatch( 'submitAddEmailDomain', { domain: registration.newDomain } )
+					.then( registration.checkStatus )
+					.then( registration.parseJSON, registration.ajaxError )
+					.then( function( data ) {
+						console.log(data)
+					} )
+
+
 				// next:
 				// - API create endpoint
 				// - ping it
