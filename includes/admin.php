@@ -26,8 +26,8 @@ function cboxol_register_admin_menu() {
 		__( 'Group Settings', 'cbox-openlab-core' ),
 		__( 'Group Settings', 'cbox-openlab-core' ),
 		'manage_network_options',
-		cboxol_admin_slug( 'group-settings', 'types' ),
-		'cboxol_grouptypes_admin_page',
+		cboxol_admin_slug( 'group-settings' ),
+		'cboxol_group_settings_admin_page',
 		'',
 		2
 	);
@@ -37,8 +37,8 @@ function cboxol_register_admin_menu() {
 		__( 'Member Settings', 'cbox-openlab-core' ),
 		__( 'Member Settings', 'cbox-openlab-core' ),
 		'manage_network_options',
-		cboxol_admin_slug( 'member-settings', 'types' ),
-		'cboxol_membertypes_admin_page',
+		cboxol_admin_slug( 'member-settings' ),
+		'cboxol_member_settings_admin_page',
 		'',
 		2
 	);
@@ -94,38 +94,13 @@ function cboxol_admin_about_page() {
 	echo 'This is the about page.';
 }
 
-function cboxol_admin_slug( $parent_page = '', $sub_page = '' ) {
+function cboxol_admin_slug( $parent_page = '' ) {
 	switch ( $parent_page ) {
 		case 'member-settings' :
-			switch ( $sub_page ) {
-				case 'types' :
-					return 'cbox-ol-member-types';
-
-				case 'signup-codes' :
-					return 'cbox-ol-signup-codes';
-
-				case 'categories' :
-					return 'cbox-ol-member-categories';
-
-				// @todo this will probably go to the BP screen?
-				case 'profile-fields' :
-					return 'cbox-ol-profile-fields';
-
-				default :
-					return 'cbox-ol-member-settings';
-			}
+			return 'cbox-ol-member-settings';
 
 		case 'group-settings' :
-			switch ( $sub_page ) {
-				case 'types' :
-					return 'cbox-ol-group-types';
-
-				case 'group-categories' :
-					return 'cbox-ol-group-categories';
-
-				case 'sort-group-categories' :
-					return 'cbox-ol-sort-group-categories';
-			}
+			return 'cbox-ol-group-settings';
 
 		default :
 			return 'cbox-ol';
@@ -149,11 +124,11 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 				case 'types' :
 					return _x( 'Types', 'Member Types admin label', 'cbox-openlab-core' );
 
-				case 'signup-codes' :
-					return _x( 'Signup Codes', 'Signup Codes admin label', 'cbox-openlab-core' );
+				case 'registration' :
+					return _x( 'Registration', 'Registration admin label', 'cbox-openlab-core' );
 
-				case 'categories' :
-					return _x( 'Categories', 'Member categories admin label', 'cbox-openlab-core' );
+				case 'academic-units' :
+					return _x( 'Academic Units', 'Member academic units admin label', 'cbox-openlab-core' );
 
 				case 'profile-fields' :
 					return _x( 'Profile Fields', 'Member profile fields admin label', 'cbox-openlab-core' );
@@ -221,24 +196,25 @@ function cboxol_admin_tabs( $parent_page, $active_tab = '' ) {
 function cboxol_get_admin_tabs( $parent_page ) {
 	switch ( $parent_page ) {
 		case 'member-settings' :
+			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'member-settings' ), 'admin.php' ) );
 			$tabs = array(
 				'0' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'types' ) ), 'admin.php' ) ),
+					'href' => add_query_arg( 'cboxol-section', 'types', $base ),
 					'name' => 'types',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'types' ),
 				),
 				'1' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'signup-codes' ) ), 'admin.php' ) ),
-					'name' => 'signup-codes',
-					'label' => cboxol_admin_subpage_label( 'member-settings', 'signup-codes' ),
+					'href' => add_query_arg( 'cboxol-section', 'registration', $base ),
+					'name' => 'registration',
+					'label' => cboxol_admin_subpage_label( 'member-settings', 'registration' ),
 				),
 				'2' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'categories' ) ), 'admin.php' ) ),
-					'name' => 'categories',
-					'label' => cboxol_admin_subpage_label( 'member-settings', 'categories' ),
+					'href' => add_query_arg( 'cboxol-section', 'academic-units', $base ),
+					'name' => 'academic-units',
+					'label' => cboxol_admin_subpage_label( 'member-settings', 'academic-units' ),
 				),
 				'3' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'member-settings', 'profile-fields' ) ), 'admin.php' ) ),
+					'href' => add_query_arg( 'cboxol-section', 'profile-fields', $base ),
 					'name' => 'profile-fields',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'profile-fields' ),
 				),
@@ -247,19 +223,20 @@ function cboxol_get_admin_tabs( $parent_page ) {
 			break;
 
 		case 'group-settings' :
+			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'group-settings' ), 'admin.php' ) );
 			$tabs = array(
 				'0' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'group-settings', 'types' ) ), 'admin.php' ) ),
+					'href' => add_query_arg( 'cboxol-section', 'types', $base ),
 					'name' => 'types',
 					'label' => cboxol_admin_subpage_label( 'group-settings', 'types' ),
 				),
 				'1' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'group-settings', 'group-categories' ) ), 'admin.php' ) ),
+					'href' => add_query_arg( 'cboxol-section', 'group-categories', $base ),
 					'name' => 'group-categories',
 					'label' => cboxol_admin_subpage_label( 'group-settings', 'group-categories' ),
 				),
 				'2' => array(
-					'href' => admin_url( add_query_arg( array( 'page' => cboxol_admin_slug( 'group-settings', 'sort-group-categories' ) ), 'admin.php' ) ),
+					'href' => add_query_arg( 'cboxol-section', 'sort-group-categories', $base ),
 					'name' => 'sort-group-categories',
 					'label' => cboxol_admin_subpage_label( 'group-settings', 'sort-group-categories' ),
 				),
@@ -269,4 +246,55 @@ function cboxol_get_admin_tabs( $parent_page ) {
 	}
 
 	return $tabs;
+}
+
+function cboxol_admin_section_content( $parent_page, $sub_page ) {
+	switch ( $parent_page ) {
+		case 'member-settings' :
+			switch ( $sub_page ) {
+				case 'types' :
+					cboxol_membertypes_admin_page();
+				break;
+
+				case 'registration' :
+					cboxol_registration_admin_page();
+				break;
+			}
+		break;
+
+		case 'group-settings' :
+			switch ( $sub_page ) {
+				case 'types' :
+					cboxol_grouptypes_admin_page();
+				break;
+			}
+
+		break;
+	}
+}
+
+function cboxol_group_settings_admin_page() {
+	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'types';
+	cboxol_admin_page( 'group-settings', $current_section );
+}
+
+function cboxol_member_settings_admin_page() {
+	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'types';
+	cboxol_admin_page( 'member-settings', $current_section );
+}
+
+
+function cboxol_admin_page( $parent_page, $current_section ) {
+	?>
+
+	<div class="wrap cboxol-admin-wrap">
+		<?php cboxol_admin_header( $parent_page, $current_section ); ?>
+
+		<div class="cboxol-admin-content">
+			<?php cboxol_admin_section_content( $parent_page, $current_section ); ?>
+		</div>
+
+	</div>
+
+	<?php
 }

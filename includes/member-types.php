@@ -121,24 +121,20 @@ function cboxol_membertypes_admin_page() {
 	$dummy_data = $dummy->get_for_endpoint();
 
 	?>
-	<div class="wrap cboxol-admin-wrap">
-		<?php cboxol_admin_header( 'member-settings', 'types' ); ?>
 
-		<div class="cboxol-admin-content">
-			<?php /* @todo */ ?>
-			<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+	<?php /* @todo */ ?>
+	<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
 
-			<script type="text/javascript">
-				var CBOXOL_ObjectType = 'member';
-				var CBOXOL_Types = <?php echo json_encode( $type_data ); ?>;
-				var CBOXOL_Dummy = <?php echo json_encode( $dummy_data ); ?>;
-			</script>
+	<script type="text/javascript">
+		var CBOXOL_ObjectType = 'member';
+		var CBOXOL_Types = <?php echo json_encode( $type_data ); ?>;
+		var CBOXOL_Dummy = <?php echo json_encode( $dummy_data ); ?>;
+	</script>
 
-			<div id="cboxol-types-admin">
-				<cboxol-types-admin object="member"></cboxol-types-admin>
-			</div>
-		</div>
+	<div id="cboxol-types-admin">
+		<cboxol-types-admin object="member"></cboxol-types-admin>
 	</div>
+
 	<?php
 }
 

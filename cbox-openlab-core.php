@@ -28,6 +28,7 @@ function cboxol_init() {
 	require CBOXOL_PLUGIN_DIR . 'includes/group-types.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/group-sites.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/related-links.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/registration.php';
 
 	// @todo Better loading for these libraries.
 	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';
