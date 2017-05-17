@@ -13,6 +13,8 @@
 				>
 				<button
 					class="button"
+					v-bind:disabled="! newDomain"
+					v-on:click="onAddEmailDomainSubmit"
 				>{{ strings.add }}</button>
 			</div>
 		</div>
@@ -29,10 +31,32 @@
 	import Vue from 'vue'
 
 	export default {
+		computed: {
+			isLoadingAddEmailDomain: {
+				get() {
+					return this.$store.state.isLoading.hasOwnProperty( 'addEmailDomain' )
+				},
+
+				set( value ) {
+					this.$store.commit( 'setIsLoading', { key: 'addEmailDomain', value } )
+				}
+			}
+		},
+
 		data() {
 			return {
 				newDomain: '',
 				strings: CBOXOLStrings.strings
+			}
+		},
+
+		methods: {
+			onAddEmailDomainSubmit( e ) {
+				this.isLoadingAddEmailDomain = true
+				// next:
+				// - API create endpoint
+				// - ping it
+				// - set isLoadingAddEmailDomain = false on success
 			}
 		}
 	}

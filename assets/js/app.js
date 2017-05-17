@@ -7,8 +7,9 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		subapp: '',
+		isLoading: {},
 		objectType: '',
+		subapp: '',
 		types: {},
 		typeNames: []
 	},
@@ -97,6 +98,16 @@ const store = new Vuex.Store({
 			}
 
 			delete state.types[ payload.slug ]
+		},
+
+		setIsLoading( state, payload ) {
+			const { key, value } = payload
+
+			if ( value && ! state.isLoading.hasOwnProperty( key ) ) {
+				state.isLoading[ key ] = true
+			} else if ( ! value && state.isLoading.hasOwnProperty( key ) ) {
+				delete state.isLoading[ key ]
+			}
 		},
 
 		setMayCreateCourses ( state, payload ) {

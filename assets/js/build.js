@@ -23,8 +23,9 @@ _vue2.default.use(_vuex2.default);
 
 var store = new _vuex2.default.Store({
 	state: {
-		subapp: '',
+		isLoading: {},
 		objectType: '',
+		subapp: '',
 		types: {},
 		typeNames: []
 	},
@@ -111,6 +112,17 @@ var store = new _vuex2.default.Store({
 			}
 
 			delete state.types[payload.slug];
+		},
+		setIsLoading: function setIsLoading(state, payload) {
+			var key = payload.key,
+			    value = payload.value;
+
+
+			if (value && !state.isLoading.hasOwnProperty(key)) {
+				state.isLoading[key] = true;
+			} else if (!value && state.isLoading.hasOwnProperty(key)) {
+				delete state.isLoading[key];
+			}
 		},
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
 			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
@@ -511,18 +523,36 @@ var _vue2 = _interopRequireDefault(_vue);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+	computed: {
+		isLoadingAddEmailDomain: {
+			get: function get() {
+				return this.$store.state.isLoading.hasOwnProperty('addEmailDomain');
+			},
+			set: function set(value) {
+				this.$store.commit('setIsLoading', { key: 'addEmailDomain', value: value });
+			}
+		}
+	},
+
 	data: function data() {
 		return {
 			newDomain: '',
 			strings: CBOXOLStrings.strings
 		};
+	},
+
+
+	methods: {
+		onAddEmailDomainSubmit: function onAddEmailDomainSubmit(e) {
+			this.isLoadingAddEmailDomain = true;
+		}
 	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('div',{staticClass:"add-email-domain"},[_c('label',{attrs:{"for":"add-email-domain-input"}},[_vm._v(_vm._s(_vm.strings.addEmailDomain))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newDomain),expression:"newDomain"}],attrs:{"id":"add-email-domain-input"},domProps:{"value":(_vm.newDomain)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newDomain=$event.target.value}}}),_vm._v(" "),_c('button',{staticClass:"button"},[_vm._v(_vm._s(_vm.strings.add))])])]),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('div',{staticClass:"add-email-domain"},[_c('label',{attrs:{"for":"add-email-domain-input"}},[_vm._v(_vm._s(_vm.strings.addEmailDomain))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newDomain),expression:"newDomain"}],attrs:{"id":"add-email-domain-input"},domProps:{"value":(_vm.newDomain)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newDomain=$event.target.value}}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newDomain},on:{"click":_vm.onAddEmailDomainSubmit}},[_vm._v(_vm._s(_vm.strings.add))])])]),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -531,7 +561,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-91028d20", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-91028d20", __vue__options__)
+    hotAPI.reload("data-v-91028d20", __vue__options__)
   }
 })()}
 },{"vue":13,"vue-hot-reload-api":12}],6:[function(require,module,exports){
