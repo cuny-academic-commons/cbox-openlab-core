@@ -1,8 +1,12 @@
 <?php
 
 function cboxol_registration_admin_page() {
-	var_dump( 'rchhcr' );
+	wp_enqueue_script( 'cbox-ol-app' );
 	?>
+
+	<div id="cboxol-registration-admin">
+		<cboxol-registration-admin></cboxol-registration-admin>
+	</div>
 
 	<?php
 }

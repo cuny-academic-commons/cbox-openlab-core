@@ -120,20 +120,23 @@ function cboxol_membertypes_admin_page() {
 	$dummy = \CBOX\OL\MemberType::get_dummy();
 	$dummy_data = $dummy->get_for_endpoint();
 
+	$app_config = array(
+		'subapp' => 'TypesUI',
+		'objectType' => 'member',
+		'types' => $type_data,
+		'dummy' => $dummy_data,
+	);
+
 	?>
 
 	<?php /* @todo */ ?>
 	<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
 
 	<script type="text/javascript">
-		var CBOXOL_ObjectType = 'member';
-		var CBOXOL_Types = <?php echo json_encode( $type_data ); ?>;
-		var CBOXOL_Dummy = <?php echo json_encode( $dummy_data ); ?>;
+		var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
 	</script>
 
-	<div id="cboxol-types-admin">
-		<cboxol-types-admin object="member"></cboxol-types-admin>
-	</div>
+	<div id="cboxol-admin"></div>
 
 	<?php
 }

@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import fetch from 'isomorphic-fetch'
-import TypesUI from './components/TypesUI.vue'
+import CBOXOLAdmin from './components/CBOXOLAdmin.vue'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		objectType: CBOXOL_ObjectType,
-		types: CBOXOL_Types,
+		subapp: '',
+		objectType: '',
+		types: {},
 		typeNames: []
 	},
 	actions: {
@@ -126,6 +127,15 @@ const store = new Vuex.Store({
 			state.types[ payload.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes = payload.selectableTypes
 		},
 
+		setUpConfig ( state, payload ) {
+			var prop
+			for ( prop in payload ) {
+				if ( state.hasOwnProperty( prop ) ) {
+					state[ prop ] = payload[ prop ]
+				}
+			}
+		},
+
 		setUpTypeNames ( state ) {
 			var typeName
 			for ( typeName in state.types ) {
@@ -142,13 +152,13 @@ const store = new Vuex.Store({
 })
 
 new Vue( {
-	el: '#cboxol-types-admin',
+	el: '#cboxol-admin',
 	store,
 	components: {
-		app: TypesUI
+		app: CBOXOLAdmin
 	},
 	mounted() {
-		this.$store.commit( 'setUpTypeNames' )
+		this.$store.commit( 'setUpConfig', CBOXOL_AppConfig )
 	},
 	render: h => h('app')
 } );

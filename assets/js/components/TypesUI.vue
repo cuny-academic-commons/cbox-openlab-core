@@ -37,7 +37,7 @@
 		data() {
 			return {
 				strings: CBOXOLStrings.strings,
-				objectType: CBOXOL_ObjectType
+				objectType: this.$store.state.objectType
 			}
 		},
 		methods: {
@@ -45,6 +45,9 @@
 				event.preventDefault()
 				this.$store.commit( 'addNewType' )
 			}
+		},
+		mounted() {
+			this.$store.commit( 'setUpTypeNames' )
 		}
 	}
 </script>
