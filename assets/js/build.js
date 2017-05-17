@@ -23,6 +23,7 @@ _vue2.default.use(_vuex2.default);
 
 var store = new _vuex2.default.Store({
 	state: {
+		dummy: {},
 		isLoading: {},
 		objectType: '',
 		subapp: '',

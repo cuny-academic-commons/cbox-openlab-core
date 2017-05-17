@@ -8,8 +8,11 @@
  * Init REST endpoints.
  */
 function openlab_rest_api_init() {
-	$endpoint = new \CBOX\OL\APIEndpoint();
-	$endpoint->register_routes();
+	$item_types_endpoint = new \CBOX\OL\API\ItemTypes();
+	$item_types_endpoint->register_routes();
+
+	$email_domains_endpoint = new \CBOX\OL\API\EmailDomains();
+	$email_domains_endpoint->register_routes();
 }
 add_action( 'rest_api_init', 'openlab_rest_api_init' );
 

@@ -55,7 +55,7 @@ function cboxol_register_assets() {
 
 	wp_localize_script( 'cbox-ol-app', 'CBOXOLStrings', array(
 		'nonce' => wp_create_nonce( 'wp_rest' ),
-		'endpoint' => home_url( '/wp-json/cboxol/v1/item-type/' ),
+		'endpointBase' => home_url( '/wp-json/cboxol/v1/' ),
 		'strings' => array(
 			'add' => _x( 'Add', '"Add" button text', 'cbox-openlab-core' ),
 			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),

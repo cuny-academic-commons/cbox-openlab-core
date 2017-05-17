@@ -17,7 +17,7 @@ const store = new Vuex.Store({
 	actions: {
 		submitDelete ( commit, payload ) {
 			const nonce = CBOXOLStrings.nonce
-			const endpoint = CBOXOLStrings.endpoint + payload.id
+			const endpoint = CBOXOLStrings.endpointBase + 'item-type/' + payload.id
 
 			return fetch( endpoint, {
 				method: 'DELETE',
@@ -31,7 +31,7 @@ const store = new Vuex.Store({
 		submitForm ( commit, payload ) {
 			const typeData = commit.state.types[ payload.slug ]
 
-			let endpoint = CBOXOLStrings.endpoint
+			let endpoint = CBOXOLStrings.endpointBase + 'item-type/'
 			if ( typeData.id > 0 ) {
 				endpoint += typeData.id
 			}
@@ -70,7 +70,7 @@ const store = new Vuex.Store({
 			} while ( ! isAvailable )
 
 			// Clone dummy data to that key.
-			let dummy = JSON.parse( JSON.stringify( CBOXOL_Dummy ) )
+			let dummy = JSON.parse( JSON.stringify( state.dummy ) )
 			dummy.slug = key
 			dummy.isCollapsed = false
 			state.types[ key ] = dummy

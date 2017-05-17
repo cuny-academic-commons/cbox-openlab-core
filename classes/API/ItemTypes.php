@@ -1,13 +1,14 @@
 <?php
 
-namespace CBOX\OL;
+namespace CBOX\OL\API;
 
+use \CBOX\OL\ItemType;
 use \WP_REST_Controller;
 use \WP_REST_Server;
 use \WP_REST_Request;
 use \WP_REST_Response;
 
-class APIEndpoint extends WP_REST_Controller {
+class ItemTypes extends WP_REST_Controller {
 	public function register_routes() {
 		$version = '1';
 		$namespace = 'cboxol/v' . $version;
@@ -124,7 +125,7 @@ class APIEndpoint extends WP_REST_Controller {
 	public function create_item_permissions_check( $request ) {
 		$params = $request->get_params();
 
-		if ( ! isset( $params['object_type'] ) || 'member' !== $params['object_type'] ) {
+		if ( ! isset( $params['objectType'] ) || 'member' !== $params['objectType'] ) {
 			return false;
 		}
 
