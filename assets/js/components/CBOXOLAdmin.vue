@@ -4,13 +4,13 @@
 
 <script>
 	import Vue from 'vue'
-	import Vuex from 'vuex'
-	import fetch from 'isomorphic-fetch'
+	import Registration from './Registration.vue'
 	import TypesUI from './TypesUI.vue'
 
 	export default {
 		components: {
-			'TypesUI': TypesUI
+			Registration,
+			TypesUI
 		},
 		computed: {
 			subapp: function() {
