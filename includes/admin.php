@@ -6,7 +6,6 @@
 
 add_action( 'admin_menu', 'cboxol_register_admin_menu' );
 add_action( 'admin_enqueue_scripts', 'cboxol_register_assets' );
-add_action( 'admin_init', 'cboxol_catch_form_submit' );
 
 function cboxol_register_admin_menu() {
 	// @todo only add on "main" site
@@ -89,29 +88,6 @@ function cboxol_register_assets() {
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );
 	// @todo More specific.
 	wp_enqueue_style( 'cbox-ol-admin' );
-}
-
-function cboxol_catch_form_submit() {
-	global $pagenow;
-
-	if ( 'admin.php' !== $pagenow ) {
-		return;
-	}
-
-	if ( empty( $_GET['page'] ) ) {
-		return;
-	}
-
-	if ( empty( $_POST ) ) {
-		return;
-	}
-
-	switch ( $_GET['page'] ) {
-		// @todo this is no longer correct
-		case cboxol_admin_slug( 'member-settings', 'types' ) :
-			cboxol_membertypes_process_form_submit();
-			break;
-	}
 }
 
 function cboxol_admin_about_page() {
