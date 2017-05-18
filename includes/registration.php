@@ -13,6 +13,8 @@ function cboxol_registration_admin_page() {
 		$domains[ $email_domain ] = $email_domain;
 	}
 
+	ksort( $domains );
+
 	$app_config = array(
 		'subapp' => 'Registration',
 		'emailDomains' => $domains,
