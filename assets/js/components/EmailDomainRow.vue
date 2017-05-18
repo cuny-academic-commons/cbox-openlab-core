@@ -23,7 +23,7 @@
 					return this.$store.state.emailDomains[ this.domainKey ]
 				},
 				set( value ) {
-					this.$store.commit( 'setEmailDomain', { key: this.key, value: this.domain } )
+					this.$store.commit( 'setEmailDomain', { key: this.domainKey, domain: value } )
 				}
 			},
 			id: {
@@ -63,12 +63,12 @@
 			onSaveClick() {
 				let item = this
 
-				item.$store.dispatch( 'submitEmailDomain', { domain: item.domain, key: item.key } )
+				item.$store.dispatch( 'submitEmailDomain', { domain: item.domain, key: item.domainKey } )
 					.then( item.checkStatus )
 					.then( item.parseJSON )
 					.then( function( data ) {
 						item.isLoading = false
-						console.log(data)
+						item.isEditing = false
 					}, function( data ) {
 						item.isLoading = false
 					} )

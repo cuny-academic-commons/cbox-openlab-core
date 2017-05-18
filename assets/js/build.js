@@ -302,7 +302,7 @@ exports.default = {
 				return this.$store.state.emailDomains[this.domainKey];
 			},
 			set: function set(value) {
-				this.$store.commit('setEmailDomain', { key: this.key, value: this.domain });
+				this.$store.commit('setEmailDomain', { key: this.domainKey, domain: value });
 			}
 		},
 		id: {
@@ -341,9 +341,9 @@ exports.default = {
 		onSaveClick: function onSaveClick() {
 			var item = this;
 
-			item.$store.dispatch('submitEmailDomain', { domain: item.domain, key: item.key }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
+			item.$store.dispatch('submitEmailDomain', { domain: item.domain, key: item.domainKey }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
 				item.isLoading = false;
-				console.log(data);
+				item.isEditing = false;
 			}, function (data) {
 				item.isLoading = false;
 			});
