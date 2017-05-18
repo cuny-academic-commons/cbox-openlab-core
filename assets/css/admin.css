@@ -14,6 +14,28 @@
 	border-bottom: 1px solid #fff;
 }
 
+/** Tables */
+
+.cboxol-item-table {
+	border: 1px solid #eee;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.cboxol-item-table th,
+.cboxol-item-table td {
+	margin: 0;
+	padding: 8px;
+}
+
+.cboxol-item-table th {
+	text-align: left;
+}
+
+.cboxol-item-table tr:nth-child(odd) {
+	background-color: #eee;
+}
+
 /** Type summary page */
 
 .types-ui {

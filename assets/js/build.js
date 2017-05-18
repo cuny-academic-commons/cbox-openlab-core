@@ -24,6 +24,8 @@ _vue2.default.use(_vuex2.default);
 var store = new _vuex2.default.Store({
 	state: {
 		dummy: {},
+		emailDomains: {},
+		isEditing: {},
 		isLoading: {},
 		objectType: '',
 		subapp: '',
@@ -31,12 +33,17 @@ var store = new _vuex2.default.Store({
 		typeNames: []
 	},
 	actions: {
-		submitAddEmailDomain: function submitAddEmailDomain(commit, payload) {
-			var endpoint = CBOXOLStrings.endpointBase + 'email-domain/';
+		submitEmailDomain: function submitEmailDomain(commit, payload) {
+			var existing = payload.existing,
+			    domain = payload.domain;
 
-			var body = {
-				domain: payload.domain
-			};
+
+			var endpoint = CBOXOLStrings.endpointBase + 'email-domain/';
+			if (existing) {
+				endpoint += existing + '/';
+			}
+
+			var body = { domain: domain };
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
@@ -131,16 +138,44 @@ var store = new _vuex2.default.Store({
 
 			delete state.types[payload.slug];
 		},
+		setEmailDomain: function setEmailDomain(state, payload) {
+			var key = payload.key,
+			    domain = payload.domain;
+
+			var newEmailDomains = Object.assign({}, state.emailDomains);
+			newEmailDomains[key] = domain;
+
+			state.emailDomains = newEmailDomains;
+		},
+		setIsEditing: function setIsEditing(state, payload) {
+			var key = payload.key,
+			    value = payload.value;
+
+
+			var newIsEditing = Object.assign({}, state.isEditing);
+
+			if (value && !newIsEditing.hasOwnProperty(key)) {
+				newIsEditing[key] = true;
+			} else if (!value && newIsEditing.hasOwnProperty(key)) {
+				delete newIsEditing[key];
+			}
+
+			state.isEditing = newIsEditing;
+		},
 		setIsLoading: function setIsLoading(state, payload) {
 			var key = payload.key,
 			    value = payload.value;
 
 
-			if (value && !state.isLoading.hasOwnProperty(key)) {
-				state.isLoading[key] = true;
-			} else if (!value && state.isLoading.hasOwnProperty(key)) {
-				delete state.isLoading[key];
+			var newIsLoading = Object.assign({}, state.isLoading);
+
+			if (value && !newIsLoading.hasOwnProperty(key)) {
+				newIsLoading[key] = true;
+			} else if (!value && newIsLoading.hasOwnProperty(key)) {
+				delete newIsLoading[key];
 			}
+
+			state.isLoading = newIsLoading;
 		},
 		setMayCreateCourses: function setMayCreateCourses(state, payload) {
 			state.types[payload.slug].settings.MayCreateCourses.data = payload.value === 'yes';
@@ -204,7 +239,7 @@ new _vue2.default({
 	}
 });
 
-},{"./components/CBOXOLAdmin.vue":2,"isomorphic-fetch":11,"vue":13,"vuex":15}],2:[function(require,module,exports){
+},{"./components/CBOXOLAdmin.vue":2,"isomorphic-fetch":12,"vue":14,"vuex":16}],2:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -253,7 +288,86 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-428061ba", __vue__options__)
   }
 })()}
-},{"./Registration.vue":5,"./TypesUI.vue":7,"vue":13,"vue-hot-reload-api":12}],3:[function(require,module,exports){
+},{"./Registration.vue":6,"./TypesUI.vue":8,"vue":14,"vue-hot-reload-api":13}],3:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	computed: {
+		domain: {
+			get: function get() {
+				return this.$store.state.emailDomains[this.domainKey];
+			},
+			set: function set(value) {
+				this.$store.commit('setEmailDomain', { key: this.key, value: this.domain });
+			}
+		},
+		id: {
+			get: function get() {
+				return 'domain-' + this.domainKey;
+			}
+		},
+		isEditing: {
+			get: function get() {
+				return this.$store.state.isEditing.hasOwnProperty(this.id);
+			},
+			set: function set(value) {
+				this.$store.commit('setIsEditing', { key: this.id, value: value });
+			}
+		},
+		isLoading: {
+			get: function get() {
+				return this.$store.state.isLoading.hasOwnProperty(this.id);
+			},
+			set: function set(value) {
+				this.$store.commit('setIsLoading', { key: this.id, value: value });
+			}
+		}
+	},
+	data: function data() {
+		return {
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+	methods: {
+		onDeleteClick: function onDeleteClick() {},
+		onEditClick: function onEditClick() {
+			this.isEditing = true;
+		},
+		onSaveClick: function onSaveClick() {
+			var item = this;
+
+			item.$store.dispatch('submitEmailDomain', { domain: item.domain, key: item.key }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
+				item.isLoading = false;
+				console.log(data);
+			}, function (data) {
+				item.isLoading = false;
+			});
+		}
+	},
+	props: ['domain', 'domainKey']
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('td',{staticClass:"email-domains-domain"},[(_vm.isEditing)?[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.domain),expression:"domain"}],domProps:{"value":(_vm.domain)},on:{"input":function($event){if($event.target.composing){ return; }_vm.domain=$event.target.value}}})]:[_vm._v("\n\t\t\t"+_vm._s(_vm.domain)+"\n\t\t")]],2),_vm._v(" "),_c('td',{staticClass:"email-domains-actions"},[(! _vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]):_vm._e(),(_vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onSaveClick}},[_vm._v(_vm._s(_vm.strings.save))]):_vm._e(),_vm._v(" | "),_c('a',{attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2d8926b1", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-2d8926b1", __vue__options__)
+  }
+})()}
+},{"vue":14,"vue-hot-reload-api":13}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -474,7 +588,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-920509b8", __vue__options__)
   }
 })()}
-},{"./OnOffSwitch.vue":4,"./TypeLabel.vue":6,"./settings/MayChangeMemberTypeTo.vue":8,"./settings/MayCreateCourses.vue":9,"./settings/Order.vue":10,"vue":13,"vue-hot-reload-api":12}],4:[function(require,module,exports){
+},{"./OnOffSwitch.vue":5,"./TypeLabel.vue":7,"./settings/MayChangeMemberTypeTo.vue":9,"./settings/MayCreateCourses.vue":10,"./settings/Order.vue":11,"vue":14,"vue-hot-reload-api":13}],5:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -526,7 +640,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":13,"vue-hot-reload-api":12,"vueify/lib/insert-css":14}],5:[function(require,module,exports){
+},{"vue":14,"vue-hot-reload-api":13,"vueify/lib/insert-css":15}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -538,10 +652,22 @@ var _vue = require('vue');
 
 var _vue2 = _interopRequireDefault(_vue);
 
+var _EmailDomainRow = require('./EmailDomainRow.vue');
+
+var _EmailDomainRow2 = _interopRequireDefault(_EmailDomainRow);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+	components: {
+		EmailDomainRow: _EmailDomainRow2.default
+	},
 	computed: {
+		emailDomains: {
+			get: function get() {
+				return this.$store.state.emailDomains;
+			}
+		},
 		isLoadingAddEmailDomain: {
 			get: function get() {
 				return this.$store.state.isLoading.hasOwnProperty('addEmailDomain');
@@ -580,9 +706,13 @@ exports.default = {
 		onAddEmailDomainSubmit: function onAddEmailDomainSubmit(e) {
 			var registration = this;
 
-			registration.isLoadingAddEmailDomain = true;
-			registration.$store.dispatch('submitAddEmailDomain', { domain: registration.newDomain }).then(registration.checkStatus).then(registration.parseJSON, registration.ajaxError).then(function (data) {
-				console.log(data);
+			this.isLoadingAddEmailDomain = true;
+			registration.$store.dispatch('submitEmailDomain', { domain: registration.newDomain }).then(registration.checkStatus).then(registration.parseJSON).then(function (data) {
+				registration.isLoadingAddEmailDomain = false;
+				registration.$store.commit('setEmailDomain', { key: data, domain: data });
+				registration.newDomain = '';
+			}, function (data) {
+				registration.isLoadingAddEmailDomain = false;
 			});
 		}
 	}
@@ -591,7 +721,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('div',{staticClass:"add-email-domain"},[_c('label',{attrs:{"for":"add-email-domain-input"}},[_vm._v(_vm._s(_vm.strings.addEmailDomain))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newDomain),expression:"newDomain"}],attrs:{"id":"add-email-domain-input"},domProps:{"value":(_vm.newDomain)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newDomain=$event.target.value}}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newDomain},on:{"click":_vm.onAddEmailDomainSubmit}},[_vm._v(_vm._s(_vm.strings.add))])])]),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('div',{staticClass:"add-email-domain"},[_c('label',{attrs:{"for":"add-email-domain-input"}},[_vm._v(_vm._s(_vm.strings.addEmailDomain))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newDomain),expression:"newDomain"}],attrs:{"id":"add-email-domain-input","disabled":_vm.isLoadingAddEmailDomain},domProps:{"value":(_vm.newDomain)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newDomain=$event.target.value}}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newDomain || _vm.isLoadingAddEmailDomain},on:{"click":_vm.onAddEmailDomainSubmit}},[_vm._v(_vm._s(_vm.strings.add))])]),_vm._v(" "),_c('div',{staticClass:"email-domains"},[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])])]),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -603,7 +733,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-91028d20", __vue__options__)
   }
 })()}
-},{"vue":13,"vue-hot-reload-api":12}],6:[function(require,module,exports){
+},{"./EmailDomainRow.vue":3,"vue":14,"vue-hot-reload-api":13}],7:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -656,7 +786,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-11c5a333", __vue__options__)
   }
 })()}
-},{"vue":13,"vue-hot-reload-api":12}],7:[function(require,module,exports){
+},{"vue":14,"vue-hot-reload-api":13}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -717,7 +847,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./ItemType.vue":3,"vue":13,"vue-hot-reload-api":12}],8:[function(require,module,exports){
+},{"./ItemType.vue":4,"vue":14,"vue-hot-reload-api":13}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -773,7 +903,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"vue":13,"vue-hot-reload-api":12}],9:[function(require,module,exports){
+},{"vue":14,"vue-hot-reload-api":13}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -818,7 +948,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":13,"vue-hot-reload-api":12}],10:[function(require,module,exports){
+},{"vue":14,"vue-hot-reload-api":13}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -863,7 +993,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
-},{"vue":13,"vue-hot-reload-api":12}],11:[function(require,module,exports){
+},{"vue":14,"vue-hot-reload-api":13}],12:[function(require,module,exports){
 // the whatwg-fetch polyfill installs the fetch() function
 // on the global object (window or self)
 //
@@ -871,7 +1001,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 require('whatwg-fetch');
 module.exports = self.fetch.bind(self);
 
-},{"whatwg-fetch":16}],12:[function(require,module,exports){
+},{"whatwg-fetch":17}],13:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -1017,7 +1147,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.2.6
@@ -7852,7 +7982,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":17}],14:[function(require,module,exports){
+},{"_process":18}],15:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -7877,7 +8007,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * vuex v2.3.0
  * (c) 2017 Evan You
@@ -8688,7 +8818,7 @@ return index;
 
 })));
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function(self) {
   'use strict';
 
@@ -9151,7 +9281,7 @@ return index;
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

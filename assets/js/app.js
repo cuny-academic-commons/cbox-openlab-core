@@ -8,6 +8,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
 		dummy: {},
+		emailDomains: {},
+		isEditing: {},
 		isLoading: {},
 		objectType: '',
 		subapp: '',
@@ -15,12 +17,15 @@ const store = new Vuex.Store({
 		typeNames: []
 	},
 	actions: {
-		submitAddEmailDomain ( commit, payload ) {
-			const endpoint = CBOXOLStrings.endpointBase + 'email-domain/'
+		submitEmailDomain ( commit, payload ) {
+			const { existing, domain } = payload
 
-			const body = {
-				domain: payload.domain
+			let endpoint = CBOXOLStrings.endpointBase + 'email-domain/'
+			if ( existing ) {
+				endpoint += existing + '/'
 			}
+
+			const body = { domain }
 
 			return fetch( endpoint, {
 				method: 'POST',
@@ -31,7 +36,6 @@ const store = new Vuex.Store({
 				},
 				body: JSON.stringify( body )
 			} )
-
 		},
 		submitDelete ( commit, payload ) {
 			const nonce = CBOXOLStrings.nonce
@@ -119,14 +123,40 @@ const store = new Vuex.Store({
 			delete state.types[ payload.slug ]
 		},
 
+		setEmailDomain( state, payload ) {
+			const { key, domain } = payload
+			let newEmailDomains = Object.assign( {}, state.emailDomains )
+			newEmailDomains[ key ] = domain
+
+			state.emailDomains = newEmailDomains
+		},
+
+		setIsEditing( state, payload ) {
+			const { key, value } = payload
+
+			let newIsEditing = Object.assign( {}, state.isEditing )
+
+			if ( value && ! newIsEditing.hasOwnProperty( key ) ) {
+				newIsEditing[ key ] = true
+			} else if ( ! value && newIsEditing.hasOwnProperty( key ) ) {
+				delete newIsEditing[ key ]
+			}
+
+			state.isEditing = newIsEditing
+		},
+
 		setIsLoading( state, payload ) {
 			const { key, value } = payload
 
-			if ( value && ! state.isLoading.hasOwnProperty( key ) ) {
-				state.isLoading[ key ] = true
-			} else if ( ! value && state.isLoading.hasOwnProperty( key ) ) {
-				delete state.isLoading[ key ]
+			let newIsLoading = Object.assign( {}, state.isLoading )
+
+			if ( value && ! newIsLoading.hasOwnProperty( key ) ) {
+				newIsLoading[ key ] = true
+			} else if ( ! value && newIsLoading.hasOwnProperty( key ) ) {
+				delete newIsLoading[ key ]
 			}
+
+			state.isLoading = newIsLoading
 		},
 
 		setMayCreateCourses ( state, payload ) {

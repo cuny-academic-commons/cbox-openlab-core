@@ -9,14 +9,29 @@
 				<label for="add-email-domain-input">{{ strings.addEmailDomain }}</label>
 				<input
 					id="add-email-domain-input"
+					v-bind:disabled="isLoadingAddEmailDomain"
 					v-model="newDomain"
 				>
 				<button
 					class="button"
-					v-bind:disabled="! newDomain"
+					v-bind:disabled="! newDomain || isLoadingAddEmailDomain"
 					v-on:click="onAddEmailDomainSubmit"
 				>{{ strings.add }}</button>
 			</div>
+
+			<div class="email-domains">
+				<table class="cboxol-item-table email-domains-table">
+					<thead>
+						<th class="email-domains-domain">{{ strings.domain }}</th>
+						<th class="email-domains-action">{{ strings.action }}</th>
+					</thead>
+
+					<tbody>
+						<div v-for="(emailDomain, index) in emailDomains" is="emailDomainRow" :domainKey="index"></div>
+					</tbody>
+				</table>
+			</div>
+
 		</div>
 
 		<div class="registration-section">
@@ -29,9 +44,18 @@
 
 <script>
 	import Vue from 'vue'
+	import EmailDomainRow from './EmailDomainRow.vue'
 
 	export default {
+		components: {
+			EmailDomainRow
+		},
 		computed: {
+			emailDomains: {
+				get() {
+					return this.$store.state.emailDomains
+				}
+			},
 			isLoadingAddEmailDomain: {
 				get() {
 					return this.$store.state.isLoading.hasOwnProperty( 'addEmailDomain' )
@@ -40,7 +64,7 @@
 				set( value ) {
 					this.$store.commit( 'setIsLoading', { key: 'addEmailDomain', value } )
 				}
-			}
+			},
 		},
 
 		data() {
@@ -74,19 +98,17 @@
 				// To avoid scope issues in the callback.
 				let registration = this
 
-				registration.isLoadingAddEmailDomain = true
-				registration.$store.dispatch( 'submitAddEmailDomain', { domain: registration.newDomain } )
+				this.isLoadingAddEmailDomain = true
+				registration.$store.dispatch( 'submitEmailDomain', { domain: registration.newDomain } )
 					.then( registration.checkStatus )
-					.then( registration.parseJSON, registration.ajaxError )
+					.then( registration.parseJSON )
 					.then( function( data ) {
-						console.log(data)
+						registration.isLoadingAddEmailDomain = false
+						registration.$store.commit( 'setEmailDomain', { key: data, domain: data } )
+						registration.newDomain = ''
+					}, function( data ) {
+						registration.isLoadingAddEmailDomain = false
 					} )
-
-
-				// next:
-				// - API create endpoint
-				// - ping it
-				// - set isLoadingAddEmailDomain = false on success
 			}
 		}
 	}
