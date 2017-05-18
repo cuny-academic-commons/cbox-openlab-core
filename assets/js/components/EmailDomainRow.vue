@@ -10,7 +10,7 @@
 			</template>
 		</td>
 		<td class="email-domains-actions">
-			<a href="#" v-if="! isEditing" v-on:click="onEditClick">{{ strings.edit }}</a><a href="#" v-if="isEditing" v-on:click="onSaveClick">{{ strings.save }}</a> | <a href="#" v-on:click="onDeleteClick">{{ strings.delete }}</a>
+			<a href="#" v-if="! isEditing" v-on:click="onEditClick">{{ strings.edit }}</a><a href="#" v-if="isEditing" v-on:click="onSaveClick"><strong>{{ strings.save }}</strong></a> | <a href="#" v-on:click="onDeleteClick">{{ strings.delete }}</a>
 		</td>
 	</tr>
 </template>

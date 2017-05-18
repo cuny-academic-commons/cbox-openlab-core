@@ -150,3 +150,9 @@ a .action-arrow {
 .cboxol-item-type-label .cboxol-setting-content input {
 	width: 90%;
 }
+
+/** Registration */
+
+.email-domains-domain {
+	width: 40%;
+}
