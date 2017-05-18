@@ -21,11 +21,11 @@ class EmailDomains extends WP_REST_Controller {
 			),
 		) );
 
-		register_rest_route( $namespace, '/email-domain/(?P<existing>[^/]+)', array(
+		register_rest_route( $namespace, '/email-domain/(?P<domain>[^/]+)', array(
 			array(
-				'methods'         => WP_REST_Server::EDITABLE,
-				'callback'        => array( $this, 'update_item' ),
-				'permission_callback' => array( $this, 'update_item_permissions_check' ),
+				'methods'         => WP_REST_Server::DELETABLE,
+				'callback'        => array( $this, 'delete_item' ),
+				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
 				'args'            => $this->get_endpoint_args_for_item_schema( true ),
 			),
 		) );
@@ -51,7 +51,8 @@ class EmailDomains extends WP_REST_Controller {
 		// Verify that it was saved.
 		$new_led = get_site_option( 'limited_email_domains' );
 
-		$success = ( $new_led !== $old_led ) && in_array( $domain, $new_led, true );
+		// Saving the same domains counts as a success.
+		$success = in_array( $domain, $new_led, true );
 
 		$response = rest_ensure_response( $domain );
 
@@ -62,14 +63,9 @@ class EmailDomains extends WP_REST_Controller {
 		return $response;
 	}
 
-	public function update_item( $request ) {
+	public function delete_item( $request ) {
 		$params = $request->get_params();
-
-		$limited_email_domains = get_site_option( 'limited_email_domains' );
-		$old_led = $limited_email_domains;
-
-		_b( $params );
-		return;
+		$domain = $params['domain'];
 
 		$limited_email_domains = get_site_option( 'limited_email_domains' );
 		$old_led = $limited_email_domains;
@@ -78,18 +74,17 @@ class EmailDomains extends WP_REST_Controller {
 			$limited_email_domains = explode( "\n", $limited_email_domains );
 		}
 
-		$limited_email_domains[] = trim( $params['domain'] );
-
-		$limited_email_domains = array_unique( $limited_email_domains );
+		$limited_email_domains = array_diff( $limited_email_domains, array( $domain ) );
 
 		update_site_option( 'limited_email_domains', $limited_email_domains );
 
 		// Verify that it was saved.
 		$new_led = get_site_option( 'limited_email_domains' );
 
-		$success = ( $new_led !== $old_led ) && in_array( $params['domain'], $new_led, true );
+		$success = ! in_array( $domain, $new_led, true );
 
-		$response = rest_ensure_response( $new_led );
+		$response = rest_ensure_response( $domain );
+
 		if ( ! $success ) {
 			$response->set_status( 500 );
 		}
@@ -101,7 +96,7 @@ class EmailDomains extends WP_REST_Controller {
 		return current_user_can( 'manage_network_options' );
 	}
 
-	public function update_item_permissions_check( $request ) {
+	public function delete_item_permissions_check( $request ) {
 		return current_user_can( 'manage_network_options' );
 	}
 }

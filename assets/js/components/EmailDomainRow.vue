@@ -55,13 +55,25 @@
 		},
 		methods: {
 			onDeleteClick() {
+				let item = this
+				item.isLoading = true
 
+				item.$store.dispatch( 'submitDeleteEmailDomain', { domain: item.domain } )
+					.then( item.checkStatus )
+					.then( item.parseJSON )
+					.then( function( data ) {
+						item.isLoading = false
+						item.$store.commit( 'removeEmailDomain', { domain: item.domain } )
+					}, function( data ) {
+						item.isLoading = false
+					} )
 			},
 			onEditClick() {
 				this.isEditing = true
 			},
 			onSaveClick() {
 				let item = this
+				item.isLoading = true
 
 				item.$store.dispatch( 'submitEmailDomain', { domain: item.domain, key: item.domainKey } )
 					.then( item.checkStatus )

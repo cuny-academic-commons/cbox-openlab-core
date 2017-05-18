@@ -33,28 +33,6 @@ var store = new _vuex2.default.Store({
 		typeNames: []
 	},
 	actions: {
-		submitEmailDomain: function submitEmailDomain(commit, payload) {
-			var existing = payload.existing,
-			    domain = payload.domain;
-
-
-			var endpoint = CBOXOLStrings.endpointBase + 'email-domain/';
-			if (existing) {
-				endpoint += existing + '/';
-			}
-
-			var body = { domain: domain };
-
-			return (0, _isomorphicFetch2.default)(endpoint, {
-				method: 'POST',
-				credentials: 'same-origin',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-WP-Nonce': CBOXOLStrings.nonce
-				},
-				body: JSON.stringify(body)
-			});
-		},
 		submitDelete: function submitDelete(commit, payload) {
 			var nonce = CBOXOLStrings.nonce;
 			var endpoint = CBOXOLStrings.endpointBase + 'item-type/' + payload.id;
@@ -66,6 +44,39 @@ var store = new _vuex2.default.Store({
 					'Content-Type': 'application/json',
 					'X-WP-Nonce': nonce
 				}
+			});
+		},
+		submitDeleteEmailDomain: function submitDeleteEmailDomain(commit, payload) {
+			var domain = payload.domain;
+
+
+			var endpoint = CBOXOLStrings.endpointBase + 'email-domain/' + domain;
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'DELETE',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				}
+			});
+		},
+		submitEmailDomain: function submitEmailDomain(commit, payload) {
+			var domain = payload.domain;
+
+
+			var endpoint = CBOXOLStrings.endpointBase + 'email-domain/';
+
+			var body = { domain: domain };
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				},
+				body: JSON.stringify(body)
 			});
 		},
 		submitForm: function submitForm(commit, payload) {
@@ -129,6 +140,12 @@ var store = new _vuex2.default.Store({
 
 				return order_a > order_b;
 			});
+		},
+		removeEmailDomain: function removeEmailDomain(state, payload) {
+			var domain = payload.domain;
+
+
+			delete state.emailDomains[domain];
 		},
 		removeType: function removeType(state, payload) {
 			var index = state.typeNames.indexOf(payload.slug);
@@ -334,12 +351,23 @@ exports.default = {
 	},
 
 	methods: {
-		onDeleteClick: function onDeleteClick() {},
+		onDeleteClick: function onDeleteClick() {
+			var item = this;
+			item.isLoading = true;
+
+			item.$store.dispatch('submitDeleteEmailDomain', { domain: item.domain }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
+				item.isLoading = false;
+				item.$store.commit('removeEmailDomain', { domain: item.domain });
+			}, function (data) {
+				item.isLoading = false;
+			});
+		},
 		onEditClick: function onEditClick() {
 			this.isEditing = true;
 		},
 		onSaveClick: function onSaveClick() {
 			var item = this;
+			item.isLoading = true;
 
 			item.$store.dispatch('submitEmailDomain', { domain: item.domain, key: item.domainKey }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
 				item.isLoading = false;
