@@ -32,7 +32,6 @@
 		data() {
 			return {
 				newDomain: '',
-				newSignupCode: '',
 				strings: CBOXOLStrings.strings
 			}
 		},

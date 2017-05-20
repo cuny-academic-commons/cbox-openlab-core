@@ -11,7 +11,9 @@ const store = new Vuex.Store({
 		emailDomains: {},
 		isEditing: {},
 		isLoading: {},
+		memberTypes: {},
 		objectType: '',
+		signupCodes: {},
 		subapp: '',
 		types: {},
 		typeNames: []

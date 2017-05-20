@@ -9,6 +9,7 @@
   "dependencies": {
     "es6-promise": "^4.1.0",
     "isomorphic-fetch": "^2.2.1",
+    "vue-select": "github:sagalbot/vue-select",
     "vuex": "^2.3.0"
   },
   "devDependencies": {

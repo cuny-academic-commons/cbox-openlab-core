@@ -26,6 +26,8 @@
 			<h2>{{ strings.signUpCodes }}</h2>
 
 			<p>{{ strings.signUpCodesLegend }}</p>
+
+			<NewSignupCode />
 		</div>
 	</div>
 </template>
@@ -33,11 +35,13 @@
 <script>
 	import EmailDomainRow from './EmailDomainRow.vue'
 	import NewEmailDomain from './NewEmailDomain.vue'
+	import NewSignupCode from './NewSignupCode.vue'
 
 	export default {
 		components: {
 			EmailDomainRow,
-			NewEmailDomain
+			NewEmailDomain,
+			NewSignupCode
 		},
 		computed: {
 			emailDomains: {
@@ -45,40 +49,11 @@
 					return this.$store.state.emailDomains
 				}
 			},
-			isLoadingSignupCode: {
-				get() {
-					return this.$store.state.isLoading.hasOwnProperty( 'addSignupCode' )
-				},
-
-				set( value ) {
-					this.$store.commit( 'setIsLoading', { key: 'addSignupCode', value } )
-				}
-			},
 		},
 
 		data() {
 			return {
-				newSignupCode: '',
 				strings: CBOXOLStrings.strings
-			}
-		},
-
-		methods: {
-			onAddSignupCodeSubmit( e ) {
-				// To avoid scope issues in the callback.
-				let registration = this
-
-				this.isLoadingAddEmailDomain = true
-				registration.$store.dispatch( 'submitEmailDomain', { domain: registration.newDomain } )
-					.then( registration.checkStatus )
-					.then( registration.parseJSON )
-					.then( function( data ) {
-						registration.isLoadingAddEmailDomain = false
-						registration.$store.commit( 'setEmailDomain', { key: data, domain: data } )
-						registration.newDomain = ''
-					}, function( data ) {
-						registration.isLoadingAddEmailDomain = false
-					} )
 			}
 		}
 	}

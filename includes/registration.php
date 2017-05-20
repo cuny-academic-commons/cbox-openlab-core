@@ -17,9 +17,20 @@ function cboxol_registration_admin_page() {
 
 	ksort( $domains );
 
+	$mtypes = cboxol_get_member_types();
+	$member_types = array();
+	foreach ( $mtypes as $mtype ) {
+		$slug = $mtype->get_slug();
+		$member_types[ $slug ] = array(
+			'slug' => $slug,
+			'label' => $mtype->get_label( 'singular' ),
+		);
+	}
+
 	$app_config = array(
 		'subapp' => 'Registration',
 		'emailDomains' => $domains,
+		'memberTypes' => $member_types,
 	);
 
 	?>
