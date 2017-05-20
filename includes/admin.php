@@ -84,6 +84,7 @@ function cboxol_register_assets() {
 			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
 			'saving' => __( 'Saving', 'cbox-openlab-core' ),
 			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
+			'selectMemberType' => __( 'Select Member Type', 'cbox-openlab-core' ),
 			'signUpCodes' => __( 'Sign Up Codes', 'cbox-openlab-core' ),
 			'signUpCodesLegend' => __( 'Lorem Ipsum', 'cbox-openlab-core' ),
 			'template' => _x( 'Template', 'subheader for template site settings section', 'cbox-openlab-core' ),

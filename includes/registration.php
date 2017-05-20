@@ -21,8 +21,8 @@ function cboxol_registration_admin_page() {
 	$member_types = array();
 	foreach ( $mtypes as $mtype ) {
 		$slug = $mtype->get_slug();
-		$member_types[ $slug ] = array(
-			'slug' => $slug,
+		$member_types[] = array(
+			'value' => $slug,
 			'label' => $mtype->get_label( 'singular' ),
 		);
 	}

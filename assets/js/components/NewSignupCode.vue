@@ -1,10 +1,19 @@
 <template>
 	<div class="add-signup-code">
 		<input
+			class="new-item-field"
 			id="add-signup-code-input"
 			v-bind:disabled="isLoading"
 			v-model="newSignupCode"
 		>
+
+		<select v-model="newMemberType" class="new-item-field">
+			<option value="">- {{ strings.selectMemberType }} -</option>
+			<option v-for="memberType in memberTypes" v-bind:value="memberType.value">
+				{{ memberType.label }}
+			</option>
+		</select>
+
 		<button
 			class="button"
 			v-bind:disabled="! newSignupCode || isLoading"
@@ -26,10 +35,13 @@
 				set( value ) {
 					this.$store.commit( 'setIsLoading', { key: 'addSignupCode', value } )
 				}
-			},
+			}
 		},
 		data() {
 			return {
+				memberTypes: this.$store.state.memberTypes,
+				newGroup: '',
+				newMemberType: '',
 				newSignupCode: '',
 				strings: CBOXOLStrings.strings
 			}

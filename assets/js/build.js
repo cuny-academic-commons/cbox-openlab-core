@@ -27,8 +27,9 @@ var store = new _vuex2.default.Store({
 		emailDomains: {},
 		isEditing: {},
 		isLoading: {},
-		memberTypes: {},
+		memberTypes: [],
 		objectType: '',
+		signupCodes: {},
 		subapp: '',
 		types: {},
 		typeNames: []
@@ -92,6 +93,24 @@ var store = new _vuex2.default.Store({
 				typeData: typeData,
 				objectType: commit.state.objectType
 			};
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				},
+				body: JSON.stringify(body)
+			});
+		},
+		submitSignupCode: function submitSignupCode(commit, payload) {
+			var domain = payload.domain;
+
+
+			var endpoint = CBOXOLStrings.endpointBase + 'signup-code/';
+
+			var body = { domain: domain };
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
@@ -257,7 +276,7 @@ new _vue2.default({
 	}
 });
 
-},{"./components/CBOXOLAdmin.vue":2,"isomorphic-fetch":14,"vue":16,"vuex":18}],2:[function(require,module,exports){
+},{"./components/CBOXOLAdmin.vue":2,"isomorphic-fetch":15,"vue":17,"vuex":19}],2:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -303,10 +322,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-428061ba", __vue__options__)
   } else {
-    hotAPI.reload("data-v-428061ba", __vue__options__)
+    hotAPI.rerender("data-v-428061ba", __vue__options__)
   }
 })()}
-},{"./Registration.vue":7,"./TypesUI.vue":9,"vue":16,"vue-hot-reload-api":15}],3:[function(require,module,exports){
+},{"./Registration.vue":8,"./TypesUI.vue":10,"vue":17,"vue-hot-reload-api":16}],3:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -396,7 +415,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2d8926b1", __vue__options__)
   }
 })()}
-},{"vue":16,"vue-hot-reload-api":15}],4:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":16}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -617,7 +636,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-920509b8", __vue__options__)
   }
 })()}
-},{"./OnOffSwitch.vue":6,"./TypeLabel.vue":8,"./settings/MayChangeMemberTypeTo.vue":10,"./settings/MayCreateCourses.vue":11,"./settings/Order.vue":12,"vue":16,"vue-hot-reload-api":15}],5:[function(require,module,exports){
+},{"./OnOffSwitch.vue":7,"./TypeLabel.vue":9,"./settings/MayChangeMemberTypeTo.vue":11,"./settings/MayCreateCourses.vue":12,"./settings/Order.vue":13,"vue":17,"vue-hot-reload-api":16}],5:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -645,7 +664,6 @@ exports.default = {
 	data: function data() {
 		return {
 			newDomain: '',
-			newSignupCode: '',
 			strings: CBOXOLStrings.strings
 		};
 	},
@@ -682,7 +700,74 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2e4d2992", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":13,"vue":16,"vue-hot-reload-api":15}],6:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":14,"vue":17,"vue-hot-reload-api":16}],6:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _AjaxTools = require('../mixins/AjaxTools.js');
+
+var _AjaxTools2 = _interopRequireDefault(_AjaxTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	computed: {
+		isLoading: {
+			get: function get() {
+				return this.$store.state.isLoading.hasOwnProperty('addSignupCode');
+			},
+			set: function set(value) {
+				this.$store.commit('setIsLoading', { key: 'addSignupCode', value: value });
+			}
+		}
+	},
+	data: function data() {
+		return {
+			memberTypes: this.$store.state.memberTypes,
+			newGroup: '',
+			newMemberType: '',
+			newSignupCode: '',
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+	mixins: [_AjaxTools2.default],
+	methods: {
+		onSubmit: function onSubmit(e) {
+			var nsc = this;
+
+			this.isLoading = true;
+			nsc.$store.dispatch('submitSignupCode', { domain: nsc.newSignupCode }).then(nsc.checkStatus).then(nsc.parseJSON).then(function (data) {
+				nsc.isLoading = false;
+				nsc.$store.commit('setSignupCode', { key: data, domain: data });
+				nsc.newSignupCode = '';
+			}, function (data) {
+				nsc.isLoading = false;
+			});
+		}
+	}
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newSignupCode),expression:"newSignupCode"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.newSignupCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newSignupCode=$event.target.value}}}),_vm._v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.newMemberType),expression:"newMemberType"}],on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.newMemberType=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},[_c('option',{attrs:{"value":""}},[_vm._v("- "+_vm._s(_vm.strings.selectMemberType)+" -")]),_vm._v(" "),_vm._l((_vm.memberTypes),function(memberType){return _c('option',{domProps:{"value":memberType.value}},[_vm._v("\n\t\t\t"+_vm._s(memberType.label)+"\n\t\t")])})],2),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newSignupCode || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6cb62e3e", __vue__options__)
+  } else {
+    hotAPI.rerender("data-v-6cb62e3e", __vue__options__)
+  }
+})()}
+},{"../mixins/AjaxTools.js":14,"vue":17,"vue-hot-reload-api":16}],7:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -734,7 +819,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":16,"vue-hot-reload-api":15,"vueify/lib/insert-css":17}],7:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":16,"vueify/lib/insert-css":18}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -750,57 +835,37 @@ var _NewEmailDomain = require('./NewEmailDomain.vue');
 
 var _NewEmailDomain2 = _interopRequireDefault(_NewEmailDomain);
 
+var _NewSignupCode = require('./NewSignupCode.vue');
+
+var _NewSignupCode2 = _interopRequireDefault(_NewSignupCode);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	components: {
 		EmailDomainRow: _EmailDomainRow2.default,
-		NewEmailDomain: _NewEmailDomain2.default
+		NewEmailDomain: _NewEmailDomain2.default,
+		NewSignupCode: _NewSignupCode2.default
 	},
 	computed: {
 		emailDomains: {
 			get: function get() {
 				return this.$store.state.emailDomains;
 			}
-		},
-		isLoadingSignupCode: {
-			get: function get() {
-				return this.$store.state.isLoading.hasOwnProperty('addSignupCode');
-			},
-			set: function set(value) {
-				this.$store.commit('setIsLoading', { key: 'addSignupCode', value: value });
-			}
 		}
 	},
 
 	data: function data() {
 		return {
-			newSignupCode: '',
 			strings: CBOXOLStrings.strings
 		};
-	},
-
-
-	methods: {
-		onAddSignupCodeSubmit: function onAddSignupCodeSubmit(e) {
-			var registration = this;
-
-			this.isLoadingAddEmailDomain = true;
-			registration.$store.dispatch('submitEmailDomain', { domain: registration.newDomain }).then(registration.checkStatus).then(registration.parseJSON).then(function (data) {
-				registration.isLoadingAddEmailDomain = false;
-				registration.$store.commit('setEmailDomain', { key: data, domain: data });
-				registration.newDomain = '';
-			}, function (data) {
-				registration.isLoadingAddEmailDomain = false;
-			});
-		}
 	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('NewEmailDomain'),_vm._v(" "),_c('div',{staticClass:"email-domains"},[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])])],1),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))]),_vm._v(" "),_c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newSignupCode),expression:"newSignupCode"}],attrs:{"id":"add-signup-code-input","disabled":_vm.isLoadingAddSignupCode},domProps:{"value":(_vm.newSignupCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newSignupCode=$event.target.value}}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newSignupCode || _vm.isLoadingAddSignupCode},on:{"click":_vm.onAddSignupCodeSubmit}},[_vm._v(_vm._s(_vm.strings.add))])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('NewEmailDomain'),_vm._v(" "),_c('div',{staticClass:"email-domains"},[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])])],1),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))]),_vm._v(" "),_c('NewSignupCode')],1)])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -809,10 +874,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-91028d20", __vue__options__)
   } else {
-    hotAPI.reload("data-v-91028d20", __vue__options__)
+    hotAPI.rerender("data-v-91028d20", __vue__options__)
   }
 })()}
-},{"./EmailDomainRow.vue":3,"./NewEmailDomain.vue":5,"vue":16,"vue-hot-reload-api":15}],8:[function(require,module,exports){
+},{"./EmailDomainRow.vue":3,"./NewEmailDomain.vue":5,"./NewSignupCode.vue":6,"vue":17,"vue-hot-reload-api":16}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -865,7 +930,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-11c5a333", __vue__options__)
   }
 })()}
-},{"vue":16,"vue-hot-reload-api":15}],9:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":16}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -926,7 +991,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./ItemType.vue":4,"vue":16,"vue-hot-reload-api":15}],10:[function(require,module,exports){
+},{"./ItemType.vue":4,"vue":17,"vue-hot-reload-api":16}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -982,7 +1047,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"vue":16,"vue-hot-reload-api":15}],11:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":16}],12:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1027,7 +1092,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":16,"vue-hot-reload-api":15}],12:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":16}],13:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1072,7 +1137,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
-},{"vue":16,"vue-hot-reload-api":15}],13:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":16}],14:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1097,7 +1162,7 @@ module.exports = {
 	}
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 // the whatwg-fetch polyfill installs the fetch() function
 // on the global object (window or self)
 //
@@ -1105,7 +1170,7 @@ module.exports = {
 require('whatwg-fetch');
 module.exports = self.fetch.bind(self);
 
-},{"whatwg-fetch":19}],15:[function(require,module,exports){
+},{"whatwg-fetch":20}],16:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -1251,7 +1316,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.2.6
@@ -8086,7 +8151,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":20}],17:[function(require,module,exports){
+},{"_process":21}],18:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -8111,7 +8176,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * vuex v2.3.0
  * (c) 2017 Evan You
@@ -8922,7 +8987,7 @@ return index;
 
 })));
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function(self) {
   'use strict';
 
@@ -9385,7 +9450,7 @@ return index;
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

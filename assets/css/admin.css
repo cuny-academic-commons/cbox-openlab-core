@@ -156,3 +156,9 @@ a .action-arrow {
 .email-domains-domain {
 	width: 40%;
 }
+
+.new-item-field {
+	float: left;
+	margin-right: 12px;
+	width: 200px;
+}
