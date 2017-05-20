@@ -5,19 +5,7 @@
 
 			<p>{{ strings.emailDomainWhitelistLegend }}</p>
 
-			<div class="add-email-domain">
-				<label for="add-email-domain-input">{{ strings.addEmailDomain }}</label>
-				<input
-					id="add-email-domain-input"
-					v-bind:disabled="isLoadingAddEmailDomain"
-					v-model="newDomain"
-				>
-				<button
-					class="button"
-					v-bind:disabled="! newDomain || isLoadingAddEmailDomain"
-					v-on:click="onAddEmailDomainSubmit"
-				>{{ strings.add }}</button>
-			</div>
+			<NewEmailDomain />
 
 			<div class="email-domains">
 				<table class="cboxol-item-table email-domains-table">
@@ -43,12 +31,13 @@
 </template>
 
 <script>
-	import Vue from 'vue'
 	import EmailDomainRow from './EmailDomainRow.vue'
+	import NewEmailDomain from './NewEmailDomain.vue'
 
 	export default {
 		components: {
-			EmailDomainRow
+			EmailDomainRow,
+			NewEmailDomain
 		},
 		computed: {
 			emailDomains: {
@@ -56,45 +45,26 @@
 					return this.$store.state.emailDomains
 				}
 			},
-			isLoadingAddEmailDomain: {
+			isLoadingSignupCode: {
 				get() {
-					return this.$store.state.isLoading.hasOwnProperty( 'addEmailDomain' )
+					return this.$store.state.isLoading.hasOwnProperty( 'addSignupCode' )
 				},
 
 				set( value ) {
-					this.$store.commit( 'setIsLoading', { key: 'addEmailDomain', value } )
+					this.$store.commit( 'setIsLoading', { key: 'addSignupCode', value } )
 				}
 			},
 		},
 
 		data() {
 			return {
-				newDomain: '',
+				newSignupCode: '',
 				strings: CBOXOLStrings.strings
 			}
 		},
 
 		methods: {
-			ajaxError( p ) {
-				// @todo better error handling
-				console.error( p )
-				throw 'Could not complete request.'
-			},
-			checkStatus(response) {
-				if (response.status >= 200 && response.status < 300) {
-					return response
-				} else {
-					var error = new Error(response.statusText)
-					error.response = response
-					throw error
-				}
-			},
-
-			parseJSON(response) {
-				return response.json()
-			},
-
-			onAddEmailDomainSubmit( e ) {
+			onAddSignupCodeSubmit( e ) {
 				// To avoid scope issues in the callback.
 				let registration = this
 
