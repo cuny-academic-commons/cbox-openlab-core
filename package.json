@@ -9,6 +9,7 @@
   "dependencies": {
     "es6-promise": "^4.1.0",
     "isomorphic-fetch": "^2.2.1",
+    "vue2-autocomplete-js": "0.0.4",
     "vuex": "^2.3.0"
   },
   "devDependencies": {

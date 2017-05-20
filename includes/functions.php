@@ -13,6 +13,9 @@ function openlab_rest_api_init() {
 
 	$email_domains_endpoint = new \CBOX\OL\API\EmailDomains();
 	$email_domains_endpoint->register_routes();
+
+	$groups_search_endpoint = new \CBOX\OL\API\GroupsSearch();
+	$groups_search_endpoint->register_routes();
 }
 add_action( 'rest_api_init', 'openlab_rest_api_init' );
 
