@@ -178,7 +178,7 @@ function cboxol_get_group_types( $args = array() ) {
 		$post_status = 'any';
 	}
 
-	$type_posts = get_posts( array(
+	$post_args = array(
 		'post_type' => 'cboxol_group_type',
 		'post_status' => $post_status,
 		'posts_per_page' => -1,
@@ -186,7 +186,19 @@ function cboxol_get_group_types( $args = array() ) {
 			'menu_order' => 'ASC',
 			'title' => 'ASC',
 		),
-	) );
+		'fields' => 'ids',
+	);
+
+	$last_changed = wp_cache_get_last_changed( 'posts' );
+	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$ids = wp_cache_get( $cache_key, 'cboxol_group_types' );
+	if ( false === $ids ) {
+		$ids = get_posts( $post_args );
+		_prime_post_caches( $ids );
+		wp_cache_set( $cache_key, $ids, 'cboxol_group_types' );
+	}
+
+	$type_posts = array_map( 'get_post', $ids );
 
 	$types = array();
 	foreach ( $type_posts as $type_post ) {
