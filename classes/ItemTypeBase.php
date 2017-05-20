@@ -137,6 +137,10 @@ class ItemTypeBase {
 
 		$meta_value = array();
 		foreach ( $this->get_labels() as $label_type => $label_data ) {
+			// A total mess. Prevents double saving of an array.
+			if ( is_array( $label_data ) && isset( $label_data['value'] ) ) {
+				$label_data = $label_data['value'];
+			}
 			$meta_value[ $label_type ] = $label_data;
 		}
 		update_post_meta( $wp_post_id, 'cboxol_item_type_labels', $meta_value );
