@@ -16,6 +16,9 @@ function openlab_rest_api_init() {
 
 	$groups_search_endpoint = new \CBOX\OL\API\GroupsSearch();
 	$groups_search_endpoint->register_routes();
+
+	$signup_codes_endpoint = new \CBOX\OL\API\SignupCodes();
+	$signup_codes_endpoint->register_routes();
 }
 add_action( 'rest_api_init', 'openlab_rest_api_init' );
 

@@ -105,12 +105,7 @@ var store = new _vuex2.default.Store({
 			});
 		},
 		submitSignupCode: function submitSignupCode(commit, payload) {
-			var domain = payload.domain;
-
-
 			var endpoint = CBOXOLStrings.endpointBase + 'signup-code/';
-
-			var body = { domain: domain };
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
@@ -119,7 +114,7 @@ var store = new _vuex2.default.Store({
 					'Content-Type': 'application/json',
 					'X-WP-Nonce': CBOXOLStrings.nonce
 				},
-				body: JSON.stringify(body)
+				body: JSON.stringify(payload)
 			});
 		}
 	},
@@ -322,7 +317,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-428061ba", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-428061ba", __vue__options__)
+    hotAPI.reload("data-v-428061ba", __vue__options__)
   }
 })()}
 },{"./Registration.vue":8,"./TypesUI.vue":10,"vue":17,"vue-hot-reload-api":16}],3:[function(require,module,exports){
@@ -754,7 +749,14 @@ exports.default = {
 			var nsc = this;
 
 			this.isLoading = true;
-			nsc.$store.dispatch('submitSignupCode', { domain: nsc.newSignupCode }).then(nsc.checkStatus).then(nsc.parseJSON).then(function (data) {
+
+			var payload = {
+				newGroup: this.newGroup,
+				newMemberType: this.newMemberType,
+				newSignupCode: this.newSignupCode
+			};
+
+			nsc.$store.dispatch('submitSignupCode', payload).then(nsc.checkStatus).then(nsc.parseJSON).then(function (data) {
 				nsc.isLoading = false;
 				nsc.$store.commit('setSignupCode', { key: data, domain: data });
 				nsc.newSignupCode = '';
@@ -888,7 +890,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-91028d20", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-91028d20", __vue__options__)
+    hotAPI.reload("data-v-91028d20", __vue__options__)
   }
 })()}
 },{"./EmailDomainRow.vue":3,"./NewEmailDomain.vue":5,"./NewSignupCode.vue":6,"vue":17,"vue-hot-reload-api":16}],9:[function(require,module,exports){

@@ -75,7 +75,14 @@
 				let nsc = this
 
 				this.isLoading = true
-				nsc.$store.dispatch( 'submitSignupCode', { domain: nsc.newSignupCode } )
+
+				const payload = {
+					newGroup: this.newGroup,
+					newMemberType: this.newMemberType,
+					newSignupCode: this.newSignupCode
+				}
+
+				nsc.$store.dispatch( 'submitSignupCode', payload )
 					.then( nsc.checkStatus )
 					.then( nsc.parseJSON )
 					.then( function( data ) {

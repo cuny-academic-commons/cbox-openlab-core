@@ -87,11 +87,7 @@ const store = new Vuex.Store({
 			} )
 		},
 		submitSignupCode ( commit, payload ) {
-			const { domain } = payload
-
 			let endpoint = CBOXOLStrings.endpointBase + 'signup-code/'
-
-			const body = { domain }
 
 			return fetch( endpoint, {
 				method: 'POST',
@@ -100,7 +96,7 @@ const store = new Vuex.Store({
 					'Content-Type': 'application/json',
 					'X-WP-Nonce': CBOXOLStrings.nonce
 				},
-				body: JSON.stringify( body )
+				body: JSON.stringify( payload )
 			} )
 		},
 	},
