@@ -61,6 +61,7 @@ function cboxol_register_assets() {
 			'add' => _x( 'Add', '"Add" button text', 'cbox-openlab-core' ),
 			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+			'code' => _x( 'Code', 'Column header for signup code value', 'cbox-openlab-core' ),
 			'delete' => __( 'Delete', 'cbox-openlab-core' ),
 			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
 			'domain' => _x( 'Domain', 'Domain from email domain whitelist', 'cbox-openlab-core' ),
@@ -68,12 +69,14 @@ function cboxol_register_assets() {
 			'editing' => __( 'Editing', 'cbox-openlab-core' ),
 			'emailDomainWhitelist' => __( 'Email Domain Whitelist', 'cbox-openlab-core' ),
 			'emailDomainWhitelistLegend' => __( 'Lorem ipsum', 'cbox-openlab-core' ),
+			'group' => _x( 'Group', 'Column header for signup code table', 'cbox-openlab-core' ),
 			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
 			'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
 			'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
 
 			// @todo This probably will not translate.
 			'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
+			'memberType' => __( 'Member Type', 'cbox-openlab-core' ),
 
 			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
 			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),

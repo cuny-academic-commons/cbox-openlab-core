@@ -44,6 +44,8 @@ class SignupCodes extends WP_REST_Controller {
 		$group_id = BP_Groups_Group::get_id_from_slug( $params['newGroup'] );
 		$signup_code->set_group_id( $group_id );
 
+		$signup_code->set_author_id( bp_loggedin_user_id() );
+
 		if ( ! $signup_code->save() ) {
 			return new WP_Error( 'signup_code_save_failure', __( 'Could not create signup code.', 'cbox-openlab-core' ) );
 		}

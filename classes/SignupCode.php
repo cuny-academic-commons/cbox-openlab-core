@@ -78,6 +78,24 @@ class SignupCode {
 		return $retval;
 	}
 
+	public static function get_instance_from_wp_post( \WP_Post $post ) {
+		$code = new self();
+
+		$code->set_author_id( $post->post_author );
+		$code->set_wp_post_id( $post->ID );
+
+		$code_value = get_post_meta( $post->ID, 'cboxol_signup_code_code', true );
+		$code->set_code( $code_value );
+
+		$group_id = get_post_meta( $post->ID, 'cboxol_signup_code_group_id', true );
+		$code->set_group_id( $group_id );
+
+		$member_type = get_post_meta( $post->ID, 'cboxol_signup_code_member_type', true );
+		$code->set_member_type( $member_type );
+
+		return $code;
+	}
+
 	/**
 	 * Get author ID.
 	 *

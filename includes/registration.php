@@ -1,6 +1,22 @@
 <?php
 
+add_action( 'init', 'cboxol_registration_register_post_type' );
 add_filter( 'sanitize_option_limited_email_domains', 'cboxol_registration_sanitize_limited_email_domains', 10, 3 );
+
+/**
+ * Register post types related to registration.
+ */
+function cboxol_registration_register_post_type() {
+	register_post_type( 'cboxol_signup_code', array(
+		'labels' => array(
+			'name' => _x( 'Signup Codes', 'Post type general name', 'cbox-openlab-core' ),
+		),
+		'public' => false,
+		'publicly_queryable' => false,
+		'show_ui' => false,
+		'show_in_menu' => false,
+	) );
+}
 
 function cboxol_registration_admin_page() {
 	wp_enqueue_script( 'cbox-ol-app' );
@@ -27,10 +43,17 @@ function cboxol_registration_admin_page() {
 		);
 	}
 
+	$signup_codes = cboxol_get_signup_codes();
+	$signup_code_data = array();
+	foreach ( $signup_codes as $signup_code ) {
+		$signup_code_data[] = $signup_code->get_for_endpoint();
+	}
+
 	$app_config = array(
 		'subapp' => 'Registration',
 		'emailDomains' => $domains,
 		'memberTypes' => $member_types,
+		'signupCodes' => $signup_code_data,
 	);
 
 	?>
@@ -146,4 +169,40 @@ function cboxol_wildcard_email_domain_check( $user_email ) {
 	}
 
 	return $valid_email_domain_check;
+}
+
+/**
+ * Get registered Signup Codes.
+ */
+function cboxol_get_signup_codes( $args = array() ) {
+	$r = array_merge( array(), $args );
+
+	$post_args = array(
+		'post_type' => 'cboxol_signup_code',
+		'post_status' => 'any',
+		'posts_per_page' => -1,
+		'orderby' => array(
+			'menu_order' => 'ASC',
+			'title' => 'ASC',
+		),
+		'fields' => 'ids',
+	);
+
+	$last_changed = wp_cache_get_last_changed( 'posts' );
+	$cache_key = 'cboxol_signup_codes_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$ids = wp_cache_get( $cache_key, 'cboxol_signup_codes' );
+	if ( false === $ids ) {
+		$ids = get_posts( $post_args );
+		_prime_post_caches( $ids );
+		wp_cache_set( $cache_key, $ids, 'cboxol_signup_codes' );
+	}
+
+	$code_posts = array_map( 'get_post', $ids );
+
+	$codes = array();
+	foreach ( $code_posts as $code_post ) {
+		$codes[ $code_post->post_name ] = \CBOX\OL\SignupCode::get_instance_from_wp_post( $code_post );
+	}
+
+	return $codes;
 }
