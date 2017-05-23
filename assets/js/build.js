@@ -28,6 +28,11 @@ var store = new _vuex2.default.Store({
 		isEditing: {},
 		isLoading: {},
 		memberTypes: [],
+		newSignupCode: {
+			code: '',
+			memberType: '',
+			groupSlug: ''
+		},
 		objectType: '',
 		signupCodes: {},
 		subapp: '',
@@ -179,6 +184,16 @@ var store = new _vuex2.default.Store({
 
 			state.emailDomains = newEmailDomains;
 		},
+		setFormValue: function setFormValue(state, payload) {
+			var form = payload.form,
+			    field = payload.field,
+			    value = payload.value;
+
+
+			var newForm = Object.assign({}, state[form]);
+			newForm[field] = value;
+			state[form] = newForm;
+		},
 		setIsEditing: function setIsEditing(state, payload) {
 			var key = payload.key,
 			    value = payload.value;
@@ -271,7 +286,7 @@ new _vue2.default({
 	}
 });
 
-},{"./components/CBOXOLAdmin.vue":2,"isomorphic-fetch":16,"vue":18,"vuex":21}],2:[function(require,module,exports){
+},{"./components/CBOXOLAdmin.vue":2,"isomorphic-fetch":17,"vue":19,"vuex":22}],2:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -317,10 +332,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-428061ba", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-428061ba", __vue__options__)
+    hotAPI.reload("data-v-428061ba", __vue__options__)
   }
 })()}
-},{"./Registration.vue":8,"./TypesUI.vue":11,"vue":18,"vue-hot-reload-api":17}],3:[function(require,module,exports){
+},{"./Registration.vue":8,"./TypesUI.vue":12,"vue":19,"vue-hot-reload-api":18}],3:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -410,7 +425,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2d8926b1", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17}],4:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -631,7 +646,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-920509b8", __vue__options__)
   }
 })()}
-},{"./OnOffSwitch.vue":7,"./TypeLabel.vue":10,"./settings/MayChangeMemberTypeTo.vue":12,"./settings/MayCreateCourses.vue":13,"./settings/Order.vue":14,"vue":18,"vue-hot-reload-api":17}],5:[function(require,module,exports){
+},{"./OnOffSwitch.vue":7,"./TypeLabel.vue":11,"./settings/MayChangeMemberTypeTo.vue":13,"./settings/MayCreateCourses.vue":14,"./settings/Order.vue":15,"vue":19,"vue-hot-reload-api":18}],5:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -695,7 +710,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2e4d2992", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":15,"vue":18,"vue-hot-reload-api":17}],6:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":16,"vue":19,"vue-hot-reload-api":18}],6:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".transition, .autocomplete, .showAll-transition, .autocomplete ul, .autocomplete ul li a{\n  transition:all 0.3s ease-out;\n  -moz-transition:all 0.3s ease-out;\n  -webkit-transition:all 0.3s ease-out;\n  -o-transition:all 0.3s ease-out;\n}\n\n.autocomplete ul{\n  font-family: sans-serif;\n  position: absolute;\n  list-style: none;\n  background: #f8f8f8;\n  padding: 10px 0;\n  margin: 0;\n  display: inline-block;\n  min-width: 15%;\n  margin-top: 10px;\n}\n\n.autocomplete ul:before{\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 0;\n  width: 0;\n  border: 10px solid transparent;\n  border-bottom: 10px solid #f8f8f8;\n  left: 46%;\n  top: -20px\n}\n\n.autocomplete ul li a{\n  text-decoration: none;\n  display: block;\n  background: #f8f8f8;\n  color: #2b2b2b;\n  padding: 5px;\n  padding-left: 10px;\n}\n\n.autocomplete ul li a:hover, .autocomplete ul li.focus-list a{\n  color: white;\n  background: #2F9AF7;\n}\n\n.autocomplete ul li a span{\n  display: block;\n  margin-top: 3px;\n  color: grey;\n  font-size: 13px;\n}\n\n.autocomplete ul li a:hover span, .autocomplete ul li.focus-list a span{\n  color: white;\n}\n\n.showAll-transition{\n  opacity: 1;\n  height: 50px;\n  overflow: hidden;\n}\n\n.showAll-enter{\n  opacity: 0.3;\n  height: 0;\n}\n\n.showAll-leave{\n  display: none;\n}")
 ;(function(){
 'use strict';
@@ -708,17 +723,53 @@ var _AjaxTools = require('../mixins/AjaxTools.js');
 
 var _AjaxTools2 = _interopRequireDefault(_AjaxTools);
 
-var _vue2AutocompleteJs = require('vue2-autocomplete-js');
+var _SignupCodeGroupSelector = require('./SignupCodeGroupSelector.vue');
 
-var _vue2AutocompleteJs2 = _interopRequireDefault(_vue2AutocompleteJs);
+var _SignupCodeGroupSelector2 = _interopRequireDefault(_SignupCodeGroupSelector);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	components: {
-		Autocomplete: _vue2AutocompleteJs2.default
+		SignupCodeGroupSelector: _SignupCodeGroupSelector2.default
 	},
 	computed: {
+		newGroup: {
+			get: function get() {
+				return this.$store.state.newSignupCode.groupSlug;
+			},
+			set: function set(value) {
+				this.$store.commit('setFormValue', {
+					form: 'newSignupCode',
+					field: 'groupSlug',
+					value: value
+				});
+			}
+		},
+		newMemberType: {
+			get: function get() {
+				return this.$store.state.newSignupCode.memberType;
+			},
+			set: function set(value) {
+				this.$store.commit('setFormValue', {
+					form: 'newSignupCode',
+					field: 'memberType',
+					value: value
+				});
+			}
+		},
+		newSignupCode: {
+			get: function get() {
+				return this.$store.state.newSignupCode.code;
+			},
+			set: function set(value) {
+				this.$store.commit('setFormValue', {
+					form: 'newSignupCode',
+					field: 'code',
+					value: value
+				});
+			}
+		},
 		isLoading: {
 			get: function get() {
 				return this.$store.state.isLoading.hasOwnProperty('addSignupCode');
@@ -730,12 +781,7 @@ exports.default = {
 	},
 	data: function data() {
 		return {
-			autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
-			endpoint: CBOXOLStrings.endpointBase + 'groups-search',
 			memberTypes: this.$store.state.memberTypes,
-			newGroup: '',
-			newMemberType: '',
-			newSignupCode: '',
 			strings: CBOXOLStrings.strings
 		};
 	},
@@ -770,7 +816,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newSignupCode),expression:"newSignupCode"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.newSignupCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newSignupCode=$event.target.value}}}),_vm._v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.newMemberType),expression:"newMemberType"}],staticClass:"new-item-field",on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.newMemberType=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},[_c('option',{attrs:{"value":""}},[_vm._v("- "+_vm._s(_vm.strings.selectMemberType)+" -")]),_vm._v(" "),_vm._l((_vm.memberTypes),function(memberType){return _c('option',{domProps:{"value":memberType.value}},[_vm._v("\n\t\t\t"+_vm._s(memberType.label)+"\n\t\t")])})],2),_vm._v(" "),_c('autocomplete',{staticClass:"new-item-field",attrs:{"anchor":"value","custom-params":_vm.autocompleteParams,"debounce":"1000","label":"label","on-select":_vm.onGroupSelect,"url":_vm.endpoint},model:{value:(_vm.newGroup),callback:function ($$v) {_vm.newGroup=$$v},expression:"newGroup"}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newSignupCode || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newSignupCode),expression:"newSignupCode"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.newSignupCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newSignupCode=$event.target.value}}}),_vm._v(" "),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.newMemberType),expression:"newMemberType"}],staticClass:"new-item-field",on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.newMemberType=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},[_c('option',{attrs:{"value":""}},[_vm._v("- "+_vm._s(_vm.strings.selectMemberType)+" -")]),_vm._v(" "),_vm._l((_vm.memberTypes),function(memberType){return _c('option',{domProps:{"value":memberType.value}},[_vm._v("\n\t\t\t"+_vm._s(memberType.label)+"\n\t\t")])})],2),_vm._v(" "),_c('SignupCodeGroupSelector',{model:{value:(_vm.newGroup),callback:function ($$v) {_vm.newGroup=$$v},expression:"newGroup"}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newSignupCode || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])],1)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -783,7 +829,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-6cb62e3e", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":15,"vue":18,"vue-hot-reload-api":17,"vue2-autocomplete-js":19,"vueify/lib/insert-css":20}],7:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":16,"./SignupCodeGroupSelector.vue":9,"vue":19,"vue-hot-reload-api":18,"vueify/lib/insert-css":21}],7:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -835,7 +881,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17,"vueify/lib/insert-css":20}],8:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18,"vueify/lib/insert-css":21}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -900,10 +946,57 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-91028d20", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-91028d20", __vue__options__)
+    hotAPI.reload("data-v-91028d20", __vue__options__)
   }
 })()}
-},{"./EmailDomainRow.vue":3,"./NewEmailDomain.vue":5,"./NewSignupCode.vue":6,"./SignupCodeRow.vue":9,"vue":18,"vue-hot-reload-api":17}],9:[function(require,module,exports){
+},{"./EmailDomainRow.vue":3,"./NewEmailDomain.vue":5,"./NewSignupCode.vue":6,"./SignupCodeRow.vue":10,"vue":19,"vue-hot-reload-api":18}],9:[function(require,module,exports){
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _vue2AutocompleteJs = require('vue2-autocomplete-js');
+
+var _vue2AutocompleteJs2 = _interopRequireDefault(_vue2AutocompleteJs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+	components: {
+		Autocomplete: _vue2AutocompleteJs2.default
+	},
+	data: function data() {
+		return {
+			autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
+			endpoint: CBOXOLStrings.endpointBase + 'groups-search'
+		};
+	},
+
+	methods: {
+		onGroupSelect: function onGroupSelect(v) {
+			this.$emit('input', v.value);
+		}
+	}
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('autocomplete',{staticClass:"new-item-field",attrs:{"anchor":"value","custom-params":_vm.autocompleteParams,"debounce":"1000","label":"label","on-select":_vm.onGroupSelect,"url":_vm.endpoint}})}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-066c031c", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-066c031c", __vue__options__)
+  }
+})()}
+},{"vue":19,"vue-hot-reload-api":18,"vue2-autocomplete-js":20}],10:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -985,7 +1078,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-609e0dce", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17}],10:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1038,7 +1131,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-11c5a333", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17}],11:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18}],12:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1099,7 +1192,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./ItemType.vue":4,"vue":18,"vue-hot-reload-api":17}],12:[function(require,module,exports){
+},{"./ItemType.vue":4,"vue":19,"vue-hot-reload-api":18}],13:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1155,7 +1248,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17}],13:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18}],14:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1200,7 +1293,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17}],14:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18}],15:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1245,7 +1338,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
-},{"vue":18,"vue-hot-reload-api":17}],15:[function(require,module,exports){
+},{"vue":19,"vue-hot-reload-api":18}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1270,7 +1363,7 @@ module.exports = {
 	}
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 // the whatwg-fetch polyfill installs the fetch() function
 // on the global object (window or self)
 //
@@ -1278,7 +1371,7 @@ module.exports = {
 require('whatwg-fetch');
 module.exports = self.fetch.bind(self);
 
-},{"whatwg-fetch":22}],17:[function(require,module,exports){
+},{"whatwg-fetch":23}],18:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
@@ -1424,7 +1517,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.2.6
@@ -8259,7 +8352,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":23}],19:[function(require,module,exports){
+},{"_process":24}],20:[function(require,module,exports){
 /*!
  * Copyright (c) 2016 Naufal Rabbani (http://github.com/BosNaufal),
  * ,Licensed Under MIT (http://opensource.org/licenses/MIT),
@@ -8274,7 +8367,7 @@ module.exports = Vue$2;
 	*
 	*/
 e.default={props:{id:String,className:String,placeholder:String,initValue:{type:String,default:""},anchor:{type:String,required:!0},label:String,url:{type:String,required:!0},param:{type:String,default:"q"},customParams:Object,min:{type:Number,default:0},onInput:Function,onShow:Function,onBlur:Function,onHide:Function,onFocus:Function,onSelect:Function,onBeforeAjax:Function,onAjaxProgress:Function,onAjaxLoaded:Function},data:function(){return{showList:!1,type:"",json:[],focusList:""}},methods:{clearInput:function(){this.showList=!1,this.type="",this.json=[],this.focusList=""},cleanUp:function(t){return JSON.parse(JSON.stringify(t))},input:function(t){this.showList=!0,this.onInput?this.onInput(t):null,this.getData(t)},showAll:function(){this.json=[],this.getData(""),this.onShow?this.onShow():null,this.showList=!0},hideAll:function(t){var e=this;this.onBlur?this.onBlur(t):null,setTimeout(function(){e.onHide?e.onHide():null,e.showList=!1},250)},focus:function(t){this.focusList=0,this.onFocus?this.onFocus(t):null},mousemove:function(t){this.focusList=t},keydown:function(t){var e=t.keyCode;if(this.showList){switch(e){case 40:this.focusList++;break;case 38:this.focusList--;break;case 13:this.selectList(this.json[this.focusList]),this.showList=!1;break;case 27:this.showList=!1}var s=this.json.length-1;this.focusList=this.focusList>s?0:this.focusList<0?s:this.focusList}},activeClass:function(t){return{"focus-list":t==this.focusList}},selectList:function(t){var e=this.cleanUp(t);this.type=e[this.anchor],this.showList=!1,this.onSelect?this.onSelect(e):null},getData:function(t){var e=this,s=this;if(!(t.length<this.min)&&null!=this.url){this.onBeforeAjax?this.onBeforeAjax(t):null;var n=new XMLHttpRequest,o="";this.customParams&&Object.keys(this.customParams).forEach(function(t){o+="&"+t+"="+e.customParams[t]}),n.open("GET",this.url+"?"+this.param+"="+t+o,!0),n.send(),n.addEventListener("progress",function(t){t.lengthComputable&&(this.onAjaxProgress?this.onAjaxProgress(t):null)}),n.addEventListener("loadend",function(t){var e=JSON.parse(this.responseText);this.onAjaxLoaded?this.onAjaxLoaded(e):null,s.json=e})}},setValue:function(t){this.type=t}},created:function(){this.type=this.initValue?this.initValue:null}}},function(t,e,s){var n,o;n=s(1);var i=s(3);o=n=n||{},"object"!=typeof n.default&&"function"!=typeof n.default||(o=n=n.default),"function"==typeof o&&(o=o.options),o.render=i.render,o.staticRenderFns=i.staticRenderFns,t.exports=n},function(t,e){t.exports={render:function(){var t=this,e=t.$createElement,s=t._self._c||e;return s("div",{class:(t.className?t.className+"-wrapper ":"")+"autocomplete-wrapper"},[s("input",{directives:[{name:"model",rawName:"v-model",value:t.type,expression:"type"}],class:(t.className?t.className+"-input ":"")+"autocomplete-input",attrs:{type:"text",id:t.id,placeholder:t.placeholder,autocomplete:"off"},domProps:{value:t._s(t.type)},on:{input:[function(e){e.target.composing||(t.type=e.target.value)},function(e){t.input(t.type)}],dblclick:t.showAll,blur:t.hideAll,keydown:t.keydown,focus:t.focus}}),t._v(" "),s("div",{directives:[{name:"show",rawName:"v-show",value:t.showList,expression:"showList"}],class:(t.className?t.className+"-list ":"")+"autocomplete transition autocomplete-list"},[s("ul",t._l(t.json,function(e,n){return s("li",{class:t.activeClass(n),attrs:{transition:"showAll"}},[s("a",{attrs:{href:"#"},on:{click:function(s){s.preventDefault(),t.selectList(e)},mousemove:function(e){t.mousemove(n)}}},[s("b",[t._v(t._s(e[t.anchor]))]),t._v(" "),s("span",[t._v(t._s(e[t.label]))])])])}))])])},staticRenderFns:[]}}])});
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -8299,7 +8392,7 @@ exports.insert = function (css) {
   }
 }
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * vuex v2.3.0
  * (c) 2017 Evan You
@@ -9110,7 +9203,7 @@ return index;
 
 })));
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 (function(self) {
   'use strict';
 
@@ -9573,7 +9666,7 @@ return index;
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

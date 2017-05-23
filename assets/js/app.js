@@ -12,6 +12,11 @@ const store = new Vuex.Store({
 		isEditing: {},
 		isLoading: {},
 		memberTypes: [],
+		newSignupCode: {
+			code: '',
+			memberType: '',
+			groupSlug: ''
+		},
 		objectType: '',
 		signupCodes: {},
 		subapp: '',
@@ -161,6 +166,14 @@ const store = new Vuex.Store({
 			newEmailDomains[ key ] = domain
 
 			state.emailDomains = newEmailDomains
+		},
+
+		setFormValue( state, payload ) {
+			const { form, field, value } = payload
+
+			let newForm = Object.assign( {}, state[ form ] )
+			newForm[ field ] = value
+			state[ form ] = newForm
 		},
 
 		setIsEditing( state, payload ) {

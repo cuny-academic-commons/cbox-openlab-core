@@ -14,16 +14,7 @@
 			</option>
 		</select>
 
-		<autocomplete
-			anchor="value"
-			class="new-item-field"
-			:custom-params="autocompleteParams"
-			debounce="1000"
-			label="label"
-			:on-select="onGroupSelect"
-			:url="endpoint"
-			v-model="newGroup"
-		/>
+		<SignupCodeGroupSelector v-model="newGroup" />
 
 		<button
 			class="button"
@@ -35,13 +26,49 @@
 
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
-	import Autocomplete from 'vue2-autocomplete-js'
+	import SignupCodeGroupSelector from './SignupCodeGroupSelector.vue'
 
 	export default {
 		components: {
-			Autocomplete
+			SignupCodeGroupSelector
 		},
 		computed: {
+			newGroup: {
+				get() {
+					return this.$store.state.newSignupCode.groupSlug
+				},
+				set( value ) {
+					this.$store.commit( 'setFormValue', {
+						form: 'newSignupCode',
+						field: 'groupSlug',
+						value
+					} )
+				},
+			},
+			newMemberType: {
+				get() {
+					return this.$store.state.newSignupCode.memberType
+				},
+				set( value ) {
+					this.$store.commit( 'setFormValue', {
+						form: 'newSignupCode',
+						field: 'memberType',
+						value
+					} )
+				},
+			},
+			newSignupCode: {
+				get() {
+					return this.$store.state.newSignupCode.code
+				},
+				set( value ) {
+					this.$store.commit( 'setFormValue', {
+						form: 'newSignupCode',
+						field: 'code',
+						value
+					} )
+				},
+			},
 			isLoading: {
 				get() {
 					return this.$store.state.isLoading.hasOwnProperty( 'addSignupCode' )
@@ -54,12 +81,7 @@
 		},
 		data() {
 			return {
-				autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
-				endpoint: CBOXOLStrings.endpointBase + 'groups-search',
 				memberTypes: this.$store.state.memberTypes,
-				newGroup: '',
-				newMemberType: '',
-				newSignupCode: '',
 				strings: CBOXOLStrings.strings
 			}
 		},
