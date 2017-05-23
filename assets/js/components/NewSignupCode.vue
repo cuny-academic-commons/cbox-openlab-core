@@ -7,12 +7,7 @@
 			v-model="newSignupCode"
 		>
 
-		<select v-model="newMemberType" class="new-item-field">
-			<option value="">- {{ strings.selectMemberType }} -</option>
-			<option v-for="memberType in memberTypes" v-bind:value="memberType.value">
-				{{ memberType.label }}
-			</option>
-		</select>
+		<SignupCodeMemberTypeSelector v-model="newMemberType" />
 
 		<SignupCodeGroupSelector v-model="newGroup" />
 
@@ -26,11 +21,13 @@
 
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
+	import SignupCodeMemberTypeSelector from './SignupCodeMemberTypeSelector.vue'
 	import SignupCodeGroupSelector from './SignupCodeGroupSelector.vue'
 
 	export default {
 		components: {
-			SignupCodeGroupSelector
+			SignupCodeGroupSelector,
+			SignupCodeMemberTypeSelector
 		},
 		computed: {
 			newGroup: {
@@ -81,7 +78,6 @@
 		},
 		data() {
 			return {
-				memberTypes: this.$store.state.memberTypes,
 				strings: CBOXOLStrings.strings
 			}
 		},
