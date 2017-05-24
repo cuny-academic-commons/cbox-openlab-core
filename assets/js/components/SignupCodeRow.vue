@@ -64,7 +64,9 @@
 			}
 		},
 		methods: {
-			onDeleteClick() {
+			onDeleteClick( event ) {
+				event.preventDefault()
+
 				let item = this
 				item.isLoading = true
 
@@ -78,10 +80,12 @@
 						item.isLoading = false
 					} )
 			},
-			onEditClick() {
+			onEditClick( event ) {
+				event.preventDefault()
 				this.isEditing = true
 			},
-			onSaveClick() {
+			onSaveClick( event ) {
+				event.preventDefault()
 				let item = this
 				item.isLoading = true
 
