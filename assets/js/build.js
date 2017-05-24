@@ -834,7 +834,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.code),expression:"code"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.code)},on:{"input":function($event){if($event.target.composing){ return; }_vm.code=$event.target.value}}}),_vm._v(" "),_c('SignupCodeMemberTypeSelector',{attrs:{"wpPostId":_vm.wpPostId},model:{value:(_vm.memberTypeSlug),callback:function ($$v) {_vm.memberTypeSlug=$$v},expression:"memberTypeSlug"}}),_vm._v(" "),_c('SignupCodeGroupSelector',{model:{value:(_vm.group),callback:function ($$v) {_vm.group=$$v},expression:"group"}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.code || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.code),expression:"code"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.code)},on:{"input":function($event){if($event.target.composing){ return; }_vm.code=$event.target.value}}}),_vm._v(" "),_c('SignupCodeMemberTypeSelector',{attrs:{"wpPostId":_vm.wpPostId},model:{value:(_vm.memberTypeSlug),callback:function ($$v) {_vm.memberTypeSlug=$$v},expression:"memberTypeSlug"}}),_vm._v(" "),_c('SignupCodeGroupSelector',{attrs:{"wpPostId":_vm.wpPostId},model:{value:(_vm.group),callback:function ($$v) {_vm.group=$$v},expression:"group"}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.code || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])],1)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1041,6 +1041,7 @@ exports.default = {
 	data: function data() {
 		return {
 			memberTypes: this.$store.state.memberTypes,
+			selected: this.$store.state.signupCodes[this.wpPostId].memberType.slug,
 			strings: CBOXOLStrings.strings
 		};
 	},
@@ -1049,13 +1050,14 @@ exports.default = {
 		onChange: function onChange($event) {
 			this.$emit('input', $event.target.value);
 		}
-	}
+	},
+	props: ['wpPostId']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select',{staticClass:"new-item-field",on:{"change":_vm.onChange}},[_c('option',{attrs:{"value":""}},[_vm._v("- "+_vm._s(_vm.strings.selectMemberType)+" -")]),_vm._v(" "),_vm._l((_vm.memberTypes),function(memberType){return _c('option',{domProps:{"value":memberType.value}},[_vm._v("\n\t\t"+_vm._s(memberType.label)+"\n\t")])})],2)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.selected),expression:"selected"}],staticClass:"new-item-field",on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.selected=$event.target.multiple ? $$selectedVal : $$selectedVal[0]},_vm.onChange]}},[_c('option',{attrs:{"value":""}},[_vm._v("- "+_vm._s(_vm.strings.selectMemberType)+" -")]),_vm._v(" "),_vm._l((_vm.memberTypes),function(memberType){return _c('option',{domProps:{"value":memberType.value}},[_vm._v("\n\t\t"+_vm._s(memberType.label)+"\n\t")])})],2)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1155,7 +1157,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('td',{staticClass:"signup-code-code"},[(! _vm.isEditing)?[_vm._v("\n\t\t\t"+_vm._s(_vm.code)+"\n\t\t")]:_vm._e(),_vm._v(" "),(_vm.isEditing)?[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.code),expression:"code"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.code)},on:{"input":function($event){if($event.target.composing){ return; }_vm.code=$event.target.value}}})]:_vm._e()],2),_vm._v(" "),_c('td',{staticClass:"signup-code-member-type"},[(! _vm.isEditing)?[_vm._v("\n\t\t\t"+_vm._s(_vm.memberType.name)+"\n\t\t")]:_vm._e(),_vm._v(" "),(_vm.isEditing)?[_c('SignupCodeMemberTypeSelector',{model:{value:(_vm.memberTypeSlug),callback:function ($$v) {_vm.memberTypeSlug=$$v},expression:"memberTypeSlug"}})]:_vm._e()],2),_vm._v(" "),_c('td',{staticClass:"signup-code-group"},[_vm._v("\n\t\t"+_vm._s(_vm.group.name)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-actions"},[(! _vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]):_vm._e(),(_vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onSaveClick}},[_c('strong',[_vm._v(_vm._s(_vm.strings.save))])]):_vm._e(),_vm._v(" | "),_c('a',{attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('td',{staticClass:"signup-code-code"},[(! _vm.isEditing)?[_vm._v("\n\t\t\t"+_vm._s(_vm.code)+"\n\t\t")]:_vm._e(),_vm._v(" "),(_vm.isEditing)?[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.code),expression:"code"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.code)},on:{"input":function($event){if($event.target.composing){ return; }_vm.code=$event.target.value}}})]:_vm._e()],2),_vm._v(" "),_c('td',{staticClass:"signup-code-member-type"},[(! _vm.isEditing)?[_vm._v("\n\t\t\t"+_vm._s(_vm.memberType.name)+"\n\t\t")]:_vm._e(),_vm._v(" "),(_vm.isEditing)?[_c('SignupCodeMemberTypeSelector',{attrs:{"wpPostId":_vm.wpPostId},model:{value:(_vm.memberTypeSlug),callback:function ($$v) {_vm.memberTypeSlug=$$v},expression:"memberTypeSlug"}})]:_vm._e()],2),_vm._v(" "),_c('td',{staticClass:"signup-code-group"},[_vm._v("\n\t\t"+_vm._s(_vm.group.name)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-actions"},[(! _vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]):_vm._e(),(_vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onSaveClick}},[_c('strong',[_vm._v(_vm._s(_vm.strings.save))])]):_vm._e(),_vm._v(" | "),_c('a',{attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1164,7 +1166,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-609e0dce", __vue__options__)
   } else {
-    hotAPI.reload("data-v-609e0dce", __vue__options__)
+    hotAPI.rerender("data-v-609e0dce", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":17,"../mixins/SignupCodeTools.js":18,"./SignupCodeGroupSelector.vue":9,"./SignupCodeMemberTypeSelector.vue":10,"vue":21,"vue-hot-reload-api":20}],12:[function(require,module,exports){

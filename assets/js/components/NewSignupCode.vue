@@ -9,7 +9,7 @@
 
 		<SignupCodeMemberTypeSelector v-model="memberTypeSlug" :wpPostId="wpPostId" />
 
-		<SignupCodeGroupSelector v-model="group" />
+		<SignupCodeGroupSelector v-model="group" :wpPostId="wpPostId" />
 
 		<button
 			class="button"

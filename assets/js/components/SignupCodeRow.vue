@@ -21,7 +21,7 @@
 			</template>
 
 			<template v-if="isEditing">
-				<SignupCodeMemberTypeSelector v-model="memberTypeSlug" />
+				<SignupCodeMemberTypeSelector v-model="memberTypeSlug" :wpPostId="wpPostId" />
 			</template>
 		</td>
 
