@@ -9,10 +9,14 @@
 
 <script>
 	export default {
+		computed: {
+				selected() {
+					return this.$store.state.signupCodes[ this.wpPostId ].memberType.slug
+				}
+		},
 		data() {
 			return {
 				memberTypes: this.$store.state.memberTypes,
-				selected: this.$store.state.signupCodes[ this.wpPostId ].memberType.slug,
 				strings: CBOXOLStrings.strings
 			}
 		},

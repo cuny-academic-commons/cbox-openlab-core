@@ -1046,10 +1046,14 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.default = {
+	computed: {
+		selected: function selected() {
+			return this.$store.state.signupCodes[this.wpPostId].memberType.slug;
+		}
+	},
 	data: function data() {
 		return {
 			memberTypes: this.$store.state.memberTypes,
-			selected: this.$store.state.signupCodes[this.wpPostId].memberType.slug,
 			strings: CBOXOLStrings.strings
 		};
 	},
