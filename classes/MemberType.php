@@ -8,6 +8,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 	protected $defaults = array(
 		'can_create_courses' => false,
 		'can_be_deleted' => true,
+		'requires_signup_code' => null,
 		'selectable_types' => array(),
 	);
 
@@ -42,6 +43,35 @@ class MemberType extends ItemTypeBase implements ItemType {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Determines whether a member type requires validation with a Signup Code.
+	 *
+	 * @return bool
+	 */
+	public function get_requires_signup_code() {
+		if ( ! is_null( $this->data['requires_signup_code'] ) ) {
+			return $this->data['requires_signup_code'];
+		}
+
+		$requires_signup_code = false;
+
+		$signup_codes = cboxol_get_signup_codes();
+		foreach ( $signup_codes as $signup_code ) {
+			$code_member_type = $signup_code->get_member_type();
+			if ( is_wp_error( $code_member_type ) ) {
+				continue;
+			}
+
+			if ( $code_member_type->get_slug() === $this->get_slug() ) {
+				$requires_signup_code = true;
+				break;
+			}
+		}
+
+		$this->data['requires_signup_code'] = $requires_signup_code;
+		return $requires_signup_code;
 	}
 
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
