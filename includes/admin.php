@@ -79,6 +79,8 @@ function cboxol_register_assets() {
 			'memberType' => __( 'Member Type', 'cbox-openlab-core' ),
 
 			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
+			'noEmailDomains' => __( 'Registration is currently open for all email domains. Enter one or more domains to restrict registration by email address.', 'cbox-openlab-core' ),
+			'noSignupCodes' => __( 'Currently, users may select any Member Type when creating or editing their accounts. To restrict access to a Member Type, create a corresponding Signup Code below.', 'cbox-openlab-core' ),
 			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
 			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
 			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
