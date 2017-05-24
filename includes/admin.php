@@ -69,6 +69,7 @@ function cboxol_register_assets() {
 			'editing' => __( 'Editing', 'cbox-openlab-core' ),
 			'emailDomainWhitelist' => __( 'Email Domain Whitelist', 'cbox-openlab-core' ),
 			'emailDomainWhitelistLegend' => __( 'Lorem ipsum', 'cbox-openlab-core' ),
+			'enterSignupCode' => __( 'Enter Signup Code', 'cbox-openlab-core' ),
 			'group' => _x( 'Group', 'Column header for signup code table', 'cbox-openlab-core' ),
 			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
 			'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),

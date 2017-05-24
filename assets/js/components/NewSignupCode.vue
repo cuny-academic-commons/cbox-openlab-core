@@ -3,6 +3,7 @@
 		<input
 			class="new-item-field"
 			id="add-signup-code-input"
+			:placeholder="codePlaceholder"
 			v-bind:disabled="isLoading"
 			v-model="code"
 		>
@@ -30,6 +31,13 @@
 			SignupCodeGroupSelector,
 			SignupCodeMemberTypeSelector
 		},
+
+		computed: {
+			codePlaceholder() {
+				return '- ' + this.strings.enterSignupCode + ' -'
+			}
+		},
+
 		data() {
 			return {
 				strings: CBOXOLStrings.strings,
