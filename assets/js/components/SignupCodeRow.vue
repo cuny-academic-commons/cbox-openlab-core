@@ -26,7 +26,13 @@
 		</td>
 
 		<td class="signup-code-group">
-			{{ group.name }}
+			<template v-if="! isEditing">
+				{{ group.name }}
+			</template>
+
+			<template v-if="isEditing">
+				<SignupCodeGroupSelector v-model="group" :wpPostId="wpPostId" />
+			</template>
 		</td>
 
 		<td class="signup-code-actions">

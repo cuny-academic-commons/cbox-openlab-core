@@ -4,6 +4,7 @@
 			class="new-item-field"
 			:custom-params="autocompleteParams"
 			debounce="1000"
+			:initValue="initValue"
 			label="label"
 			:on-select="onGroupSelect"
 			:placeholder="placeholder"
@@ -27,6 +28,7 @@
 			return {
 				autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
 				endpoint: CBOXOLStrings.endpointBase + 'groups-search',
+				initValue: this.$store.state.signupCodes[ this.wpPostId ].group.slug,
 				strings: CBOXOLStrings.strings
 			}
 		},
@@ -37,7 +39,8 @@
 					slug: v.value
 				} )
 			}
-		}
+		},
+		props: [ 'wpPostId' ]
 	}
 </script>
 
