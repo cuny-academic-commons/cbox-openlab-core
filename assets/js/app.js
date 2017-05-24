@@ -101,7 +101,12 @@ const store = new Vuex.Store({
 			} )
 		},
 		submitSignupCode ( commit, payload ) {
+			const { wpPostId } = payload
+
 			let endpoint = CBOXOLStrings.endpointBase + 'signup-code/'
+			if ( wpPostId ) {
+				endpoint += wpPostId
+			}
 
 			return fetch( endpoint, {
 				method: 'POST',

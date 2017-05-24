@@ -120,7 +120,13 @@ var store = new _vuex2.default.Store({
 			});
 		},
 		submitSignupCode: function submitSignupCode(commit, payload) {
+			var wpPostId = payload.wpPostId;
+
+
 			var endpoint = CBOXOLStrings.endpointBase + 'signup-code/';
+			if (wpPostId) {
+				endpoint += wpPostId;
+			}
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
@@ -1142,7 +1148,14 @@ exports.default = {
 			var item = this;
 			item.isLoading = true;
 
-			item.$store.dispatch('submitEmailDomain', { domain: item.domain, key: item.domainKey }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
+			var payload = {
+				newGroup: this.groupSlug,
+				newMemberType: this.memberTypeSlug,
+				newSignupCode: this.code,
+				wpPostId: this.wpPostId
+			};
+
+			item.$store.dispatch('submitSignupCode', payload).then(item.checkStatus).then(item.parseJSON).then(function (data) {
 				item.isLoading = false;
 				item.isEditing = false;
 			}, function (data) {

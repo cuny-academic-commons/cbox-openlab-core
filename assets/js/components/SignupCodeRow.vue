@@ -95,7 +95,14 @@
 				let item = this
 				item.isLoading = true
 
-				item.$store.dispatch( 'submitEmailDomain', { domain: item.domain, key: item.domainKey } )
+				const payload = {
+					newGroup: this.groupSlug,
+					newMemberType: this.memberTypeSlug,
+					newSignupCode: this.code,
+					wpPostId: this.wpPostId
+				}
+
+				item.$store.dispatch( 'submitSignupCode', payload )
 					.then( item.checkStatus )
 					.then( item.parseJSON )
 					.then( function( data ) {
