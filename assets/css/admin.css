@@ -162,3 +162,12 @@ a .action-arrow {
 	margin-right: 12px;
 	width: 200px;
 }
+
+.add-email-domain,
+.add-signup-code {
+	margin-bottom: 26px;
+}
+
+.signup-codes-table th {
+	width: 23%;
+}
