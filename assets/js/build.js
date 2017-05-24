@@ -469,7 +469,7 @@ exports.default = {
 			});
 		}
 	},
-	props: ['domain', 'domainKey']
+	props: ['domainKey']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default

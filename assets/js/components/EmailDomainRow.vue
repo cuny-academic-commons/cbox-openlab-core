@@ -88,6 +88,6 @@
 					} )
 			}
 		},
-		props: ['domain', 'domainKey']
+		props: [ 'domainKey' ]
 	}
 </script>
