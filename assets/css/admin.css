@@ -153,6 +153,10 @@ a .action-arrow {
 
 /** Registration */
 
+.registration-section {
+	margin-top: 36px;
+}
+
 .email-domains-domain {
 	width: 40%;
 }
