@@ -1,14 +1,34 @@
 <template>
 	<tr>
 		<td class="signup-code-code">
-			{{ code }}
+			<template v-if="! isEditing">
+				{{ code }}
+			</template>
+
+			<template v-if="isEditing">
+				<input
+					class="new-item-field"
+					id="add-signup-code-input"
+					v-bind:disabled="isLoading"
+					v-model="code"
+				>
+			</template>
 		</td>
+
 		<td class="signup-code-member-type">
-			{{ memberType.name }}
+			<template v-if="! isEditing">
+				{{ memberType.name }}
+			</template>
+
+			<template v-if="isEditing">
+				<SignupCodeMemberTypeSelector v-model="memberTypeSlug" />
+			</template>
 		</td>
+
 		<td class="signup-code-group">
 			{{ group.name }}
 		</td>
+
 		<td class="signup-code-actions">
 			<a href="#" v-if="! isEditing" v-on:click="onEditClick">{{ strings.edit }}</a><a href="#" v-if="isEditing" v-on:click="onSaveClick"><strong>{{ strings.save }}</strong></a> | <a href="#" v-on:click="onDeleteClick">{{ strings.delete }}</a>
 		</td>
@@ -16,35 +36,19 @@
 </template>
 
 <script>
+	import AjaxTools from '../mixins/AjaxTools.js'
+	import SignupCodeTools from '../mixins/SignupCodeTools.js'
+
+	import SignupCodeMemberTypeSelector from './SignupCodeMemberTypeSelector.vue'
+	import SignupCodeGroupSelector from './SignupCodeGroupSelector.vue'
+
 	export default {
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
+		components: {
+			SignupCodeGroupSelector,
+			SignupCodeMemberTypeSelector
 		},
+
 		computed: {
-			code: {
-				get() {
-					return this.$store.state.signupCodes[ this.wpPostId ].code
-				},
-				set( value ) {
-					this.$store.commit( 'setSignupCodeProperty', {
-						wpPostId: this.wpPostId,
-						key: 'code',
-						value: value
-					} )
-				}
-			},
-			group: {
-				get() {
-					return this.$store.state.signupCodes[ this.wpPostId ].group
-				}
-			},
-			id: {
-				get() {
-					return 'signupCode-' + this.wpPostId
-				}
-			},
 			isEditing: {
 				get() {
 					return this.$store.state.isEditing.hasOwnProperty( this.id )
@@ -53,26 +57,11 @@
 					this.$store.commit( 'setIsEditing', { key: this.id, value } )
 				}
 			},
-			isLoading: {
-				get() {
-					return this.$store.state.isLoading.hasOwnProperty( this.id )
-				},
-				set( value ) {
-					this.$store.commit( 'setIsLoading', { key: this.id, value } )
-				}
-			},
-			memberType: {
-				get() {
-					return this.$store.state.signupCodes[ this.wpPostId ].memberType
-				},
-				set( value ) {
-					this.$store.commit( 'setSignupCodeProperty', {
-						wpPostId: this.wpPostId,
-						key: 'memberType',
-						value: value
-					} )
-				}
-			},
+		},
+		data() {
+			return {
+				strings: CBOXOLStrings.strings
+			}
 		},
 		methods: {
 			onDeleteClick() {
@@ -107,6 +96,12 @@
 					} )
 			}
 		},
+
+		mixins: [
+			AjaxTools,
+			SignupCodeTools
+		],
+
 		props: [ 'wpPostId' ]
 	}
 </script>

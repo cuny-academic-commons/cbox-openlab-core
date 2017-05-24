@@ -263,7 +263,9 @@ const store = new Vuex.Store({
 				break;
 			}
 
-			state.signupCodes[ wpPostId ] = signupCode
+			let newSignupCodes = Object.assign( {}, state.signupCodes )
+			newSignupCodes[ wpPostId ] = signupCode
+			state.signupCodes = newSignupCodes
 		},
 
 		setTypeProperty ( state, payload ) {

@@ -7,7 +7,7 @@
 			v-model="code"
 		>
 
-		<SignupCodeMemberTypeSelector v-model="memberTypeSlug" />
+		<SignupCodeMemberTypeSelector v-model="memberTypeSlug" :wpPostId="wpPostId" />
 
 		<SignupCodeGroupSelector v-model="group" />
 
@@ -21,6 +21,7 @@
 
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
+	import SignupCodeTools from '../mixins/SignupCodeTools.js'
 	import SignupCodeMemberTypeSelector from './SignupCodeMemberTypeSelector.vue'
 	import SignupCodeGroupSelector from './SignupCodeGroupSelector.vue'
 
@@ -29,65 +30,15 @@
 			SignupCodeGroupSelector,
 			SignupCodeMemberTypeSelector
 		},
-		computed: {
-			code: {
-				get() {
-					return this.$store.state.signupCodes[0].code
-				},
-				set( value ) {
-					this.$store.commit( 'setSignupCodeProperty', {
-						wpPostId: 0,
-						field: 'code',
-						value
-					} )
-				},
-			},
-			group: {
-				get() {
-					return this.$store.state.signupCodes[0].group
-				},
-				set( value ) {
-					this.$store.commit( 'setSignupCodeProperty', {
-						wpPostId: 0,
-						field: 'group',
-						value: value
-					} )
-				},
-			},
-			groupSlug: {
-				get() {
-					return this.group.slug
-				}
-			},
-			memberTypeSlug: {
-				get() {
-					return this.$store.state.signupCodes[0].memberType.slug
-				},
-				set( value ) {
-					this.$store.commit( 'setSignupCodeProperty', {
-						wpPostId: 0,
-						field: 'memberTypeSlug',
-						value: value
-					} )
-				},
-			},
-			isLoading: {
-				get() {
-					return this.$store.state.isLoading.hasOwnProperty( 'addSignupCode' )
-				},
-
-				set( value ) {
-					this.$store.commit( 'setIsLoading', { key: 'addSignupCode', value } )
-				}
-			}
-		},
 		data() {
 			return {
-				strings: CBOXOLStrings.strings
+				strings: CBOXOLStrings.strings,
+				wpPostId: 0
 			}
 		},
 		mixins: [
-			AjaxTools
+			AjaxTools,
+			SignupCodeTools
 		],
 		methods: {
 			onGroupSelect( v ) {
