@@ -55,12 +55,14 @@ function cboxol_membertypes_register_member_types() {
  * @return \CBOX\OL\MemberType|WP_Error
  */
 function cboxol_get_member_type( $slug ) {
-	$types = cboxol_get_member_types( array(
-		'enabled' => null,
-	) );
+	if ( $slug ) {
+		$types = cboxol_get_member_types( array(
+			'enabled' => null,
+		) );
 
-	if ( isset( $types[ $slug ] ) ) {
-		return $types[ $slug ];
+		if ( isset( $types[ $slug ] ) ) {
+			return $types[ $slug ];
+		}
 	}
 
 	return new WP_Error( 'no_member_type_found', __( 'No member type exists for this slug.', 'cbox-openlab-core' ), $slug );
