@@ -37,7 +37,7 @@ function cboxol_registration_admin_page() {
 	$member_types = array();
 	foreach ( $mtypes as $mtype ) {
 		$slug = $mtype->get_slug();
-		$member_types[] = array(
+		$member_types[ $slug ] = array(
 			'value' => $slug,
 			'label' => $mtype->get_label( 'singular' ),
 		);
@@ -46,8 +46,11 @@ function cboxol_registration_admin_page() {
 	$signup_codes = cboxol_get_signup_codes();
 	$signup_code_data = array();
 	foreach ( $signup_codes as $signup_code ) {
-		$signup_code_data[] = $signup_code->get_for_endpoint();
+		$signup_code_data[ $signup_code->get_wp_post_id() ] = $signup_code->get_for_endpoint();
 	}
+
+	$dummy = new \CBOX\OL\SignupCode();
+	$signup_code_data[0] = $dummy->get_for_endpoint();
 
 	$app_config = array(
 		'subapp' => 'Registration',

@@ -6,6 +6,7 @@
 			debounce="1000"
 			label="label"
 			:on-select="onGroupSelect"
+			:placeholder="placeholder"
 			:url="endpoint"
 		/>
 </template>
@@ -17,15 +18,24 @@
 		components: {
 			Autocomplete
 		},
+		computed: {
+			placeholder() {
+				return '- ' + this.strings.selectGroup + ' -'
+			}
+		},
 		data() {
 			return {
 				autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
-				endpoint: CBOXOLStrings.endpointBase + 'groups-search'
+				endpoint: CBOXOLStrings.endpointBase + 'groups-search',
+				strings: CBOXOLStrings.strings
 			}
 		},
 		methods: {
 			onGroupSelect( v ) {
-				this.$emit( 'input', v.value )
+				this.$emit( 'input', {
+					name: v.label,
+					slug: v.value
+				} )
 			}
 		}
 	}

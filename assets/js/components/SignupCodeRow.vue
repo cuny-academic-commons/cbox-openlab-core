@@ -1,13 +1,13 @@
 <template>
 	<tr>
 		<td class="signup-code-code">
-			{{ signupCode.code }}
+			{{ code }}
 		</td>
 		<td class="signup-code-member-type">
-			{{ signupCode.memberType.name }}
+			{{ memberType.name }}
 		</td>
 		<td class="signup-code-group">
-			{{ signupCode.group.name }}
+			{{ group.name }}
 		</td>
 		<td class="signup-code-actions">
 			<a href="#" v-if="! isEditing" v-on:click="onEditClick">{{ strings.edit }}</a><a href="#" v-if="isEditing" v-on:click="onSaveClick"><strong>{{ strings.save }}</strong></a> | <a href="#" v-on:click="onDeleteClick">{{ strings.delete }}</a>
@@ -23,9 +23,26 @@
 			}
 		},
 		computed: {
+			code: {
+				get() {
+					return this.$store.state.signupCodes[ this.wpPostId ].code
+				},
+				set( value ) {
+					this.$store.commit( 'setSignupCodeProperty', {
+						wpPostId: this.wpPostId,
+						key: 'code',
+						value: value
+					} )
+				}
+			},
+			group: {
+				get() {
+					return this.$store.state.signupCodes[ this.wpPostId ].group
+				}
+			},
 			id: {
 				get() {
-					return 'signupCode-' + this.signupCode.code
+					return 'signupCode-' + this.wpPostId
 				}
 			},
 			isEditing: {
@@ -43,7 +60,19 @@
 				set( value ) {
 					this.$store.commit( 'setIsLoading', { key: this.id, value } )
 				}
-			}
+			},
+			memberType: {
+				get() {
+					return this.$store.state.signupCodes[ this.wpPostId ].memberType
+				},
+				set( value ) {
+					this.$store.commit( 'setSignupCodeProperty', {
+						wpPostId: this.wpPostId,
+						key: 'memberType',
+						value: value
+					} )
+				}
+			},
 		},
 		methods: {
 			onDeleteClick() {
@@ -78,6 +107,6 @@
 					} )
 			}
 		},
-		props: [ 'signupCode' ]
+		props: [ 'wpPostId' ]
 	}
 </script>

@@ -28,11 +28,6 @@ var store = new _vuex2.default.Store({
 		isEditing: {},
 		isLoading: {},
 		memberTypes: [],
-		newSignupCode: {
-			code: '',
-			memberType: '',
-			groupSlug: ''
-		},
 		objectType: '',
 		signupCodes: {},
 		subapp: '',
@@ -184,16 +179,6 @@ var store = new _vuex2.default.Store({
 
 			state.emailDomains = newEmailDomains;
 		},
-		setFormValue: function setFormValue(state, payload) {
-			var form = payload.form,
-			    field = payload.field,
-			    value = payload.value;
-
-
-			var newForm = Object.assign({}, state[form]);
-			newForm[field] = value;
-			state[form] = newForm;
-		},
 		setIsEditing: function setIsEditing(state, payload) {
 			var key = payload.key,
 			    value = payload.value;
@@ -232,6 +217,30 @@ var store = new _vuex2.default.Store({
 		},
 		setOrder: function setOrder(state, payload) {
 			state.types[payload.slug].settings.Order.data = payload.value;
+		},
+		setSignupCodeProperty: function setSignupCodeProperty(state, payload) {
+			var wpPostId = payload.wpPostId,
+			    field = payload.field,
+			    value = payload.value;
+
+
+			var signupCode = Object.assign({}, state.signupCodes[wpPostId]);
+
+			switch (field) {
+				// The member type "name" must always be updated to match slug.
+				case 'memberTypeSlug':
+					signupCode.memberType.slug = value;
+					signupCode.memberType.name = state.memberTypes[value].name;
+
+				case 'group':
+				case 'code':
+				default:
+					signupCode[field] = value;
+
+					break;
+			}
+
+			state.signupCodes[wpPostId] = signupCode;
 		},
 		setTypeProperty: function setTypeProperty(state, payload) {
 			state.types[payload.slug][payload.property] = payload.value;
@@ -738,38 +747,43 @@ exports.default = {
 		SignupCodeMemberTypeSelector: _SignupCodeMemberTypeSelector2.default
 	},
 	computed: {
-		newGroup: {
+		code: {
 			get: function get() {
-				return this.$store.state.newSignupCode.groupSlug;
+				return this.$store.state.signupCodes[0].code;
 			},
 			set: function set(value) {
-				this.$store.commit('setFormValue', {
-					form: 'newSignupCode',
-					field: 'groupSlug',
-					value: value
-				});
-			}
-		},
-		newMemberType: {
-			get: function get() {
-				return this.$store.state.newSignupCode.memberType;
-			},
-			set: function set(value) {
-				this.$store.commit('setFormValue', {
-					form: 'newSignupCode',
-					field: 'memberType',
-					value: value
-				});
-			}
-		},
-		newSignupCode: {
-			get: function get() {
-				return this.$store.state.newSignupCode.code;
-			},
-			set: function set(value) {
-				this.$store.commit('setFormValue', {
-					form: 'newSignupCode',
+				this.$store.commit('setSignupCodeProperty', {
+					wpPostId: 0,
 					field: 'code',
+					value: value
+				});
+			}
+		},
+		group: {
+			get: function get() {
+				return this.$store.state.signupCodes[0].group;
+			},
+			set: function set(value) {
+				this.$store.commit('setSignupCodeProperty', {
+					wpPostId: 0,
+					field: 'group',
+					value: value
+				});
+			}
+		},
+		groupSlug: {
+			get: function get() {
+				return this.group.slug;
+			}
+		},
+		memberTypeSlug: {
+			get: function get() {
+				return this.$store.state.signupCodes[0].memberType.slug;
+			},
+			set: function set(value) {
+				this.$store.commit('setSignupCodeProperty', {
+					wpPostId: 0,
+					field: 'memberTypeSlug',
 					value: value
 				});
 			}
@@ -800,15 +814,15 @@ exports.default = {
 			this.isLoading = true;
 
 			var payload = {
-				newGroup: this.newGroup,
-				newMemberType: this.newMemberType,
-				newSignupCode: this.newSignupCode
+				newGroup: this.groupSlug,
+				newMemberType: this.memberTypeSlug,
+				newSignupCode: this.code
 			};
 
 			nsc.$store.dispatch('submitSignupCode', payload).then(nsc.checkStatus).then(nsc.parseJSON).then(function (data) {
 				nsc.isLoading = false;
 				nsc.$store.commit('setSignupCode', { key: data, domain: data });
-				nsc.newSignupCode = '';
+				nsc.code = '';
 			}, function (data) {
 				nsc.isLoading = false;
 			});
@@ -819,7 +833,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newSignupCode),expression:"newSignupCode"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.newSignupCode)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newSignupCode=$event.target.value}}}),_vm._v(" "),_c('SignupCodeMemberTypeSelector',{model:{value:(_vm.newMemberType),callback:function ($$v) {_vm.newMemberType=$$v},expression:"newMemberType"}}),_vm._v(" "),_c('SignupCodeGroupSelector',{model:{value:(_vm.newGroup),callback:function ($$v) {_vm.newGroup=$$v},expression:"newGroup"}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.newSignupCode || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"add-signup-code"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.code),expression:"code"}],staticClass:"new-item-field",attrs:{"id":"add-signup-code-input","disabled":_vm.isLoading},domProps:{"value":(_vm.code)},on:{"input":function($event){if($event.target.composing){ return; }_vm.code=$event.target.value}}}),_vm._v(" "),_c('SignupCodeMemberTypeSelector',{model:{value:(_vm.memberTypeSlug),callback:function ($$v) {_vm.memberTypeSlug=$$v},expression:"memberTypeSlug"}}),_vm._v(" "),_c('SignupCodeGroupSelector',{model:{value:(_vm.group),callback:function ($$v) {_vm.group=$$v},expression:"group"}}),_vm._v(" "),_c('button',{staticClass:"button",attrs:{"disabled":! _vm.code || _vm.isLoading},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.strings.add))])],1)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -924,7 +938,13 @@ exports.default = {
 		},
 		signupCodes: {
 			get: function get() {
-				return this.$store.state.signupCodes;
+				var codes = {};
+				for (var k in this.$store.state.signupCodes) {
+					if (0 < this.$store.state.signupCodes[k].wpPostId) {
+						codes[k] = this.$store.state.signupCodes[k];
+					}
+				}
+				return codes;
 			}
 		}
 	},
@@ -939,7 +959,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('NewEmailDomain'),_vm._v(" "),_c('div',{staticClass:"email-domains"},[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])])],1),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))]),_vm._v(" "),_c('NewSignupCode'),_vm._v(" "),_c('div',{staticClass:"signup-codes"},[_c('table',{staticClass:"cboxol-item-table signup-codes-table"},[_c('thead',[_c('th',{staticClass:"signup-domains-code"},[_vm._v(_vm._s(_vm.strings.code))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-member-type"},[_vm._v(_vm._s(_vm.strings.memberType))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-group"},[_vm._v(_vm._s(_vm.strings.group))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.signupCodes),function(signupCode){return _c("signupCodeRow",{tag:"div",attrs:{"signupCode":signupCode}})}))])])],1)])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('NewEmailDomain'),_vm._v(" "),_c('div',{staticClass:"email-domains"},[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])])],1),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))]),_vm._v(" "),_c('NewSignupCode'),_vm._v(" "),_c('div',{staticClass:"signup-codes"},[_c('table',{staticClass:"cboxol-item-table signup-codes-table"},[_c('thead',[_c('th',{staticClass:"signup-domains-code"},[_vm._v(_vm._s(_vm.strings.code))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-member-type"},[_vm._v(_vm._s(_vm.strings.memberType))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-group"},[_vm._v(_vm._s(_vm.strings.group))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.signupCodes),function(signupCode,wpPostId){return _c("signupCodeRow",{tag:"div",attrs:{"wpPostId":wpPostId}})}))])])],1)])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -970,16 +990,25 @@ exports.default = {
 	components: {
 		Autocomplete: _vue2AutocompleteJs2.default
 	},
+	computed: {
+		placeholder: function placeholder() {
+			return '- ' + this.strings.selectGroup + ' -';
+		}
+	},
 	data: function data() {
 		return {
 			autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
-			endpoint: CBOXOLStrings.endpointBase + 'groups-search'
+			endpoint: CBOXOLStrings.endpointBase + 'groups-search',
+			strings: CBOXOLStrings.strings
 		};
 	},
 
 	methods: {
 		onGroupSelect: function onGroupSelect(v) {
-			this.$emit('input', v.value);
+			this.$emit('input', {
+				name: v.label,
+				slug: v.value
+			});
 		}
 	}
 };
@@ -987,7 +1016,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('autocomplete',{staticClass:"new-item-field",attrs:{"anchor":"value","custom-params":_vm.autocompleteParams,"debounce":"1000","label":"label","on-select":_vm.onGroupSelect,"url":_vm.endpoint}})}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('autocomplete',{staticClass:"new-item-field",attrs:{"anchor":"value","custom-params":_vm.autocompleteParams,"debounce":"1000","label":"label","on-select":_vm.onGroupSelect,"placeholder":_vm.placeholder,"url":_vm.endpoint}})}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1052,9 +1081,26 @@ exports.default = {
 	},
 
 	computed: {
+		code: {
+			get: function get() {
+				return this.$store.state.signupCodes[this.wpPostId].code;
+			},
+			set: function set(value) {
+				this.$store.commit('setSignupCodeProperty', {
+					wpPostId: this.wpPostId,
+					key: 'code',
+					value: value
+				});
+			}
+		},
+		group: {
+			get: function get() {
+				return this.$store.state.signupCodes[this.wpPostId].group;
+			}
+		},
 		id: {
 			get: function get() {
-				return 'signupCode-' + this.signupCode.code;
+				return 'signupCode-' + this.wpPostId;
 			}
 		},
 		isEditing: {
@@ -1071,6 +1117,18 @@ exports.default = {
 			},
 			set: function set(value) {
 				this.$store.commit('setIsLoading', { key: this.id, value: value });
+			}
+		},
+		memberType: {
+			get: function get() {
+				return this.$store.state.signupCodes[this.wpPostId].memberType;
+			},
+			set: function set(value) {
+				this.$store.commit('setSignupCodeProperty', {
+					wpPostId: this.wpPostId,
+					key: 'memberType',
+					value: value
+				});
 			}
 		}
 	},
@@ -1101,13 +1159,13 @@ exports.default = {
 			});
 		}
 	},
-	props: ['signupCode']
+	props: ['wpPostId']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('td',{staticClass:"signup-code-code"},[_vm._v("\n\t\t"+_vm._s(_vm.signupCode.code)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-member-type"},[_vm._v("\n\t\t"+_vm._s(_vm.signupCode.memberType.name)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-group"},[_vm._v("\n\t\t"+_vm._s(_vm.signupCode.group.name)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-actions"},[(! _vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]):_vm._e(),(_vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onSaveClick}},[_c('strong',[_vm._v(_vm._s(_vm.strings.save))])]):_vm._e(),_vm._v(" | "),_c('a',{attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('td',{staticClass:"signup-code-code"},[_vm._v("\n\t\t"+_vm._s(_vm.code)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-member-type"},[_vm._v("\n\t\t"+_vm._s(_vm.memberType.name)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-group"},[_vm._v("\n\t\t"+_vm._s(_vm.group.name)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"signup-code-actions"},[(! _vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]):_vm._e(),(_vm.isEditing)?_c('a',{attrs:{"href":"#"},on:{"click":_vm.onSaveClick}},[_c('strong',[_vm._v(_vm._s(_vm.strings.save))])]):_vm._e(),_vm._v(" | "),_c('a',{attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

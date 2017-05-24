@@ -12,11 +12,6 @@ const store = new Vuex.Store({
 		isEditing: {},
 		isLoading: {},
 		memberTypes: [],
-		newSignupCode: {
-			code: '',
-			memberType: '',
-			groupSlug: ''
-		},
 		objectType: '',
 		signupCodes: {},
 		subapp: '',
@@ -168,14 +163,6 @@ const store = new Vuex.Store({
 			state.emailDomains = newEmailDomains
 		},
 
-		setFormValue( state, payload ) {
-			const { form, field, value } = payload
-
-			let newForm = Object.assign( {}, state[ form ] )
-			newForm[ field ] = value
-			state[ form ] = newForm
-		},
-
 		setIsEditing( state, payload ) {
 			const { key, value } = payload
 
@@ -214,6 +201,28 @@ const store = new Vuex.Store({
 
 		setOrder ( state, payload ) {
 			state.types[ payload.slug ].settings.Order.data = payload.value
+		},
+
+		setSignupCodeProperty ( state, payload ) {
+			const { wpPostId, field, value } = payload
+
+			let signupCode = Object.assign( {}, state.signupCodes[ wpPostId ] )
+
+			switch ( field ) {
+				// The member type "name" must always be updated to match slug.
+				case 'memberTypeSlug' :
+					signupCode.memberType.slug = value
+					signupCode.memberType.name = state.memberTypes[ value ].name
+
+				case 'group' :
+				case 'code' :
+				default :
+					signupCode[ field ] = value
+
+				break;
+			}
+
+			state.signupCodes[ wpPostId ] = signupCode
 		},
 
 		setTypeProperty ( state, payload ) {

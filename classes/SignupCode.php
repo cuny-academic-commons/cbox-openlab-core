@@ -59,8 +59,15 @@ class SignupCode {
 	public function get_for_endpoint() {
 		$retval = array(
 			'code' => $this->get_code(),
-			'group' => array(),
-			'memberType' => array(),
+			'group' => array(
+				'name' => '',
+				'slug' => '',
+			),
+			'memberType' => array(
+				'name' => '',
+				'slug' => '',
+			),
+			'wpPostId' => $this->get_wp_post_id(),
 		);
 
 		$group = $this->get_group();

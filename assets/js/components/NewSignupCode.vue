@@ -4,16 +4,16 @@
 			class="new-item-field"
 			id="add-signup-code-input"
 			v-bind:disabled="isLoading"
-			v-model="newSignupCode"
+			v-model="code"
 		>
 
-		<SignupCodeMemberTypeSelector v-model="newMemberType" />
+		<SignupCodeMemberTypeSelector v-model="memberTypeSlug" />
 
-		<SignupCodeGroupSelector v-model="newGroup" />
+		<SignupCodeGroupSelector v-model="group" />
 
 		<button
 			class="button"
-			v-bind:disabled="! newSignupCode || isLoading"
+			v-bind:disabled="! code || isLoading"
 			v-on:click="onSubmit"
 		>{{ strings.add }}</button>
 	</div>
@@ -30,39 +30,44 @@
 			SignupCodeMemberTypeSelector
 		},
 		computed: {
-			newGroup: {
+			code: {
 				get() {
-					return this.$store.state.newSignupCode.groupSlug
+					return this.$store.state.signupCodes[0].code
 				},
 				set( value ) {
-					this.$store.commit( 'setFormValue', {
-						form: 'newSignupCode',
-						field: 'groupSlug',
-						value
-					} )
-				},
-			},
-			newMemberType: {
-				get() {
-					return this.$store.state.newSignupCode.memberType
-				},
-				set( value ) {
-					this.$store.commit( 'setFormValue', {
-						form: 'newSignupCode',
-						field: 'memberType',
-						value
-					} )
-				},
-			},
-			newSignupCode: {
-				get() {
-					return this.$store.state.newSignupCode.code
-				},
-				set( value ) {
-					this.$store.commit( 'setFormValue', {
-						form: 'newSignupCode',
+					this.$store.commit( 'setSignupCodeProperty', {
+						wpPostId: 0,
 						field: 'code',
 						value
+					} )
+				},
+			},
+			group: {
+				get() {
+					return this.$store.state.signupCodes[0].group
+				},
+				set( value ) {
+					this.$store.commit( 'setSignupCodeProperty', {
+						wpPostId: 0,
+						field: 'group',
+						value: value
+					} )
+				},
+			},
+			groupSlug: {
+				get() {
+					return this.group.slug
+				}
+			},
+			memberTypeSlug: {
+				get() {
+					return this.$store.state.signupCodes[0].memberType.slug
+				},
+				set( value ) {
+					this.$store.commit( 'setSignupCodeProperty', {
+						wpPostId: 0,
+						field: 'memberTypeSlug',
+						value: value
 					} )
 				},
 			},
@@ -95,9 +100,9 @@
 				this.isLoading = true
 
 				const payload = {
-					newGroup: this.newGroup,
-					newMemberType: this.newMemberType,
-					newSignupCode: this.newSignupCode
+					newGroup: this.groupSlug,
+					newMemberType: this.memberTypeSlug,
+					newSignupCode: this.code
 				}
 
 				nsc.$store.dispatch( 'submitSignupCode', payload )
@@ -106,7 +111,7 @@
 					.then( function( data ) {
 						nsc.isLoading = false
 						nsc.$store.commit( 'setSignupCode', { key: data, domain: data } )
-						nsc.newSignupCode = ''
+						nsc.code = ''
 					}, function( data ) {
 						nsc.isLoading = false
 					} )

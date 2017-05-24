@@ -39,7 +39,7 @@
 					</thead>
 
 					<tbody>
-						<div v-for="signupCode in signupCodes" is="signupCodeRow" :signupCode="signupCode"></div>
+						<div v-for="(signupCode, wpPostId) in signupCodes" is="signupCodeRow" :wpPostId="wpPostId"></div>
 					</tbody>
 				</table>
 			</div>
@@ -68,7 +68,13 @@
 			},
 			signupCodes: {
 				get() {
-					return this.$store.state.signupCodes
+					let codes = {}
+					for ( var k in this.$store.state.signupCodes ) {
+						if ( 0 < this.$store.state.signupCodes[ k ].wpPostId ) {
+							codes[ k ] = this.$store.state.signupCodes[ k ]
+						}
+					}
+					return codes 
 				}
 			},
 		},
