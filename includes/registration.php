@@ -204,7 +204,7 @@ function cboxol_get_signup_codes( $args = array() ) {
 
 	$codes = array();
 	foreach ( $code_posts as $code_post ) {
-		$codes[ $code_post->post_name ] = \CBOX\OL\SignupCode::get_instance_from_wp_post( $code_post );
+		$codes[ $code_post->ID ] = \CBOX\OL\SignupCode::get_instance_from_wp_post( $code_post );
 	}
 
 	return $codes;
