@@ -209,3 +209,49 @@ function cboxol_get_signup_codes( $args = array() ) {
 
 	return $codes;
 }
+
+/* Register page *************************************************************/
+
+/**
+ * Output registration errors into a JS variable.
+ *
+ * These error values can then be used to create dynamic error messages for objects inserted
+ * into the DOM, as is the case with account-type-specific profile fields.
+ */
+function openlab_registration_errors_object() {
+	if ( ! bp_is_register_page() ) {
+		return;
+	}
+
+	/*
+	 * Instead of doing a database query to pull up every registration field ID (and thus
+	 * dynamically build hook names), do the quicker and more terrible loop through
+	 * existing hooks.
+	 */
+	global $wp_filter;
+	$errors = array();
+	foreach ( $wp_filter as $filter_name => $callbacks ) {
+		// Faster than regex.
+		if ( 0 !== strpos( $filter_name, 'bp_' ) ) {
+			continue;
+		}
+
+		if ( '_errors' !== substr( $filter_name, -7 ) ) {
+			continue;
+		}
+
+		ob_start();
+		do_action( $filter_name );
+		$error = ob_get_clean();
+
+		if ( ! empty( $error ) ) {
+			preg_match( '/bp_(field_[0-9]+)_errors/', $filter_name, $matches );
+			$field_name = $matches[1];
+			$errors[ $field_name ] = $error;
+		}
+	}
+
+	$error_json = json_encode( $errors );
+	echo '<script type="text/javascript">var OpenLab_Registration_Errors = ' . $error_json . '</script>';
+}
+add_action( 'wp_head', 'openlab_registration_errors_object' );
