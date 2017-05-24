@@ -3,6 +3,8 @@
 add_action( 'init', 'cboxol_registration_register_post_type' );
 add_filter( 'sanitize_option_limited_email_domains', 'cboxol_registration_sanitize_limited_email_domains', 10, 3 );
 
+add_action( 'wp_ajax_nopriv_openlab_validate_email', 'cboxol_registration_validate_email' );
+
 /**
  * Register post types related to registration.
  */
@@ -255,3 +257,36 @@ function openlab_registration_errors_object() {
 	echo '<script type="text/javascript">var OpenLab_Registration_Errors = ' . $error_json . '</script>';
 }
 add_action( 'wp_head', 'openlab_registration_errors_object' );
+
+/**
+ * AJAX callback for email validation.
+ */
+function cboxol_registration_validate_email() {
+	$retval = array(
+		'message' => '',
+	);
+
+	if ( ! isset( $_POST['email'] ) ) {
+		$retval['message'] = __( 'No email provided.', 'cbox-openlab-core' );
+		wp_send_json_error( $retval );
+	}
+
+	$email = wp_unslash( $_POST['email'] );
+
+	if ( ! is_email( $email ) ) {
+		$retval['message'] = __( 'Please enter a valid email address.', 'cbox-openlab-core' );
+		wp_send_json_error( $retval );
+	}
+
+	if ( ! cboxol_wildcard_email_domain_check( $email ) ) {
+		$retval['message'] = __( 'Sorry, that email address is not allowed!', 'cbox-openlab-core' );
+		wp_send_json_error( $retval );
+	}
+
+	if ( email_exists( $email ) ) {
+		$retval['message'] = __( 'Sorry, that email address is already used!', 'cbox-openlab-core' );
+		wp_send_json_error( $retval );
+	}
+
+	wp_send_json_success();
+}
