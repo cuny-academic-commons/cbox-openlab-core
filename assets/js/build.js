@@ -452,10 +452,12 @@ exports.default = {
 				item.isLoading = false;
 			});
 		},
-		onEditClick: function onEditClick() {
+		onEditClick: function onEditClick(event) {
+			event.preventDefault();
 			this.isEditing = true;
 		},
-		onSaveClick: function onSaveClick() {
+		onSaveClick: function onSaveClick(event) {
+			event.preventDefault();
 			var item = this;
 			item.isLoading = true;
 
