@@ -79,12 +79,12 @@
 				let item = this
 				item.isLoading = true
 
-				item.$store.dispatch( 'submitDeleteEmailDomain', { domain: item.domain } )
+				item.$store.dispatch( 'submitDeleteSignupCode', { wpPostId: item.wpPostId } )
 					.then( item.checkStatus )
 					.then( item.parseJSON )
 					.then( function( data ) {
 						item.isLoading = false
-						item.$store.commit( 'removeEmailDomain', { domain: item.domain } )
+						item.$store.commit( 'removeSignupCode', { wpPostId: item.wpPostId } )
 					}, function( data ) {
 						item.isLoading = false
 					} )

@@ -63,6 +63,21 @@ var store = new _vuex2.default.Store({
 				}
 			});
 		},
+		submitDeleteSignupCode: function submitDeleteSignupCode(commit, payload) {
+			var wpPostId = payload.wpPostId;
+
+
+			var endpoint = CBOXOLStrings.endpointBase + 'signup-code/' + wpPostId;
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'DELETE',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				}
+			});
+		},
 		submitEmailDomain: function submitEmailDomain(commit, payload) {
 			var domain = payload.domain;
 
@@ -160,7 +175,19 @@ var store = new _vuex2.default.Store({
 			var domain = payload.domain;
 
 
-			delete state.emailDomains[domain];
+			var newEmailDomains = Object.assign({}, state.emailDomains);
+			delete newEmailDomains[domain];
+
+			state.emailDomains = newEmailDomains;
+		},
+		removeSignupCode: function removeSignupCode(state, payload) {
+			var wpPostId = payload.wpPostId;
+
+
+			var newSignupCodes = Object.assign({}, state.signupCodes);
+			delete newSignupCodes[wpPostId];
+
+			state.signupCodes = newSignupCodes;
 		},
 		removeType: function removeType(state, payload) {
 			var index = state.typeNames.indexOf(payload.slug);
@@ -1155,9 +1182,9 @@ exports.default = {
 			var item = this;
 			item.isLoading = true;
 
-			item.$store.dispatch('submitDeleteEmailDomain', { domain: item.domain }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
+			item.$store.dispatch('submitDeleteSignupCode', { wpPostId: item.wpPostId }).then(item.checkStatus).then(item.parseJSON).then(function (data) {
 				item.isLoading = false;
-				item.$store.commit('removeEmailDomain', { domain: item.domain });
+				item.$store.commit('removeSignupCode', { wpPostId: item.wpPostId });
 			}, function (data) {
 				item.isLoading = false;
 			});

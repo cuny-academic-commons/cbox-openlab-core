@@ -24,7 +24,7 @@ class SignupCodes extends WP_REST_Controller {
 			),
 		) );
 
-		register_rest_route( $namespace, '/signup-code/(?P<domain>\d+)', array(
+		register_rest_route( $namespace, '/signup-code/(?P<id>\d+)', array(
 			array(
 				'methods'         => WP_REST_Server::DELETABLE,
 				'callback'        => array( $this, 'delete_item' ),
@@ -57,8 +57,11 @@ class SignupCodes extends WP_REST_Controller {
 
 	public function delete_item( $request ) {
 		$params = $request->get_params();
+		$wp_post_id = $params['id'];
 
-//		$response = rest_ensure_response( $domain );
+		$success = (bool) wp_delete_post( $wp_post_id );
+
+		$response = rest_ensure_response( $success );
 
 		if ( ! $success ) {
 			$response->set_status( 500 );

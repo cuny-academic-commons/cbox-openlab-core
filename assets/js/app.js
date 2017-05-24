@@ -46,6 +46,20 @@ const store = new Vuex.Store({
 				}
 			} )
 		},
+		submitDeleteSignupCode ( commit, payload ) {
+			const { wpPostId } = payload
+
+			let endpoint = CBOXOLStrings.endpointBase + 'signup-code/' + wpPostId
+
+			return fetch( endpoint, {
+				method: 'DELETE',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				}
+			} )
+		},
 		submitEmailDomain ( commit, payload ) {
 			const { domain } = payload
 
@@ -143,7 +157,19 @@ const store = new Vuex.Store({
 		removeEmailDomain ( state, payload ) {
 			const { domain } = payload
 
-			delete state.emailDomains[ domain ]
+			let newEmailDomains = Object.assign( {}, state.emailDomains )
+			delete newEmailDomains[ domain ]
+
+			state.emailDomains = newEmailDomains
+		},
+
+		removeSignupCode ( state, payload ) {
+			const { wpPostId } = payload
+
+			let newSignupCodes = Object.assign( {}, state.signupCodes )
+			delete newSignupCodes[ wpPostId ]
+
+			state.signupCodes = newSignupCodes
 		},
 
 		removeType ( state, payload ) {
