@@ -218,6 +218,15 @@ var store = new _vuex2.default.Store({
 		setOrder: function setOrder(state, payload) {
 			state.types[payload.slug].settings.Order.data = payload.value;
 		},
+		setSignupCode: function setSignupCode(state, payload) {
+			var key = payload.key,
+			    signupCode = payload.signupCode;
+
+			var newSignupCodes = Object.assign({}, state.signupCodes);
+			newSignupCodes[key] = signupCode;
+
+			state.signupCodes = newSignupCodes;
+		},
 		setSignupCodeProperty: function setSignupCodeProperty(state, payload) {
 			var wpPostId = payload.wpPostId,
 			    field = payload.field,
@@ -230,7 +239,14 @@ var store = new _vuex2.default.Store({
 				// The member type "name" must always be updated to match slug.
 				case 'memberTypeSlug':
 					signupCode.memberType.slug = value;
-					signupCode.memberType.name = state.memberTypes[value].name;
+
+					if (state.memberTypes.hasOwnProperty(value)) {
+						signupCode.memberType.name = state.memberTypes[value].name;
+					} else {
+						signupCode.memberType.name = '';
+					}
+
+					break;
 
 				case 'group':
 				case 'code':
@@ -821,8 +837,10 @@ exports.default = {
 
 			nsc.$store.dispatch('submitSignupCode', payload).then(nsc.checkStatus).then(nsc.parseJSON).then(function (data) {
 				nsc.isLoading = false;
-				nsc.$store.commit('setSignupCode', { key: data, domain: data });
+				nsc.$store.commit('setSignupCode', { key: data.wpPostId, signupCode: data });
 				nsc.code = '';
+				nsc.group = { name: '', slug: '' };
+				nsc.memberTypeSlug = '';
 			}, function (data) {
 				nsc.isLoading = false;
 			});

@@ -110,8 +110,10 @@
 					.then( nsc.parseJSON )
 					.then( function( data ) {
 						nsc.isLoading = false
-						nsc.$store.commit( 'setSignupCode', { key: data, domain: data } )
+						nsc.$store.commit( 'setSignupCode', { key: data.wpPostId, signupCode: data } )
 						nsc.code = ''
+						nsc.group = { name: '', slug: '' }
+						nsc.memberTypeSlug = ''
 					}, function( data ) {
 						nsc.isLoading = false
 					} )

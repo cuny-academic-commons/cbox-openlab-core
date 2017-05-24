@@ -203,6 +203,14 @@ const store = new Vuex.Store({
 			state.types[ payload.slug ].settings.Order.data = payload.value
 		},
 
+		setSignupCode( state, payload ) {
+			const { key, signupCode } = payload
+			let newSignupCodes = Object.assign( {}, state.signupCodes )
+			newSignupCodes[ key ] = signupCode
+
+			state.signupCodes = newSignupCodes
+		},
+
 		setSignupCodeProperty ( state, payload ) {
 			const { wpPostId, field, value } = payload
 
@@ -212,7 +220,14 @@ const store = new Vuex.Store({
 				// The member type "name" must always be updated to match slug.
 				case 'memberTypeSlug' :
 					signupCode.memberType.slug = value
-					signupCode.memberType.name = state.memberTypes[ value ].name
+
+					if ( state.memberTypes.hasOwnProperty( value ) ) {
+						signupCode.memberType.name = state.memberTypes[ value ].name
+					} else {
+						signupCode.memberType.name = ''
+					}
+
+				break;
 
 				case 'group' :
 				case 'code' :
