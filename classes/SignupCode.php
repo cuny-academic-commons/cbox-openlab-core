@@ -24,6 +24,7 @@ class SignupCode {
 			'post_type' => 'cboxol_signup_code',
 			'post_title' => $this->get_code(),
 			'post_author' => $this->get_author_id(),
+			'post_status' => 'publish',
 		);
 
 		$wp_post_id = $this->get_wp_post_id();
