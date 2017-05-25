@@ -180,6 +180,28 @@ function cboxol_wildcard_email_domain_check( $user_email ) {
 }
 
 /**
+ * Get Signup Code by the code.
+ *
+ * This assumes uniqueness.
+ *
+ * @param string $code
+ * @return \WP_Error|\CBOX\OL\SignupCode
+ */
+function cboxol_get_signup_code( $code ) {
+	if ( $code ) {
+		$signup_codes = cboxol_get_signup_codes();
+
+		foreach ( $signup_codes as $signup_code ) {
+			if ( $signup_code->get_code() === $code ) {
+				return $signup_code;
+			}
+		}
+	}
+
+	return new WP_Error( 'no_signup_code_found', __( 'No signup code found.', 'cbox-openlab-core' ), $code );
+}
+
+/**
  * Get registered Signup Codes.
  */
 function cboxol_get_signup_codes( $args = array() ) {
@@ -364,6 +386,8 @@ function cboxol_save_signup_member_type( $usermeta ) {
 /**
  * Apply a user's chosen member type at activation.
  *
+ * Also does any group joining associated with the signup code.
+ *
  * @param int    $user_id
  * @param string $key
  * @param array  $user
@@ -388,6 +412,15 @@ function cboxol_save_activated_user_member_type( $user_id, $key, $user ) {
 
 		if ( $validated ) {
 			bp_set_member_type( $user_id, $member_type->get_slug() );
+
+			$signup_code = cboxol_get_signup_code( $account_type_signup_code );
+			if ( ! is_wp_error( $signup_code ) ) {
+				$group_id = $signup_code->get_group_id();
+				if ( $group_id ) {
+					// Will create activity items, etc.
+					groups_join_group( $group_id, $user_id );
+				}
+			}
 		}
 	}
 }
