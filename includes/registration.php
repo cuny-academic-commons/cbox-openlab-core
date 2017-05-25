@@ -4,6 +4,9 @@ add_action( 'init', 'cboxol_registration_register_post_type' );
 add_filter( 'sanitize_option_limited_email_domains', 'cboxol_registration_sanitize_limited_email_domains', 10, 3 );
 
 add_action( 'wp_ajax_nopriv_openlab_validate_email', 'cboxol_registration_validate_email' );
+add_action( 'bp_core_validate_user_signup', 'cboxol_validate_signup_member_type' );
+add_action( 'bp_signup_usermeta', 'cboxol_save_signup_member_type' );
+add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_member_type', 10, 3 );
 
 /**
  * Register post types related to registration.
@@ -289,4 +292,102 @@ function cboxol_registration_validate_email() {
 	}
 
 	wp_send_json_success();
+}
+
+/**
+ * Save user's member type at registration.
+ *
+ * @param int $user_id
+ */
+function cboxol_validate_signup_member_type( $validate ) {
+	$account_type = null;
+	if ( isset( $_POST['account-type'] ) ) {
+		$account_type = wp_unslash( $_POST['account-type'] );
+	}
+
+	if ( ! $account_type ) {
+		return $validate;
+	}
+
+	$error = null;
+	$member_type = cboxol_get_member_type( $account_type );
+	if ( is_wp_error( $member_type ) ) {
+		$error = $member_type;
+	} else {
+		if ( ! $member_type->get_requires_signup_code() ) {
+			return $validate;
+		}
+
+		$signup_code = '';
+		if ( isset( $_POST['account-type-signup-code'] ) ) {
+			$signup_code = wp_unslash( $_POST['account-type-signup-code'] );
+		}
+
+		$signup_code_validate = $member_type->validate_signup_code( $signup_code );
+		if ( is_wp_error( $signup_code_validate ) ) {
+			$error = $signup_code_validate;
+		}
+	}
+
+	// Error must be added to the global for BP to stop signups. :(
+	if ( $error ) {
+		$validate['errors']->add( $error->get_error_code(), $error->get_error_message() );
+		buddypress()->signup->errors['account_type'] = $error->get_error_message();
+	}
+
+	return $validate;
+}
+
+/**
+ * Save user's member type at registration.
+ *
+ * @param array $usermeta
+ * @return array
+ */
+function cboxol_save_signup_member_type( $usermeta ) {
+	$account_type = null;
+	if ( isset( $_POST['account-type'] ) ) {
+		$account_type = wp_unslash( $_POST['account-type'] );
+	}
+
+	$account_type_signup_code = null;
+	if ( isset( $_POST['account-type-signup-code'] ) ) {
+		$account_type_signup_code = wp_unslash( $_POST['account-type-signup-code'] );
+	}
+
+	$usermeta['account_type'] = $account_type;
+	$usermeta['account_type_signup_code'] = $account_type_signup_code;
+
+	return $usermeta;
+}
+
+/**
+ * Apply a user's chosen member type at activation.
+ *
+ * @param int    $user_id
+ * @param string $key
+ * @param array  $user
+ */
+function cboxol_save_activated_user_member_type( $user_id, $key, $user ) {
+	$account_type = $account_type_signup_code = null;
+
+	if ( isset( $user['meta']['account_type'] ) ) {
+		$account_type = $user['meta']['account_type'];
+	}
+
+	$member_type = cboxol_get_member_type( $account_type );
+	if ( ! is_wp_error( $member_type ) ) {
+		$validated = true;
+
+		if ( $member_type->get_requires_signup_code() ) {
+			if ( isset( $user['meta']['account_type_signup_code'] ) ) {
+				$account_type_signup_code = $user['meta']['account_type_signup_code'];
+			}
+			$validated = $member_type->validate_signup_code( $account_type_signup_code );
+		}
+
+		if ( $validated ) {
+			bp_set_member_type( $user_id, $member_type->get_slug() );
+		}
+	}
 }

@@ -2,6 +2,8 @@
 
 namespace CBOX\OL;
 
+use \WP_Error;
+
 class MemberType extends ItemTypeBase implements ItemType {
 	protected $post_type = 'cboxol_member_type';
 
@@ -181,5 +183,34 @@ class MemberType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 		);
+	}
+
+	/**
+	 * Validate a signup code against this member type.
+	 *
+	 * @param string $code
+	 * @return bool|\WP_Error
+	 */
+	public function validate_signup_code( $code ) {
+		$the_code = null;
+
+		// @todo There should be a better way to fetch.
+		$signup_codes = cboxol_get_signup_codes();
+		foreach ( $signup_codes as $signup_code ) {
+			if ( $signup_code->get_code() === $code ) {
+				$the_code = $signup_code;
+				break;
+			}
+		}
+
+		if ( ! $the_code ) {
+			return new WP_Error( 'signup_code_not_found', __( 'Signup code is incorrect.', 'cbox-openlab-core' ), $code );
+		}
+
+		if ( $the_code->get_member_type()->get_slug() !== $this->get_slug() ) {
+			return new WP_Error( 'signup_code_does_not_match', __( 'Signup code is incorrect.', 'cbox-openlab-core' ), $code );
+		}
+
+		return true;
 	}
 }
