@@ -253,7 +253,7 @@ const store = new Vuex.Store({
 					signupCode.memberType.slug = value
 
 					if ( state.memberTypes.hasOwnProperty( value ) ) {
-						signupCode.memberType.name = state.memberTypes[ value ].name
+						signupCode.memberType.name = state.memberTypes[ value ].label
 					} else {
 						signupCode.memberType.name = ''
 					}

@@ -274,7 +274,7 @@ var store = new _vuex2.default.Store({
 					signupCode.memberType.slug = value;
 
 					if (state.memberTypes.hasOwnProperty(value)) {
-						signupCode.memberType.name = state.memberTypes[value].name;
+						signupCode.memberType.name = state.memberTypes[value].label;
 					} else {
 						signupCode.memberType.name = '';
 					}
