@@ -4,6 +4,7 @@ add_action( 'init', 'cboxol_registration_register_post_type' );
 add_filter( 'sanitize_option_limited_email_domains', 'cboxol_registration_sanitize_limited_email_domains', 10, 3 );
 
 add_action( 'wp_ajax_nopriv_openlab_validate_email', 'cboxol_registration_validate_email' );
+add_action( 'wp_ajax_nopriv_cboxol_validate_signup_code', 'cboxol_registration_validate_signup_code' );
 add_action( 'bp_core_validate_user_signup', 'cboxol_validate_signup_member_type' );
 add_action( 'bp_signup_usermeta', 'cboxol_save_signup_member_type' );
 add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_member_type', 10, 3 );
@@ -422,5 +423,27 @@ function cboxol_save_activated_user_member_type( $user_id, $key, $user ) {
 				}
 			}
 		}
+	}
+}
+
+/**
+ * AJAX callback for validating signup code.
+ */
+function cboxol_registration_validate_signup_code() {
+	if ( empty( $_POST['member_type'] ) || empty( $_POST['code'] ) ) {
+		wp_send_json_error();
+	}
+
+	$validated = false;
+
+	$member_type = cboxol_get_member_type( wp_unslash( $_POST['member_type'] ) );
+	if ( ! is_wp_error( $member_type ) ) {
+		$validated = $member_type->validate_signup_code( wp_unslash( $_POST['code'] ) );
+	}
+
+	if ( is_wp_error( $validated ) ) {
+		wp_send_json_error();
+	} else {
+		wp_send_json_success();
 	}
 }
