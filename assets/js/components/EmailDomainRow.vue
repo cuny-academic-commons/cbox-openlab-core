@@ -54,7 +54,13 @@
 			}
 		},
 		methods: {
-			onDeleteClick() {
+			onDeleteClick( event ) {
+				event.preventDefault()
+
+				if ( ! confirm( this.strings.deleteConfirm ) ) {
+					return
+				}
+
 				let item = this
 				item.isLoading = true
 
