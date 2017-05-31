@@ -18,14 +18,6 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		wp_readme_to_markdown: {
-			your_target: {
-				files: {
-					'README.md': 'readme.txt'
-				}
-			},
-		},
-
 		makepot: {
 			target: {
 				options: {
@@ -41,12 +33,34 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
+        less: {
+            development: {
+                options: {
+                    compress: true,
+                    optimization: 2
+                },
+                files: {
+                    "assets/css/openlab-toolbar.css": "assets/css/openlab-toolbar.less"
+                }
+            }
+        },
+
+        watch: {
+            styles: {
+                files: ['assets/css/*.less'],
+                tasks: ['less'],
+                options: {
+                    nospawn: true
+                }
+            },
+		}
 	} );
 
 	grunt.loadNpmTasks( 'grunt-wp-i18n' );
-	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
+    grunt.loadNpmTasks( 'grunt-contrib-less' );
+    grunt.loadNpmTasks( 'grunt-contrib-watch' );
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
-	grunt.registerTask( 'readme', ['wp_readme_to_markdown'] );
 
 	grunt.util.linefeed = '\n';
 
