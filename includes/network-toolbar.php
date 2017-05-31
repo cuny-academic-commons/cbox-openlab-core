@@ -1488,7 +1488,10 @@ HTML;
 
 		$adminbar_custom_url = CBOXOL_PLUGIN_URL . '/assets/css/admin-bar-custom.css';
 		$adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
-		$openlab_toolbar_url = CBOXOL_PLUGIN_URL . '/assets/css/openlab-toolbar.css';
+
+		$color_scheme = openlab_get_color_scheme();
+
+		$openlab_toolbar_url = content_url( '/themes/openlab-theme/css/color-schemes/toolbar-' . $color_scheme . '.css' );
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
