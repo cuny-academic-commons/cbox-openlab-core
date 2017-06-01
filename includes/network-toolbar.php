@@ -49,6 +49,7 @@ function openlab_get_logo_url() {
 	}
 
 	$custom_logo_id = get_theme_mod( 'openlab_logo' );
+	$image = '';
 	if ( $custom_logo_id ) {
 		$image = wp_get_attachment_image_src( $custom_logo_id, 'full', false );
 	}
