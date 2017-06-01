@@ -3,6 +3,108 @@
  * OpenLab Top Header Markup
  */
 
+function openlab_color_schemes() {
+	return array(
+		'red' => array(
+			'label' => __( 'Red', 'openlab-theme' ),
+			'icon_color' => '#c32e10',
+		),
+		'blue' => array(
+			'label' => __( 'Blue', 'openlab-theme' ),
+			'icon_color' => '#3170a4',
+		),
+		'gold' => array(
+			'label' => __( 'Gold', 'openlab-theme' ),
+			'icon_color' => '#dab715',
+		),
+	);
+}
+
+function openlab_get_color_scheme() {
+	$switched = false;
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		$switched = true;
+	}
+
+	$color_scheme = get_theme_mod( 'openlab_color_scheme' );
+	if ( ! $color_scheme ) {
+		$color_scheme = 'red';
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
+	}
+
+	return $color_scheme;
+}
+
+function openlab_get_logo_url() {
+	$url = '';
+
+	$switched = false;
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		$switched = true;
+	}
+
+	$custom_logo_id = get_theme_mod( 'openlab_logo' );
+	if ( $custom_logo_id ) {
+		$image = wp_get_attachment_image_src( $custom_logo_id, 'full', false );
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
+	}
+
+	if ( $image ) {
+		$url = $image[0];
+	}
+
+	return $url;
+}
+
+function openlab_get_logo_html( $link = true ) {
+	$switched = false;
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		$switched = true;
+	}
+
+	$custom_logo_id = get_theme_mod( 'openlab_logo' );
+
+	$atts = '';
+	if ( $custom_logo_id ) {
+		$atts = 'rel="home" itemprop="url"';
+		$logo_html = wp_get_attachment_image( $custom_logo_id, 'full', false, array(
+			'class'    => 'custom-logo',
+			'itemprop' => 'logo',
+		) );
+	}
+
+	// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
+	elseif ( is_customize_preview() ) {
+		$atts = 'style="display:none;';
+		$logo_html = '<img class="custom-logo"/>';
+	} else {
+		$logo_html = esc_html( get_option( 'blogname' ) );
+	}
+
+	if ( $link ) {
+		$logo_html = sprintf( '<a href="%1$s" class="custom-logo-link" %2$s>%3$s</a>',
+			esc_url( home_url( '/' ) ),
+			$atts,
+			$logo_html
+		);
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
+	}
+
+	return $logo_html;
+}
+
 /**
  * Sitewide header markup
  * Includs sitewide logo and sitewide search
@@ -303,21 +405,32 @@ HTML;
 		}
 	}
 
-		/**
-		 * Add the main OpenLab menu
-		 */
+	/**
+	 * Add the main OpenLab menu
+	 */
 	function add_network_menu( $wp_admin_bar ) {
+		$logo_url = openlab_get_logo_url();
+
 		$wp_admin_bar->add_node( array(
 			/*'parent' => 'top-secondary',*/
 			'id'     => 'openlab',
-			'title'  => '<span class="openlab-open">Open</span>Lab', // Span is here in case you want to bold 'OPEN'
+			'title'  => bp_get_option( 'blogname' ),
 			'href'   => bp_get_root_domain(),
 			'meta'	 => array(
-			'tabindex' => 90,
-							'class' => 'admin-bar-menu hidden-xs',
+				'tabindex' => 90,
+				'class' => 'admin-bar-menu hidden-xs main-logo-menu',
 			),
 		) );
-			$this->openlab_menu_items( 'openlab' );
+
+		?>
+		<style type="text/css">
+			.oplb-bs #wpadminbar #wp-toolbar > ul > li#wp-admin-bar-openlab > .ab-item {
+				background-image: url('<?php echo esc_url( $logo_url ); ?>');
+			}
+		</style>
+		<?php
+
+		$this->openlab_menu_items( 'openlab' );
 	}
 
 	function openlab_menu_items( $parent ) {
