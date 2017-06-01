@@ -1744,3 +1744,14 @@ function openlab_wrap_adminbar_bottom() {
 }
 
 add_action( 'wp_after_admin_bar_render','openlab_wrap_adminbar_bottom' );
+
+function openlab_network_footer() {
+	$footer = get_site_transient( 'cboxol_network_footer' );
+
+	if ( ! $footer ) {
+		return;
+	}
+
+	echo $footer;
+}
+add_action( 'wp_footer', 'openlab_network_footer' );
