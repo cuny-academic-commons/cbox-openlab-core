@@ -13,9 +13,9 @@ function openlab_color_schemes() {
 			'label' => __( 'Blue', 'openlab-theme' ),
 			'icon_color' => '#3170a4',
 		),
-		'gold' => array(
-			'label' => __( 'Gold', 'openlab-theme' ),
-			'icon_color' => '#dab715',
+		'green' => array(
+			'label' => __( 'Green', 'openlab-theme' ),
+			'icon_color' => '#88b956',
 		),
 	);
 }
@@ -1695,10 +1695,8 @@ function openlab_admin_bar_counts( $count, $pull_right = ' pull-right' ) {
 
 }
 
-// Themes like TwentyTen don't use jQuery by default, so let's enqueue it!
-// added by r-a-y (05.16.11)
 function cac_adminbar_enqueue_scripts() {
-	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/search.js', array( 'jquery' ) );
 }
 add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
 
