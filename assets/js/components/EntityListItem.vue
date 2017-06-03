@@ -22,18 +22,18 @@
 			<div v-if="isToggleable" class="cboxol-entity-content-section">
 				<on-off-switch
 					:entityType="entityType"
-					:slug="data.slug"
+					:slug="slug"
 				/>
 			</div>
 
 			<div class="cboxol-entity-content-section">
 				<label
-					v-bind:for="data.slug + '-name'"
+					v-bind:for="slug + '-name'"
 					class="cboxol-entity-content-section-header"
 				>{{ strings.itemTypeNameLabel }}</label>
 				<input
 					v-bind:placeholder="addNewPlaceholder"
-					v-bind:id="data.slug + '-name'"
+					v-bind:id="slug + '-name'"
 					v-model="name"
 					v-bind:autofocus="! name"
 				>
@@ -42,11 +42,11 @@
 			<div class="cboxol-entity-content-section item-type-settings">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.settings }}</h3>
 
-				<div v-for="setting in data.settings">
+				<div v-for="setting in entityData.settings">
 					<component 
 						:entityType="entityType"
 						:is="setting.component" 
-						v-bind:slug="data.slug"
+						v-bind:slug="slug"
 					/>
 				</div>
 			</div>
@@ -54,8 +54,8 @@
 			<div class="cboxol-entity-content-section item-type-labels">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
-				<div v-for="label in data.labels">
-					<type-label v-bind:typeSlug="data.slug" v-bind:labelSlug="label.slug"></type-label>
+				<div v-for="label in entityData.labels">
+					<type-label v-bind:typeSlug="slug" v-bind:labelSlug="label.slug"></type-label>
 				</div>
 			</div>
 
@@ -91,18 +91,6 @@
 	import Order from './settings/Order.vue'
 
 	export default {
-		data() {
-			return {
-				data: this.$store.state.types[ this.slug ]
-			}
-		},
-
-		props: [
-			'entityType',
-			'isToggleable',
-			'slug'
-		],
-
 		components: {
 			OnOffSwitch,
 			MayCreateCourses,
@@ -114,6 +102,10 @@
 		computed: {
 			addNewPlaceholder() {
 				return this.getEntityTypeProp( 'addNewPlaceholder' )
+			},
+
+			entityData() {
+				return this.$store.state[ this.itemsKey ][ this.slug ]
 			},
 
 			itemClass() {
@@ -204,12 +196,10 @@
 						itemType.isModified = false
 
 						itemType.setEntityProp( 'id', data.id )
-						/*
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
 							namesKey: itemType.namesKey	
 						} )
-						*/
 
 						itemType.isLoading = false
 						itemType.isCollapsed = true
@@ -221,6 +211,13 @@
 			AjaxTools,
 			EntityTools,
 			i18nTools
-		]
+		],
+
+		props: [
+			'entityType',
+			'isToggleable',
+			'slug'
+		],
+
 	}
 </script>
