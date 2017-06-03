@@ -151,10 +151,14 @@ const store = new Vuex.Store({
 			state[ namesKey ].push( key )
 		},
 
-		orderTypes ( state ) {
-			state.typeNames.sort( function( a, b ) {
-				const order_a = state.types[ a ].settings.Order.data
-				const order_b = state.types[ b ].settings.Order.data
+		orderEntities ( state, payload ) {
+			const { itemsKey, namesKey } = payload
+
+			let newEntityNames = state[ namesKey ]
+
+			newEntityNames.sort( function( a, b ) {
+				const order_a = state[ itemsKey ][ a ].settings.Order.data
+				const order_b = state[ itemsKey ][ b ].settings.Order.data
 
 				if ( order_a == order_b ) {
 					return 0
@@ -162,6 +166,8 @@ const store = new Vuex.Store({
 
 				return order_a > order_b
 			} )
+
+			state[ namesKey ] = newEntityNames
 		},
 
 		removeEmailDomain ( state, payload ) {

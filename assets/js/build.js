@@ -172,10 +172,16 @@ var store = new _vuex2.default.Store({
 			// Push to typeNames to force render.
 			state[namesKey].push(key);
 		},
-		orderTypes: function orderTypes(state) {
-			state.typeNames.sort(function (a, b) {
-				var order_a = state.types[a].settings.Order.data;
-				var order_b = state.types[b].settings.Order.data;
+		orderEntities: function orderEntities(state, payload) {
+			var itemsKey = payload.itemsKey,
+			    namesKey = payload.namesKey;
+
+
+			var newEntityNames = state[namesKey];
+
+			newEntityNames.sort(function (a, b) {
+				var order_a = state[itemsKey][a].settings.Order.data;
+				var order_b = state[itemsKey][b].settings.Order.data;
 
 				if (order_a == order_b) {
 					return 0;
@@ -183,6 +189,8 @@ var store = new _vuex2.default.Store({
 
 				return order_a > order_b;
 			});
+
+			state[namesKey] = newEntityNames;
 		},
 		removeEmailDomain: function removeEmailDomain(state, payload) {
 			var domain = payload.domain;
@@ -755,7 +763,10 @@ exports.default = {
 			if (itemType.id > 0) {
 				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
 					itemType.$store.commit('removeType', { slug: itemType.slug });
-					itemType.$store.commit('orderTypes');
+					itemType.$store.commit('orderEntities', {
+						itemsKey: itemType.itemsKey,
+						namesKey: itemType.namesKey
+					});
 				});
 			}
 		},
@@ -767,7 +778,10 @@ exports.default = {
 				itemType.isModified = false;
 
 				itemType.setEntityProp('id', data.id);
-				itemType.$store.commit('orderTypes');
+				itemType.$store.commit('orderEntities', {
+					itemsKey: itemType.itemsKey,
+					namesKey: itemType.namesKey
+				});
 
 				itemType.isLoading = false;
 				itemType.isCollapsed = true;
@@ -790,7 +804,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6e83156a", __vue__options__)
+    hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":20,"../mixins/EntityTools.js":21,"../mixins/i18nTools.js":23,"./OnOffSwitch.vue":10,"./TypeLabel.vue":15,"./settings/MayChangeMemberTypeTo.vue":17,"./settings/MayCreateCourses.vue":18,"./settings/Order.vue":19,"vue":62,"vue-hot-reload-api":61}],7:[function(require,module,exports){

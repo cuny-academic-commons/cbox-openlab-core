@@ -186,7 +186,10 @@
 					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {
 						itemType.$store.commit( 'removeType', { slug: itemType.slug } )
-						itemType.$store.commit( 'orderTypes' )
+						itemType.$store.commit( 'orderEntities', {
+							itemsKey: itemType.itemsKey,
+							namesKey: itemType.namesKey	
+						} )
 					} )
 				}
 			},
@@ -201,7 +204,10 @@
 						itemType.isModified = false
 
 						itemType.setEntityProp( 'id', data.id )
-						itemType.$store.commit( 'orderTypes' )
+						itemType.$store.commit( 'orderEntities', {
+							itemsKey: itemType.itemsKey,
+							namesKey: itemType.namesKey	
+						} )
 
 						itemType.isLoading = false
 						itemType.isCollapsed = true
