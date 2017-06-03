@@ -158,9 +158,6 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 
 				case 'group-categories' :
 					return _x( 'Group Categories', 'Group categories admin label', 'cbox-openlab-core' );
-
-				case 'sort-group-categories' :
-					return _x( 'Sort Group Categories', 'Sort group categories admin label', 'cbox-openlab-core' );
 			}
 	}
 }
@@ -251,11 +248,6 @@ function cboxol_get_admin_tabs( $parent_page ) {
 					'href' => add_query_arg( 'cboxol-section', 'group-categories', $base ),
 					'name' => 'group-categories',
 					'label' => cboxol_admin_subpage_label( 'group-settings', 'group-categories' ),
-				),
-				'2' => array(
-					'href' => add_query_arg( 'cboxol-section', 'sort-group-categories', $base ),
-					'name' => 'sort-group-categories',
-					'label' => cboxol_admin_subpage_label( 'group-settings', 'sort-group-categories' ),
 				),
 			);
 
