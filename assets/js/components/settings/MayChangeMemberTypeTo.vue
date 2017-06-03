@@ -24,13 +24,9 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
-		},
+	import EntityTools from '../../mixins/EntityTools.js'
 
+	export default {
 		computed: {
 			allTypes: function() {
 				var retval = {}, key
@@ -47,12 +43,28 @@
 					return this.$store.state.types[ this.slug ].settings.MayChangeMemberTypeTo.data.selectableTypes
 				},
 				set ( value ) {
-					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
+					if ( ! this.isModified ) {
+						this.isModified = true
+					}
+
 					this.$store.commit( 'setSelectableTypes', { slug: this.slug, selectableTypes: value } )
 				}
 			}
 		},
 
-		props: ['slug']
+		data() {
+			return {
+				itemsKey: 'types',
+				strings: CBOXOLStrings.strings
+			}
+		},
+
+		mixins: [
+			EntityTools
+		],
+
+		props: [
+			'slug'
+		]
 	}
 </script>

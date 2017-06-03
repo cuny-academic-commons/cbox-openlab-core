@@ -1681,14 +1681,14 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _EntityTools = require('../../mixins/EntityTools.js');
+
+var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
-	},
-
-
 	computed: {
 		allTypes: function allTypes() {
 			var retval = {},
@@ -1706,11 +1706,24 @@ exports.default = {
 				return this.$store.state.types[this.slug].settings.MayChangeMemberTypeTo.data.selectableTypes;
 			},
 			set: function set(value) {
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
+				if (!this.isModified) {
+					this.isModified = true;
+				}
+
 				this.$store.commit('setSelectableTypes', { slug: this.slug, selectableTypes: value });
 			}
 		}
 	},
+
+	data: function data() {
+		return {
+			itemsKey: 'types',
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+
+	mixins: [_EntityTools2.default],
 
 	props: ['slug']
 };
@@ -1730,32 +1743,45 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],19:[function(require,module,exports){
+},{"../../mixins/EntityTools.js":22,"vue":62,"vue-hot-reload-api":61}],19:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _EntityTools = require('../../mixins/EntityTools.js');
+
+var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
-	},
-
-
 	computed: {
 		mayCreateCourses: {
 			get: function get() {
 				return this.$store.state.types[this.slug].settings.MayCreateCourses.data ? 'yes' : 'no';
 			},
 			set: function set(value) {
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
+				if (!this.isModified) {
+					this.isModified = true;
+				}
+
 				this.$store.commit('setMayCreateCourses', { slug: this.slug, value: value });
 			}
 		}
 	},
+
+	data: function data() {
+		return {
+			itemsKey: 'types',
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+
+	mixins: [_EntityTools2.default],
 
 	props: ['slug']
 };
@@ -1775,32 +1801,44 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],20:[function(require,module,exports){
+},{"../../mixins/EntityTools.js":22,"vue":62,"vue-hot-reload-api":61}],20:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _EntityTools = require('../../mixins/EntityTools.js');
+
+var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
-	},
-
-
 	computed: {
 		order: {
 			get: function get() {
 				return this.$store.state.types[this.slug].settings.Order.data;
 			},
 			set: function set(value) {
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
+				if (!this.isModified) {
+					this.isModified = true;
+				}
 				this.$store.commit('setOrder', { slug: this.slug, value: value });
 			}
 		}
 	},
+
+	data: function data() {
+		return {
+			itemsKey: 'types',
+			strings: CBOXOLStrings.strings
+		};
+	},
+
+
+	mixins: [_EntityTools2.default],
 
 	props: ['slug']
 };
@@ -1820,7 +1858,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],21:[function(require,module,exports){
+},{"../../mixins/EntityTools.js":22,"vue":62,"vue-hot-reload-api":61}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = {

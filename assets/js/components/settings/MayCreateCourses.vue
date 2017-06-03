@@ -21,25 +21,37 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
-		},
+	import EntityTools from '../../mixins/EntityTools.js'
 
+	export default {
 		computed: {
 			mayCreateCourses: {
 				get () {
 					return this.$store.state.types[ this.slug ].settings.MayCreateCourses.data ? 'yes' : 'no'
 				},
 				set ( value ) {
-					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
+					if ( ! this.isModified ) {
+						this.isModified = true
+					}
+
 					this.$store.commit( 'setMayCreateCourses', { slug: this.slug, value: value } )
 				}
 			}
 		},
 
-		props: ['slug']
+		data() {
+			return {
+				itemsKey: 'types',
+				strings: CBOXOLStrings.strings
+			}
+		},
+
+		mixins: [
+			EntityTools
+		],
+
+		props: [
+			'slug'
+		]
 	}
 </script>

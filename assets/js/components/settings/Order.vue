@@ -15,25 +15,36 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
-		},
+	import EntityTools from '../../mixins/EntityTools.js'
 
+	export default {
 		computed: {
 			order: {
 				get () {
 					return this.$store.state.types[ this.slug ].settings.Order.data
 				},
 				set ( value ) {
-					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
+					if ( ! this.isModified ) {
+						this.isModified = true
+					}
 					this.$store.commit( 'setOrder', { slug: this.slug, value: value } )
 				}
 			}
 		},
 
-		props: ['slug']
+		data() {
+			return {
+				itemsKey: 'types',
+				strings: CBOXOLStrings.strings
+			}
+		},
+
+		mixins: [
+			EntityTools
+		],
+
+		props: [
+			'slug'
+		]
 	}
 </script>
