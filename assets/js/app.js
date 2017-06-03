@@ -9,6 +9,8 @@ const store = new Vuex.Store({
 	state: {
 		dummy: {},
 		emailDomains: {},
+		groupCategories: {},
+		groupCategoryNames: [],
 		isEditing: {},
 		isLoading: {},
 		memberTypes: [],
@@ -120,7 +122,9 @@ const store = new Vuex.Store({
 		},
 	},
 	mutations: {
-		addNewType ( state ) {
+		addNewEntity ( state, payload ) {
+			const { itemsKey, namesKey } = payload
+
 			// Get unique key.
 			let isAvailable = false
 			let baseKey = '_new'
@@ -128,7 +132,7 @@ const store = new Vuex.Store({
 			let incr = 1
 
 			do {
-				if ( state.types.hasOwnProperty( key ) ) {
+				if ( state[ itemsKey ].hasOwnProperty( key ) ) {
 					key = baseKey + incr
 					incr++
 				} else {
@@ -140,10 +144,10 @@ const store = new Vuex.Store({
 			let dummy = JSON.parse( JSON.stringify( state.dummy ) )
 			dummy.slug = key
 			dummy.isCollapsed = false
-			state.types[ key ] = dummy
+			state[ itemsKey ][ key ] = dummy
 
 			// Push to typeNames to force render.
-			state.typeNames.push( key )
+			state[ namesKey ].push( key )
 		},
 
 		orderTypes ( state ) {

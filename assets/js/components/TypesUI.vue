@@ -1,4 +1,5 @@
 <template>
+
 	<div>
 		<ul class="types-ui">
 			<li v-for="typeName in typeNames">
@@ -6,22 +7,22 @@
 			</li>
 		</ul>
 
-		<a
-			class="add-new-type-toggle"
-			href=""
+		<AddNewEntityLink
+			:itemsKey="itemsKey"
+			:namesKey="namesKey"
+			:text="strings.addNewType"
 			v-if="canAddNew"
-			v-on:click="addNewType"
-		>
-			+ {{ strings.addNewType }}
-		</a>
+		/>
 	</div>
 </template>
 
 <script>
+	import AddNewEntityLink from './AddNewEntityLink.vue'
 	import ItemType from './ItemType.vue'
 
 	export default {
 		components: {
+			AddNewEntityLink,
 			'itemType': ItemType
 		},
 		computed: {
@@ -36,14 +37,10 @@
 		},
 		data() {
 			return {
-				strings: CBOXOLStrings.strings,
-				objectType: this.$store.state.objectType
-			}
-		},
-		methods: {
-			addNewType( event ) {
-				event.preventDefault()
-				this.$store.commit( 'addNewType' )
+				itemsKey: 'types',
+				namesKey: 'typeNames',
+				objectType: this.$store.state.objectType,
+				strings: CBOXOLStrings.strings
 			}
 		},
 		mounted() {
