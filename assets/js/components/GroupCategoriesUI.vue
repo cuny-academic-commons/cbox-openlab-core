@@ -2,7 +2,6 @@
 	<div>
 		<ul class="types-ui">
 			<li v-for="groupCategoryName in groupCategoryNames">
-				<div is="GroupCategory" :slug="groupCategoryName"></div>
 			</li>
 		</ul>
 
@@ -16,12 +15,11 @@
 
 <script>
 	import AddNewEntityLink from './AddNewEntityLink.vue'
-	import GroupCategory from './GroupCategory.vue'
+	import i18nTools from '../mixins/i18nTools.js'
 
 	export default {
 		components: {
-			AddNewEntityLink,
-			GroupCategory
+			AddNewEntityLink
 		},
 
 		computed: {
@@ -33,10 +31,13 @@
 		data() {
 			return {
 				itemsKey: 'groupCategories',
-				namesKey: 'groupCategoryNames',
-				strings: CBOXOLStrings.strings
+				namesKey: 'groupCategoryNames'
 			}
 		},
+
+		mixins: [
+			i18nTools
+		],
 
 		mounted() {
 			this.$store.commit( 'setUpEntityNames', {

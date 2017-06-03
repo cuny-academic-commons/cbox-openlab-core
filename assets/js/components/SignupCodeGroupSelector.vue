@@ -14,6 +14,7 @@
 
 <script>
 	import Autocomplete from 'vue2-autocomplete-js'
+	import i18nTools from '../mixins/i18nTools.js'
 
 	export default {
 		components: {
@@ -28,8 +29,7 @@
 			return {
 				autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
 				endpoint: CBOXOLStrings.endpointBase + 'groups-search',
-				initValue: this.$store.state.signupCodes[ this.wpPostId ].group.slug,
-				strings: CBOXOLStrings.strings
+				initValue: this.$store.state.signupCodes[ this.wpPostId ].group.slug
 			}
 		},
 		methods: {
@@ -40,6 +40,11 @@
 				} )
 			}
 		},
+
+		mixins: [
+			i18nTools
+		],
+
 		props: [ 'wpPostId' ]
 	}
 </script>

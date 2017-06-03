@@ -43,6 +43,7 @@
 
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
+	import i18nTools from '../mixins/i18nTools.js'
 	import SignupCodeTools from '../mixins/SignupCodeTools.js'
 
 	import SignupCodeMemberTypeSelector from './SignupCodeMemberTypeSelector.vue'
@@ -63,11 +64,6 @@
 					this.$store.commit( 'setIsEditing', { key: this.id, value } )
 				}
 			},
-		},
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
 		},
 		methods: {
 			onDeleteClick( event ) {
@@ -120,6 +116,7 @@
 
 		mixins: [
 			AjaxTools,
+			i18nTools,
 			SignupCodeTools
 		],
 

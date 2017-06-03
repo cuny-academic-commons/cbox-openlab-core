@@ -16,6 +16,7 @@ const store = new Vuex.Store({
 		memberTypes: [],
 		objectType: '',
 		signupCodes: {},
+		strings: CBOXOLStrings.strings,
 		subapp: '',
 		types: {},
 		typeNames: []

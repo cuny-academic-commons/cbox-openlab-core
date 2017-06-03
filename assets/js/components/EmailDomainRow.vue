@@ -16,6 +16,8 @@
 </template>
 
 <script>
+	import i18nTools from '../mixins/i18nTools.js'
+
 	export default {
 		computed: {
 			domain: {
@@ -48,11 +50,7 @@
 				}
 			}
 		},
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
-		},
+
 		methods: {
 			onDeleteClick( event ) {
 				event.preventDefault()
@@ -94,6 +92,11 @@
 					} )
 			}
 		},
+
+		mixins: [
+			i18nTools
+		],
+
 		props: [ 'domainKey' ]
 	}
 </script>

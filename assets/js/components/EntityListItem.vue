@@ -76,6 +76,7 @@
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
 	import EntityTools from '../mixins/EntityTools.js'
+	import i18nTools from '../mixins/i18nTools.js'
 
 	import OnOffSwitch from './OnOffSwitch.vue'
 	import TypeLabel from './TypeLabel.vue'
@@ -88,8 +89,7 @@
 	export default {
 		data() {
 			return {
-				strings: CBOXOLStrings.strings,
-				data: this.$store.state.types[ this.slug ],
+				data: this.$store.state.types[ this.slug ]
 			}
 		},
 
@@ -204,7 +204,8 @@
 
 		mixins: [
 			AjaxTools,
-			EntityTools
+			EntityTools,
+			i18nTools
 		]
 	}
 </script>

@@ -8,6 +8,8 @@
 </template>
 
 <script>
+	import i18nTools from '../mixins/i18nTools.js'
+
 	export default {
 		computed: {
 				selected() {
@@ -16,8 +18,7 @@
 		},
 		data() {
 			return {
-				memberTypes: this.$store.state.memberTypes,
-				strings: CBOXOLStrings.strings
+				memberTypes: this.$store.state.memberTypes
 			}
 		},
 		methods: {
@@ -25,6 +26,11 @@
 				this.$emit( 'input', $event.target.value )
 			}
 		},
+
+		mixins: [
+			i18nTools
+		],
+
 		props: [ 'wpPostId' ]
 	}
 </script>

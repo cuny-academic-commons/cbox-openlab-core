@@ -32,6 +32,7 @@ var store = new _vuex2.default.Store({
 		memberTypes: [],
 		objectType: '',
 		signupCodes: {},
+		strings: CBOXOLStrings.strings,
 		subapp: '',
 		types: {},
 		typeNames: []
@@ -454,16 +455,23 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-428061ba", __vue__options__)
   } else {
-    hotAPI.reload("data-v-428061ba", __vue__options__)
+    hotAPI.rerender("data-v-428061ba", __vue__options__)
   }
 })()}
-},{"./GroupCategoriesUI.vue":7,"./Registration.vue":12,"./TypesUI.vue":17,"vue":62,"vue-hot-reload-api":61}],4:[function(require,module,exports){
+},{"./GroupCategoriesUI.vue":7,"./Registration.vue":11,"./TypesUI.vue":16,"vue":62,"vue-hot-reload-api":61}],4:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	computed: {
 		domain: {
@@ -495,11 +503,6 @@ exports.default = {
 				this.$store.commit('setIsLoading', { key: this.id, value: value });
 			}
 		}
-	},
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
 	},
 
 	methods: {
@@ -537,6 +540,9 @@ exports.default = {
 			});
 		}
 	},
+
+	mixins: [_i18nTools2.default],
+
 	props: ['domainKey']
 };
 })()
@@ -555,7 +561,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2d8926b1", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],5:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],5:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -571,6 +577,10 @@ var _EntityListItem = require('./EntityListItem.vue');
 
 var _EntityListItem2 = _interopRequireDefault(_EntityListItem);
 
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -585,11 +595,6 @@ exports.default = {
 		}
 	},
 
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
-	},
 	mounted: function mounted() {
 		this.$store.commit('setUpEntityNames', {
 			itemsKey: this.itemsKey,
@@ -597,6 +602,8 @@ exports.default = {
 		});
 	},
 
+
+	mixins: [_i18nTools2.default],
 
 	props: ['canAddNew', 'contentComponent', 'isToggleable', 'itemsKey', 'namesKey']
 };
@@ -616,7 +623,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2576d798", __vue__options__)
   }
 })()}
-},{"./AddNewEntityLink.vue":2,"./EntityListItem.vue":6,"vue":62,"vue-hot-reload-api":61}],6:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"./AddNewEntityLink.vue":2,"./EntityListItem.vue":6,"vue":62,"vue-hot-reload-api":61}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -631,6 +638,10 @@ var _AjaxTools2 = _interopRequireDefault(_AjaxTools);
 var _EntityTools = require('../mixins/EntityTools.js');
 
 var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 var _OnOffSwitch = require('./OnOffSwitch.vue');
 
@@ -657,7 +668,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
 	data: function data() {
 		return {
-			strings: CBOXOLStrings.strings,
 			data: this.$store.state.types[this.slug]
 		};
 	},
@@ -758,7 +768,7 @@ exports.default = {
 		}
 	},
 
-	mixins: [_AjaxTools2.default, _EntityTools2.default]
+	mixins: [_AjaxTools2.default, _EntityTools2.default, _i18nTools2.default]
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -776,7 +786,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":21,"../mixins/EntityTools.js":22,"./OnOffSwitch.vue":11,"./TypeLabel.vue":16,"./settings/MayChangeMemberTypeTo.vue":18,"./settings/MayCreateCourses.vue":19,"./settings/Order.vue":20,"vue":62,"vue-hot-reload-api":61}],7:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":20,"../mixins/EntityTools.js":21,"../mixins/i18nTools.js":23,"./OnOffSwitch.vue":10,"./TypeLabel.vue":15,"./settings/MayChangeMemberTypeTo.vue":17,"./settings/MayCreateCourses.vue":18,"./settings/Order.vue":19,"vue":62,"vue-hot-reload-api":61}],7:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -788,16 +798,15 @@ var _AddNewEntityLink = require('./AddNewEntityLink.vue');
 
 var _AddNewEntityLink2 = _interopRequireDefault(_AddNewEntityLink);
 
-var _GroupCategory = require('./GroupCategory.vue');
+var _i18nTools = require('../mixins/i18nTools.js');
 
-var _GroupCategory2 = _interopRequireDefault(_GroupCategory);
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	components: {
-		AddNewEntityLink: _AddNewEntityLink2.default,
-		GroupCategory: _GroupCategory2.default
+		AddNewEntityLink: _AddNewEntityLink2.default
 	},
 
 	computed: {
@@ -809,10 +818,13 @@ exports.default = {
 	data: function data() {
 		return {
 			itemsKey: 'groupCategories',
-			namesKey: 'groupCategoryNames',
-			strings: CBOXOLStrings.strings
+			namesKey: 'groupCategoryNames'
 		};
 	},
+
+
+	mixins: [_i18nTools2.default],
+
 	mounted: function mounted() {
 		this.$store.commit('setUpEntityNames', {
 			itemsKey: 'groupCategories',
@@ -824,7 +836,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.groupCategoryNames),function(groupCategoryName){return _c('li',[_c("GroupCategory",{tag:"div",attrs:{"slug":groupCategoryName}})])})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"itemsKey":_vm.itemsKey,"namesKey":_vm.namesKey,"text":_vm.strings.addNewType}})],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.groupCategoryNames),function(groupCategoryName){return _c('li')})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"itemsKey":_vm.itemsKey,"namesKey":_vm.namesKey,"text":_vm.strings.addNewType}})],1)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -836,228 +848,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-64c4ccb0", __vue__options__)
   }
 })()}
-},{"./AddNewEntityLink.vue":2,"./GroupCategory.vue":8,"vue":62,"vue-hot-reload-api":61}],8:[function(require,module,exports){
-;(function(){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _OnOffSwitch = require('./OnOffSwitch.vue');
-
-var _OnOffSwitch2 = _interopRequireDefault(_OnOffSwitch);
-
-var _TypeLabel = require('./TypeLabel.vue');
-
-var _TypeLabel2 = _interopRequireDefault(_TypeLabel);
-
-var _MayCreateCourses = require('./settings/MayCreateCourses.vue');
-
-var _MayCreateCourses2 = _interopRequireDefault(_MayCreateCourses);
-
-var _MayChangeMemberTypeTo = require('./settings/MayChangeMemberTypeTo.vue');
-
-var _MayChangeMemberTypeTo2 = _interopRequireDefault(_MayChangeMemberTypeTo);
-
-var _Order = require('./settings/Order.vue');
-
-var _Order2 = _interopRequireDefault(_Order);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings,
-			data: this.$store.state.types[this.slug]
-		};
-	},
-
-
-	props: ['slug'],
-
-	components: {
-		OnOffSwitch: _OnOffSwitch2.default,
-		MayCreateCourses: _MayCreateCourses2.default,
-		MayChangeMemberTypeTo: _MayChangeMemberTypeTo2.default,
-		Order: _Order2.default,
-		TypeLabel: _TypeLabel2.default
-	},
-
-	computed: {
-		canBeDeleted: {
-			get: function get() {
-				return this.$store.state.types[this.slug].canBeDeleted;
-			}
-		},
-		id: {
-			get: function get() {
-				return this.$store.state.types[this.slug].id;
-			}
-		},
-		isCollapsed: {
-			get: function get() {
-				return this.$store.state.types[this.slug].isCollapsed;
-			},
-			set: function set(value) {
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isCollapsed', value: value });
-			}
-		},
-		isEnabled: {
-			get: function get() {
-				return this.$store.state.types[this.slug].isEnabled;
-			}
-		},
-		itemClass: function itemClass() {
-			var itemClass = 'cboxol-item-type';
-
-			if (this.isCollapsed) {
-				itemClass += ' collapsed';
-			}
-
-			if (this.isLoading) {
-				itemClass += ' loading';
-			}
-
-			if (!this.isEnabled) {
-				itemClass += ' disabled';
-			}
-
-			return itemClass;
-		},
-
-
-		isLoading: {
-			get: function get() {
-				return this.$store.state.types[this.slug].isLoading;
-			},
-			set: function set(value) {
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isLoading', value: value });
-			}
-		},
-
-		isModified: {
-			get: function get() {
-				return this.$store.state.types[this.slug].isModified;
-			},
-			set: function set(value) {
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: value });
-			}
-		},
-
-		name: {
-			get: function get() {
-				return this.$store.state.types[this.slug].name;
-			},
-			set: function set(value) {
-				this.setIsModified();
-				this.$store.commit('setTypeProperty', { slug: this.slug, property: 'name', value: value });
-			}
-		},
-
-		objectType: function objectType() {
-			return this.$store.state.objectType;
-		},
-
-		saveButtonText: function saveButtonText() {
-			if (this.isLoading) {
-				return this.strings.saving;
-			} else if (this.isModified) {
-				return this.strings.saveChanges;
-			} else {
-				return this.strings.saved;
-			}
-		},
-		templateUrl: function templateUrl() {
-			return this.$store.state.types[this.slug].templateSite.url;
-		},
-		templateAdminUrl: function templateAdminUrl() {
-			return this.$store.state.types[this.slug].templateSite.adminUrl;
-		}
-	},
-
-	methods: {
-		onAccordionClick: function onAccordionClick(event) {
-			event.preventDefault();
-			this.$store.commit('toggleCollapsed', { slug: this.slug });
-		},
-
-		getElId: function getElId(base) {
-			return this.slug + '-'.base;
-		},
-
-		checkStatus: function checkStatus(response) {
-			if (response.status >= 200 && response.status < 300) {
-				return response;
-			} else {
-				var error = new Error(response.statusText);
-				error.response = response;
-				throw error;
-			}
-		},
-		parseJSON: function parseJSON(response) {
-			return response.json();
-		},
-		ajaxError: function ajaxError(p) {
-			console.error(p);
-			throw 'Could not complete request.';
-		},
-
-
-		onDeleteClick: function onDeleteClick(event) {
-			event.preventDefault();
-
-			if (!confirm(this.strings.deleteConfirm)) {
-				return;
-			}
-
-			var itemType = this;
-			itemType.isLoading = true;
-			if (itemType.id > 0) {
-				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
-					itemType.$store.commit('removeType', { slug: itemType.slug });
-					itemType.$store.commit('orderTypes');
-				});
-			}
-		},
-
-		onSubmit: function onSubmit() {
-			var itemType = this;
-			itemType.isLoading = true;
-			itemType.$store.dispatch('submitForm', { slug: itemType.slug }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
-				itemType.isModified = false;
-
-				itemType.$store.commit('setTypeProperty', { slug: itemType.slug, property: 'id', value: data.id });
-				itemType.$store.commit('orderTypes');
-
-				itemType.isLoading = false;
-				itemType.isCollapsed = true;
-			});
-		},
-
-		setIsModified: function setIsModified() {
-			this.$store.commit('setTypeProperty', { slug: this.slug, property: 'isModified', value: true });
-		}
-	}
-};
-})()
-if (module.exports.__esModule) module.exports = module.exports.default
-var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
-if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-item-type-header"},[_c('div',{staticClass:"cboxol-item-type-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"item-type-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-item-type-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content"},[_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('on-off-switch',{attrs:{"slug":_vm.data.slug}})],1),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section"},[_c('label',{staticClass:"cboxol-item-type-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"change":_vm.setIsModified,"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),('group' === _vm.objectType)?_c('div',{staticClass:"cboxol-item-type-content-section item-type-template"},[_c('h3',{staticClass:"cboxol-item-type-content-section-header"},[_vm._v(_vm._s(_vm.strings.template))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.templateSiteDescription))]),_vm._v(" "),_c('div',{staticClass:"cboxol-template-site-links"},[_c('a',{attrs:{"href":_vm.templateAdminUrl}},[_vm._v(_vm._s(_vm.strings.templateDashboardLink))]),_vm._v(" | "),_c('a',{attrs:{"href":_vm.templateUrl}},[_vm._v(_vm._s(_vm.strings.templateViewLink))])])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-item-type-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
-__vue__options__.staticRenderFns = []
-if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1f7d75f6", __vue__options__)
-  } else {
-    hotAPI.reload("data-v-1f7d75f6", __vue__options__)
-  }
-})()}
-},{"./OnOffSwitch.vue":11,"./TypeLabel.vue":16,"./settings/MayChangeMemberTypeTo.vue":18,"./settings/MayCreateCourses.vue":19,"./settings/Order.vue":20,"vue":62,"vue-hot-reload-api":61}],9:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"./AddNewEntityLink.vue":2,"vue":62,"vue-hot-reload-api":61}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1068,6 +859,10 @@ Object.defineProperty(exports, "__esModule", {
 var _AjaxTools = require('../mixins/AjaxTools.js');
 
 var _AjaxTools2 = _interopRequireDefault(_AjaxTools);
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1082,14 +877,16 @@ exports.default = {
 			}
 		}
 	},
+
 	data: function data() {
 		return {
-			newDomain: '',
-			strings: CBOXOLStrings.strings
+			newDomain: ''
 		};
 	},
 
-	mixins: [_AjaxTools2.default],
+
+	mixins: [_AjaxTools2.default, _i18nTools2.default],
+
 	methods: {
 		onSubmit: function onSubmit(e) {
 			var registration = this;
@@ -1121,7 +918,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2e4d2992", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":21,"vue":62,"vue-hot-reload-api":61}],10:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":20,"../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],9:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1132,6 +929,10 @@ Object.defineProperty(exports, "__esModule", {
 var _AjaxTools = require('../mixins/AjaxTools.js');
 
 var _AjaxTools2 = _interopRequireDefault(_AjaxTools);
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 var _SignupCodeTools = require('../mixins/SignupCodeTools.js');
 
@@ -1161,12 +962,13 @@ exports.default = {
 
 	data: function data() {
 		return {
-			strings: CBOXOLStrings.strings,
 			wpPostId: 0
 		};
 	},
 
-	mixins: [_AjaxTools2.default, _SignupCodeTools2.default],
+
+	mixins: [_AjaxTools2.default, _i18nTools2.default, _SignupCodeTools2.default],
+
 	methods: {
 		onGroupSelect: function onGroupSelect(v) {
 			this.newGroup = v.value;
@@ -1210,7 +1012,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-6cb62e3e", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":21,"../mixins/SignupCodeTools.js":23,"./SignupCodeGroupSelector.vue":13,"./SignupCodeMemberTypeSelector.vue":14,"vue":62,"vue-hot-reload-api":61}],11:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":20,"../mixins/SignupCodeTools.js":22,"../mixins/i18nTools.js":23,"./SignupCodeGroupSelector.vue":12,"./SignupCodeMemberTypeSelector.vue":13,"vue":62,"vue-hot-reload-api":61}],10:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffswitch {\n    position: relative; width: 90px;\n    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;\n}\n.onoffswitch-checkbox {\n    display: none !important;\n}\n.onoffswitch-label {\n    display: block; overflow: hidden; cursor: pointer;\n    border: 2px solid #999999; border-radius: 20px;\n}\n.onoffswitch-inner {\n    display: block; width: 200%; margin-left: -100%;\n    transition: margin 0.3s ease-in 0s;\n}\n.onoffswitch-inner:before, .onoffswitch-inner:after {\n    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;\n    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;\n    box-sizing: border-box;\n}\n.onoffswitch-inner:before {\n    content: \"ON\";\n    padding-left: 10px;\n    background-color: #34A7C1; color: #FFFFFF;\n}\n.onoffswitch-inner:after {\n    content: \"OFF\";\n    padding-right: 10px;\n    background-color: #EEEEEE; color: #999999;\n    text-align: right;\n}\n.onoffswitch-switch {\n    display: block; height: 18px; width: 18px; margin: 6px;\n    background: #FFFFFF;\n    position: absolute; top: 18; bottom: 0;\n    right: 56px;\n    border: 2px solid #999999; border-radius: 20px;\n    transition: all 0.3s ease-in 0s;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {\n    margin-left: 0;\n}\n.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {\n    right: 0px;\n}")
 ;(function(){
 'use strict';
@@ -1258,10 +1060,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-16fbec7d", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-16fbec7d", __vue__options__)
+    hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61,"vueify/lib/insert-css":64}],12:[function(require,module,exports){
+},{"vue":62,"vue-hot-reload-api":61,"vueify/lib/insert-css":64}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1288,6 +1090,10 @@ var _NewSignupCode2 = _interopRequireDefault(_NewSignupCode);
 var _SignupCodeRow = require('./SignupCodeRow.vue');
 
 var _SignupCodeRow2 = _interopRequireDefault(_SignupCodeRow);
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1319,11 +1125,7 @@ exports.default = {
 		}
 	},
 
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
-	}
+	mixins: [_i18nTools2.default]
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -1341,7 +1143,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-91028d20", __vue__options__)
   }
 })()}
-},{"./EmailDomainRow.vue":4,"./NewEmailDomain.vue":9,"./NewSignupCode.vue":10,"./SignupCodeRow.vue":15,"babel-runtime/core-js/object/keys":24,"vue":62,"vue-hot-reload-api":61}],13:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"./EmailDomainRow.vue":4,"./NewEmailDomain.vue":8,"./NewSignupCode.vue":9,"./SignupCodeRow.vue":14,"babel-runtime/core-js/object/keys":24,"vue":62,"vue-hot-reload-api":61}],12:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".transition, .autocomplete, .showAll-transition, .autocomplete ul, .autocomplete ul li a{\n  transition:all 0.3s ease-out;\n  -moz-transition:all 0.3s ease-out;\n  -webkit-transition:all 0.3s ease-out;\n  -o-transition:all 0.3s ease-out;\n}\n\n.autocomplete ul{\n  font-family: sans-serif;\n  position: absolute;\n  list-style: none;\n  background: #f8f8f8;\n  padding: 10px 0;\n  margin: 0;\n  display: inline-block;\n  min-width: 15%;\n  margin-top: 10px;\n}\n\n.autocomplete ul:before{\n  content: \"\";\n  display: block;\n  position: absolute;\n  height: 0;\n  width: 0;\n  border: 10px solid transparent;\n  border-bottom: 10px solid #f8f8f8;\n  left: 46%;\n  top: -20px\n}\n\n.autocomplete ul li a{\n  text-decoration: none;\n  display: block;\n  background: #f8f8f8;\n  color: #2b2b2b;\n  padding: 5px;\n  padding-left: 10px;\n}\n\n.autocomplete ul li a:hover, .autocomplete ul li.focus-list a{\n  color: white;\n  background: #2F9AF7;\n}\n\n.autocomplete ul li a span{\n  display: block;\n  margin-top: 3px;\n  color: grey;\n  font-size: 13px;\n}\n\n.autocomplete ul li a:hover span, .autocomplete ul li.focus-list a span{\n  color: white;\n}\n\n.showAll-transition{\n  opacity: 1;\n  height: 50px;\n  overflow: hidden;\n}\n\n.showAll-enter{\n  opacity: 0.3;\n  height: 0;\n}\n\n.showAll-leave{\n  display: none;\n}")
 ;(function(){
 'use strict';
@@ -1353,6 +1155,10 @@ Object.defineProperty(exports, "__esModule", {
 var _vue2AutocompleteJs = require('vue2-autocomplete-js');
 
 var _vue2AutocompleteJs2 = _interopRequireDefault(_vue2AutocompleteJs);
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1369,8 +1175,7 @@ exports.default = {
 		return {
 			autocompleteParams: { _wpnonce: CBOXOLStrings.nonce },
 			endpoint: CBOXOLStrings.endpointBase + 'groups-search',
-			initValue: this.$store.state.signupCodes[this.wpPostId].group.slug,
-			strings: CBOXOLStrings.strings
+			initValue: this.$store.state.signupCodes[this.wpPostId].group.slug
 		};
 	},
 
@@ -1382,6 +1187,9 @@ exports.default = {
 			});
 		}
 	},
+
+	mixins: [_i18nTools2.default],
+
 	props: ['wpPostId']
 };
 })()
@@ -1401,13 +1209,20 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-066c031c", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61,"vue2-autocomplete-js":63,"vueify/lib/insert-css":64}],14:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61,"vue2-autocomplete-js":63,"vueify/lib/insert-css":64}],13:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	computed: {
 		selected: function selected() {
@@ -1416,8 +1231,7 @@ exports.default = {
 	},
 	data: function data() {
 		return {
-			memberTypes: this.$store.state.memberTypes,
-			strings: CBOXOLStrings.strings
+			memberTypes: this.$store.state.memberTypes
 		};
 	},
 
@@ -1426,6 +1240,9 @@ exports.default = {
 			this.$emit('input', $event.target.value);
 		}
 	},
+
+	mixins: [_i18nTools2.default],
+
 	props: ['wpPostId']
 };
 })()
@@ -1444,7 +1261,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-3308b42f", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],15:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],14:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1455,6 +1272,10 @@ Object.defineProperty(exports, "__esModule", {
 var _AjaxTools = require('../mixins/AjaxTools.js');
 
 var _AjaxTools2 = _interopRequireDefault(_AjaxTools);
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 var _SignupCodeTools = require('../mixins/SignupCodeTools.js');
 
@@ -1486,12 +1307,6 @@ exports.default = {
 			}
 		}
 	},
-	data: function data() {
-		return {
-			strings: CBOXOLStrings.strings
-		};
-	},
-
 	methods: {
 		onDeleteClick: function onDeleteClick(event) {
 			event.preventDefault();
@@ -1535,7 +1350,7 @@ exports.default = {
 		}
 	},
 
-	mixins: [_AjaxTools2.default, _SignupCodeTools2.default],
+	mixins: [_AjaxTools2.default, _i18nTools2.default, _SignupCodeTools2.default],
 
 	props: ['wpPostId']
 };
@@ -1555,13 +1370,20 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-609e0dce", __vue__options__)
   }
 })()}
-},{"../mixins/AjaxTools.js":21,"../mixins/SignupCodeTools.js":23,"./SignupCodeGroupSelector.vue":13,"./SignupCodeMemberTypeSelector.vue":14,"vue":62,"vue-hot-reload-api":61}],16:[function(require,module,exports){
+},{"../mixins/AjaxTools.js":20,"../mixins/SignupCodeTools.js":22,"../mixins/i18nTools.js":23,"./SignupCodeGroupSelector.vue":12,"./SignupCodeMemberTypeSelector.vue":13,"vue":62,"vue-hot-reload-api":61}],15:[function(require,module,exports){
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _i18nTools = require('../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	computed: {
 		entityIsModified: {
@@ -1601,11 +1423,12 @@ exports.default = {
 	data: function data() {
 		return {
 			description: this.$store.state.types[this.typeSlug].labels[this.labelSlug].description,
-			label: this.$store.state.types[this.typeSlug].labels[this.labelSlug].label,
-			strings: CBOXOLStrings.strings
+			label: this.$store.state.types[this.typeSlug].labels[this.labelSlug].label
 		};
 	},
 
+
+	mixins: [_i18nTools2.default],
 
 	props: ['labelSlug', 'typeSlug']
 };
@@ -1625,7 +1448,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-11c5a333", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],17:[function(require,module,exports){
+},{"../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],16:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1671,10 +1494,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-3f7822e6", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3f7822e6", __vue__options__)
+    hotAPI.reload("data-v-3f7822e6", __vue__options__)
   }
 })()}
-},{"./EntityList.vue":5,"vue":62,"vue-hot-reload-api":61}],18:[function(require,module,exports){
+},{"./EntityList.vue":5,"vue":62,"vue-hot-reload-api":61}],17:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1685,6 +1508,10 @@ Object.defineProperty(exports, "__esModule", {
 var _EntityTools = require('../../mixins/EntityTools.js');
 
 var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+var _i18nTools = require('../../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1712,18 +1539,21 @@ exports.default = {
 
 				this.$store.commit('setSelectableTypes', { slug: this.slug, selectableTypes: value });
 			}
+		},
+
+		strings: function strings() {
+			return this.$store.state.strings;
 		}
 	},
 
 	data: function data() {
 		return {
-			itemsKey: 'types',
-			strings: CBOXOLStrings.strings
+			itemsKey: 'types'
 		};
 	},
 
 
-	mixins: [_EntityTools2.default],
+	mixins: [_EntityTools2.default, _i18nTools2.default],
 
 	props: ['slug']
 };
@@ -1743,7 +1573,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
-},{"../../mixins/EntityTools.js":22,"vue":62,"vue-hot-reload-api":61}],19:[function(require,module,exports){
+},{"../../mixins/EntityTools.js":21,"../../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],18:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1754,6 +1584,10 @@ Object.defineProperty(exports, "__esModule", {
 var _EntityTools = require('../../mixins/EntityTools.js');
 
 var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+var _i18nTools = require('../../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1775,13 +1609,12 @@ exports.default = {
 
 	data: function data() {
 		return {
-			itemsKey: 'types',
-			strings: CBOXOLStrings.strings
+			itemsKey: 'types'
 		};
 	},
 
 
-	mixins: [_EntityTools2.default],
+	mixins: [_EntityTools2.default, _i18nTools2.default],
 
 	props: ['slug']
 };
@@ -1801,7 +1634,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-677df33c", __vue__options__)
   }
 })()}
-},{"../../mixins/EntityTools.js":22,"vue":62,"vue-hot-reload-api":61}],20:[function(require,module,exports){
+},{"../../mixins/EntityTools.js":21,"../../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],19:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1812,6 +1645,10 @@ Object.defineProperty(exports, "__esModule", {
 var _EntityTools = require('../../mixins/EntityTools.js');
 
 var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+var _i18nTools = require('../../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1832,13 +1669,12 @@ exports.default = {
 
 	data: function data() {
 		return {
-			itemsKey: 'types',
-			strings: CBOXOLStrings.strings
+			itemsKey: 'types'
 		};
 	},
 
 
-	mixins: [_EntityTools2.default],
+	mixins: [_EntityTools2.default, _i18nTools2.default],
 
 	props: ['slug']
 };
@@ -1858,7 +1694,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-5d0da2ce", __vue__options__)
   }
 })()}
-},{"../../mixins/EntityTools.js":22,"vue":62,"vue-hot-reload-api":61}],21:[function(require,module,exports){
+},{"../../mixins/EntityTools.js":21,"../../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1883,7 +1719,7 @@ module.exports = {
 	}
 };
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1968,7 +1804,7 @@ module.exports = {
 	}
 };
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -2034,6 +1870,17 @@ module.exports = {
 			}
 		}
 
+	}
+};
+
+},{}],23:[function(require,module,exports){
+"use strict";
+
+module.exports = {
+	computed: {
+		strings: function strings() {
+			return this.$store.state.strings;
+		}
 	}
 };
 

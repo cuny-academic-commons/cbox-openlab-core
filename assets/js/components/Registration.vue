@@ -65,6 +65,8 @@
 	import NewSignupCode from './NewSignupCode.vue'
 	import SignupCodeRow from './SignupCodeRow.vue'
 
+	import i18nTools from '../mixins/i18nTools.js'
+
 	export default {
 		components: {
 			EmailDomainRow,
@@ -93,10 +95,8 @@
 			}
 		},
 
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
-		}
+		mixins: [
+			i18nTools
+		]
 	}
 </script>

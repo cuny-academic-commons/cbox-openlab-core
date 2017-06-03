@@ -15,6 +15,8 @@
 </template>
 
 <script>
+	import i18nTools from '../mixins/i18nTools.js'
+
 	export default {
 		computed: {
 			entityIsModified: {
@@ -56,10 +58,13 @@
 		data() {
 			return {
 				description: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].description,
-				label: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].label,
-				strings: CBOXOLStrings.strings
+				label: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].label
 			}
 		},
+
+		mixins: [
+			i18nTools
+		],
 
 		props: [
 			'labelSlug',

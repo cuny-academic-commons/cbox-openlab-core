@@ -22,6 +22,7 @@
 
 <script>
 	import EntityTools from '../../mixins/EntityTools.js'
+	import i18nTools from '../../mixins/i18nTools.js'
 
 	export default {
 		computed: {
@@ -41,13 +42,13 @@
 
 		data() {
 			return {
-				itemsKey: 'types',
-				strings: CBOXOLStrings.strings
+				itemsKey: 'types'
 			}
 		},
 
 		mixins: [
-			EntityTools
+			EntityTools,
+			i18nTools
 		],
 
 		props: [

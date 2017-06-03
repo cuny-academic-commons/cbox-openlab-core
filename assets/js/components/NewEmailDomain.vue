@@ -16,6 +16,7 @@
 
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
+	import i18nTools from '../mixins/i18nTools.js'
 
 	export default {
 		computed: {
@@ -29,15 +30,18 @@
 				}
 			},
 		},
+
 		data() {
 			return {
-				newDomain: '',
-				strings: CBOXOLStrings.strings
+				newDomain: ''
 			}
 		},
+
 		mixins: [
-			AjaxTools
+			AjaxTools,
+			i18nTools
 		],
+
 		methods: {
 			onSubmit( e ) {
 				// To avoid scope issues in the callback.

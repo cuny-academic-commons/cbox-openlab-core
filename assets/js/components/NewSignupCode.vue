@@ -22,6 +22,7 @@
 
 <script>
 	import AjaxTools from '../mixins/AjaxTools.js'
+	import i18nTools from '../mixins/i18nTools.js'
 	import SignupCodeTools from '../mixins/SignupCodeTools.js'
 	import SignupCodeMemberTypeSelector from './SignupCodeMemberTypeSelector.vue'
 	import SignupCodeGroupSelector from './SignupCodeGroupSelector.vue'
@@ -40,14 +41,16 @@
 
 		data() {
 			return {
-				strings: CBOXOLStrings.strings,
 				wpPostId: 0
 			}
 		},
+
 		mixins: [
 			AjaxTools,
+			i18nTools,
 			SignupCodeTools
 		],
+
 		methods: {
 			onGroupSelect( v ) {
 				this.newGroup = v.value

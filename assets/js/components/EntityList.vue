@@ -23,6 +23,8 @@
 	import AddNewEntityLink from './AddNewEntityLink.vue'
 	import EntityListItem from './EntityListItem.vue'
 
+	import i18nTools from '../mixins/i18nTools.js'
+
 	export default {
 		components: {
 			AddNewEntityLink,
@@ -35,18 +37,16 @@
 			}
 		},
 
-		data() {
-			return {
-				strings: CBOXOLStrings.strings
-			}
-		},
-
 		mounted() {
 			this.$store.commit( 'setUpEntityNames', {
 				itemsKey: this.itemsKey,
 				namesKey: this.namesKey
 			} )
 		},
+
+		mixins: [
+			i18nTools	
+		],
 
 		props: [
 			'canAddNew',
