@@ -204,10 +204,12 @@
 						itemType.isModified = false
 
 						itemType.setEntityProp( 'id', data.id )
+						/*
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
 							namesKey: itemType.namesKey	
 						} )
+						*/
 
 						itemType.isLoading = false
 						itemType.isCollapsed = true

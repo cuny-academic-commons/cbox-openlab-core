@@ -178,6 +178,7 @@ var store = new _vuex2.default.Store({
 
 
 			var newEntityNames = state[namesKey];
+			console.log(newEntityNames);
 
 			newEntityNames.sort(function (a, b) {
 				var order_a = state[itemsKey][a].settings.Order.data;
@@ -778,10 +779,7 @@ exports.default = {
 				itemType.isModified = false;
 
 				itemType.setEntityProp('id', data.id);
-				itemType.$store.commit('orderEntities', {
-					itemsKey: itemType.itemsKey,
-					namesKey: itemType.namesKey
-				});
+
 
 				itemType.isLoading = false;
 				itemType.isCollapsed = true;
@@ -1839,7 +1837,9 @@ module.exports = {
 		},
 
 		setEntityProp: function setEntityProp(prop, value) {
-			if (!this.isModified) {
+			var nonDirtyProps = ['id', 'isCollapsed', 'isLoading', 'isModified'];
+
+			if (!this.isModified && -1 == nonDirtyProps.indexOf(prop)) {
 				this.isModified = true;
 			}
 

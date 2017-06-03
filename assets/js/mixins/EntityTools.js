@@ -80,7 +80,9 @@ module.exports = {
 		},
 
 		setEntityProp: function( prop, value ) {
-			if ( ! this.isModified ) {
+			const nonDirtyProps = [ 'id', 'isCollapsed', 'isLoading', 'isModified' ]
+
+			if ( ! this.isModified && -1 == nonDirtyProps.indexOf( prop ) ) { 
 				this.isModified = true
 			}
 
