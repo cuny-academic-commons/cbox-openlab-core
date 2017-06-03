@@ -93,8 +93,6 @@ const store = new Vuex.Store({
 				endpoint += typeData.id
 			}
 
-			console.log(typeData)
-
 			let body = {
 				typeData
 			}
@@ -166,7 +164,6 @@ const store = new Vuex.Store({
 			const { itemsKey, namesKey } = payload
 
 			let newEntityNames = state[ namesKey ]
-			console.log(newEntityNames)
 
 			newEntityNames.sort( function( a, b ) {
 				const order_a = state[ itemsKey ][ a ].settings.Order.data

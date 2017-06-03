@@ -116,8 +116,6 @@ var store = new _vuex2.default.Store({
 				endpoint += typeData.id;
 			}
 
-			console.log(typeData);
-
 			var body = {
 				typeData: typeData
 			};
@@ -193,7 +191,6 @@ var store = new _vuex2.default.Store({
 
 
 			var newEntityNames = state[namesKey];
-			console.log(newEntityNames);
 
 			newEntityNames.sort(function (a, b) {
 				var order_a = state[itemsKey][a].settings.Order.data;
