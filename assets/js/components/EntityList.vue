@@ -3,17 +3,15 @@
 		<ul class="entity-list">
 			<li v-for="entityName in entityNames">
 				<EntityListItem
+					:entityType="entityType"
 					:isToggleable="isToggleable"
-					:itemsKey="itemsKey"
-					:namesKey="namesKey"
 					:slug="entityName"
 				/>
 			</li>
 		</ul>
 
 		<AddNewEntityLink
-			:itemsKey="itemsKey"
-			:namesKey="namesKey"
+			:entityType="entityType"
 			:text="strings.addNewType"
 		/>
 	</div>
@@ -23,6 +21,7 @@
 	import AddNewEntityLink from './AddNewEntityLink.vue'
 	import EntityListItem from './EntityListItem.vue'
 
+	import EntityTools from '../mixins/EntityTools.js'
 	import i18nTools from '../mixins/i18nTools.js'
 
 	export default {
@@ -45,15 +44,15 @@
 		},
 
 		mixins: [
+			EntityTools,
 			i18nTools	
 		],
 
 		props: [
 			'canAddNew',
 			'contentComponent',
+			'entityType',
 			'isToggleable',
-			'itemsKey',
-			'namesKey'
 		]
 	}
 </script>

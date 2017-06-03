@@ -21,7 +21,7 @@
 		<div class="cboxol-entity-content">
 			<div v-if="isToggleable" class="cboxol-entity-content-section">
 				<on-off-switch
-					:itemsKey="itemsKey"
+					:entityType="entityType"
 					:slug="data.slug"
 				/>
 			</div>
@@ -32,7 +32,7 @@
 					class="cboxol-entity-content-section-header"
 				>{{ strings.itemTypeNameLabel }}</label>
 				<input
-					v-bind:placeholder="strings.addNewType"
+					v-bind:placeholder="addNewPlaceholder"
 					v-bind:id="data.slug + '-name'"
 					v-model="name"
 					v-bind:autofocus="! name"
@@ -43,7 +43,11 @@
 				<h3 class="cboxol-entity-content-section-header">{{ strings.settings }}</h3>
 
 				<div v-for="setting in data.settings">
-					<component :is="setting.component" v-bind:slug="data.slug"></component>
+					<component 
+						:entityType="entityType"
+						:is="setting.component" 
+						v-bind:slug="data.slug"
+					/>
 				</div>
 			</div>
 
@@ -94,9 +98,8 @@
 		},
 
 		props: [
+			'entityType',
 			'isToggleable',
-			'itemsKey',
-			'namesKey',
 			'slug'
 		],
 
@@ -109,6 +112,10 @@
 		},
 
 		computed: {
+			addNewPlaceholder() {
+				return this.getEntityTypeProp( 'addNewPlaceholder' )
+			},
+
 			itemClass() {
 				let itemClass = 'cboxol-entity'
 

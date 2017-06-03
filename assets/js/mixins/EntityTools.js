@@ -1,3 +1,5 @@
+import i18nTools from './i18nTools.js'
+
 module.exports = {
 	computed: {
 		canBeDeleted() {
@@ -36,13 +38,43 @@ module.exports = {
 			}
 		},
 
+		itemsKey() {
+			return this.getEntityTypeProp( 'itemsKey' )
+		},
+
 		name: {
 			get() { return this.getEntityProp( 'name' ) },
 			set( value ) { this.setEntityProp( 'name', value ) }
 		},
+
+		namesKey() {
+			return this.getEntityTypeProp( 'namesKey' )
+		}
 	},
 
 	methods: {
+		getEntityTypeProp: function( prop ) {
+			const schema = {
+				groupType: {
+					addNewPlaceholder: this.strings.addNewType,
+					itemsKey: 'types',
+					namesKey: 'typeNames'
+				},
+				memberType: {
+					addNewPlaceholder: this.strings.addNewType,
+					itemsKey: 'types',
+					namesKey: 'typeNames'
+				},
+				groupCategory: {
+					addNewPlaceholder: this.strings.addNewType,
+					itemsKey: 'types',
+					namesKey: 'typeNames'
+				},
+			}
+
+			return schema[ this.entityType ][ prop ] 
+		},
+
 		getEntityProp: function( prop ) {
 			return this.$store.state[ this.itemsKey ][ this.slug ][ prop ]
 		},
@@ -58,6 +90,17 @@ module.exports = {
 				slug: this.slug,
 				value: value
 			} )
+		}
+	},
+
+	mixins: [
+		i18nTools
+	],
+
+	props: {
+		entityType: {
+			required: true,
+			type: String
 		}
 	}
 }

@@ -16,17 +16,14 @@
 </template>
 
 <script>
+	import EntityTools from '../mixins/EntityTools.js'
+
 	export default {
 		data() {
 			return {
 				uniqueId: 'onoffswitch-' + this.slug
 			}
 		},
-
-		props: [
-			'itemsKey',
-			'slug'
-		],
 
 		computed: {
 			isEnabled: {
@@ -42,7 +39,16 @@
 					} )
 				}
 			}
-		}
+		},
+
+		mixins: [
+			EntityTools
+		],
+
+		props: [
+			'entityType',
+			'slug'
+		],
 	}
 </script>
 

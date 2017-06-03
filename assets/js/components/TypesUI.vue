@@ -3,8 +3,7 @@
 		:canAddNew="canAddNew"
 		:contentComponent="contentComponent"
 		:isToggleable="isToggleable"
-		:itemsKey="itemsKey"
-		:namesKey="namesKey"
+		:entityType="entityType"
 	/>
 </template>
 
@@ -18,6 +17,9 @@
 		computed: {
 			canAddNew() {
 				return 'member' === this.objectType
+			},
+			entityType() {
+				return 'member' === this.objectType ? 'memberType' : 'groupType'
 			}
 		},
 		data() {

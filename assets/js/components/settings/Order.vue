@@ -33,18 +33,13 @@
 			}
 		},
 
-		data() {
-			return {
-				itemsKey: 'types'
-			}
-		},
-
 		mixins: [
 			EntityTools,
 			i18nTools
 		],
 
 		props: [
+			'entityType',
 			'slug'
 		]
 	}

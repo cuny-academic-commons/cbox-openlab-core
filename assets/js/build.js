@@ -577,6 +577,10 @@ var _EntityListItem = require('./EntityListItem.vue');
 
 var _EntityListItem2 = _interopRequireDefault(_EntityListItem);
 
+var _EntityTools = require('../mixins/EntityTools.js');
+
+var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
 var _i18nTools = require('../mixins/i18nTools.js');
 
 var _i18nTools2 = _interopRequireDefault(_i18nTools);
@@ -603,15 +607,15 @@ exports.default = {
 	},
 
 
-	mixins: [_i18nTools2.default],
+	mixins: [_EntityTools2.default, _i18nTools2.default],
 
-	props: ['canAddNew', 'contentComponent', 'isToggleable', 'itemsKey', 'namesKey']
+	props: ['canAddNew', 'contentComponent', 'entityType', 'isToggleable']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"entity-list"},_vm._l((_vm.entityNames),function(entityName){return _c('li',[_c('EntityListItem',{attrs:{"isToggleable":_vm.isToggleable,"itemsKey":_vm.itemsKey,"namesKey":_vm.namesKey,"slug":entityName}})],1)})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"itemsKey":_vm.itemsKey,"namesKey":_vm.namesKey,"text":_vm.strings.addNewType}})],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"entity-list"},_vm._l((_vm.entityNames),function(entityName){return _c('li',[_c('EntityListItem',{attrs:{"entityType":_vm.entityType,"isToggleable":_vm.isToggleable,"slug":entityName}})],1)})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"entityType":_vm.entityType,"text":_vm.strings.addNewType}})],1)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -623,7 +627,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2576d798", __vue__options__)
   }
 })()}
-},{"../mixins/i18nTools.js":23,"./AddNewEntityLink.vue":2,"./EntityListItem.vue":6,"vue":62,"vue-hot-reload-api":61}],6:[function(require,module,exports){
+},{"../mixins/EntityTools.js":21,"../mixins/i18nTools.js":23,"./AddNewEntityLink.vue":2,"./EntityListItem.vue":6,"vue":62,"vue-hot-reload-api":61}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -673,7 +677,7 @@ exports.default = {
 	},
 
 
-	props: ['isToggleable', 'itemsKey', 'namesKey', 'slug'],
+	props: ['entityType', 'isToggleable', 'slug'],
 
 	components: {
 		OnOffSwitch: _OnOffSwitch2.default,
@@ -684,6 +688,9 @@ exports.default = {
 	},
 
 	computed: {
+		addNewPlaceholder: function addNewPlaceholder() {
+			return this.getEntityTypeProp('addNewPlaceholder');
+		},
 		itemClass: function itemClass() {
 			var itemClass = 'cboxol-entity';
 
@@ -774,7 +781,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-entity-header"},[_c('div',{staticClass:"cboxol-entity-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"entity-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content"},[(_vm.isToggleable)?_c('div',{staticClass:"cboxol-entity-content-section"},[_c('on-off-switch',{attrs:{"itemsKey":_vm.itemsKey,"slug":_vm.data.slug}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section"},[_c('label',{staticClass:"cboxol-entity-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.strings.addNewType,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),('group' === _vm.objectType)?_c('div',{staticClass:"cboxol-entity-content-section item-type-template"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.template))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.templateSiteDescription))]),_vm._v(" "),_c('div',{staticClass:"cboxol-template-site-links"},[_c('a',{attrs:{"href":_vm.templateAdminUrl}},[_vm._v(_vm._s(_vm.strings.templateDashboardLink))]),_vm._v(" | "),_c('a',{attrs:{"href":_vm.templateUrl}},[_vm._v(_vm._s(_vm.strings.templateViewLink))])])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-entity-header"},[_c('div',{staticClass:"cboxol-entity-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"entity-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content"},[(_vm.isToggleable)?_c('div',{staticClass:"cboxol-entity-content-section"},[_c('on-off-switch',{attrs:{"entityType":_vm.entityType,"slug":_vm.data.slug}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section"},[_c('label',{staticClass:"cboxol-entity-content-section-header",attrs:{"for":_vm.data.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.addNewPlaceholder,"id":_vm.data.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.data.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"entityType":_vm.entityType,"slug":_vm.data.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.data.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.data.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),('group' === _vm.objectType)?_c('div',{staticClass:"cboxol-entity-content-section item-type-template"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.template))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.templateSiteDescription))]),_vm._v(" "),_c('div',{staticClass:"cboxol-template-site-links"},[_c('a',{attrs:{"href":_vm.templateAdminUrl}},[_vm._v(_vm._s(_vm.strings.templateDashboardLink))]),_vm._v(" | "),_c('a',{attrs:{"href":_vm.templateUrl}},[_vm._v(_vm._s(_vm.strings.templateViewLink))])])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -783,7 +790,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.reload("data-v-6e83156a", __vue__options__)
+    hotAPI.rerender("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":20,"../mixins/EntityTools.js":21,"../mixins/i18nTools.js":23,"./OnOffSwitch.vue":10,"./TypeLabel.vue":15,"./settings/MayChangeMemberTypeTo.vue":17,"./settings/MayCreateCourses.vue":18,"./settings/Order.vue":19,"vue":62,"vue-hot-reload-api":61}],7:[function(require,module,exports){
@@ -1020,6 +1027,13 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".onoffsw
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _EntityTools = require('../mixins/EntityTools.js');
+
+var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	data: function data() {
 		return {
@@ -1027,8 +1041,6 @@ exports.default = {
 		};
 	},
 
-
-	props: ['itemsKey', 'slug'],
 
 	computed: {
 		isEnabled: {
@@ -1044,7 +1056,11 @@ exports.default = {
 				});
 			}
 		}
-	}
+	},
+
+	mixins: [_EntityTools2.default],
+
+	props: ['entityType', 'slug']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -1063,7 +1079,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-16fbec7d", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61,"vueify/lib/insert-css":64}],11:[function(require,module,exports){
+},{"../mixins/EntityTools.js":21,"vue":62,"vue-hot-reload-api":61,"vueify/lib/insert-css":64}],11:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1469,6 +1485,9 @@ exports.default = {
 	computed: {
 		canAddNew: function canAddNew() {
 			return 'member' === this.objectType;
+		},
+		entityType: function entityType() {
+			return 'member' === this.objectType ? 'memberType' : 'groupType';
 		}
 	},
 	data: function data() {
@@ -1485,7 +1504,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('EntityList',{attrs:{"canAddNew":_vm.canAddNew,"contentComponent":_vm.contentComponent,"isToggleable":_vm.isToggleable,"itemsKey":_vm.itemsKey,"namesKey":_vm.namesKey}})}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('EntityList',{attrs:{"canAddNew":_vm.canAddNew,"contentComponent":_vm.contentComponent,"isToggleable":_vm.isToggleable,"entityType":_vm.entityType}})}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1546,13 +1565,6 @@ exports.default = {
 		}
 	},
 
-	data: function data() {
-		return {
-			itemsKey: 'types'
-		};
-	},
-
-
 	mixins: [_EntityTools2.default, _i18nTools2.default],
 
 	props: ['slug']
@@ -1570,7 +1582,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.reload("data-v-ae10b222", __vue__options__)
+    hotAPI.rerender("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"../../mixins/EntityTools.js":21,"../../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],18:[function(require,module,exports){
@@ -1606,13 +1618,6 @@ exports.default = {
 			}
 		}
 	},
-
-	data: function data() {
-		return {
-			itemsKey: 'types'
-		};
-	},
-
 
 	mixins: [_EntityTools2.default, _i18nTools2.default],
 
@@ -1667,16 +1672,9 @@ exports.default = {
 		}
 	},
 
-	data: function data() {
-		return {
-			itemsKey: 'types'
-		};
-	},
-
-
 	mixins: [_EntityTools2.default, _i18nTools2.default],
 
-	props: ['slug']
+	props: ['entityType', 'slug']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -1721,6 +1719,12 @@ module.exports = {
 
 },{}],21:[function(require,module,exports){
 'use strict';
+
+var _i18nTools = require('./i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = {
 	computed: {
@@ -1774,6 +1778,11 @@ module.exports = {
 			}
 		},
 
+		itemsKey: function itemsKey() {
+			return this.getEntityTypeProp('itemsKey');
+		},
+
+
 		name: {
 			get: function get() {
 				return this.getEntityProp('name');
@@ -1781,10 +1790,36 @@ module.exports = {
 			set: function set(value) {
 				this.setEntityProp('name', value);
 			}
+		},
+
+		namesKey: function namesKey() {
+			return this.getEntityTypeProp('namesKey');
 		}
 	},
 
 	methods: {
+		getEntityTypeProp: function getEntityTypeProp(prop) {
+			var schema = {
+				groupType: {
+					addNewPlaceholder: this.strings.addNewType,
+					itemsKey: 'types',
+					namesKey: 'typeNames'
+				},
+				memberType: {
+					addNewPlaceholder: this.strings.addNewType,
+					itemsKey: 'types',
+					namesKey: 'typeNames'
+				},
+				groupCategory: {
+					addNewPlaceholder: this.strings.addNewType,
+					itemsKey: 'types',
+					namesKey: 'typeNames'
+				}
+			};
+
+			return schema[this.entityType][prop];
+		},
+
 		getEntityProp: function getEntityProp(prop) {
 			return this.$store.state[this.itemsKey][this.slug][prop];
 		},
@@ -1801,10 +1836,19 @@ module.exports = {
 				value: value
 			});
 		}
+	},
+
+	mixins: [_i18nTools2.default],
+
+	props: {
+		entityType: {
+			required: true,
+			type: String
+		}
 	}
 };
 
-},{}],22:[function(require,module,exports){
+},{"./i18nTools.js":23}],22:[function(require,module,exports){
 'use strict';
 
 module.exports = {
