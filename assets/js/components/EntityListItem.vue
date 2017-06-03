@@ -39,7 +39,7 @@
 				>
 			</div>
 
-			<div class="cboxol-entity-content-section item-type-settings">
+			<div class="cboxol-entity-content-section item-type-settings" v-if="showSettings">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.settings }}</h3>
 
 				<div v-for="setting in entityData.settings">
@@ -51,7 +51,7 @@
 				</div>
 			</div>
 
-			<div class="cboxol-entity-content-section item-type-labels">
+			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
 				<div v-for="label in entityData.labels">
@@ -59,7 +59,8 @@
 				</div>
 			</div>
 
-			<div v-if="'group' === objectType" class="cboxol-entity-content-section item-type-template">
+			<!-- durrrrr -->
+			<div v-if="'group' === objectType && 'itemType' === entityType" class="cboxol-entity-content-section item-type-template">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.template }}</h3>
 
 				<p>{{ strings.templateSiteDescription }}</p>
@@ -106,6 +107,30 @@
 
 			entityData() {
 				return this.$store.state[ this.itemsKey ][ this.slug ]
+			},
+
+			showLabels() {
+				let hasLabels = false, s = null
+				if ( this.entityData.hasOwnProperty( 'labels' ) ) {
+					for ( s in this.entityData.labels ) {
+						hasLabels = true
+						break
+					}
+				}
+
+				return hasLabels
+			},
+
+			showSettings() {
+				let hasSettings = false, s = null
+				if ( this.entityData.hasOwnProperty( 'settings' ) ) {
+					for ( s in this.entityData.settings ) {
+						hasSettings = true
+						break
+					}
+				}
+
+				return hasSettings
 			},
 
 			itemClass() {
@@ -161,8 +186,6 @@
 				return this.slug + '-' . base
 			},
 
-			// @todo will need endpoint info passed as prop
-
 			onDeleteClick: function( event ) {
 				event.preventDefault()
 
@@ -192,7 +215,11 @@
 			onSubmit: function() {
 				let itemType = this
 				itemType.isLoading = true
-				itemType.$store.dispatch( 'submitForm', { slug: itemType.slug } )
+				itemType.$store.dispatch( 'submitEntity', {
+					apiRoute: itemType.apiRoute,
+					itemsKey: itemType.itemsKey,
+					slug: itemType.slug
+				} )
 					.then( itemType.checkStatus )
 					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {

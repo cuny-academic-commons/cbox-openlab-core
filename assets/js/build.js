@@ -103,18 +103,29 @@ var store = new _vuex2.default.Store({
 				body: JSON.stringify(body)
 			});
 		},
-		submitForm: function submitForm(commit, payload) {
-			var typeData = commit.state.types[payload.slug];
+		submitEntity: function submitEntity(commit, payload) {
+			var apiRoute = payload.apiRoute,
+			    itemsKey = payload.itemsKey,
+			    slug = payload.slug;
 
-			var endpoint = CBOXOLStrings.endpointBase + 'item-type/';
+
+			var typeData = commit.state[itemsKey][slug];
+
+			var endpoint = CBOXOLStrings.endpointBase + apiRoute + '/';
 			if (typeData.id > 0) {
 				endpoint += typeData.id;
 			}
 
+			console.log(typeData);
+
 			var body = {
-				typeData: typeData,
-				objectType: commit.state.objectType
+				typeData: typeData
 			};
+
+			// omg this is bad
+			if (commit.state.hasOwnProperty('objectType')) {
+				body.objectType = commit.state.objectType;
+			}
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'POST',
@@ -389,6 +400,13 @@ new _vue2.default({
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _EntityTools = require('../mixins/EntityTools.js');
+
+var _EntityTools2 = _interopRequireDefault(_EntityTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	methods: {
 		onClick: function onClick(event) {
@@ -399,7 +417,10 @@ exports.default = {
 			});
 		}
 	},
-	props: ['itemsKey', 'namesKey', 'text']
+
+	mixins: [_EntityTools2.default],
+
+	props: ['text']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -417,7 +438,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-972d3e5a", __vue__options__)
   }
 })()}
-},{"vue":62,"vue-hot-reload-api":61}],3:[function(require,module,exports){
+},{"../mixins/EntityTools.js":21,"vue":62,"vue-hot-reload-api":61}],3:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -468,7 +489,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-428061ba", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-428061ba", __vue__options__)
+    hotAPI.reload("data-v-428061ba", __vue__options__)
   }
 })()}
 },{"./GroupCategoriesUI.vue":7,"./Registration.vue":11,"./TypesUI.vue":16,"vue":62,"vue-hot-reload-api":61}],4:[function(require,module,exports){
@@ -698,6 +719,30 @@ exports.default = {
 		entityData: function entityData() {
 			return this.$store.state[this.itemsKey][this.slug];
 		},
+		showLabels: function showLabels() {
+			var hasLabels = false,
+			    s = null;
+			if (this.entityData.hasOwnProperty('labels')) {
+				for (s in this.entityData.labels) {
+					hasLabels = true;
+					break;
+				}
+			}
+
+			return hasLabels;
+		},
+		showSettings: function showSettings() {
+			var hasSettings = false,
+			    s = null;
+			if (this.entityData.hasOwnProperty('settings')) {
+				for (s in this.entityData.settings) {
+					hasSettings = true;
+					break;
+				}
+			}
+
+			return hasSettings;
+		},
 		itemClass: function itemClass() {
 			var itemClass = 'cboxol-entity';
 
@@ -776,7 +821,11 @@ exports.default = {
 		onSubmit: function onSubmit() {
 			var itemType = this;
 			itemType.isLoading = true;
-			itemType.$store.dispatch('submitForm', { slug: itemType.slug }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
+			itemType.$store.dispatch('submitEntity', {
+				apiRoute: itemType.apiRoute,
+				itemsKey: itemType.itemsKey,
+				slug: itemType.slug
+			}).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
 				itemType.isModified = false;
 
 				itemType.setEntityProp('id', data.id);
@@ -800,7 +849,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-entity-header"},[_c('div',{staticClass:"cboxol-entity-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"entity-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content"},[(_vm.isToggleable)?_c('div',{staticClass:"cboxol-entity-content-section"},[_c('on-off-switch',{attrs:{"entityType":_vm.entityType,"slug":_vm.slug}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section"},[_c('label',{staticClass:"cboxol-entity-content-section-header",attrs:{"for":_vm.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.addNewPlaceholder,"id":_vm.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.entityData.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"entityType":_vm.entityType,"slug":_vm.slug}})],1)})],2),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.entityData.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.slug,"labelSlug":label.slug}})],1)})],2),_vm._v(" "),('group' === _vm.objectType)?_c('div',{staticClass:"cboxol-entity-content-section item-type-template"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.template))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.templateSiteDescription))]),_vm._v(" "),_c('div',{staticClass:"cboxol-template-site-links"},[_c('a',{attrs:{"href":_vm.templateAdminUrl}},[_vm._v(_vm._s(_vm.strings.templateDashboardLink))]),_vm._v(" | "),_c('a',{attrs:{"href":_vm.templateUrl}},[_vm._v(_vm._s(_vm.strings.templateViewLink))])])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.itemClass},[_c('div',{staticClass:"cboxol-entity-header"},[_c('div',{staticClass:"cboxol-entity-header-label"},[_vm._v("\n\t\t\t"+_vm._s(_vm.name)+" "),(! _vm.isEnabled)?_c('span',{staticClass:"entity-off"},[_vm._v(_vm._s(_vm.strings.off))]):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-header-actions"},[(_vm.canBeDeleted)?_c('a',{attrs:{"href":""},on:{"click":_vm.onDeleteClick}},[_c('span',[_vm._v(_vm._s(_vm.strings.delete))])]):_vm._e(),_vm._v(" "),(_vm.canBeDeleted)?_c('span',[_vm._v(" | ")]):_vm._e(),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit",attrs:{"href":""},on:{"click":_vm.onAccordionClick}},[(_vm.isCollapsed)?_c('span',[_vm._v(_vm._s(_vm.strings.edit))]):_c('span',[_vm._v(_vm._s(_vm.strings.editing))])]),_vm._v(" "),_c('a',{staticClass:"cboxol-entity-edit-arrow",attrs:{"href":""},on:{"click":_vm.onAccordionClick}})])]),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content"},[(_vm.isToggleable)?_c('div',{staticClass:"cboxol-entity-content-section"},[_c('on-off-switch',{attrs:{"entityType":_vm.entityType,"slug":_vm.slug}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-content-section"},[_c('label',{staticClass:"cboxol-entity-content-section-header",attrs:{"for":_vm.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.itemTypeNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.name),expression:"name"}],attrs:{"placeholder":_vm.addNewPlaceholder,"id":_vm.slug + '-name',"autofocus":! _vm.name},domProps:{"value":(_vm.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.name=$event.target.value}}})]),_vm._v(" "),(_vm.showSettings)?_c('div',{staticClass:"cboxol-entity-content-section item-type-settings"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.settings))]),_vm._v(" "),_vm._l((_vm.entityData.settings),function(setting){return _c('div',[_c(setting.component,{tag:"component",attrs:{"entityType":_vm.entityType,"slug":_vm.slug}})],1)})],2):_vm._e(),_vm._v(" "),(_vm.showLabels)?_c('div',{staticClass:"cboxol-entity-content-section item-type-labels"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.labels))]),_vm._v(" "),_vm._l((_vm.entityData.labels),function(label){return _c('div',[_c('type-label',{attrs:{"typeSlug":_vm.slug,"labelSlug":label.slug}})],1)})],2):_vm._e(),_vm._v(" "),('group' === _vm.objectType && 'itemType' === _vm.entityType)?_c('div',{staticClass:"cboxol-entity-content-section item-type-template"},[_c('h3',{staticClass:"cboxol-entity-content-section-header"},[_vm._v(_vm._s(_vm.strings.template))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.templateSiteDescription))]),_vm._v(" "),_c('div',{staticClass:"cboxol-template-site-links"},[_c('a',{attrs:{"href":_vm.templateAdminUrl}},[_vm._v(_vm._s(_vm.strings.templateDashboardLink))]),_vm._v(" | "),_c('a',{attrs:{"href":_vm.templateUrl}},[_vm._v(_vm._s(_vm.strings.templateViewLink))])])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"cboxol-entity-submit"},[_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.isLoading || ! _vm.isModified},on:{"click":_vm.onSubmit}},[_vm._v(_vm._s(_vm.saveButtonText))])])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1596,7 +1645,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ae10b222", __vue__options__)
+    hotAPI.reload("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"../../mixins/EntityTools.js":21,"../../mixins/i18nTools.js":23,"vue":62,"vue-hot-reload-api":61}],18:[function(require,module,exports){

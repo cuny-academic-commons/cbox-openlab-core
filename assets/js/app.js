@@ -82,17 +82,26 @@ const store = new Vuex.Store({
 				body: JSON.stringify( body )
 			} )
 		},
-		submitForm ( commit, payload ) {
-			const typeData = commit.state.types[ payload.slug ]
 
-			let endpoint = CBOXOLStrings.endpointBase + 'item-type/'
+		submitEntity ( commit, payload ) {
+			const { apiRoute, itemsKey, slug } = payload
+
+			const typeData = commit.state[ itemsKey ][ slug ]
+
+			let endpoint = CBOXOLStrings.endpointBase + apiRoute + '/'
 			if ( typeData.id > 0 ) {
 				endpoint += typeData.id
 			}
 
-			const body = {
-				typeData,
-				objectType: commit.state.objectType
+			console.log(typeData)
+
+			let body = {
+				typeData
+			}
+
+			// omg this is bad
+			if ( commit.state.hasOwnProperty( 'objectType' ) ) {
+				body.objectType = commit.state.objectType
 			}
 
 			return fetch( endpoint, {

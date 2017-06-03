@@ -9,6 +9,8 @@
 </template>
 
 <script>
+	import EntityTools from '../mixins/EntityTools.js'
+
 	export default {
 		methods: {
 			onClick( event ) {
@@ -19,9 +21,12 @@
 				} )
 			}
 		},
+
+		mixins: [
+			EntityTools
+		],
+
 		props: [
-			'itemsKey',
-			'namesKey',
 			'text'
 		]
 	}
