@@ -28,15 +28,10 @@
 		computed: {
 			isEnabled: {
 				get () {
-					return this.$store.state[ this.itemsKey ][ this.slug ].isEnabled
+					return this.getEntityProp( 'isEnabled' )
 				},
 				set (value) {
-					this.$store.commit( 'setEntityProperty', {
-						itemsKey: this.itemsKey,
-						property: 'isEnabled',
-						slug: this.slug,
-						value: value
-					} )
+					this.setEntityProp( 'isEnabled', value )
 				}
 			}
 		},
