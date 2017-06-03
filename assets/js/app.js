@@ -298,11 +298,13 @@ const store = new Vuex.Store({
 			}
 		},
 
-		setUpTypeNames ( state ) {
-			var typeName
-			for ( typeName in state.types ) {
-				if ( state.types.hasOwnProperty( typeName ) ) {
-					state.typeNames.push( typeName )
+		setUpEntityNames ( state, payload ) {
+			const { itemsKey, namesKey } = payload
+
+			let entityName
+			for ( entityName in state[ itemsKey ] ) {
+				if ( state[ itemsKey ].hasOwnProperty( entityName ) ) {
+					state[ namesKey ].push( entityName )
 				}
 			}
 		},

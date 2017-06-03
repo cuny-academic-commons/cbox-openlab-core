@@ -47,7 +47,10 @@
 			}
 		},
 		mounted() {
-			this.$store.commit( 'setUpTypeNames' )
+			this.$store.commit( 'setUpEntityNames', {
+				itemsKey: 'types',
+				namesKey: 'typeNames'
+			} )
 		}
 	}
 </script>

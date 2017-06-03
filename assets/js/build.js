@@ -317,11 +317,15 @@ var store = new _vuex2.default.Store({
 				}
 			}
 		},
-		setUpTypeNames: function setUpTypeNames(state) {
-			var typeName;
-			for (typeName in state.types) {
-				if (state.types.hasOwnProperty(typeName)) {
-					state.typeNames.push(typeName);
+		setUpEntityNames: function setUpEntityNames(state, payload) {
+			var itemsKey = payload.itemsKey,
+			    namesKey = payload.namesKey;
+
+
+			var entityName = void 0;
+			for (entityName in state[itemsKey]) {
+				if (state[itemsKey].hasOwnProperty(entityName)) {
+					state[namesKey].push(entityName);
 				}
 			}
 		},
