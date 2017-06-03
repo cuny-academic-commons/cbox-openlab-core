@@ -22,9 +22,11 @@ const store = new Vuex.Store({
 		typeNames: []
 	},
 	actions: {
-		submitDelete ( commit, payload ) {
+		submitDeleteEntity ( commit, payload ) {
+			const { apiRoute, id } = payload
+
 			const nonce = CBOXOLStrings.nonce
-			const endpoint = CBOXOLStrings.endpointBase + 'item-type/' + payload.id
+			const endpoint = CBOXOLStrings.endpointBase + apiRoute + '/' + id
 
 			return fetch( endpoint, {
 				method: 'DELETE',

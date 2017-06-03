@@ -105,7 +105,12 @@ class ItemTypes extends WP_REST_Controller {
 		$params = $request->get_params();
 
 		$wp_post = get_post( $params['id'] );
-		$type = MemberType::get_instance_from_wp_post( $wp_post );
+		if ( ! $wp_post ) {
+			return new WP_Error( 'no_item_type_found', __( 'No item type found by that ID.', 'cbox-openlab-core' ) );
+		}
+
+		$class = $this->get_class_for_object_type( $wp_post->post_type );
+		$type = $class::get_instance_from_wp_post( $wp_post );
 
 		if ( ! $type->get_can_be_deleted() ) {
 			$data = __( 'Type cannot be deleted', 'cbox-openlab-core' );
@@ -147,9 +152,11 @@ class ItemTypes extends WP_REST_Controller {
 	protected function get_class_for_object_type( $object_type ) {
 		switch ( $object_type ) {
 			case 'member' :
+			case 'cboxol_member_type' :
 				return '\CBOX\OL\MemberType';
 
 			case 'group' :
+			case 'cboxol_group_type' :
 				return 'CBOX\OL\GroupType';
 		}
 	}

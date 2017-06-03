@@ -38,9 +38,13 @@ var store = new _vuex2.default.Store({
 		typeNames: []
 	},
 	actions: {
-		submitDelete: function submitDelete(commit, payload) {
+		submitDeleteEntity: function submitDeleteEntity(commit, payload) {
+			var apiRoute = payload.apiRoute,
+			    id = payload.id;
+
+
 			var nonce = CBOXOLStrings.nonce;
-			var endpoint = CBOXOLStrings.endpointBase + 'item-type/' + payload.id;
+			var endpoint = CBOXOLStrings.endpointBase + apiRoute + '/' + id;
 
 			return (0, _isomorphicFetch2.default)(endpoint, {
 				method: 'DELETE',
@@ -756,7 +760,10 @@ exports.default = {
 			var itemType = this;
 			itemType.isLoading = true;
 			if (itemType.id > 0) {
-				itemType.$store.dispatch('submitDelete', { id: itemType.id }).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
+				itemType.$store.dispatch('submitDeleteEntity', {
+					apiRoute: itemType.apiRoute,
+					id: itemType.id
+				}).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
 					itemType.$store.commit('removeType', { slug: itemType.slug });
 					itemType.$store.commit('orderEntities', {
 						itemsKey: itemType.itemsKey,
@@ -802,7 +809,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6e83156a", __vue__options__)
+    hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":20,"../mixins/EntityTools.js":21,"../mixins/i18nTools.js":23,"./OnOffSwitch.vue":10,"./TypeLabel.vue":15,"./settings/MayChangeMemberTypeTo.vue":17,"./settings/MayCreateCourses.vue":18,"./settings/Order.vue":19,"vue":62,"vue-hot-reload-api":61}],7:[function(require,module,exports){
@@ -1740,6 +1747,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 module.exports = {
 	computed: {
+		apiRoute: function apiRoute() {
+			return this.getEntityTypeProp('apiRoute');
+		},
 		canBeDeleted: function canBeDeleted() {
 			return this.getEntityProp('id');
 		},
@@ -1814,16 +1824,19 @@ module.exports = {
 			var schema = {
 				groupType: {
 					addNewPlaceholder: this.strings.addNewType,
+					apiRoute: 'item-type',
 					itemsKey: 'types',
 					namesKey: 'typeNames'
 				},
 				memberType: {
 					addNewPlaceholder: this.strings.addNewType,
+					apiRoute: 'item-type',
 					itemsKey: 'types',
 					namesKey: 'typeNames'
 				},
 				groupCategory: {
 					addNewPlaceholder: this.strings.addNewType,
+					apiRoute: 'group-category',
 					itemsKey: 'types',
 					namesKey: 'typeNames'
 				}

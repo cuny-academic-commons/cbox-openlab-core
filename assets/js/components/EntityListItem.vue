@@ -43,9 +43,9 @@
 				<h3 class="cboxol-entity-content-section-header">{{ strings.settings }}</h3>
 
 				<div v-for="setting in entityData.settings">
-					<component 
+					<component
 						:entityType="entityType"
-						:is="setting.component" 
+						:is="setting.component"
 						v-bind:slug="slug"
 					/>
 				</div>
@@ -173,14 +173,17 @@
 				let itemType = this
 				itemType.isLoading = true
 				if ( itemType.id > 0 ) {
-					itemType.$store.dispatch( 'submitDelete', { id: itemType.id } )
+					itemType.$store.dispatch( 'submitDeleteEntity', {
+						apiRoute: itemType.apiRoute,
+						id: itemType.id
+					} )
 					.then( itemType.checkStatus )
 					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {
 						itemType.$store.commit( 'removeType', { slug: itemType.slug } )
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
-							namesKey: itemType.namesKey	
+							namesKey: itemType.namesKey
 						} )
 					} )
 				}
@@ -198,7 +201,7 @@
 						itemType.setEntityProp( 'id', data.id )
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
-							namesKey: itemType.namesKey	
+							namesKey: itemType.namesKey
 						} )
 
 						itemType.isLoading = false

@@ -2,6 +2,10 @@ import i18nTools from './i18nTools.js'
 
 module.exports = {
 	computed: {
+		apiRoute() {
+			return this.getEntityTypeProp( 'apiRoute' )
+		},
+
 		canBeDeleted() {
 			return this.getEntityProp( 'id' )
 		},
@@ -27,7 +31,7 @@ module.exports = {
 
 		isModified: {
 			get() { return this.getEntityProp( 'isModified' ) },
-			set( value ) { 
+			set( value ) {
 				// Don't use setEntityProp() to avoid recursion.
 				this.$store.commit( 'setEntityProperty', {
 					itemsKey: this.itemsKey,
@@ -57,22 +61,25 @@ module.exports = {
 			const schema = {
 				groupType: {
 					addNewPlaceholder: this.strings.addNewType,
+					apiRoute: 'item-type',
 					itemsKey: 'types',
 					namesKey: 'typeNames'
 				},
 				memberType: {
 					addNewPlaceholder: this.strings.addNewType,
+					apiRoute: 'item-type',
 					itemsKey: 'types',
 					namesKey: 'typeNames'
 				},
 				groupCategory: {
 					addNewPlaceholder: this.strings.addNewType,
+					apiRoute: 'group-category',
 					itemsKey: 'types',
 					namesKey: 'typeNames'
 				},
 			}
 
-			return schema[ this.entityType ][ prop ] 
+			return schema[ this.entityType ][ prop ]
 		},
 
 		getEntityProp: function( prop ) {
@@ -82,7 +89,7 @@ module.exports = {
 		setEntityProp: function( prop, value ) {
 			const nonDirtyProps = [ 'id', 'isCollapsed', 'isLoading', 'isModified' ]
 
-			if ( ! this.isModified && -1 == nonDirtyProps.indexOf( prop ) ) { 
+			if ( ! this.isModified && -1 == nonDirtyProps.indexOf( prop ) ) {
 				this.isModified = true
 			}
 
