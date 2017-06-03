@@ -280,7 +280,13 @@ const store = new Vuex.Store({
 		setEntityProperty ( state, payload ) {
 			const { itemsKey, property, slug, value } = payload
 
-			state[ itemsKey ][ slug ][ property ] = value
+			let newEntity = Object.assign( {}, state[ itemsKey ][ slug ] )
+			newEntity[ property ] = value
+
+			let newEntities = Object.assign( {}, state[ itemsKey ] )
+			newEntities[ slug ] = newEntity
+
+			state[ itemsKey ] = newEntities
 
 			if ( 'isModified' == property ) {
 				if ( value ) {

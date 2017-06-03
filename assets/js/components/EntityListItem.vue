@@ -35,7 +35,6 @@
 					v-bind:placeholder="strings.addNewType"
 					v-bind:id="data.slug + '-name'"
 					v-model="name"
-					v-on:change="setIsModified"
 					v-bind:autofocus="! name"
 				>
 			</div>
@@ -75,6 +74,9 @@
 </template>
 
 <script>
+	import AjaxTools from '../mixins/AjaxTools.js'
+	import EntityTools from '../mixins/EntityTools.js'
+
 	import OnOffSwitch from './OnOffSwitch.vue'
 	import TypeLabel from './TypeLabel.vue'
 
@@ -107,35 +109,6 @@
 		},
 
 		computed: {
-			canBeDeleted: {
-				get() {
-					return this.$store.state.types[ this.slug ].canBeDeleted
-				}
-			},
-			id() {
-				return this.getEntityProp( 'id' )
-			},
-
-			isCollapsed: {
-				get() { return this.getEntityProp( 'isCollapsed' ) },
-				set( value ) { this.setEntityProp( 'isCollapsed', value ) }
-			},
-
-			isEnabled: {
-				get() { return this.getEntityProp( 'isEnabled' ) },
-				set( value ) { this.setEntityProp( 'isEnabled', value ) }
-			},
-
-			isLoading: {
-				get() { return this.getEntityProp( 'isLoading' ) },
-				set( value ) { this.setEntityProp( 'isLoading', value ) }
-			},
-
-			isModified: {
-				get() { return this.getEntityProp( 'isModified' ) },
-				set( value ) { this.setEntityProp( 'isModified', value ) }
-			},
-
 			itemClass() {
 				let itemClass = 'cboxol-entity'
 
@@ -152,11 +125,6 @@
 				}
 
 				return itemClass
-			},
-
-			name: {
-				get() { return this.getEntityProp( 'name' ) },
-				set( value ) { this.setEntityProp( 'name', value ) }
 			},
 
 			objectType: function() {
@@ -185,20 +153,6 @@
 		},
 
 		methods: {
-			getEntityProp: function( prop ) {
-				return this.$store.state[ this.itemsKey ][ this.slug ][ prop ]
-			},
-
-			setEntityProp: function( prop, value ) {
-				this.setIsModified()
-				this.$store.commit( 'setEntityProperty', {
-					itemsKey: this.itemsKey,
-					property: prop,
-					slug: this.slug,
-					value: value
-				} )
-			},
-
 			onAccordionClick: function( event ) {
 				event.preventDefault()
 				this.$store.commit( 'toggleCollapsed', { slug: this.slug } )
@@ -208,25 +162,7 @@
 				return this.slug + '-' . base
 			},
 
-			checkStatus(response) {
-				if (response.status >= 200 && response.status < 300) {
-					return response
-				} else {
-					var error = new Error(response.statusText)
-					error.response = response
-					throw error
-				}
-			},
-
-			parseJSON(response) {
-				return response.json()
-			},
-
-			ajaxError( p ) {
-							// @todo better error handling
-							console.error( p )
-							throw 'Could not complete request.'
-			},
+			// @todo will need endpoint info passed as prop
 
 			onDeleteClick: function( event ) {
 				event.preventDefault()
@@ -257,17 +193,18 @@
 					.then( function( data ) {
 						itemType.isModified = false
 
-						itemType.setTypeProp( 'id', data.id )
+						itemType.setEntityProp( 'id', data.id )
 						itemType.$store.commit( 'orderTypes' )
 
 						itemType.isLoading = false
 						itemType.isCollapsed = true
 					} )
 			},
+		},
 
-			setIsModified() {
-				this.setEntityProp( 'isModified', true );
-			}
-		}
+		mixins: [
+			AjaxTools,
+			EntityTools
+		]
 	}
 </script>

@@ -7,7 +7,6 @@
 			class="onoffswitch-checkbox"
 			v-bind:id="uniqueId"
 			v-model="isEnabled"
-			v-on:change="setIsModified"
 		>
         <label class="onoffswitch-label" v-bind:for="uniqueId">
             <span class="onoffswitch-inner"></span>

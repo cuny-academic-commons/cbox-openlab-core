@@ -16,17 +16,22 @@
 
 <script>
 	export default {
-		data() {
-			return {
-				strings: CBOXOLStrings.strings,
-				label: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].label,
-				description: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].description
-			}
-		},
-
-		props: ['typeSlug', 'labelSlug'],
-
 		computed: {
+			entityIsModified: {
+				get() {
+					return this.$store.state.types[ this.typeSlug ].isModified
+				},
+
+				set( value ) {
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: 'types',
+						property: 'isModified',
+						slug: this.typeSlug,
+						value: value
+					} )
+				}
+			},
+
 			labelValue: {
 				get () {
 					let value = this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].value
@@ -39,10 +44,26 @@
 					return value
 				},
 				set ( value ) {
-					this.$store.commit( 'setTypeProperty', { slug: this.typeSlug, property: 'isModified', value: true } )
+					if ( ! this.entityIsModified ) {
+						this.entityIsModified = true
+					}
+
 					this.$store.commit( 'setLabel', { typeSlug: this.typeSlug, labelSlug: this.labelSlug, value } )
 				}
 			}
-		}
+		},
+
+		data() {
+			return {
+				description: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].description,
+				label: this.$store.state.types[ this.typeSlug ].labels[ this.labelSlug ].label,
+				strings: CBOXOLStrings.strings
+			}
+		},
+
+		props: [
+			'labelSlug',
+			'typeSlug'
+		]
 	}
 </script>
