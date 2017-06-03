@@ -277,11 +277,13 @@ const store = new Vuex.Store({
 			state.signupCodes = newSignupCodes
 		},
 
-		setTypeProperty ( state, payload ) {
-			state.types[ payload.slug ][ payload.property ] = payload.value
+		setEntityProperty ( state, payload ) {
+			const { itemsKey, property, slug, value } = payload
 
-			if ( 'isModified' == payload.property ) {
-				if ( payload.value ) {
+			state[ itemsKey ][ slug ][ property ] = value
+
+			if ( 'isModified' == property ) {
+				if ( value ) {
 					window.onbeforeunload = function() { return true }
 				} else {
 					window.onbeforeunload = null

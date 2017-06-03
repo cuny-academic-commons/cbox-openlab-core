@@ -56,8 +56,6 @@ function cboxol_is_portfolio( $group_id = 0 ) {
 
 function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'club' ); }
 
-
-// @todo abstract with Member Types?
 function cboxol_grouptypes_admin_page() {
 	wp_enqueue_script( 'cbox-ol-app' );
 

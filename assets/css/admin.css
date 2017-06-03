@@ -42,11 +42,11 @@
 	background: #fff;
 }
 
-.cboxol-item-type {
+.cboxol-entity {
 	margin-bottom: 14px;
 }
 
-.cboxol-item-type-header {
+.cboxol-entity-header {
 	background: #ededed;
 	border: 1px solid #ccc;
 	font-weight: bold;
@@ -54,41 +54,41 @@
 	padding: 8px 12px;
 }
 
-.cboxol-item-type-header-label {
+.cboxol-entity-header-label {
 	float: left;
 	width: 75%;
 }
 
-.cboxol-item-type.disabled .cboxol-item-type-header-label {
+.cboxol-entity.disabled .cboxol-entity-header-label {
 	color: #888;
 	font-style: italic;
 }
 
-.cboxol-item-type-header-actions {
+.cboxol-entity-header-actions {
 	float: right;
 	position: relative;
 	width: 20%;
 	text-align: right;
 }
 
-.cboxol-item-type-header-actions a {
+.cboxol-entity-header-actions a {
 	height: 18px;
 	text-decoration: none;
 }
 
-.cboxol-item-type-header-actions a span {
+.cboxol-entity-header-actions a span {
 	text-decoration: underline;
 }
 
-.cboxol-item-type-header-actions a:focus {
+.cboxol-entity-header-actions a:focus {
 	box-shadow: none;
 }
 
-.cboxol-item-type-edit {
+.cboxol-entity-edit {
 	padding-right: 26px;
 }
 
-a.cboxol-item-type-edit-arrow:after {
+a.cboxol-entity-edit-arrow:after {
 	color: #666;
 	content: "\25B2";
 	font-size: 26px;
@@ -98,7 +98,7 @@ a.cboxol-item-type-edit-arrow:after {
 	top: 0;
 }
 
-.cboxol-item-type.collapsed a.cboxol-item-type-edit-arrow:after {
+.cboxol-entity.collapsed a.cboxol-entity-edit-arrow:after {
 	content: "\25BC";
 }
 
@@ -108,27 +108,27 @@ a .action-arrow {
 	text-decoration: none;
 }
 
-.cboxol-item-type.collapsed .cboxol-item-type-header {
+.cboxol-entity.collapsed .cboxol-entity-header {
 	background: transparent;
 }
 
-.cboxol-item-type.collapsed .cboxol-item-type-content {
+.cboxol-entity.collapsed .cboxol-entity-content {
 	display: none;
 }
 
-.cboxol-item-type-content {
+.cboxol-entity-content {
 	border: 1px solid #ccc;
 	border-top: none;
 	padding: 30px 20px;
 }
 
-.cboxol-item-type-content-section {
+.cboxol-entity-content-section {
 	clear: both;
 	margin-bottom: 30px;
 	overflow: hidden;
 }
 
-.cboxol-item-type-content-section-header {
+.cboxol-entity-content-section-header {
 	display: block;
 	font-size: 12pt;
 	font-weight: bold;

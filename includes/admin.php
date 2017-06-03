@@ -276,6 +276,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 				case 'types' :
 					cboxol_grouptypes_admin_page();
 				break;
+
+				case 'group-categories' :
+					cboxol_groupcategories_admin_page();
+				break;
 			}
 
 		break;

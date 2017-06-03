@@ -1,19 +1,51 @@
 <template>
     <div class="onoffswitch">
         <input
-					type="checkbox"
-					name="onoffswitch"
-					class="onoffswitch-checkbox"
-					v-bind:id="uniqueId"
-					v-model="isEnabled"
-					v-on:change="setIsModified"
-				>
+			type="checkbox"
+			ref="input"
+			name="onoffswitch"
+			class="onoffswitch-checkbox"
+			v-bind:id="uniqueId"
+			v-model="isEnabled"
+			v-on:change="setIsModified"
+		>
         <label class="onoffswitch-label" v-bind:for="uniqueId">
             <span class="onoffswitch-inner"></span>
             <span class="onoffswitch-switch"></span>
         </label>
     </div>
 </template>
+
+<script>
+	export default {
+		data() {
+			return {
+				uniqueId: 'onoffswitch-' + this.slug
+			}
+		},
+
+		props: [
+			'itemsKey',
+			'slug'
+		],
+
+		computed: {
+			isEnabled: {
+				get () {
+					return this.$store.state[ this.itemsKey ][ this.slug ].isEnabled
+				},
+				set (value) {
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: this.itemsKey,
+						property: 'isEnabled',
+						slug: this.slug,
+						value: value
+					} )
+				}
+			}
+		}
+	}
+</script>
 
 <style>
 .onoffswitch {
@@ -62,32 +94,3 @@
     right: 0px;
 }
 </style>
-
-<script>
-	export default {
-		data() {
-			return {
-					uniqueId: 'onoffswitch-' + this.slug
-			}
-		},
-
-		props: ['slug'],
-
-		computed: {
-			isEnabled: {
-				get () {
-					return this.$store.state.types[ this.slug ].isEnabled
-				},
-				set (value) {
-					this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isEnabled', value: value } )
-				}
-			}
-		},
-
-		methods: {
-			setIsModified() {
-				this.$store.commit( 'setTypeProperty', { slug: this.slug, property: 'isModified', value: true } )
-			}
-		}
-	}
-</script>

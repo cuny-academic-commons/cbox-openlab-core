@@ -4,11 +4,13 @@
 
 <script>
 	import Vue from 'vue'
+	import GroupCategoriesUI from './GroupCategoriesUI.vue'
 	import Registration from './Registration.vue'
 	import TypesUI from './TypesUI.vue'
 
 	export default {
 		components: {
+			GroupCategoriesUI,
 			Registration,
 			TypesUI
 		},

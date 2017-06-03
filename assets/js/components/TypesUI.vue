@@ -1,53 +1,33 @@
 <template>
-
-	<div>
-		<ul class="types-ui">
-			<li v-for="typeName in typeNames">
-				<div is="itemType" :slug="typeName"></div>
-			</li>
-		</ul>
-
-		<AddNewEntityLink
-			:itemsKey="itemsKey"
-			:namesKey="namesKey"
-			:text="strings.addNewType"
-			v-if="canAddNew"
-		/>
-	</div>
+	<EntityList
+		:canAddNew="canAddNew"
+		:contentComponent="contentComponent"
+		:isToggleable="isToggleable"
+		:itemsKey="itemsKey"
+		:namesKey="namesKey"
+	/>
 </template>
 
 <script>
-	import AddNewEntityLink from './AddNewEntityLink.vue'
-	import ItemType from './ItemType.vue'
+	import EntityList from './EntityList.vue'
 
 	export default {
 		components: {
-			AddNewEntityLink,
-			'itemType': ItemType
+			EntityList,
 		},
 		computed: {
-			canAddNew: function() {
+			canAddNew() {
 				return 'member' === this.objectType
-			},
-			typeNames: {
-				get () {
-					return this.$store.state.typeNames
-				}
 			}
 		},
 		data() {
 			return {
+				contentComponent: 'EntityContentItemType',
+				isToggleable: true,
 				itemsKey: 'types',
 				namesKey: 'typeNames',
-				objectType: this.$store.state.objectType,
-				strings: CBOXOLStrings.strings
+				objectType: this.$store.state.objectType
 			}
-		},
-		mounted() {
-			this.$store.commit( 'setUpEntityNames', {
-				itemsKey: 'types',
-				namesKey: 'typeNames'
-			} )
 		}
 	}
 </script>
