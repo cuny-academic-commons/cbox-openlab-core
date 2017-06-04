@@ -74,8 +74,8 @@ module.exports = {
 				groupCategory: {
 					addNewPlaceholder: this.strings.addNewType,
 					apiRoute: 'group-category',
-					itemsKey: 'types',
-					namesKey: 'typeNames'
+					itemsKey: 'groupCategories',
+					namesKey: 'groupCategoryNames'
 				},
 			}
 

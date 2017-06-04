@@ -1,25 +1,17 @@
 <template>
-	<div>
-		<ul class="types-ui">
-			<li v-for="groupCategoryName in groupCategoryNames">
-			</li>
-		</ul>
-
-		<AddNewEntityLink
-			:itemsKey="itemsKey"
-			:namesKey="namesKey"
-			:text="strings.addNewType"
-		/>
-	</div>
+	<EntityList
+		:canAddNew="canAddNew"
+		:isToggleable="isToggleable"
+		:entityType="entityType"
+	/>
 </template>
 
 <script>
-	import AddNewEntityLink from './AddNewEntityLink.vue'
-	import i18nTools from '../mixins/i18nTools.js'
+	import EntityList from './EntityList.vue'
 
 	export default {
 		components: {
-			AddNewEntityLink
+			EntityList,
 		},
 
 		computed: {
@@ -30,14 +22,11 @@
 
 		data() {
 			return {
-				itemsKey: 'groupCategories',
-				namesKey: 'groupCategoryNames'
+				canAddNew: true,
+				entityType: 'groupCategory',
+				isToggleable: false,
 			}
 		},
-
-		mixins: [
-			i18nTools
-		],
 
 		mounted() {
 			this.$store.commit( 'setUpEntityNames', {

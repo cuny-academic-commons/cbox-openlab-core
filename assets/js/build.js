@@ -640,7 +640,7 @@ exports.default = {
 
 	mixins: [_EntityTools2.default, _i18nTools2.default],
 
-	props: ['canAddNew', 'contentComponent', 'entityType', 'isToggleable']
+	props: ['entityType', 'isToggleable']
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -866,19 +866,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _AddNewEntityLink = require('./AddNewEntityLink.vue');
+var _EntityList = require('./EntityList.vue');
 
-var _AddNewEntityLink2 = _interopRequireDefault(_AddNewEntityLink);
-
-var _i18nTools = require('../mixins/i18nTools.js');
-
-var _i18nTools2 = _interopRequireDefault(_i18nTools);
+var _EntityList2 = _interopRequireDefault(_EntityList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
 	components: {
-		AddNewEntityLink: _AddNewEntityLink2.default
+		EntityList: _EntityList2.default
 	},
 
 	computed: {
@@ -889,14 +885,11 @@ exports.default = {
 
 	data: function data() {
 		return {
-			itemsKey: 'groupCategories',
-			namesKey: 'groupCategoryNames'
+			canAddNew: true,
+			entityType: 'groupCategory',
+			isToggleable: false
 		};
 	},
-
-
-	mixins: [_i18nTools2.default],
-
 	mounted: function mounted() {
 		this.$store.commit('setUpEntityNames', {
 			itemsKey: 'groupCategories',
@@ -908,7 +901,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"types-ui"},_vm._l((_vm.groupCategoryNames),function(groupCategoryName){return _c('li')})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"itemsKey":_vm.itemsKey,"namesKey":_vm.namesKey,"text":_vm.strings.addNewType}})],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('EntityList',{attrs:{"canAddNew":_vm.canAddNew,"isToggleable":_vm.isToggleable,"entityType":_vm.entityType}})}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -920,7 +913,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-64c4ccb0", __vue__options__)
   }
 })()}
-},{"../mixins/i18nTools.js":23,"./AddNewEntityLink.vue":2,"vue":62,"vue-hot-reload-api":61}],8:[function(require,module,exports){
+},{"./EntityList.vue":5,"vue":62,"vue-hot-reload-api":61}],8:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1552,10 +1545,7 @@ exports.default = {
 	},
 	data: function data() {
 		return {
-			contentComponent: 'EntityContentItemType',
 			isToggleable: true,
-			itemsKey: 'types',
-			namesKey: 'typeNames',
 			objectType: this.$store.state.objectType
 		};
 	}
@@ -1878,8 +1868,8 @@ module.exports = {
 				groupCategory: {
 					addNewPlaceholder: this.strings.addNewType,
 					apiRoute: 'group-category',
-					itemsKey: 'types',
-					namesKey: 'typeNames'
+					itemsKey: 'groupCategories',
+					namesKey: 'groupCategoryNames'
 				}
 			};
 

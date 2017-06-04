@@ -24,10 +24,7 @@
 		},
 		data() {
 			return {
-				contentComponent: 'EntityContentItemType',
 				isToggleable: true,
-				itemsKey: 'types',
-				namesKey: 'typeNames',
 				objectType: this.$store.state.objectType
 			}
 		}

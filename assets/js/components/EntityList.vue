@@ -45,14 +45,12 @@
 
 		mixins: [
 			EntityTools,
-			i18nTools	
+			i18nTools
 		],
 
 		props: [
-			'canAddNew',
-			'contentComponent',
 			'entityType',
-			'isToggleable',
+			'isToggleable', // @todo Move this to the EntityType schema
 		]
 	}
 </script>

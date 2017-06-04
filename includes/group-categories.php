@@ -21,7 +21,6 @@ function cboxol_groupcategories_admin_page() {
 
 	$app_config = array(
 		'subapp' => 'GroupCategoriesUI',
-		'objectType' => 'group',
 		'types' => $type_data,
 		'dummy' => $dummy_data,
 	);
@@ -29,7 +28,7 @@ function cboxol_groupcategories_admin_page() {
 	?>
 
 	<?php /* @todo */ ?>
-	<p>Group Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+	<p>Group Categories are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
 
 	<script type="text/javascript">
 		var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
