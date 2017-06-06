@@ -26,12 +26,7 @@
 					return this.$store.state[ this.itemsKey ][ this.slug ].groupTypes
 				},
 				set( value ) {
-					this.$store.commit( 'setEntityProperty', {
-						itemsKey: this.itemsKey,
-						property: 'groupTypes',
-						slug: this.slug,
-						value: value
-					} )
+					this.setEntityProp( 'groupTypes', value )
 				}
 			}
 		},

@@ -72,6 +72,7 @@ class GroupCategory {
 			'isCollapsed' => true,
 			'isEnabled' => true,
 			'isLoading' => false,
+			'isModified' => false,
 		);
 
 		$group_types = $this->get_group_types();
