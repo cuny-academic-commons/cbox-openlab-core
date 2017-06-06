@@ -63,13 +63,24 @@ class GroupCategories extends WP_REST_Controller {
 	public function edit_item( $request ) {
 		$params = $request->get_params();
 
-		$post = get_post( $params['id'] );
-		$signup_code = \CBOX\OL\SignupCode::get_instance_from_wp_post( $post );
+		$term_id = $params['wpTermId'];
+		$term = get_term( $term_id, 'bp_group_categories' );
+		if ( ! $term ) {
+			return new WP_Error( 'no_term_found', __( 'No term found by that ID.', 'cbox-openlab-core' ) );
+		}
 
-		$signup_code = $this->create_edit_helper( $signup_code, $params );
+		$data = $params['typeData'];
 
-		$response = rest_ensure_response( $signup_code->get_for_endpoint() );
+		$group_category = GroupCategory::get_instance_from_wp_term( $term );
 
+		$group_category->set_group_types( $data['groupTypes'] );
+		$group_category->set_name( $data['name'] );
+		$group_category->set_order( $data['settings']['Order']['data'] );
+
+		$group_category->save();
+
+		$retval = $group_category->get_for_endpoint();
+		$response = rest_ensure_response( $retval );
 		return $response;
 	}
 
