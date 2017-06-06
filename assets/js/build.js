@@ -224,13 +224,18 @@ var store = new _vuex2.default.Store({
 
 			state.signupCodes = newSignupCodes;
 		},
-		removeType: function removeType(state, payload) {
-			var index = state.typeNames.indexOf(payload.slug);
+		removeEntity: function removeEntity(state, payload) {
+			var itemsKey = payload.itemsKey,
+			    namesKey = payload.namesKey,
+			    slug = payload.slug;
+
+
+			var index = state[namesKey].indexOf(slug);
 			if (index > -1) {
-				state.typeNames.splice(index, 1);
+				state[namesKey].splice(index, 1);
 			}
 
-			delete state.types[payload.slug];
+			delete state[itemsKey][slug];
 		},
 		setEmailDomain: function setEmailDomain(state, payload) {
 			var key = payload.key,
@@ -825,7 +830,12 @@ exports.default = {
 					apiRoute: itemType.apiRoute,
 					id: itemType.id
 				}).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
-					itemType.$store.commit('removeType', { slug: itemType.slug });
+					itemType.$store.commit('removeEntity', {
+						itemsKey: itemType.itemsKey,
+						namesKey: itemType.namesKey,
+						slug: itemType.slug
+					});
+
 					itemType.$store.commit('orderEntities', {
 						itemsKey: itemType.itemsKey,
 						namesKey: itemType.namesKey

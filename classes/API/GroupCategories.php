@@ -63,7 +63,7 @@ class GroupCategories extends WP_REST_Controller {
 	public function edit_item( $request ) {
 		$params = $request->get_params();
 
-		$term_id = $params['wpTermId'];
+		$term_id = $params['id'];
 		$term = get_term( $term_id, 'bp_group_categories' );
 		if ( ! $term ) {
 			return new WP_Error( 'no_term_found', __( 'No term found by that ID.', 'cbox-openlab-core' ) );
@@ -84,29 +84,15 @@ class GroupCategories extends WP_REST_Controller {
 		return $response;
 	}
 
-	protected function create_edit_helper( \CBOX\OL\SignupCode $signup_code, $params ) {
-		$signup_code->set_code( $params['newSignupCode'] );
-		$signup_code->set_member_type( $params['newMemberType'] );
-
-		$group_id = BP_Groups_Group::get_id_from_slug( $params['newGroup'] );
-		$signup_code->set_group_id( $group_id );
-
-		$signup_code->set_author_id( bp_loggedin_user_id() );
-
-		$signup_code->save();
-
-		return $signup_code;
-	}
-
 	public function delete_item( $request ) {
 		$params = $request->get_params();
-		$wp_post_id = $params['id'];
+		$wp_term_id = $params['id'];
 
-		$success = (bool) wp_delete_post( $wp_post_id );
+		$success = wp_delete_term( $wp_term_id, 'bp_group_categories' );
 
 		$response = rest_ensure_response( $success );
 
-		if ( ! $success ) {
+		if ( ! $success || is_wp_error( $success ) ) {
 			$response->set_status( 500 );
 		}
 

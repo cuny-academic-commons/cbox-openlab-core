@@ -217,7 +217,12 @@
 					.then( itemType.checkStatus )
 					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {
-						itemType.$store.commit( 'removeType', { slug: itemType.slug } )
+						itemType.$store.commit( 'removeEntity', {
+							itemsKey: itemType.itemsKey,
+							namesKey: itemType.namesKey,
+							slug: itemType.slug
+						} )
+
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
 							namesKey: itemType.namesKey

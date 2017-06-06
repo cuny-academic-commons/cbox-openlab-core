@@ -198,13 +198,15 @@ const store = new Vuex.Store({
 			state.signupCodes = newSignupCodes
 		},
 
-		removeType ( state, payload ) {
-			var index = state.typeNames.indexOf( payload.slug )
+		removeEntity ( state, payload ) {
+			const { itemsKey, namesKey, slug } = payload
+
+			var index = state[ namesKey ].indexOf( slug )
 			if ( index > -1 ) {
-				state.typeNames.splice( index, 1 )
+				state[ namesKey ].splice( index, 1 )
 			}
 
-			delete state.types[ payload.slug ]
+			delete state[ itemsKey ][ slug ]
 		},
 
 		setEmailDomain( state, payload ) {

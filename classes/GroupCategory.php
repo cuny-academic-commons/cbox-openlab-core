@@ -55,7 +55,7 @@ class GroupCategory {
 					'data' => $this->get_order(),
 				),
 			),
-			'wpTermId' => $this->get_wp_term_id(),
+			'id' => $this->get_wp_term_id(),
 
 			'canBeDeleted' => true,
 			'isCollapsed' => true,
