@@ -39,6 +39,11 @@
 				>
 			</div>
 
+			<!-- durrrrr -->
+			<div v-if="'groupCategory' === entityType" class="cboxol-entity-content-section associated-group-types">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
+			</div>
+
 			<div class="cboxol-entity-content-section item-type-settings" v-if="showSettings">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.settings }}</h3>
 

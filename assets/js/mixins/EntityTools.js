@@ -7,7 +7,7 @@ module.exports = {
 		},
 
 		canBeDeleted() {
-			return this.getEntityProp( 'id' )
+			return this.getEntityProp( 'canBeDeleted' )
 		},
 
 		id() {

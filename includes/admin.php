@@ -62,6 +62,7 @@ function cboxol_register_assets() {
 			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),
 			'addNewCategory' => __( 'Add New Category', 'cbox-openlab-core' ),
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
+			'associatedWithGroupTypes' => __( 'Associated with Group Types', 'cbox-openlab-core' ),
 			'code' => _x( 'Code', 'Column header for signup code value', 'cbox-openlab-core' ),
 			'delete' => __( 'Delete', 'cbox-openlab-core' ),
 			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
