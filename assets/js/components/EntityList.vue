@@ -12,7 +12,7 @@
 
 		<AddNewEntityLink
 			:entityType="entityType"
-			:text="strings.addNewType"
+			:text="addNewText"
 		/>
 	</div>
 </template>
@@ -22,7 +22,6 @@
 	import EntityListItem from './EntityListItem.vue'
 
 	import EntityTools from '../mixins/EntityTools.js'
-	import i18nTools from '../mixins/i18nTools.js'
 
 	export default {
 		components: {
@@ -31,6 +30,9 @@
 		},
 
 		computed: {
+			addNewText() {
+				return this.getEntityTypeProp( 'addNewPlaceholder' )
+			},
 			entityNames() {
 				return this.$store.state[ this.namesKey ]
 			}
@@ -44,8 +46,7 @@
 		},
 
 		mixins: [
-			EntityTools,
-			i18nTools
+			EntityTools
 		],
 
 		props: [

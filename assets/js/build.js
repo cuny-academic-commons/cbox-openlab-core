@@ -623,10 +623,6 @@ var _EntityTools = require('../mixins/EntityTools.js');
 
 var _EntityTools2 = _interopRequireDefault(_EntityTools);
 
-var _i18nTools = require('../mixins/i18nTools.js');
-
-var _i18nTools2 = _interopRequireDefault(_i18nTools);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -636,6 +632,9 @@ exports.default = {
 	},
 
 	computed: {
+		addNewText: function addNewText() {
+			return this.getEntityTypeProp('addNewPlaceholder');
+		},
 		entityNames: function entityNames() {
 			return this.$store.state[this.namesKey];
 		}
@@ -649,7 +648,7 @@ exports.default = {
 	},
 
 
-	mixins: [_EntityTools2.default, _i18nTools2.default],
+	mixins: [_EntityTools2.default],
 
 	props: ['entityType', 'isToggleable']
 };
@@ -657,7 +656,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"entity-list"},_vm._l((_vm.entityNames),function(entityName){return _c('li',[_c('EntityListItem',{attrs:{"entityType":_vm.entityType,"isToggleable":_vm.isToggleable,"slug":entityName}})],1)})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"entityType":_vm.entityType,"text":_vm.strings.addNewType}})],1)}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('ul',{staticClass:"entity-list"},_vm._l((_vm.entityNames),function(entityName){return _c('li',[_c('EntityListItem',{attrs:{"entityType":_vm.entityType,"isToggleable":_vm.isToggleable,"slug":entityName}})],1)})),_vm._v(" "),_c('AddNewEntityLink',{attrs:{"entityType":_vm.entityType,"text":_vm.addNewText}})],1)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -669,7 +668,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-2576d798", __vue__options__)
   }
 })()}
-},{"../mixins/EntityTools.js":21,"../mixins/i18nTools.js":23,"./AddNewEntityLink.vue":2,"./EntityListItem.vue":6,"vue":62,"vue-hot-reload-api":61}],6:[function(require,module,exports){
+},{"../mixins/EntityTools.js":21,"./AddNewEntityLink.vue":2,"./EntityListItem.vue":6,"vue":62,"vue-hot-reload-api":61}],6:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1884,7 +1883,7 @@ module.exports = {
 					namesKey: 'typeNames'
 				},
 				groupCategory: {
-					addNewPlaceholder: this.strings.addNewType,
+					addNewPlaceholder: this.strings.addNewCategory,
 					apiRoute: 'group-category',
 					itemsKey: 'groupCategories',
 					namesKey: 'groupCategoryNames'

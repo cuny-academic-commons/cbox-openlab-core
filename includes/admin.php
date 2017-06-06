@@ -60,6 +60,7 @@ function cboxol_register_assets() {
 			'action' => _x( 'Action', 'Header for Action column in admin tables', 'cbox-openlab-core' ),
 			'add' => _x( 'Add', '"Add" button text', 'cbox-openlab-core' ),
 			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),
+			'addNewCategory' => __( 'Add New Category', 'cbox-openlab-core' ),
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
 			'code' => _x( 'Code', 'Column header for signup code value', 'cbox-openlab-core' ),
 			'delete' => __( 'Delete', 'cbox-openlab-core' ),
