@@ -27,10 +27,16 @@ function cboxol_init() {
 	require CBOXOL_PLUGIN_DIR . 'includes/member-types.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/group-types.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/group-sites.php';
-	require CBOXOL_PLUGIN_DIR . 'includes/group-categories.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/related-links.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/registration.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
+
+	require CBOXOL_PLUGIN_DIR . 'includes/group-categories.php';
+	if ( ! class_exists( 'Bp_Customizable_Group_Categories' ) ) {
+		require CBOXOL_PLUGIN_DIR . 'lib/bp-customizable-group-categories/bp-customizable-group-categories.php';
+		$bpcgc_plugin = new Bp_Customizable_Group_Categories();
+		$bpcgc_plugin->run();
+	}
 
 	// @todo Better loading for these libraries.
 	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';

@@ -179,7 +179,10 @@
 		methods: {
 			onAccordionClick: function( event ) {
 				event.preventDefault()
-				this.$store.commit( 'toggleCollapsed', { slug: this.slug } )
+				this.$store.commit( 'toggleCollapsed', {
+					itemsKey: this.itemsKey,
+					slug: this.slug
+				} )
 			},
 
 			getElId: function( base ) {

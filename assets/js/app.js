@@ -251,7 +251,8 @@ const store = new Vuex.Store({
 		},
 
 		setOrder ( state, payload ) {
-			state.types[ payload.slug ].settings.Order.data = payload.value
+			const { itemsKey, slug, value } = payload
+			state[ itemsKey ][ slug ].settings.Order.data = value
 		},
 
 		setSignupCode( state, payload ) {
@@ -338,7 +339,9 @@ const store = new Vuex.Store({
 		},
 
 		toggleCollapsed ( state, payload ) {
-			state.types[ payload.slug ].isCollapsed = ! state.types[ payload.slug ].isCollapsed
+			const { itemsKey, slug } = payload
+
+			state[ itemsKey ][ slug ].isCollapsed = ! state[ itemsKey ][ slug ].isCollapsed
 		}
 	}
 })

@@ -22,13 +22,17 @@
 		computed: {
 			order: {
 				get () {
-					return this.$store.state.types[ this.slug ].settings.Order.data
+					return this.$store.state[ this.itemsKey ][ this.slug ].settings.Order.data
 				},
 				set ( value ) {
 					if ( ! this.isModified ) {
 						this.isModified = true
 					}
-					this.$store.commit( 'setOrder', { slug: this.slug, value: value } )
+					this.$store.commit( 'setOrder', {
+						itemsKey: this.itemsKey,
+						slug: this.slug,
+						value: value
+					} )
 				}
 			}
 		},

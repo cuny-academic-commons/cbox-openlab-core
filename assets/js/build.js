@@ -277,7 +277,11 @@ var store = new _vuex2.default.Store({
 			state.types[payload.typeSlug].labels[payload.labelSlug].value = payload.value;
 		},
 		setOrder: function setOrder(state, payload) {
-			state.types[payload.slug].settings.Order.data = payload.value;
+			var itemsKey = payload.itemsKey,
+			    slug = payload.slug,
+			    value = payload.value;
+
+			state[itemsKey][slug].settings.Order.data = value;
 		},
 		setSignupCode: function setSignupCode(state, payload) {
 			var key = payload.key,
@@ -370,7 +374,11 @@ var store = new _vuex2.default.Store({
 			}
 		},
 		toggleCollapsed: function toggleCollapsed(state, payload) {
-			state.types[payload.slug].isCollapsed = !state.types[payload.slug].isCollapsed;
+			var itemsKey = payload.itemsKey,
+			    slug = payload.slug;
+
+
+			state[itemsKey][slug].isCollapsed = !state[itemsKey][slug].isCollapsed;
 		}
 	}
 });
@@ -785,7 +793,10 @@ exports.default = {
 	methods: {
 		onAccordionClick: function onAccordionClick(event) {
 			event.preventDefault();
-			this.$store.commit('toggleCollapsed', { slug: this.slug });
+			this.$store.commit('toggleCollapsed', {
+				itemsKey: this.itemsKey,
+				slug: this.slug
+			});
 		},
 
 		getElId: function getElId(base) {
@@ -1711,13 +1722,17 @@ exports.default = {
 	computed: {
 		order: {
 			get: function get() {
-				return this.$store.state.types[this.slug].settings.Order.data;
+				return this.$store.state[this.itemsKey][this.slug].settings.Order.data;
 			},
 			set: function set(value) {
 				if (!this.isModified) {
 					this.isModified = true;
 				}
-				this.$store.commit('setOrder', { slug: this.slug, value: value });
+				this.$store.commit('setOrder', {
+					itemsKey: this.itemsKey,
+					slug: this.slug,
+					value: value
+				});
 			}
 		}
 	},

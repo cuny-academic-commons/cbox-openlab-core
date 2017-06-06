@@ -7,21 +7,26 @@
 function cboxol_groupcategories_admin_page() {
 	wp_enqueue_script( 'cbox-ol-app' );
 
-	$types = cboxol_get_group_types( array(
-		'enabled' => null,
-	) );
+	$cats = cboxol_get_group_categories();
 
-	$type_data = array();
-	foreach ( $types as $type ) {
-		$type_data[ $type->get_slug() ] = $type->get_for_endpoint();
+	$cats_data = array();
+	foreach ( $cats as $cat ) {
+		$cats_data[ $cat->get_slug() ] = $cat->get_for_endpoint();
 	}
 
-	$dummy = \CBOX\OL\GroupType::get_dummy();
+	$group_types = cboxol_get_group_types();
+	$group_types_data = array();
+	foreach ( $group_types as $group_type ) {
+		$group_types_data[ $group_type->get_slug() ] = $group_type->get_for_endpoint();
+	}
+
+	$dummy = \CBOX\OL\GroupCategory::get_dummy();
 	$dummy_data = $dummy->get_for_endpoint();
 
 	$app_config = array(
 		'subapp' => 'GroupCategoriesUI',
-		'types' => $type_data,
+		'groupCategories' => $cats_data,
+		'groupTypes' => $group_types_data,
 		'dummy' => $dummy_data,
 	);
 
@@ -37,4 +42,21 @@ function cboxol_groupcategories_admin_page() {
 	<div id="cboxol-admin"></div>
 
 	<?php
+}
+
+function cboxol_get_group_categories() {
+	$args = array(
+		'taxonomy' => 'bp_group_categories',
+		'hide_empty' => false,
+	);
+
+	$terms = get_terms( $args );
+
+	$cats = array();
+	foreach ( $terms as $term ) {
+		$cat = \CBOX\OL\GroupCategory::get_instance_from_wp_term( $term );
+		$cats[ $term->name ] = $cat;
+	}
+
+	return $cats;
 }
