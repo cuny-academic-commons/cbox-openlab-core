@@ -81,7 +81,7 @@ class GroupCategory {
 
 		$order = get_term_meta( $term->term_id, 'cboxol_order', true );
 		if ( $order ) {
-			$cat->set_order( $term->order );
+			$cat->set_order( $order );
 		}
 
 		// Yikes - this is the way the data is stored by the plugin.
