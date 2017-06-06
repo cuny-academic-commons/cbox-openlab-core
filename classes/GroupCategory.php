@@ -17,40 +17,29 @@ class GroupCategory {
 	 * @return bool
 	 */
 	public function save() {
-		// @todo prevent dupes
-		$post_args = array(
-			'post_type' => 'cboxol_signup_code',
-			'post_title' => $this->get_code(),
-			'post_author' => $this->get_author_id(),
-			'post_status' => 'publish',
-		);
+		$created = wp_insert_term( $this->get_name(), 'bp_group_categories' );
 
-		$wp_post_id = $this->get_wp_post_id();
-		if ( $wp_post_id ) {
-			$post_args['ID'] = $wp_post_id;
-
-			$saved = wp_update_post( $post_args );
-		} else {
-			$saved = wp_insert_post( $post_args );
+		if ( is_wp_error( $created ) ) {
+			return $created;
 		}
 
-		if ( ! $saved ) {
-			// errors?
-			return false;
+		$term = get_term( $created['term_id'], 'bp_group_categories' );
+		update_term_meta( $term->term_id, 'cboxol_order', $this->get_order() );
+
+		// Must delete existing group type associations first.
+		$meta = get_term_meta( $term->term_id );
+		$group_types = array();
+		foreach ( $meta as $meta_key => $_ ) {
+			if ( 0 === strpos( $meta_key, 'bpcgc_group_' ) ) {
+				delete_term_meta( $term->term_id, $meta_key );
+			}
 		}
 
-		$wp_post_id = $saved;
-		$this->set_wp_post_id( $wp_post_id );
-
-		$post = get_post( $wp_post_id );
-		$this->set_author_id( $post->post_author );
-
-		update_post_meta( $wp_post_id, 'cboxol_signup_code_code', $this->get_code() );
-		update_post_meta( $wp_post_id, 'cboxol_signup_code_group_id', $this->get_group_id() );
-		$member_type = $this->get_member_type();
-		if ( ! is_wp_error( $member_type ) ) {
-			update_post_meta( $wp_post_id, 'cboxol_signup_code_member_type', $member_type->get_slug() );
+		foreach ( $this->get_group_types() as $group_type ) {
+			add_term_meta( $term->term_id, 'bpcgc_group_' . $group_type->get_slug(), 1 );
 		}
+
+		$this->set_wp_term_id( $term->term_id );
 
 		return true;
 	}
