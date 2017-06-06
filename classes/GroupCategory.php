@@ -57,7 +57,7 @@ class GroupCategory {
 
 	public function get_for_endpoint() {
 		$retval = array(
-			'group_types' => array(),
+			'groupTypes' => array(),
 			'name' => $this->get_name(),
 			'slug' => $this->get_slug(),
 			'settings' => array(
@@ -66,7 +66,7 @@ class GroupCategory {
 					'data' => $this->get_order(),
 				),
 			),
-			'wp_term_id' => $this->get_wp_term_id(),
+			'wpTermId' => $this->get_wp_term_id(),
 
 			'canBeDeleted' => true,
 			'isCollapsed' => true,
@@ -76,7 +76,7 @@ class GroupCategory {
 
 		$group_types = $this->get_group_types();
 		foreach ( $group_types as $group_type ) {
-			$retval['group_types'][] = $group_type->get_slug();
+			$retval['groupTypes'][] = $group_type->get_slug();
 		}
 
 		return $retval;

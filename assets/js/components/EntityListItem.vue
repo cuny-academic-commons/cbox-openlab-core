@@ -42,6 +42,10 @@
 			<!-- durrrrr -->
 			<div v-if="'groupCategory' === entityType" class="cboxol-entity-content-section associated-group-types">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
+				<AssociatedGroupTypeCheckboxes
+					:entityType="entityType"
+					:slug="slug"
+				/>
 			</div>
 
 			<div class="cboxol-entity-content-section item-type-settings" v-if="showSettings">
@@ -92,12 +96,14 @@
 	import TypeLabel from './TypeLabel.vue'
 
 	// All settings components must be available.
+	import AssociatedGroupTypeCheckboxes from './settings/AssociatedGroupTypeCheckboxes.vue'
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
 	import MayChangeMemberTypeTo from './settings/MayChangeMemberTypeTo.vue'
 	import Order from './settings/Order.vue'
 
 	export default {
 		components: {
+			AssociatedGroupTypeCheckboxes,
 			OnOffSwitch,
 			MayCreateCourses,
 			MayChangeMemberTypeTo,

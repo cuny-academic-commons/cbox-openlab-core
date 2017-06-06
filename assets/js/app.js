@@ -11,6 +11,7 @@ const store = new Vuex.Store({
 		emailDomains: {},
 		groupCategories: {},
 		groupCategoryNames: [],
+		groupTypes: {},
 		isEditing: {},
 		isLoading: {},
 		memberTypes: [],
