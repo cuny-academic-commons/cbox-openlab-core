@@ -366,12 +366,15 @@ var store = new _vuex2.default.Store({
 			    namesKey = payload.namesKey;
 
 
-			var entityName = void 0;
+			var entityName = '';
+			var entityNames = [];
 			for (entityName in state[itemsKey]) {
 				if (state[itemsKey].hasOwnProperty(entityName)) {
-					state[namesKey].push(entityName);
+					entityNames.push(entityName);
 				}
 			}
+
+			state[namesKey] = entityNames;
 		},
 		toggleCollapsed: function toggleCollapsed(state, payload) {
 			var itemsKey = payload.itemsKey,

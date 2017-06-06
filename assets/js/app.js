@@ -330,12 +330,15 @@ const store = new Vuex.Store({
 		setUpEntityNames ( state, payload ) {
 			const { itemsKey, namesKey } = payload
 
-			let entityName
+			let entityName = ''
+			let entityNames = []
 			for ( entityName in state[ itemsKey ] ) {
 				if ( state[ itemsKey ].hasOwnProperty( entityName ) ) {
-					state[ namesKey ].push( entityName )
+					entityNames.push( entityName )
 				}
 			}
+
+			state[ namesKey ] = entityNames
 		},
 
 		toggleCollapsed ( state, payload ) {
