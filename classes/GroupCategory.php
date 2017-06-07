@@ -17,13 +17,26 @@ class GroupCategory {
 	 * @return bool
 	 */
 	public function save() {
-		$created = wp_insert_term( $this->get_name(), 'bp_group_categories' );
+		$term_id = $this->get_wp_term_id();
+		if ( ! $term_id ) {
+			$created = wp_insert_term( $this->get_name(), 'bp_group_categories' );
 
-		if ( is_wp_error( $created ) ) {
-			return $created;
+			if ( is_wp_error( $created ) ) {
+				return $created;
+			}
+
+			$term_id = $created['term_id'];
+		} else {
+			$updated = wp_update_term( $term_id, 'bp_group_categories', array(
+				'name' => $this->get_name(),
+			) );
+
+			if ( is_wp_error( $updated ) ) {
+				return $updated;
+			}
 		}
 
-		$term = get_term( $created['term_id'], 'bp_group_categories' );
+		$term = get_term( $term_id, 'bp_group_categories' );
 		update_term_meta( $term->term_id, 'cboxol_order', $this->get_order() );
 
 		// Must delete existing group type associations first.
