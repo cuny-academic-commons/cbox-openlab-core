@@ -42,6 +42,17 @@ function cboxol_register_admin_menu() {
 		'',
 		2
 	);
+
+	add_submenu_page(
+		cboxol_admin_slug(),
+		__( 'Brand Settings', 'cbox-openlab-core' ),
+		__( 'Brand Settings', 'cbox-openlab-core' ),
+		'manage_network_options',
+		cboxol_admin_slug( 'brand-settings' ),
+		'cboxol_brand_settings_admin_page',
+		'',
+		2
+	);
 }
 
 function cboxol_register_assets() {
@@ -121,6 +132,9 @@ function cboxol_admin_slug( $parent_page = '' ) {
 		case 'group-settings' :
 			return 'cbox-ol-group-settings';
 
+		case 'brand-settings' :
+			return 'cbox-ol-brand-settings';
+
 		default :
 			return 'cbox-ol';
 	}
@@ -133,6 +147,9 @@ function cboxol_admin_page_label( $page ) {
 
 		case 'group-settings' :
 			return __( 'Group Settings', 'cbox-openlab-core' );
+
+		case 'brand-settings' :
+			return __( 'Brand Settings', 'cbox-openlab-core' );
 	}
 }
 
@@ -167,11 +184,20 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 function cboxol_admin_header( $parent_page, $sub_page ) {
 	$parent_title = $sub_title = '';
 
-	$title = sprintf(
-		'<h1>%s: %s</h1>',
-		cboxol_admin_page_label( $parent_page ),
-		cboxol_admin_subpage_label( $parent_page, $sub_page )
-	);
+	$subpage_label = cboxol_admin_subpage_label( $parent_page, $sub_page );
+
+	if ( $subpage_label ) {
+		$title = sprintf(
+			'<h1>%s: %s</h1>',
+			cboxol_admin_page_label( $parent_page ),
+			cboxol_admin_subpage_label( $parent_page, $sub_page )
+		);
+	} else {
+		$title = sprintf(
+			'<h1>%s</h1>',
+			cboxol_admin_page_label( $parent_page )
+		);
+	}
 
 	echo $title;
 
@@ -210,6 +236,8 @@ function cboxol_admin_tabs( $parent_page, $active_tab = '' ) {
  * @return array
  */
 function cboxol_get_admin_tabs( $parent_page ) {
+	$tabs = array();
+
 	switch ( $parent_page ) {
 		case 'member-settings' :
 			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'member-settings' ), 'admin.php' ) );
@@ -285,6 +313,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 			}
 
 		break;
+
+		case 'brand-settings' :
+			cboxol_brand_admin_page();
+		break;
 	}
 }
 
@@ -298,17 +330,18 @@ function cboxol_member_settings_admin_page() {
 	cboxol_admin_page( 'member-settings', $current_section );
 }
 
+function cboxol_brand_settings_admin_page() {
+	$current_section = '';
+	cboxol_admin_page( 'brand-settings', $current_section );
+}
 
 function cboxol_admin_page( $parent_page, $current_section ) {
 	?>
 
-	<div class="wrap cboxol-admin-wrap">
+	<div class="wrap cboxol-admin-wrap cboxol-admin-<?php echo esc_attr( $parent_page ); ?> <?php if ( $current_section ) : ?>cboxol-admin-<?php echo esc_attr( $parent_page ); ?>-<?php echo esc_attr( $current_section ); ?><?php endif; ?>">
 		<?php cboxol_admin_header( $parent_page, $current_section ); ?>
 
-		<div class="cboxol-admin-content">
-			<?php cboxol_admin_section_content( $parent_page, $current_section ); ?>
-		</div>
-
+		<?php cboxol_admin_section_content( $parent_page, $current_section ); ?>
 	</div>
 
 	<?php

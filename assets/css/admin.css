@@ -2,7 +2,12 @@
 	background: #fff;
 	border: 1px solid #ccc;
 	border-top: none;
+	margin-bottom: 40px;
 	padding: 30px 20px;
+}
+
+.cboxol-admin-content.has-top-border {
+	border-top: 1px solid #ccc;
 }
 
 .cboxol-admin-wrap .nav-tab:first-child {
