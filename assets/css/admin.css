@@ -10,6 +10,10 @@
 	border-top: 1px solid #ccc;
 }
 
+.cboxol-admin-brand-settings .cboxol-admin-content {
+	padding: 1px;
+}
+
 .cboxol-admin-wrap .nav-tab:first-child {
 	margin-left: 0;
 }
@@ -17,6 +21,18 @@
 .cboxol-admin-wrap .nav-tab-active {
 	background: #fff;
 	border-bottom: 1px solid #fff;
+}
+
+h3.cboxol-admin-content-header {
+	border-bottom: 1px solid #eee;
+	font-size: 1em;
+	margin-bottom: 0;
+	margin-top: 0;
+	padding: 8px 20px;
+}
+
+.cboxol-admin-content-copy {
+	padding: 0px 20px;
 }
 
 /** Tables */
