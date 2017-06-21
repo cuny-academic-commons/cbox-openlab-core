@@ -36,6 +36,21 @@ class CBOXOL_Command extends WP_CLI_Command {
 			wp_delete_post( $member_type->get_wp_post_id(), true );
 		}
 
+		// email domains
+		// signup codes
+
+		// Sliders.
+		$sliders = get_posts( array(
+			'post_type' => 'slider',
+			'post_status' => 'any',
+			'posts_per_page' => '-1',
+			'fields' => 'ids',
+		) );
+
+		foreach ( $sliders as $slide_id ) {
+			wp_delete_post( $slide_id, true );
+		}
+
 		delete_site_option( 'cboxol_ver' );
 
 		// Perform theme resets as well.
