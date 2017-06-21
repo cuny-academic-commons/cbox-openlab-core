@@ -15,6 +15,8 @@ class CBOXOL_Command extends WP_CLI_Command {
 	 * - widgets
 	 */
 	public function reset() {
+		global $wpdb;
+
 		$group_types = cboxol_get_group_types( array(
 			'enabled' => null,
 		) );
@@ -49,6 +51,12 @@ class CBOXOL_Command extends WP_CLI_Command {
 
 		foreach ( $sliders as $slide_id ) {
 			wp_delete_post( $slide_id, true );
+		}
+
+		// Group categories.
+		$group_cat_ids = $wpdb->get_col( "SELECT term_id FROM $wpdb->term_taxonomy WHERE taxonomy = 'bp_group_categories'" );
+		foreach ( $group_cat_ids as $group_cat_id ) {
+			wp_delete_term( $group_cat_id, 'bp_group_categories' );
 		}
 
 		delete_site_option( 'cboxol_ver' );
