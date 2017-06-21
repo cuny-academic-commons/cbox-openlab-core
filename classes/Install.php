@@ -16,6 +16,7 @@ class Install {
 	public function install() {
 		$this->install_default_member_types();
 		$this->install_default_group_types();
+		$this->install_default_group_categories();
 	}
 
 	public function upgrade() { }
@@ -280,6 +281,27 @@ class Install {
 			$type->save();
 
 			$type->create_template_site();
+		}
+	}
+
+	protected function install_default_group_categories() {
+		$cats = array(
+			'coursework' => array(
+				'name' => __( 'Coursework', 'cbox-openlab-core' ),
+				'types' => array( 'course', 'portfolio' ),
+			),
+			'research' => array(
+				'name' => __( 'Research', 'cbox-openlab-core' ),
+				'types' => array( 'portfolio', 'project' ),
+			),
+		);
+
+		foreach ( $cats as $cat_slug => $cat ) {
+			$c = new GroupCategory();
+			$c->set_slug( $cat_slug );
+			$c->set_name( $cat['name'] );
+			$c->set_group_types( $cat['types'] );
+			$c->save();
 		}
 	}
 }
