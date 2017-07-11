@@ -232,7 +232,7 @@ function openlab_add_user_to_groupblog( $group_id, $user_id ) {
 				$role = 'editor';
 			} else {
 				// Default role is lower for portfolios
-				$role = openlab_is_portfolio() ? 'subscriber' : 'author';
+				$role = cboxol_is_portfolio() ? 'subscriber' : 'author';
 			}
 		}
 
@@ -294,7 +294,7 @@ function openlab_force_blog_role_sync() {
 			if ( '-3' == $blog_public ) {
 				$status = $member->is_admin ? 'administrator' : '';
 			} else {
-				$status = openlab_is_portfolio( $group_id ) ? 'subscriber' : 'author';
+				$status = cboxol_is_portfolio( $group_id ) ? 'subscriber' : 'author';
 
 				if ( $member->is_admin ) {
 					$status = 'administrator';
