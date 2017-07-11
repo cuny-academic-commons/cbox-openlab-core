@@ -53,6 +53,17 @@ function cboxol_register_admin_menu() {
 		'',
 		2
 	);
+
+	add_submenu_page(
+		cboxol_admin_slug(),
+		__( 'Academic Units', 'cbox-openlab-core' ),
+		__( 'Academic Units', 'cbox-openlab-core' ),
+		'manage_network_options',
+		cboxol_admin_slug( 'academic-units' ),
+		'cboxol_academic_units_admin_page',
+		'',
+		2
+	);
 }
 
 function cboxol_register_assets() {
@@ -71,6 +82,7 @@ function cboxol_register_assets() {
 			'action' => _x( 'Action', 'Header for Action column in admin tables', 'cbox-openlab-core' ),
 			'add' => _x( 'Add', '"Add" button text', 'cbox-openlab-core' ),
 			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),
+			'addNewAcademicUnit' => __( 'Add New Academic Unit', 'cbox-openlab-core' ),
 			'addNewCategory' => __( 'Add New Category', 'cbox-openlab-core' ),
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
 			'associatedWithGroupTypes' => __( 'Associated with Group Types', 'cbox-openlab-core' ),
@@ -94,10 +106,12 @@ function cboxol_register_assets() {
 
 			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
 			'noEmailDomains' => __( 'Registration is currently open for all email domains. Enter one or more domains to restrict registration by email address.', 'cbox-openlab-core' ),
+			'none' => _x( 'None', 'null dropdown option', 'cbox-openlab-core' ),
 			'noSignupCodes' => __( 'Currently, users may select any Member Type when creating or editing their accounts. To restrict access to a Member Type, create a corresponding Signup Code below.', 'cbox-openlab-core' ),
 			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
 			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
 			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
+			'parent' => __( 'Parent', 'cbox-openlab-core' ),
 			'save' => __( 'Save', 'cbox-openlab-core' ),
 			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
 			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
@@ -135,6 +149,9 @@ function cboxol_admin_slug( $parent_page = '' ) {
 		case 'brand-settings' :
 			return 'cbox-ol-brand-settings';
 
+		case 'academic-units' :
+			return 'cbox-ol-academic-units';
+
 		default :
 			return 'cbox-ol';
 	}
@@ -150,6 +167,9 @@ function cboxol_admin_page_label( $page ) {
 
 		case 'brand-settings' :
 			return __( 'Brand Settings', 'cbox-openlab-core' );
+
+		case 'academic-units' :
+			return __( 'Academic Units', 'cbox-openlab-core' );
 	}
 }
 
@@ -317,6 +337,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 		case 'brand-settings' :
 			cboxol_brand_admin_page();
 		break;
+
+		case 'academic-units' :
+			cboxol_academic_units_main_admin_page();
+		break;
 	}
 }
 
@@ -333,6 +357,11 @@ function cboxol_member_settings_admin_page() {
 function cboxol_brand_settings_admin_page() {
 	$current_section = '';
 	cboxol_admin_page( 'brand-settings', $current_section );
+}
+
+function cboxol_academic_units_admin_page() {
+	$current_section = '';
+	cboxol_admin_page( 'academic-units', $current_section );
 }
 
 function cboxol_admin_page( $parent_page, $current_section ) {

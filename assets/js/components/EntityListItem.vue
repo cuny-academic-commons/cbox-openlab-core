@@ -39,6 +39,22 @@
 				>
 			</div>
 
+			<div v-if="supportsParent">
+				<div class="cboxol-entity-content-section">
+					<label
+						v-bind:for="slug + '-parent'"
+						class="cboxol-entity-content-section-header"
+					>{{ strings.parent }}</label>
+					<select
+						v-bind:id="slug + '-parent'"
+						v-model="parent"
+					>
+						<option value="0">{{ strings.none }}</option>
+						<option v-for="sibling in getSiblings" :value="sibling.slug">{{ sibling.name }}</option>
+					</select>
+				</div>
+			</div>
+
 			<!-- durrrrr -->
 			<div v-if="'groupCategory' === entityType" class="cboxol-entity-content-section associated-group-types">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
@@ -120,6 +136,19 @@
 				return this.$store.state[ this.itemsKey ][ this.slug ]
 			},
 
+			getSiblings() {
+				let siblings = {}
+				let sibling
+				for ( let s in this.$store.state[ this.itemsKey ] ) {
+					sibling = this.$store.state[ this.itemsKey ][ s ]
+					if ( sibling.slug !== this.slug ) {
+						siblings[ s ] = sibling
+					}
+				}
+
+				return siblings
+			},
+
 			showLabels() {
 				let hasLabels = false, s = null
 				if ( this.entityData.hasOwnProperty( 'labels' ) ) {
@@ -174,6 +203,10 @@
 				} else {
 					return this.strings.saved
 				}
+			},
+
+			supportsParent() {
+				return this.entityData.hasOwnProperty( 'parent' )
 			},
 
 			templateUrl() {

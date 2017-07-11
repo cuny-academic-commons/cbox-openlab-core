@@ -53,12 +53,23 @@ module.exports = {
 
 		namesKey() {
 			return this.getEntityTypeProp( 'namesKey' )
-		}
+		},
+
+		parent: {
+			get() { return this.getEntityProp( 'parent' ) },
+			set( value ) { this.setEntityProp( 'parent', value ) }
+		},
 	},
 
 	methods: {
 		getEntityTypeProp: function( prop ) {
 			const schema = {
+				academicUnitType: {
+					addNewPlaceholder: this.strings.addNewAcademicUnit,
+					apiRoute: 'academic-unit-type',
+					itemsKey: 'academicUnitTypes',
+					namesKey: 'academicUnitTypeNames'
+				},
 				groupType: {
 					addNewPlaceholder: this.strings.addNewType,
 					apiRoute: 'item-type',
