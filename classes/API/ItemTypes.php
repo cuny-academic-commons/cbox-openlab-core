@@ -130,7 +130,7 @@ class ItemTypes extends WP_REST_Controller {
 	public function create_item_permissions_check( $request ) {
 		$params = $request->get_params();
 
-		if ( ! isset( $params['objectType'] ) || 'member' !== $params['objectType'] ) {
+		if ( ! isset( $params['objectType'] ) || ! in_array( $params['objectType'], array( 'group', 'member' ) ) ) {
 			return false;
 		}
 
