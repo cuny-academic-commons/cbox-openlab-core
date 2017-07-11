@@ -39,20 +39,18 @@
 				>
 			</div>
 
-			<div v-if="supportsParent">
-				<div class="cboxol-entity-content-section">
-					<label
-						v-bind:for="slug + '-parent'"
-						class="cboxol-entity-content-section-header"
-					>{{ strings.parent }}</label>
-					<select
-						v-bind:id="slug + '-parent'"
-						v-model="parent"
-					>
-						<option value="0">{{ strings.none }}</option>
-						<option v-for="sibling in getSiblings" :value="sibling.slug">{{ sibling.name }}</option>
-					</select>
-				</div>
+			<div v-if="supportsParent" class="cboxol-entity-content-section">
+				<label
+					v-bind:for="slug + '-parent'"
+					class="cboxol-entity-content-section-header"
+				>{{ strings.parent }}</label>
+				<select
+					v-bind:id="slug + '-parent'"
+					v-model="parent"
+				>
+					<option value="0">{{ strings.none }}</option>
+					<option v-for="sibling in getSiblings" :value="sibling.slug">{{ sibling.name }}</option>
+				</select>
 			</div>
 
 			<!-- durrrrr -->
