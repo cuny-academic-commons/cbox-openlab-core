@@ -107,10 +107,9 @@ class ItemTypeBase {
 		$wp_post_id = $this->get_wp_post_id();
 
 		$name = $this->get_name();
+
+		// @todo Should we enforce slug immutability here?
 		$slug = $this->get_slug();
-		if ( ! $slug ) {
-			$slug = sanitize_title( $name );
-		}
 
 		$post_params = array(
 			'post_title' => $name,
