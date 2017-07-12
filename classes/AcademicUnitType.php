@@ -24,6 +24,7 @@ class AcademicUnitType {
 			'post_type' => 'cboxol_acadunit_type',
 			'post_title' => $this->get_name(),
 			'post_parent' => $this->get_parent(),
+			'post_status' => 'publish',
 		);
 
 		if ( $post_id ) {
@@ -34,7 +35,7 @@ class AcademicUnitType {
 				return $updated;
 			}
 		} else {
-			$created = wp_insert_post( $this->get_name(), 'bp_group_categories', true );
+			$created = wp_insert_post( $post_params );
 
 			if ( is_wp_error( $created ) ) {
 				return $created;
@@ -134,6 +135,22 @@ class AcademicUnitType {
 		return new self();
 	}
 
+	public static function get_instance_from_wp_post( \WP_Post $post ) {
+		$type = new self();
+
+		$type->set_name( $post->post_title );
+		$type->set_slug( $post->post_name );
+		$type->set_parent( (int) $post->post_parent );
+
+		$group_types = get_post_meta( $post->ID, 'cboxol_associated_group_types', true );
+		$type->set_group_types( $group_types );
+
+		$member_types = get_post_meta( $post->ID, 'cboxol_associated_member_types', true );
+		$type->set_member_types( $member_types );
+
+		return $type;
+	}
+
 	public function get_for_endpoint() {
 		$retval = array(
 			'groupTypes' => array(),
@@ -192,6 +209,15 @@ class AcademicUnitType {
 	 */
 	public function set_parent( int $parent ) {
 		$this->data['parent'] = $parent;
+	}
+
+	/**
+	 * Set slug.
+	 *
+	 * @param slug
+	 */
+	public function set_slug( $slug ) {
+		$this->data['slug'] = $slug;
 	}
 
 	/**
