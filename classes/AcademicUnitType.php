@@ -13,6 +13,45 @@ class AcademicUnitType {
 	);
 
 	/**
+	 * Save to the database.
+	 *
+	 * @return bool
+	 */
+	public function save() {
+		$post_id = $this->get_wp_post_id();
+
+		$post_params = array(
+			'post_type' => 'cboxol_acadunit_type',
+			'post_title' => $this->get_name(),
+			'post_parent' => $this->get_parent(),
+		);
+
+		if ( $post_id ) {
+			$post_params['ID'] = $post_id;
+			$updated = wp_update_post( $post_params );
+
+			if ( is_wp_error( $updated ) ) {
+				return $updated;
+			}
+		} else {
+			$created = wp_insert_post( $this->get_name(), 'bp_group_categories', true );
+
+			if ( is_wp_error( $created ) ) {
+				return $created;
+			}
+
+			$post_id = (int) $created;
+			$this->set_wp_post_id( $post_id );
+		}
+
+		// @todo validate?
+		update_post_meta( $post_id, 'cboxol_associated_member_types', $this->get_member_types() );
+		update_post_meta( $post_id, 'cboxol_associated_group_types', $this->get_group_types() );
+
+		return true;
+	}
+
+	/**
 	 * Get name.
 	 *
 	 * @return string
@@ -22,9 +61,9 @@ class AcademicUnitType {
 	}
 
 	/**
-	 * Get slug.
+	 * Get parent.
 	 *
-	 * @return string
+	 * @return int
 	 */
 	public function get_parent() {
 		return (int) $this->data['parent'];
@@ -135,5 +174,50 @@ class AcademicUnitType {
 		}
 
 		return $retval;
+	}
+
+	/**
+	 * Set name.
+	 *
+	 * @param string
+	 */
+	public function set_name( $name ) {
+		$this->data['name'] = $name;
+	}
+
+	/**
+	 * Set parent ID.
+	 *
+	 * @param int
+	 */
+	public function set_parent( int $parent ) {
+		$this->data['parent'] = $parent;
+	}
+
+	/**
+	 * Set group types.
+	 *
+	 * @param array
+	 */
+	public function set_group_types( $group_types ) {
+		$this->data['group_types'] = $group_types;
+	}
+
+	/**
+	 * Set member types.
+	 *
+	 * @param array
+	 */
+	public function set_member_types( $member_types ) {
+		$this->data['member_types'] = $member_types;
+	}
+
+	/**
+	 * Set WP post ID.
+	 *
+	 * @param int
+	 */
+	public function set_wp_post_id( int $wp_post_id ) {
+		$this->data['wp_post_id'] = $wp_post_id;
 	}
 }
