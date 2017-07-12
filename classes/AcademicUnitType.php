@@ -6,6 +6,7 @@ class AcademicUnitType {
 	protected $data = array(
 		'group_types' => array(),
 		'member_types' => array(),
+		'order' => null,
 		'name' => null,
 		'parent' => null,
 		'slug' => null,
@@ -77,6 +78,15 @@ class AcademicUnitType {
 	 */
 	public function get_slug() {
 		return $this->data['slug'];
+	}
+
+	/**
+	 * Get slug.
+	 *
+	 * @return int
+	 */
+	public function get_order() {
+		return (int) $this->data['order'];
 	}
 
 	/**
@@ -158,7 +168,12 @@ class AcademicUnitType {
 			'name' => $this->get_name(),
 			'parent' => $this->get_parent(),
 			'slug' => $this->get_slug(),
-			'settings' => array(),
+			'settings' => array(
+				'Order' => array(
+					'component' => 'Order',
+					'data' => $this->get_order(),
+				),
+			),
 
 			// @todo
 			'units' => array(
@@ -209,6 +224,15 @@ class AcademicUnitType {
 	 */
 	public function set_parent( int $parent ) {
 		$this->data['parent'] = $parent;
+	}
+
+	/**
+	 * Set order.
+	 *
+	 * @param int
+	 */
+	public function set_order( int $order ) {
+		$this->data['order'] = $order;
 	}
 
 	/**
