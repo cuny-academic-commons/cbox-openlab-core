@@ -53,6 +53,16 @@
 				</select>
 			</div>
 
+			<div v-if="supportsAssociatedWithMemberTypes" class="cboxol-entity-content-section">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithMemberTypes }}</h3>
+
+				<AssociatedTypeDropdowns
+					associatedType="memberTypes"
+					:entityType="entityType"
+					:slug="slug"
+				/>
+			</div>
+
 			<!-- durrrrr -->
 			<div v-if="'groupCategory' === entityType" class="cboxol-entity-content-section associated-group-types">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
@@ -111,12 +121,14 @@
 
 	// All settings components must be available.
 	import AssociatedGroupTypeCheckboxes from './settings/AssociatedGroupTypeCheckboxes.vue'
+	import AssociatedTypeDropdowns from './settings/AssociatedTypeDropdowns.vue'
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
 	import MayChangeMemberTypeTo from './settings/MayChangeMemberTypeTo.vue'
 	import Order from './settings/Order.vue'
 
 	export default {
 		components: {
+			AssociatedTypeDropdowns,
 			AssociatedGroupTypeCheckboxes,
 			OnOffSwitch,
 			MayCreateCourses,
@@ -201,6 +213,14 @@
 				} else {
 					return this.strings.saved
 				}
+			},
+
+			supportsAssociatedWithMemberTypes() {
+				return this.itemsKey === 'academicUnitTypes'
+			},
+
+			supportsAssociatedWithGroupTypes() {
+				return this.itemsKey === 'academicUnitTypes'
 			},
 
 			supportsParent() {

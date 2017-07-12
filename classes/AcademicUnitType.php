@@ -97,11 +97,12 @@ class AcademicUnitType {
 
 	public function get_for_endpoint() {
 		$retval = array(
+			'groupTypes' => array(),
+			'memberTypes' => array(),
 			'name' => $this->get_name(),
 			'parent' => $this->get_parent(),
 			'slug' => $this->get_slug(),
-			'settings' => array(
-			),
+			'settings' => array(),
 
 			// @todo
 			'units' => array(
