@@ -47,7 +47,7 @@ class AcademicUnitTypes extends WP_REST_Controller {
 
 		$academic_unit_type = new AcademicUnitType();
 		$academic_unit_type->set_group_types( $data['groupTypes'] );
-		$academic_unit_type->set_member_types( $data['groupTypes'] );
+		$academic_unit_type->set_member_types( $data['memberTypes'] );
 
 		// Let WordPress set the slug.
 		$name = $data['name'];
