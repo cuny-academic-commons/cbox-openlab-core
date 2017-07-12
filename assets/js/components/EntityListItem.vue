@@ -63,6 +63,16 @@
 				/>
 			</div>
 
+			<div v-if="supportsAssociatedWithGroupTypes" class="cboxol-entity-content-section">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
+
+				<AssociatedTypeDropdowns
+					associatedType="groupTypes"
+					:entityType="entityType"
+					:slug="slug"
+				/>
+			</div>
+
 			<!-- durrrrr -->
 			<div v-if="'groupCategory' === entityType" class="cboxol-entity-content-section associated-group-types">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
