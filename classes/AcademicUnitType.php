@@ -104,15 +104,7 @@ class AcademicUnitType {
 	 * @return array
 	 */
 	public function get_group_types() {
-		$group_types = array();
-		foreach ( $this->data['group_types'] as $gt ) {
-			$group_type = cboxol_get_group_type( $gt );
-			if ( ! is_wp_error( $group_type ) ) {
-				$group_types[ $gt ] = $group_type;
-			}
-		}
-
-		return $group_types;
+		return $this->data['group_types'];
 	}
 
 	/**
@@ -121,15 +113,7 @@ class AcademicUnitType {
 	 * @return array
 	 */
 	public function get_member_types() {
-		$member_types = array();
-		foreach ( $this->data['member_types'] as $mt ) {
-			$member_type = cboxol_get_member_type( $mt );
-			if ( ! is_wp_error( $member_type ) ) {
-				$member_types[ $mt ] = $member_type;
-			}
-		}
-
-		return $member_types;
+		return $this->data['member_types'];
 	}
 
 	/**
@@ -196,14 +180,10 @@ class AcademicUnitType {
 		);
 
 		$group_types = $this->get_group_types();
-		foreach ( $group_types as $group_type ) {
-			$retval['groupTypes'][] = $group_type->get_slug();
-		}
+		$retval['groupTypes'] = $group_types;
 
 		$member_types = $this->get_member_types();
-		foreach ( $member_types as $member_type ) {
-			$retval['memberTypes'][] = $member_type->get_slug();
-		}
+		$retval['memberTypes'] = $member_types;
 
 		return $retval;
 	}
