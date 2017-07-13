@@ -972,7 +972,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6e83156a", __vue__options__)
+    hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":24,"../mixins/EntityTools.js":25,"../mixins/i18nTools.js":27,"./OnOffSwitch.vue":11,"./TypeLabel.vue":16,"./settings/AssociatedGroupTypeCheckboxes.vue":18,"./settings/AssociatedTypeDropdowns.vue":20,"./settings/MayChangeMemberTypeTo.vue":21,"./settings/MayCreateCourses.vue":22,"./settings/Order.vue":23,"vue":72,"vue-hot-reload-api":71}],8:[function(require,module,exports){
@@ -1840,7 +1840,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',_vm._l((_vm.allTypes),function(type){return _c('li',[_c('label',{attrs:{"for":_vm.associatedType + '-' + type.value}},[_vm._v(_vm._s(type.label))]),_vm._v(" "),_c('AssociatedTypeDropdown',{attrs:{"associatedType":_vm.associatedType,"associatedTypeSlug":type.value,"entityType":_vm.entityType,"slug":_vm.slug}})],1)}))}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"associated-type-dropdowns"},_vm._l((_vm.allTypes),function(type){return _c('li',[_c('label',{attrs:{"for":_vm.associatedType + '-' + type.value}},[_vm._v(_vm._s(type.label))]),_vm._v(" "),_c('AssociatedTypeDropdown',{attrs:{"associatedType":_vm.associatedType,"associatedTypeSlug":type.value,"entityType":_vm.entityType,"slug":_vm.slug}})],1)}))}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1849,7 +1849,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-4c8acb8d", __vue__options__)
   } else {
-    hotAPI.reload("data-v-4c8acb8d", __vue__options__)
+    hotAPI.rerender("data-v-4c8acb8d", __vue__options__)
   }
 })()}
 },{"./AssociatedTypeDropdown.vue":19,"vue":72,"vue-hot-reload-api":71}],21:[function(require,module,exports){

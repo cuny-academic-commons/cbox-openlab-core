@@ -1,5 +1,5 @@
 <template>
-	<ul>
+	<ul class="associated-type-dropdowns">
 		<li v-for="type in allTypes">
 			<label v-bind:for="associatedType + '-' + type.value">{{ type.label }}</label>
 			<AssociatedTypeDropdown
