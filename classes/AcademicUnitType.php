@@ -24,7 +24,6 @@ class AcademicUnitType {
 		$post_params = array(
 			'post_type' => 'cboxol_acadunit_type',
 			'post_title' => $this->get_name(),
-			'post_parent' => $this->get_parent(),
 			'post_status' => 'publish',
 		);
 
@@ -49,6 +48,7 @@ class AcademicUnitType {
 		// @todo validate?
 		update_post_meta( $post_id, 'cboxol_associated_member_types', $this->get_member_types() );
 		update_post_meta( $post_id, 'cboxol_associated_group_types', $this->get_group_types() );
+		update_post_meta( $post_id, 'cboxol_academic_unit_type_parent', $this->get_parent() );
 
 		return true;
 	}
@@ -65,10 +65,10 @@ class AcademicUnitType {
 	/**
 	 * Get parent.
 	 *
-	 * @return int
+	 * @return string
 	 */
 	public function get_parent() {
-		return (int) $this->data['parent'];
+		return $this->data['parent'];
 	}
 
 	/**
@@ -135,7 +135,9 @@ class AcademicUnitType {
 		$type->set_wp_post_id( $post->ID );
 		$type->set_name( $post->post_title );
 		$type->set_slug( $post->post_name );
-		$type->set_parent( (int) $post->post_parent );
+
+		$parent = get_post_meta( $post->ID, 'cboxol_academic_unit_type_parent', true );
+		$type->set_parent( $parent );
 
 		$group_types = get_post_meta( $post->ID, 'cboxol_associated_group_types', true );
 		$type->set_group_types( $group_types );
@@ -201,9 +203,9 @@ class AcademicUnitType {
 	/**
 	 * Set parent ID.
 	 *
-	 * @param int
+	 * @param string
 	 */
-	public function set_parent( int $parent ) {
+	public function set_parent( $parent ) {
 		$this->data['parent'] = $parent;
 	}
 

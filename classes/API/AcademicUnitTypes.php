@@ -53,7 +53,7 @@ class AcademicUnitTypes extends WP_REST_Controller {
 		$name = $data['name'];
 		$academic_unit_type->set_name( $name );
 
-		$academic_unit_type->set_parent( (int) $data['parent'] );
+		$academic_unit_type->set_parent( $data['parent'] );
 
 		$academic_unit_type->save();
 
