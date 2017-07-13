@@ -132,6 +132,7 @@ class AcademicUnitType {
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 
+		$type->set_wp_post_id( $post->ID );
 		$type->set_name( $post->post_title );
 		$type->set_slug( $post->post_name );
 		$type->set_parent( (int) $post->post_parent );
