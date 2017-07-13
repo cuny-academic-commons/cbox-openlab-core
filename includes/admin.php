@@ -4,13 +4,14 @@
  * General admin functionality.
  */
 
-add_action( 'admin_menu', 'cboxol_register_admin_menu' );
+add_action( cbox_admin_prop( 'menu' ), 'cboxol_register_admin_menu' );
 add_action( 'admin_enqueue_scripts', 'cboxol_register_assets' );
 
 function cboxol_register_admin_menu() {
 	// @todo only add on "main" site
 	// @todo icon
 	// @todo How do I make it "About" as first option
+	/*
 	add_menu_page(
 		__( 'OpenLab Setup', 'cbox-openlab-core' ),
 		__( 'OpenLab Setup', 'cbox-openlab-core' ),
@@ -20,6 +21,7 @@ function cboxol_register_admin_menu() {
 		'',
 		2
 	);
+	*/
 
 	add_submenu_page(
 		cboxol_admin_slug(),
@@ -156,7 +158,7 @@ function cboxol_admin_slug( $parent_page = '' ) {
 			return 'cbox-ol-academic-units';
 
 		default :
-			return 'cbox-ol';
+			return 'cbox';
 	}
 }
 

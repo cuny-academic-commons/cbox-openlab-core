@@ -1,7 +1,8 @@
 <?php
 
 function cboxol_brand_admin_page() {
-	$customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
+	$url_base = get_admin_url( bp_get_root_blog_id(), 'customize.php' );
+	$customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), $url_base );
 
 	?>
 	<div class="cboxol-admin-content">
