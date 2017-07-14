@@ -30,14 +30,12 @@ class AcademicUnitTypes extends WP_REST_Controller {
 				'permission_callback' => array( $this, 'update_item_permissions_check' ),
 				'args'            => $this->get_endpoint_args_for_item_schema( true ),
 			),
-			/*
 			array(
 				'methods'         => WP_REST_Server::DELETABLE,
 				'callback'        => array( $this, 'delete_item' ),
 				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
 				'args'            => $this->get_endpoint_args_for_item_schema( true ),
 			),
-			*/
 		) );
 	}
 
@@ -68,7 +66,30 @@ class AcademicUnitTypes extends WP_REST_Controller {
 		return $this->create_update_helper( $academic_unit_type, $data );
 	}
 
+	public function delete_item( $request ) {
+		$params = $request->get_params();
+
+		$deleted = wp_delete_post( $params['id'] );
+
+		if ( $deleted ) {
+			$data = __( 'OK', 'cbox-openlab-core' );
+			$status = 200;
+		} else {
+			$data = __( 'Cannot delete type.', 'cbox-openlab-core' );
+			$status = 403;
+		}
+
+		$response = new WP_REST_Response( $data );
+		$response->set_status( $status );
+
+		return $response;
+	}
+
 	public function update_item_permissions_check( $request ) {
+		return current_user_can( 'manage_network_options' );
+	}
+
+	public function delete_item_permissions_check( $request ) {
 		return current_user_can( 'manage_network_options' );
 	}
 
