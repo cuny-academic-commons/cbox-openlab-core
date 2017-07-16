@@ -22,6 +22,7 @@ class AcademicUnitType {
 		$post_id = $this->get_wp_post_id();
 
 		$post_params = array(
+			'menu_order' => $this->get_order(),
 			'post_type' => 'cboxol_acadunit_type',
 			'post_title' => $this->get_name(),
 			'post_status' => 'publish',
@@ -135,6 +136,7 @@ class AcademicUnitType {
 		$type->set_wp_post_id( $post->ID );
 		$type->set_name( $post->post_title );
 		$type->set_slug( $post->post_name );
+		$type->set_order( $post->menu_order );
 
 		$parent = get_post_meta( $post->ID, 'cboxol_academic_unit_type_parent', true );
 		$type->set_parent( $parent );
