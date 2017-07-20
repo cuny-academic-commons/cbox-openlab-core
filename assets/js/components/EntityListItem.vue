@@ -117,6 +117,12 @@
 			<div class="cboxol-entity-submit">
 				<button class="button button-primary" v-on:click="onSubmit" v-bind:disabled="isLoading || ! isModified">{{ saveButtonText }}</button>
 			</div>
+
+			<div v-if="supportsAcademicUnits" class="cboxol-academic-units-of-type">
+				<AcademicUnits
+					:academicUnitTypeSlug="slug"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -130,6 +136,7 @@
 	import TypeLabel from './TypeLabel.vue'
 
 	// All settings components must be available.
+	import AcademicUnits from './settings/AcademicUnits.vue'
 	import AssociatedGroupTypeCheckboxes from './settings/AssociatedGroupTypeCheckboxes.vue'
 	import AssociatedTypeDropdowns from './settings/AssociatedTypeDropdowns.vue'
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
@@ -138,6 +145,7 @@
 
 	export default {
 		components: {
+			AcademicUnits,
 			AssociatedTypeDropdowns,
 			AssociatedGroupTypeCheckboxes,
 			OnOffSwitch,
@@ -230,6 +238,10 @@
 			},
 
 			supportsAssociatedWithGroupTypes() {
+				return this.itemsKey === 'academicUnitTypes'
+			},
+
+			supportsAcademicUnits() {
 				return this.itemsKey === 'academicUnitTypes'
 			},
 

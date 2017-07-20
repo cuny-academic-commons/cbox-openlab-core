@@ -13,6 +13,16 @@ function cboxol_academic_units_main_admin_page() {
 		$type_data[ $academic_unit_type->get_slug() ] = $academic_unit_type->get_for_endpoint();
 	}
 
+	$unit_data = array();
+
+	// 'new' for each unit type.
+	foreach ( $academic_unit_types as $academic_unit_type ) {
+		$unit_data[ '_new-' . $academic_unit_type->get_slug() ] = array(
+			'name' => '',
+			'parent' => '',
+		);
+	}
+
 	$mtypes = cboxol_get_member_types();
 	$member_types = array();
 	foreach ( $mtypes as $mtype ) {
@@ -39,6 +49,7 @@ function cboxol_academic_units_main_admin_page() {
 	$app_config = array(
 		'subapp' => 'AcademicUnitsUI',
 		'objectType' => 'member',
+		'academicUnits' => $unit_data,
 		'academicUnitTypes' => $type_data,
 		'dummy' => $dummy_data,
 		'groupTypes' => $group_types,

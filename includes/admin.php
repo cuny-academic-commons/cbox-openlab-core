@@ -79,10 +79,12 @@ function cboxol_register_assets() {
 		'nonce' => wp_create_nonce( 'wp_rest' ),
 		'endpointBase' => home_url( '/wp-json/cboxol/v1/' ),
 		'strings' => array(
+			'academicUnitNameLabel' => _x( 'Name', '"Name" label for adding new academic units', 'cbox-openlab-core' ),
 			'action' => _x( 'Action', 'Header for Action column in admin tables', 'cbox-openlab-core' ),
 			'add' => _x( 'Add', '"Add" button text', 'cbox-openlab-core' ),
 			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),
 			'addNewAcademicUnit' => __( 'Add New Academic Unit', 'cbox-openlab-core' ),
+			'addNewAcademicUnitTitle' => __( 'Add New', 'cbox-openlab-core' ),
 			'addNewCategory' => __( 'Add New Category', 'cbox-openlab-core' ),
 			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
 			'associatedWithGroupTypes' => __( 'Associated with Group Types', 'cbox-openlab-core' ),
