@@ -91,15 +91,6 @@ class AcademicUnitType {
 	}
 
 	/**
-	 * Get term ID.
-	 *
-	 * @return int
-	 */
-	public function get_wp_term_id() {
-		return (int) $this->data['wp_term_id'];
-	}
-
-	/**
 	 * Get group types.
 	 *
 	 * @return array

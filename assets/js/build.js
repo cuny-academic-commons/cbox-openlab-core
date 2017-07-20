@@ -1755,8 +1755,6 @@ exports.default = {
 				itemsKey: 'academicUnits',
 				slug: unitType.newUnitSlug
 			}).then(unitType.checkStatus).then(unitType.parseJSON, unitType.ajaxError).then(function (data) {
-				itemType.setEntityProp('id', data.id);
-
 
 				unitType.addNewIsLoading = false;
 			});

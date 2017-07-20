@@ -83,7 +83,7 @@
 				.then( unitType.checkStatus )
 				.then( unitType.parseJSON, unitType.ajaxError )
 				.then( function( data ) {
-					itemType.setEntityProp( 'id', data.id )
+//					itemType.setEntityProp( 'id', data.id )
 					/*
 					itemType.$store.commit( 'orderEntities', {
 						itemsKey: itemType.itemsKey,

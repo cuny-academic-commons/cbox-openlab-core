@@ -25,6 +25,9 @@ function openlab_rest_api_init() {
 
 	$academic_unit_types_endpoint = new \CBOX\OL\API\AcademicUnitTypes();
 	$academic_unit_types_endpoint->register_routes();
+
+	$academic_units_endpoint = new \CBOX\OL\API\AcademicUnits();
+	$academic_units_endpoint->register_routes();
 }
 add_action( 'rest_api_init', 'openlab_rest_api_init' );
 

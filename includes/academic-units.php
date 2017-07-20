@@ -4,6 +4,33 @@
  * Academic Units functionality.
  */
 
+/**
+ * Register post types for Academic Units.
+ *
+ * @since 1.0.0
+ */
+function cboxol_academic_units_register_post_types() {
+	register_post_type( 'cboxol_acadunit_type', array(
+		'labels' => array(
+			'name' => _x( 'Academic Unit Types', 'Post type general name', 'cbox-openlab-core' ),
+		),
+		'public' => false,
+		'publicly_queryable' => false,
+		'show_ui' => false,
+		'show_in_menu' => false,
+	) );
+
+	register_post_type( 'cboxol_acadunit', array(
+		'labels' => array(
+			'name' => _x( 'Academic Units', 'Post type general name', 'cbox-openlab-core' ),
+		),
+		'public' => false,
+		'publicly_queryable' => false,
+		'show_ui' => false,
+		'show_in_menu' => false,
+	) );
+}
+
 function cboxol_academic_units_main_admin_page() {
 	wp_enqueue_script( 'cbox-ol-app' );
 
@@ -20,6 +47,7 @@ function cboxol_academic_units_main_admin_page() {
 		$unit_data[ '_new-' . $academic_unit_type->get_slug() ] = array(
 			'name' => '',
 			'parent' => '',
+			'type' => $academic_unit_type->get_slug(),
 		);
 	}
 
