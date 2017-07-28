@@ -51,6 +51,11 @@ function cboxol_academic_units_main_admin_page() {
 		);
 	}
 
+	$academic_units = cboxol_get_academic_units();
+	foreach ( $academic_units as $academic_unit ) {
+		$unit_data[ $academic_unit->get_slug() ] = $academic_unit->get_for_endpoint();
+	}
+
 	$mtypes = cboxol_get_member_types();
 	$member_types = array();
 	foreach ( $mtypes as $mtype ) {
@@ -129,6 +134,41 @@ function cboxol_get_academic_unit_types( $args = array() ) {
 	$types = array();
 	foreach ( $type_posts as $type_post ) {
 		$types[ $type_post->post_name ] = \CBOX\OL\AcademicUnitType::get_instance_from_wp_post( $type_post );
+	}
+
+	return $types;
+}
+
+/**
+ * Get registered Academic Units.
+ *
+ * @params array $args
+ */
+function cboxol_get_academic_units( $args = array() ) {
+	$post_args = array(
+		'post_type' => 'cboxol_acadunit',
+		'post_status' => 'publish',
+		'posts_per_page' => -1,
+		'orderby' => array(
+			'title' => 'ASC',
+		),
+		'fields' => 'ids',
+	);
+
+	$last_changed = wp_cache_get_last_changed( 'posts' );
+	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$ids = wp_cache_get( $cache_key, 'cboxol_academic_units' );
+	if ( false === $ids ) {
+		$ids = get_posts( $post_args );
+		_prime_post_caches( $ids );
+		wp_cache_set( $cache_key, $ids, 'cboxol_academic_units' );
+	}
+
+	$type_posts = array_map( 'get_post', $ids );
+
+	$types = array();
+	foreach ( $type_posts as $type_post ) {
+		$types[ $type_post->post_name ] = \CBOX\OL\AcademicUnit::get_instance_from_wp_post( $type_post );
 	}
 
 	return $types;

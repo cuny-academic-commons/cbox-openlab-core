@@ -4,6 +4,7 @@ namespace CBOX\OL;
 
 class AcademicUnit {
 	protected $data = array(
+		'count' => 0,
 		'name' => null,
 		'parent' => null,
 		'slug' => null,
@@ -48,9 +49,18 @@ class AcademicUnit {
 
 		// @todo validate?
 		update_post_meta( $post_id, 'cboxol_academic_unit_type', $this->get_type() );
-		update_post_meta( $post_id, 'cboxol_academic_unit_pe_parent', $this->get_parent() );
+		update_post_meta( $post_id, 'cboxol_academic_unit_parent', $this->get_parent() );
 
 		return true;
+	}
+
+	/**
+	 * Get count.
+	 *
+	 * @return string
+	 */
+	public function get_count() {
+		return (int) $this->data['count'];
 	}
 
 	/**
@@ -100,6 +110,7 @@ class AcademicUnit {
 
 	public function get_for_endpoint() {
 		$retval = array(
+			'count' => $this->get_count(),
 			'id' => $this->get_wp_post_id(),
 			'name' => $this->get_name(),
 			'parent' => $this->get_parent(),
@@ -111,6 +122,22 @@ class AcademicUnit {
 		);
 
 		return $retval;
+	}
+
+	public static function get_instance_from_wp_post( \WP_Post $post ) {
+		$type = new self();
+
+		$type->set_wp_post_id( $post->ID );
+		$type->set_name( $post->post_title );
+		$type->set_slug( $post->post_name );
+
+		$parent = get_post_meta( $post->ID, 'cboxol_academic_unit_parent', true );
+		$type->set_parent( $parent );
+
+		$acad_unit_type = get_post_meta( $post->ID, 'cboxol_academic_unit_type', true );
+		$type->set_type( $acad_unit_type );
+
+		return $type;
 	}
 
 	/**

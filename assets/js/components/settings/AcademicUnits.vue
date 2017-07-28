@@ -13,6 +13,11 @@
 
 			<fieldset v-if="typeSupportsParent" class="new-academic-unit-parent">
 				<legend>{{ strings.parent }}</legend>
+
+				<AcademicUnitParentSelector
+					:academicUnitTypeSlug="academicUnitTypeSlug"
+					:thisUnitSlug="newUnitSlug"
+				/>
 			</fieldset>
 
 			<button
@@ -23,15 +28,52 @@
 		</div>
 
 		<div class="academic-unit-list">
-			{{academicUnitType}}
+			<table class="wp-list-table widefat fixed striped">
+				<thead><tr>
+					<td :id="academicUnitTypeSlug + '-cb'" class="manage-column column-cb check-column">
+						<label class="screen-reader-text" :for="academicUnitTypeSlug + '-cb-select-all'">{{ strings.selectAll }}</label>
+						<input :id="academicUnitTypeSlug + '-cb-select-all'" type="checkbox" />
+					</td>
+
+					<td :id="academicUnitTypeSlug + '-name'" class="manage-column column-name column-primary" scope="col">
+						{{ strings.name }}
+					</td>
+
+					<td :id="academicUnitTypeSlug + '-parent'" class="manage-column column-parent" scope="col">
+						{{ strings.parent }}
+					</td>
+
+					<td :id="academicUnitTypeSlug + '-posts'" class="manage-posts column-posts" scope="col">
+						{{ strings.count }}
+					</td>
+				</tr></thead>
+
+				<tbody>
+					<template v-if="unitsOfType.length > 0" v-for="unitSlug in unitsOfType">
+						<AcademicUnit :slug="unitSlug" />
+					</template>
+
+					<tr v-if="unitsOfType.length === 0">
+						<td colspan="4">{{ strings.noUnitsOfType }}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </template>
 
 <script>
+	import AcademicUnit from './AcademicUnit.vue'
+	import AcademicUnitParentSelector from './AcademicUnitParentSelector.vue'
+
 	import i18nTools from '../../mixins/i18nTools.js'
 
 	export default {
+		components: {
+			AcademicUnit,
+			AcademicUnitParentSelector
+		},
+
 		computed: {
 			academicUnitType() {
 				return this.$store.state.academicUnitTypes[ this.academicUnitTypeSlug ]
@@ -62,6 +104,23 @@
 
 			typeSupportsParent() {
 				return this.academicUnitType.parent.length > 0
+			},
+
+			unitsOfType() {
+				let units = []
+				for ( let unitSlug in this.$store.state.academicUnits ) {
+					if ( '_new-' === unitSlug.substr( 0, 5 ) ) {
+						continue
+					}
+
+					if ( this.academicUnitTypeSlug !== this.$store.state.academicUnits[ unitSlug ].type ) {
+						continue
+					}
+
+					units.push( unitSlug )
+				}
+
+				return units
 			}
 		},
 
