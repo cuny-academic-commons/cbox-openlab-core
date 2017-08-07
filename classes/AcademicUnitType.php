@@ -22,9 +22,9 @@ class AcademicUnitType {
 		$post_id = $this->get_wp_post_id();
 
 		$post_params = array(
+			'menu_order' => $this->get_order(),
 			'post_type' => 'cboxol_acadunit_type',
 			'post_title' => $this->get_name(),
-			'post_parent' => $this->get_parent(),
 			'post_status' => 'publish',
 		);
 
@@ -49,6 +49,7 @@ class AcademicUnitType {
 		// @todo validate?
 		update_post_meta( $post_id, 'cboxol_associated_member_types', $this->get_member_types() );
 		update_post_meta( $post_id, 'cboxol_associated_group_types', $this->get_group_types() );
+		update_post_meta( $post_id, 'cboxol_academic_unit_type_parent', $this->get_parent() );
 
 		return true;
 	}
@@ -65,10 +66,10 @@ class AcademicUnitType {
 	/**
 	 * Get parent.
 	 *
-	 * @return int
+	 * @return string
 	 */
 	public function get_parent() {
-		return (int) $this->data['parent'];
+		return $this->data['parent'];
 	}
 
 	/**
@@ -87,15 +88,6 @@ class AcademicUnitType {
 	 */
 	public function get_order() {
 		return (int) $this->data['order'];
-	}
-
-	/**
-	 * Get term ID.
-	 *
-	 * @return int
-	 */
-	public function get_wp_term_id() {
-		return (int) $this->data['wp_term_id'];
 	}
 
 	/**
@@ -132,9 +124,13 @@ class AcademicUnitType {
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();
 
+		$type->set_wp_post_id( $post->ID );
 		$type->set_name( $post->post_title );
 		$type->set_slug( $post->post_name );
-		$type->set_parent( (int) $post->post_parent );
+		$type->set_order( $post->menu_order );
+
+		$parent = get_post_meta( $post->ID, 'cboxol_academic_unit_type_parent', true );
+		$type->set_parent( $parent );
 
 		$group_types = get_post_meta( $post->ID, 'cboxol_associated_group_types', true );
 		$type->set_group_types( $group_types );
@@ -200,9 +196,9 @@ class AcademicUnitType {
 	/**
 	 * Set parent ID.
 	 *
-	 * @param int
+	 * @param string
 	 */
-	public function set_parent( int $parent ) {
+	public function set_parent( $parent ) {
 		$this->data['parent'] = $parent;
 	}
 

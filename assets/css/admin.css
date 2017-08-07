@@ -155,6 +155,11 @@ a .action-arrow {
 	font-weight: bold;
 }
 
+.associated-type-dropdowns label {
+	display: inline-block;
+	width: 130px;
+}
+
 .cboxol-item-type-setting {
 	margin-bottom: 15px;
 }

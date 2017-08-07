@@ -4,6 +4,33 @@
  * Academic Units functionality.
  */
 
+/**
+ * Register post types for Academic Units.
+ *
+ * @since 1.0.0
+ */
+function cboxol_academic_units_register_post_types() {
+	register_post_type( 'cboxol_acadunit_type', array(
+		'labels' => array(
+			'name' => _x( 'Academic Unit Types', 'Post type general name', 'cbox-openlab-core' ),
+		),
+		'public' => false,
+		'publicly_queryable' => false,
+		'show_ui' => false,
+		'show_in_menu' => false,
+	) );
+
+	register_post_type( 'cboxol_acadunit', array(
+		'labels' => array(
+			'name' => _x( 'Academic Units', 'Post type general name', 'cbox-openlab-core' ),
+		),
+		'public' => false,
+		'publicly_queryable' => false,
+		'show_ui' => false,
+		'show_in_menu' => false,
+	) );
+}
+
 function cboxol_academic_units_main_admin_page() {
 	wp_enqueue_script( 'cbox-ol-app' );
 
@@ -11,6 +38,17 @@ function cboxol_academic_units_main_admin_page() {
 	$academic_unit_types = cboxol_get_academic_unit_types();
 	foreach ( $academic_unit_types as $academic_unit_type ) {
 		$type_data[ $academic_unit_type->get_slug() ] = $academic_unit_type->get_for_endpoint();
+	}
+
+	$unit_data = array();
+
+	// 'new' for each unit type.
+	foreach ( $academic_unit_types as $academic_unit_type ) {
+		$unit_data[ '_new-' . $academic_unit_type->get_slug() ] = array(
+			'name' => '',
+			'parent' => '',
+			'type' => $academic_unit_type->get_slug(),
+		);
 	}
 
 	$mtypes = cboxol_get_member_types();
@@ -39,6 +77,7 @@ function cboxol_academic_units_main_admin_page() {
 	$app_config = array(
 		'subapp' => 'AcademicUnitsUI',
 		'objectType' => 'member',
+		'academicUnits' => $unit_data,
 		'academicUnitTypes' => $type_data,
 		'dummy' => $dummy_data,
 		'groupTypes' => $group_types,
