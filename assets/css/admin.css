@@ -206,3 +206,12 @@ a .action-arrow {
 .signup-codes-table th {
 	width: 23%;
 }
+
+.cboxol-admin-content-subsection {
+	margin-left: 15px;
+	padding-bottom: 1rem;
+}
+
+.cboxol-admin-content-subsection-header {
+	color: #0073aa;
+}
