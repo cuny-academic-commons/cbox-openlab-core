@@ -1733,10 +1733,31 @@ exports.default = {
 	},
 
 	methods: {
-		onDeleteClick: function onDeleteClick() {
-			console.log('ok');
+		onDeleteClick: function onDeleteClick(event) {
+			event.preventDefault();
+
+			if (!confirm(this.strings.deleteConfirm)) {
+				return;
+			}
+
+			var unit = this;
+			var unitId = unit.academicUnit.id;
+			unit.isLoading = true;
+			if (unitId) {
+				unit.$store.dispatch('submitDeleteEntity', {
+					apiRoute: 'academic-unit',
+					id: unitId
+				}).then(unit.checkStatus).then(unit.parseJSON, unit.ajaxError).then(function (data) {
+					unit.$store.commit('removeEntity', {
+						itemsKey: 'academicUnits',
+						namesKey: 'academicUnitNames',
+						slug: unit.slug
+					});
+				});
+			}
 		},
-		onEditClick: function onEditClick() {
+		onEditClick: function onEditClick(event) {
+			event.preventDefault();
 			console.log('ok');
 		}
 	},
@@ -1912,16 +1933,19 @@ exports.default = {
 		},
 		unitsOfType: function unitsOfType() {
 			var units = [];
-			for (var unitSlug in this.$store.state.academicUnits) {
-				if (0 == this.$store.state.academicUnits[unitSlug].id) {
+			var currentUnit = void 0;
+			for (var i in this.$store.state.academicUnitNames) {
+				currentUnit = this.$store.state.academicUnits[this.$store.state.academicUnitNames[i]];
+
+				if (0 == currentUnit.id) {
 					continue;
 				}
 
-				if (this.academicUnitTypeSlug !== this.$store.state.academicUnits[unitSlug].type) {
+				if (this.academicUnitTypeSlug !== currentUnit.type) {
 					continue;
 				}
 
-				units.push(unitSlug);
+				units.push(currentUnit.slug);
 			}
 
 			return units;

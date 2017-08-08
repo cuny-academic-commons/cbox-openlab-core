@@ -104,16 +104,19 @@
 
 			unitsOfType() {
 				let units = []
-				for ( let unitSlug in this.$store.state.academicUnits ) {
-					if ( 0 == this.$store.state.academicUnits[ unitSlug ].id ) {
+				let currentUnit
+				for ( let i in this.$store.state.academicUnitNames ) {
+					currentUnit = this.$store.state.academicUnits[ this.$store.state.academicUnitNames[ i ] ]
+
+					if ( 0 == currentUnit.id ) {
 						continue
 					}
 
-					if ( this.academicUnitTypeSlug !== this.$store.state.academicUnits[ unitSlug ].type ) {
+					if ( this.academicUnitTypeSlug !== currentUnit.type ) {
 						continue
 					}
 
-					units.push( unitSlug )
+					units.push( currentUnit.slug )
 				}
 
 				return units

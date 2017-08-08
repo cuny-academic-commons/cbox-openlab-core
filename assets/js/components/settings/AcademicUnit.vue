@@ -50,11 +50,35 @@
 		},
 
 		methods: {
-			onDeleteClick() {
-				console.log('ok')
+			onDeleteClick( event ) {
+				event.preventDefault()
+
+				if ( ! confirm( this.strings.deleteConfirm ) ) {
+					return
+				}
+
+				let unit = this
+				const unitId = unit.academicUnit.id
+				unit.isLoading = true
+				if ( unitId ) {
+					unit.$store.dispatch( 'submitDeleteEntity', {
+						apiRoute: 'academic-unit',
+						id: unitId
+					} )
+					.then( unit.checkStatus )
+					.then( unit.parseJSON, unit.ajaxError )
+					.then( function( data ) {
+						unit.$store.commit( 'removeEntity', {
+							itemsKey: 'academicUnits',
+							namesKey: 'academicUnitNames',
+							slug: unit.slug
+						} )
+					} )
+				}
 			},
 
-			onEditClick() {
+			onEditClick( event ) {
+				event.preventDefault()
 				console.log('ok')
 			}
 		},

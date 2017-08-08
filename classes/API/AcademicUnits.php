@@ -63,4 +63,27 @@ class AcademicUnits extends WP_REST_Controller {
 		$response = rest_ensure_response( $retval );
 		return $response;
 	}
+
+	public function delete_item_permissions_check( $request ) {
+		return current_user_can( 'manage_network_options' );
+	}
+
+	public function delete_item( $request ) {
+		$params = $request->get_params();
+
+		$deleted = wp_delete_post( $params['id'] );
+
+		if ( $deleted ) {
+			$data = __( 'OK', 'cbox-openlab-core' );
+			$status = 200;
+		} else {
+			$data = __( 'Cannot delete academic unit.', 'cbox-openlab-core' );
+			$status = 403;
+		}
+
+		$response = new WP_REST_Response( $data );
+		$response->set_status( $status );
+
+		return $response;
+	}
 }
