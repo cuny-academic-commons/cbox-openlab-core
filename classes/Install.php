@@ -17,6 +17,7 @@ class Install {
 		$this->install_default_member_types();
 		$this->install_default_group_types();
 		$this->install_default_group_categories();
+		$this->install_default_brand_pages();
 	}
 
 	public function upgrade() { }
@@ -303,5 +304,35 @@ class Install {
 			$c->set_group_types( $cat['types'] );
 			$c->save();
 		}
+	}
+
+	protected function install_default_brand_pages() {
+		$pages = array(
+			'about' => array(
+				'post_title' => __( 'About', 'cbox-openlab-core' ),
+				'post_content' => __( 'This is the content of your About page.', 'cbox-openlab-core' ),
+			),
+			'help' => array(
+				'post_title' => __( 'Help', 'cbox-openlab-core' ),
+				'post_content' => __( 'This is the content of your Help page.', 'cbox-openlab-core' ),
+			),
+		);
+
+		$page_ids = array();
+		foreach ( $pages as $post_name => $page ) {
+			$page_id = wp_insert_post( array(
+				'post_type' => 'page',
+				'post_title' => $page['post_title'],
+				'post_content' => $page['post_content'],
+				'post_name' => $post_name,
+				'post_status' => 'publish',
+			) );
+
+			if ( $page_id ) {
+				$page_ids[ $post_name ] = $page_id;
+			}
+		}
+
+		update_site_option( 'cboxol_brand_page_ids', $page_ids );
 	}
 }
