@@ -44,10 +44,12 @@ function cboxol_academic_units_main_admin_page() {
 
 	// 'new' for each unit type.
 	foreach ( $academic_unit_types as $academic_unit_type ) {
-		$unit_data[ '_new-' . $academic_unit_type->get_slug() ] = array(
+		$unit_slug = '_new-' . $academic_unit_type->get_slug();
+		$unit_data[ $unit_slug ] = array(
 			'name' => '',
 			'parent' => '',
 			'type' => $academic_unit_type->get_slug(),
+			'slug' => $unit_slug,
 		);
 	}
 

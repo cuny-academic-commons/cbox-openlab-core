@@ -89,7 +89,12 @@
 					return this.$store.state.academicUnits[ this.newUnitSlug ].name
 				},
 				set( value ) {
-					this.$store.state.academicUnits[ this.newUnitSlug ].name = value
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'name',
+						slug: this.newUnitSlug,
+						value
+					} );
 				}
 			},
 
@@ -98,7 +103,12 @@
 					return this.$store.state.academicUnits[ this.newUnitSlug ].parent
 				},
 				set( value ) {
-					this.$store.state.academicUnits[ this.newUnitSlug ].parent = value
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'parent',
+						slug: this.newUnitSlug,
+						value
+					} );
 				}
 			},
 

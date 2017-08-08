@@ -30,6 +30,11 @@
 
 		mounted() {
 			this.$store.commit( 'setUpEntityNames', {
+				itemsKey: 'academicUnits',
+				namesKey: 'academicUnitNames'
+			} )
+
+			this.$store.commit( 'setUpEntityNames', {
 				itemsKey: 'academicUnitTypes',
 				namesKey: 'academicUnitTypeNames'
 			} )

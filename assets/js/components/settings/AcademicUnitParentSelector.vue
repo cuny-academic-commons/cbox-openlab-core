@@ -1,40 +1,56 @@
 <template>
-	<ul class="academic-unit-parent-selector">
-		<li v-for="unit in unitsOfType">
-			<input
-				:name="checkboxName( unit )"
-				type="checkbox"
-				:value="unit.slug"
-			/>
-
-			<label
-				:for="checkboxName( unit )"
-			/>{{ unit.name }}</label>
-		</li>
-	</ul>
+	<select class="academic-unit-parent-selector" v-model="parentSlug">
+		<option value="">- {{ strings.none }} -</option>
+		<option v-for="unit in unitsOfType"
+			v-bind:value="unit.slug"
+		>
+			{{ unit.name }}
+		</option>
+	</select>
 </template>
 
 <script>
+	import i18nTools from '../../mixins/i18nTools.js'
 
 	export default {
 		computed: {
+			parentSlug: {
+				get() {
+					return this.$store.state.academicUnits[ this.thisUnitSlug ].parent
+				},
+				set( value ) {
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'parent',
+						slug: this.thisUnitSlug,
+						value
+					} );
+				}
+			},
+
 			unitsOfType() {
 				let units = {}
 				let currentUnit
 
-				for ( let unitSlug in this.$store.state.academicUnits ) {
-					if ( '_new-' === unitSlug.substr( 0, 5 ) ) {
+				for ( let i in this.$store.state.academicUnitNames ) {
+					currentUnit = this.$store.state.academicUnits[ this.$store.state.academicUnitNames[ i ] ]
+
+					if ( '_new-' === currentUnit.slug.substr( 0, 5 ) ) {
 						continue
 					}
 
-					currentUnit = this.$store.state.academicUnits[ unitSlug ]
-
 					if ( currentUnit.type === this.academicUnitTypeSlug ) {
-						units[ unitSlug ] = currentUnit
+						units[ currentUnit.slug ] = currentUnit
 					}
 				}
 
 				return units
+			}
+		},
+
+		data() {
+			return {
+				checkboxValue: false
 			}
 		},
 
@@ -43,6 +59,11 @@
 				return this.thisUnitSlug + '-parent-' + unit.slug
 			}
 		},
+
+		mixins: [
+			i18nTools
+		],
+
 
 		props: {
 			academicUnitTypeSlug: {

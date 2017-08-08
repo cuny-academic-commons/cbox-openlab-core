@@ -24,6 +24,7 @@ _vue2.default.use(_vuex2.default);
 var store = new _vuex2.default.Store({
 	state: {
 		academicUnits: {},
+		academicUnitNames: {},
 		academicUnitTypes: {},
 		academicUnitTypeNames: [],
 		dummy: {},
@@ -444,6 +445,11 @@ exports.default = {
 	},
 	mounted: function mounted() {
 		this.$store.commit('setUpEntityNames', {
+			itemsKey: 'academicUnits',
+			namesKey: 'academicUnitNames'
+		});
+
+		this.$store.commit('setUpEntityNames', {
 			itemsKey: 'academicUnitTypes',
 			namesKey: 'academicUnitTypeNames'
 		});
@@ -462,7 +468,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-572150d5", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-572150d5", __vue__options__)
+    hotAPI.reload("data-v-572150d5", __vue__options__)
   }
 })()}
 },{"./EntityList.vue":6,"vue":75,"vue-hot-reload-api":74}],3:[function(require,module,exports){
@@ -1036,7 +1042,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-64c4ccb0", __vue__options__)
   } else {
-    hotAPI.reload("data-v-64c4ccb0", __vue__options__)
+    hotAPI.rerender("data-v-64c4ccb0", __vue__options__)
   }
 })()}
 },{"./EntityList.vue":6,"vue":75,"vue-hot-reload-api":74}],9:[function(require,module,exports){
@@ -1767,21 +1773,42 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _i18nTools = require('../../mixins/i18nTools.js');
+
+var _i18nTools2 = _interopRequireDefault(_i18nTools);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
 	computed: {
+		parentSlug: {
+			get: function get() {
+				return this.$store.state.academicUnits[this.thisUnitSlug].parent;
+			},
+			set: function set(value) {
+				this.$store.commit('setEntityProperty', {
+					itemsKey: 'academicUnits',
+					property: 'parent',
+					slug: this.thisUnitSlug,
+					value: value
+				});
+			}
+		},
+
 		unitsOfType: function unitsOfType() {
 			var units = {};
 			var currentUnit = void 0;
 
-			for (var unitSlug in this.$store.state.academicUnits) {
-				if ('_new-' === unitSlug.substr(0, 5)) {
+			for (var i in this.$store.state.academicUnitNames) {
+				currentUnit = this.$store.state.academicUnits[this.$store.state.academicUnitNames[i]];
+
+				if ('_new-' === currentUnit.slug.substr(0, 5)) {
 					continue;
 				}
 
-				currentUnit = this.$store.state.academicUnits[unitSlug];
-
 				if (currentUnit.type === this.academicUnitTypeSlug) {
-					units[unitSlug] = currentUnit;
+					units[currentUnit.slug] = currentUnit;
 				}
 			}
 
@@ -1789,11 +1816,20 @@ exports.default = {
 		}
 	},
 
+	data: function data() {
+		return {
+			checkboxValue: false
+		};
+	},
+
+
 	methods: {
 		checkboxName: function checkboxName(unit) {
 			return this.thisUnitSlug + '-parent-' + unit.slug;
 		}
 	},
+
+	mixins: [_i18nTools2.default],
 
 	props: {
 		academicUnitTypeSlug: {
@@ -1808,7 +1844,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',{staticClass:"academic-unit-parent-selector"},_vm._l((_vm.unitsOfType),function(unit){return _c('li',[_c('input',{attrs:{"name":_vm.checkboxName( unit ),"type":"checkbox"},domProps:{"value":unit.slug}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.checkboxName( unit )}}),_vm._v(_vm._s(unit.name))])}))}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.parentSlug),expression:"parentSlug"}],staticClass:"academic-unit-parent-selector",on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.parentSlug=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},[_c('option',{attrs:{"value":""}},[_vm._v("- "+_vm._s(_vm.strings.none)+" -")]),_vm._v(" "),_vm._l((_vm.unitsOfType),function(unit){return _c('option',{domProps:{"value":unit.slug}},[_vm._v("\n\t\t"+_vm._s(unit.name)+"\n\t")])})],2)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1820,7 +1856,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.rerender("data-v-4915f579", __vue__options__)
   }
 })()}
-},{"vue":75,"vue-hot-reload-api":74}],20:[function(require,module,exports){
+},{"../../mixins/i18nTools.js":30,"vue":75,"vue-hot-reload-api":74}],20:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1862,7 +1898,12 @@ exports.default = {
 				return this.$store.state.academicUnits[this.newUnitSlug].name;
 			},
 			set: function set(value) {
-				this.$store.state.academicUnits[this.newUnitSlug].name = value;
+				this.$store.commit('setEntityProperty', {
+					itemsKey: 'academicUnits',
+					property: 'name',
+					slug: this.newUnitSlug,
+					value: value
+				});
 			}
 		},
 
@@ -1871,7 +1912,12 @@ exports.default = {
 				return this.$store.state.academicUnits[this.newUnitSlug].parent;
 			},
 			set: function set(value) {
-				this.$store.state.academicUnits[this.newUnitSlug].parent = value;
+				this.$store.commit('setEntityProperty', {
+					itemsKey: 'academicUnits',
+					property: 'parent',
+					slug: this.newUnitSlug,
+					value: value
+				});
 			}
 		},
 
