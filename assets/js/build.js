@@ -1907,27 +1907,13 @@ exports.default = {
 			}
 		},
 
-		newUnitParent: {
-			get: function get() {
-				return this.$store.state.academicUnits[this.newUnitSlug].parent;
-			},
-			set: function set(value) {
-				this.$store.commit('setEntityProperty', {
-					itemsKey: 'academicUnits',
-					property: 'parent',
-					slug: this.newUnitSlug,
-					value: value
-				});
-			}
-		},
-
 		typeSupportsParent: function typeSupportsParent() {
 			return this.academicUnitType.parent.length > 0;
 		},
 		unitsOfType: function unitsOfType() {
 			var units = [];
 			for (var unitSlug in this.$store.state.academicUnits) {
-				if ('_new-' === unitSlug.substr(0, 5)) {
+				if (0 == this.$store.state.academicUnits[unitSlug].id) {
 					continue;
 				}
 
@@ -1951,15 +1937,20 @@ exports.default = {
 
 	methods: {
 		onAddNewSubmit: function onAddNewSubmit() {
-			var unitType = this;
-			unitType.addNewIsLoading = true;
-			unitType.$store.dispatch('submitEntity', {
+			var unit = this;
+			unit.addNewIsLoading = true;
+			unit.$store.dispatch('submitEntity', {
 				apiRoute: 'academic-unit',
 				itemsKey: 'academicUnits',
-				slug: unitType.newUnitSlug
-			}).then(unitType.checkStatus).then(unitType.parseJSON, unitType.ajaxError).then(function (data) {
-
-				unitType.addNewIsLoading = false;
+				slug: unit.newUnitSlug
+			}).then(unit.checkStatus).then(unit.parseJSON, unit.ajaxError).then(function (data) {
+				unit.$store.commit('setEntityProperty', {
+					itemsKey: 'academicUnits',
+					property: 'id',
+					slug: unit.newUnitSlug,
+					value: data.id
+				});
+				unit.addNewIsLoading = false;
 			});
 		}
 	},
@@ -1986,7 +1977,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ecca841a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ecca841a", __vue__options__)
+    hotAPI.reload("data-v-ecca841a", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"./AcademicUnit.vue":18,"./AcademicUnitParentSelector.vue":19,"vue":75,"vue-hot-reload-api":74}],21:[function(require,module,exports){

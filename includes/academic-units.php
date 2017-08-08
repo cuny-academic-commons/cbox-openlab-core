@@ -46,6 +46,8 @@ function cboxol_academic_units_main_admin_page() {
 	foreach ( $academic_unit_types as $academic_unit_type ) {
 		$unit_slug = '_new-' . $academic_unit_type->get_slug();
 		$unit_data[ $unit_slug ] = array(
+			'count' => 0,
+			'id' => 0,
 			'name' => '',
 			'parent' => '',
 			'type' => $academic_unit_type->get_slug(),

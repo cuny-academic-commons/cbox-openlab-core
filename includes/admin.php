@@ -4,7 +4,10 @@
  * General admin functionality.
  */
 
-add_action( cbox_admin_prop( 'menu' ), 'cboxol_register_admin_menu' );
+if ( ! defined( 'DOING_AJAX' ) ) {
+	add_action( cbox_admin_prop( 'menu' ), 'cboxol_register_admin_menu' );
+}
+
 add_action( 'admin_enqueue_scripts', 'cboxol_register_assets' );
 
 function cboxol_register_admin_menu() {

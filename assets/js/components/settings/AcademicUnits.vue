@@ -98,20 +98,6 @@
 				}
 			},
 
-			newUnitParent: {
-				get() {
-					return this.$store.state.academicUnits[ this.newUnitSlug ].parent
-				},
-				set( value ) {
-					this.$store.commit( 'setEntityProperty', {
-						itemsKey: 'academicUnits',
-						property: 'parent',
-						slug: this.newUnitSlug,
-						value
-					} );
-				}
-			},
-
 			typeSupportsParent() {
 				return this.academicUnitType.parent.length > 0
 			},
@@ -119,7 +105,7 @@
 			unitsOfType() {
 				let units = []
 				for ( let unitSlug in this.$store.state.academicUnits ) {
-					if ( '_new-' === unitSlug.substr( 0, 5 ) ) {
+					if ( 0 == this.$store.state.academicUnits[ unitSlug ].id ) {
 						continue
 					}
 
@@ -142,25 +128,23 @@
 
 		methods: {
 			onAddNewSubmit: function() {
-				let unitType = this
-				unitType.addNewIsLoading = true
-				unitType.$store.dispatch( 'submitEntity', {
+				let unit = this
+				unit.addNewIsLoading = true
+				unit.$store.dispatch( 'submitEntity', {
 					apiRoute: 'academic-unit',
 					itemsKey: 'academicUnits',
-					slug: unitType.newUnitSlug
+					slug: unit.newUnitSlug
 				} )
-				.then( unitType.checkStatus )
-				.then( unitType.parseJSON, unitType.ajaxError )
+				.then( unit.checkStatus )
+				.then( unit.parseJSON, unit.ajaxError )
 				.then( function( data ) {
-//					itemType.setEntityProp( 'id', data.id )
-					/*
-					itemType.$store.commit( 'orderEntities', {
-						itemsKey: itemType.itemsKey,
-						namesKey: itemType.namesKey
+					unit.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'id',
+						slug: unit.newUnitSlug,
+						value: data.id
 					} )
-					*/
-
-					unitType.addNewIsLoading = false
+					unit.addNewIsLoading = false
 				} )
 			}
 		},
