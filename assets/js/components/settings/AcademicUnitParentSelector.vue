@@ -35,10 +35,6 @@
 				for ( let i in this.$store.state.academicUnitNames ) {
 					currentUnit = this.$store.state.academicUnits[ this.$store.state.academicUnitNames[ i ] ]
 
-					if ( ! currentUnit.hasOwnProperty( 'slug' ) ) {
-						console.log( currentUnit )
-					}
-
 					if ( '_new-' === currentUnit.slug.substr( 0, 5 ) ) {
 						continue
 					}

@@ -155,6 +155,13 @@
 						namesKey: 'academicUnitNames',
 					} )
 
+					unit.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'parent',
+						slug: unit.newUnitSlug,
+						value: ''
+					} );
+
 					/*
 					unit.$store.commit( 'removeEntity', {
 						slug: unit.newUnitSlug,

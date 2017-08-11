@@ -1921,10 +1921,6 @@ exports.default = {
 			for (var i in this.$store.state.academicUnitNames) {
 				currentUnit = this.$store.state.academicUnits[this.$store.state.academicUnitNames[i]];
 
-				if (!currentUnit.hasOwnProperty('slug')) {
-					console.log(currentUnit);
-				}
-
 				if ('_new-' === currentUnit.slug.substr(0, 5)) {
 					continue;
 				}
@@ -2076,6 +2072,13 @@ exports.default = {
 					key: data.slug,
 					itemsKey: 'academicUnits',
 					namesKey: 'academicUnitNames'
+				});
+
+				unit.$store.commit('setEntityProperty', {
+					itemsKey: 'academicUnits',
+					property: 'parent',
+					slug: unit.newUnitSlug,
+					value: ''
 				});
 
 				unit.addNewIsLoading = false;
