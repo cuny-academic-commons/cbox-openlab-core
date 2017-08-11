@@ -4,6 +4,8 @@
  * Academic Units functionality.
  */
 
+add_action( 'init', 'cboxol_academic_units_register_post_types' );
+
 /**
  * Register post types for Academic Units.
  *
@@ -28,6 +30,14 @@ function cboxol_academic_units_register_post_types() {
 		'publicly_queryable' => false,
 		'show_ui' => false,
 		'show_in_menu' => false,
+	) );
+
+	register_taxonomy( 'cboxol_member_in_acadunit', 'user', array(
+		'public' => false,
+	) );
+
+	register_taxonomy( 'cboxol_group_in_acadunit', 'bp_group', array(
+		'public' => false,
 	) );
 }
 
