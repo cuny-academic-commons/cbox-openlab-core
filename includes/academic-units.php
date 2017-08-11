@@ -49,6 +49,7 @@ function cboxol_academic_units_main_admin_page() {
 			'count' => 0,
 			'id' => 0,
 			'name' => '',
+			'order' => 0,
 			'parent' => '',
 			'type' => $academic_unit_type->get_slug(),
 			'slug' => $unit_slug,
@@ -154,6 +155,7 @@ function cboxol_get_academic_units( $args = array() ) {
 		'post_status' => 'publish',
 		'posts_per_page' => -1,
 		'orderby' => array(
+			'menu_order' => 'ASC',
 			'title' => 'ASC',
 		),
 		'fields' => 'ids',

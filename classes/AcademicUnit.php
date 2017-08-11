@@ -5,6 +5,7 @@ namespace CBOX\OL;
 class AcademicUnit {
 	protected $data = array(
 		'count' => 0,
+		'order' => 0,
 		'name' => null,
 		'parent' => null,
 		'slug' => null,
@@ -24,6 +25,7 @@ class AcademicUnit {
 			'post_type' => 'cboxol_acadunit',
 			'post_title' => $this->get_name(),
 			'post_status' => 'publish',
+			'menu_order' => $this->get_order(),
 		);
 
 		if ( $post_id ) {
@@ -73,6 +75,15 @@ class AcademicUnit {
 	}
 
 	/**
+	 * Get order.
+	 *
+	 * @return int
+	 */
+	public function get_order() {
+		return (int) $this->data['order'];
+	}
+
+	/**
 	 * Get parent.
 	 *
 	 * @return string
@@ -113,6 +124,7 @@ class AcademicUnit {
 			'count' => $this->get_count(),
 			'id' => $this->get_wp_post_id(),
 			'name' => $this->get_name(),
+			'order' => $this->get_order(),
 			'parent' => $this->get_parent(),
 			'slug' => $this->get_slug(),
 			'type' => $this->get_type(),
@@ -130,6 +142,7 @@ class AcademicUnit {
 		$type->set_wp_post_id( $post->ID );
 		$type->set_name( $post->post_title );
 		$type->set_slug( $post->post_name );
+		$type->set_order( $post->menu_order );
 
 		$parent = get_post_meta( $post->ID, 'cboxol_academic_unit_parent', true );
 		$type->set_parent( $parent );
@@ -147,6 +160,15 @@ class AcademicUnit {
 	 */
 	public function set_name( $name ) {
 		$this->data['name'] = $name;
+	}
+
+	/**
+	 * Set order.
+	 *
+	 * @param int
+	 */
+	public function set_order( int $order ) {
+		$this->data['order'] = $order;
 	}
 
 	/**

@@ -78,6 +78,10 @@ class AcademicUnits extends WP_REST_Controller {
 		$academic_unit->set_parent( $data['parent'] );
 		$academic_unit->set_type( $data['type'] );
 
+		if ( isset( $data['order'] ) ) {
+			$academic_unit->set_order( $data['order'] );
+		}
+
 		$academic_unit->save();
 
 		$retval = $academic_unit->get_for_endpoint();

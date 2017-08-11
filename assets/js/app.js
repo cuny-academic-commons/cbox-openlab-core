@@ -171,8 +171,19 @@ const store = new Vuex.Store({
 			let newEntityNames = state[ namesKey ]
 
 			newEntityNames.sort( function( a, b ) {
-				const order_a = state[ itemsKey ][ a ].settings.Order.data
-				const order_b = state[ itemsKey ][ b ].settings.Order.data
+				let order_a
+				if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
+					order_a = state[ itemsKey ][ a ].order
+				} else {
+					order_a = state[ itemsKey ][ a ].settings.Order.data
+				}
+
+				let order_b
+				if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
+					order_b = state[ itemsKey ][ b ].order
+				} else {
+					order_b = state[ itemsKey ][ b ].settings.Order.data
+				}
 
 				if ( order_a == order_b ) {
 					return 0

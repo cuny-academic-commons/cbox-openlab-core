@@ -198,8 +198,19 @@ var store = new _vuex2.default.Store({
 			var newEntityNames = state[namesKey];
 
 			newEntityNames.sort(function (a, b) {
-				var order_a = state[itemsKey][a].settings.Order.data;
-				var order_b = state[itemsKey][b].settings.Order.data;
+				var order_a = void 0;
+				if (state[itemsKey][a].hasOwnProperty('order')) {
+					order_a = state[itemsKey][a].order;
+				} else {
+					order_a = state[itemsKey][a].settings.Order.data;
+				}
+
+				var order_b = void 0;
+				if (state[itemsKey][a].hasOwnProperty('order')) {
+					order_b = state[itemsKey][b].order;
+				} else {
+					order_b = state[itemsKey][b].settings.Order.data;
+				}
 
 				if (order_a == order_b) {
 					return 0;
@@ -1818,6 +1829,11 @@ exports.default = {
 				unit.addNewIsLoading = false;
 				unit.isEditing = false;
 				unit.academicUnit = data;
+
+				unit.$store.commit('orderEntities', {
+					itemsKey: 'academicUnits',
+					namesKey: 'academicUnitNames'
+				});
 			});
 		}
 	},
@@ -1844,7 +1860,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-04520930", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-04520930", __vue__options__)
+    hotAPI.reload("data-v-04520930", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"./AcademicUnitParentSelector.vue":19,"vue":75,"vue-hot-reload-api":74}],19:[function(require,module,exports){
