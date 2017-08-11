@@ -226,6 +226,10 @@ var store = new _vuex2.default.Store({
 					return 0;
 				}
 
+				console.log(order_a);
+				console.log(order_b);
+				console.log(order_a > order_b);
+
 				return order_a > order_b;
 			});
 
@@ -1768,9 +1772,6 @@ exports.default = {
 	created: function created() {
 		this.setUpFormData();
 	},
-	updated: function updated() {
-		this.setUpFormData();
-	},
 	data: function data() {
 		return {
 			isEditing: false,
@@ -2074,6 +2075,7 @@ exports.default = {
 					namesKey: 'academicUnitNames'
 				});
 
+				unit.newUnitName = '';
 				unit.$store.commit('setEntityProperty', {
 					itemsKey: 'academicUnits',
 					property: 'parent',
@@ -2081,8 +2083,12 @@ exports.default = {
 					value: ''
 				});
 
+				unit.$store.commit('orderEntities', {
+					itemsKey: 'academicUnits',
+					namesKey: 'academicUnitNames'
+				});
+
 				unit.addNewIsLoading = false;
-				unit.newUnitName = '';
 			});
 		}
 	},

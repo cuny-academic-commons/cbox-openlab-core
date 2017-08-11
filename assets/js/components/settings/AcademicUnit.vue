@@ -105,10 +105,6 @@
 			this.setUpFormData()
 		},
 
-		updated() {
-			this.setUpFormData()
-		},
-
 		data() {
 			return {
 				isEditing: false,

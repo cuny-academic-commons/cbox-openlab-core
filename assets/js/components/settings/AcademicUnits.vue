@@ -155,6 +155,8 @@
 						namesKey: 'academicUnitNames',
 					} )
 
+					// Reset form data.
+					unit.newUnitName = ''
 					unit.$store.commit( 'setEntityProperty', {
 						itemsKey: 'academicUnits',
 						property: 'parent',
@@ -162,23 +164,12 @@
 						value: ''
 					} );
 
-					/*
-					unit.$store.commit( 'removeEntity', {
-						slug: unit.newUnitSlug,
-						itemsKey: 'academicUnits',
-						namesKey: 'academicUnitNames',
-					} )
-					*/
-
-					/*
 					unit.$store.commit( 'orderEntities', {
 						itemsKey: 'academicUnits',
 						namesKey: 'academicUnitNames',
 					} )
-					*/
+
 					unit.addNewIsLoading = false
-					unit.newUnitName = ''
-//					unit.newUnitParent = ''
 				} )
 			}
 		},
