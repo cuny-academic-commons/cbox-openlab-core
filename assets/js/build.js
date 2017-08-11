@@ -161,6 +161,16 @@ var store = new _vuex2.default.Store({
 		}
 	},
 	mutations: {
+		addEntity: function addEntity(state, payload) {
+			var item = payload.item,
+			    key = payload.key,
+			    itemsKey = payload.itemsKey,
+			    namesKey = payload.namesKey;
+
+
+			state[itemsKey][key] = item;
+			state[namesKey].push(key);
+		},
 		addNewEntity: function addNewEntity(state, payload) {
 			var itemsKey = payload.itemsKey,
 			    namesKey = payload.namesKey;
@@ -1733,6 +1743,9 @@ exports.default = {
 	},
 
 	computed: {
+		academicUnit: function academicUnit() {
+			return this.$store.state.academicUnits[this.slug];
+		},
 		checkboxLabel: function checkboxLabel() {
 			return this.strings.selectUnit.replace('%s', this.academicUnit.name);
 		},
@@ -1752,15 +1765,18 @@ exports.default = {
 		}
 	},
 
+	created: function created() {
+		this.setUpFormData();
+	},
+	updated: function updated() {
+		this.setUpFormData();
+	},
 	data: function data() {
-		var academicUnit = this.$store.state.academicUnits[this.slug];
-
 		return {
-			academicUnit: academicUnit,
 			isEditing: false,
-			unitName: academicUnit.name,
-			unitOrder: academicUnit.order,
-			unitParent: academicUnit.parent
+			unitName: '',
+			unitOrder: '',
+			unitParent: ''
 		};
 	},
 
@@ -1835,6 +1851,11 @@ exports.default = {
 					namesKey: 'academicUnitNames'
 				});
 			});
+		},
+		setUpFormData: function setUpFormData() {
+			this.unitName = this.academicUnit.name;
+			this.unitOrder = this.academicUnit.order;
+			this.unitParent = this.academicUnit.parent;
 		}
 	},
 
@@ -1899,6 +1920,10 @@ exports.default = {
 
 			for (var i in this.$store.state.academicUnitNames) {
 				currentUnit = this.$store.state.academicUnits[this.$store.state.academicUnitNames[i]];
+
+				if (!currentUnit.hasOwnProperty('slug')) {
+					console.log(currentUnit);
+				}
 
 				if ('_new-' === currentUnit.slug.substr(0, 5)) {
 					continue;
@@ -2043,14 +2068,18 @@ exports.default = {
 				apiRoute: 'academic-unit',
 				itemsKey: 'academicUnits',
 				slug: unit.newUnitSlug
-			}).then(unit.checkStatus).then(unit.parseJSON, unit.ajaxError).then(function (data) {
-				unit.$store.commit('setEntityProperty', {
+			}).then(unit.checkStatus).then(unit.parseJSON, unit.ajaxError).then(function (response) {
+				return response.json();
+			}).then(function (data) {
+				unit.$store.commit('addEntity', {
+					item: data,
+					key: data.slug,
 					itemsKey: 'academicUnits',
-					property: 'id',
-					slug: unit.newUnitSlug,
-					value: data.id
+					namesKey: 'academicUnitNames'
 				});
+
 				unit.addNewIsLoading = false;
+				unit.newUnitName = '';
 			});
 		}
 	},
@@ -2077,7 +2106,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ecca841a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ecca841a", __vue__options__)
+    hotAPI.reload("data-v-ecca841a", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"./AcademicUnit.vue":18,"./AcademicUnitParentSelector.vue":19,"vue":75,"vue-hot-reload-api":74}],21:[function(require,module,exports){

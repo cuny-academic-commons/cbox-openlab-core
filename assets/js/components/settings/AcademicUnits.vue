@@ -144,14 +144,34 @@
 				} )
 				.then( unit.checkStatus )
 				.then( unit.parseJSON, unit.ajaxError )
+				.then( function( response ) {
+					return response.json()
+				} )
 				.then( function( data ) {
-					unit.$store.commit( 'setEntityProperty', {
+					unit.$store.commit( 'addEntity', {
+						item: data,
+						key: data.slug,
 						itemsKey: 'academicUnits',
-						property: 'id',
-						slug: unit.newUnitSlug,
-						value: data.id
+						namesKey: 'academicUnitNames',
 					} )
+
+					/*
+					unit.$store.commit( 'removeEntity', {
+						slug: unit.newUnitSlug,
+						itemsKey: 'academicUnits',
+						namesKey: 'academicUnitNames',
+					} )
+					*/
+
+					/*
+					unit.$store.commit( 'orderEntities', {
+						itemsKey: 'academicUnits',
+						namesKey: 'academicUnitNames',
+					} )
+					*/
 					unit.addNewIsLoading = false
+					unit.newUnitName = ''
+//					unit.newUnitParent = ''
 				} )
 			}
 		},

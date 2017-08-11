@@ -137,6 +137,13 @@ const store = new Vuex.Store({
 		},
 	},
 	mutations: {
+		addEntity( state, payload ) {
+			const { item, key, itemsKey, namesKey } = payload
+
+			state[ itemsKey ][ key ] = item
+			state[ namesKey ].push( key )
+		},
+
 		addNewEntity ( state, payload ) {
 			const { itemsKey, namesKey } = payload
 

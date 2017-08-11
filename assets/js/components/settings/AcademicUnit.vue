@@ -76,6 +76,10 @@
 		},
 
 		computed: {
+			academicUnit() {
+				return this.$store.state.academicUnits[ this.slug ]
+			},
+
 			checkboxLabel() {
 				return this.strings.selectUnit.replace( '%s', this.academicUnit.name )
 			},
@@ -97,15 +101,20 @@
 			}
 		},
 
-		data() {
-			const academicUnit = this.$store.state.academicUnits[ this.slug ]
+		created() {
+			this.setUpFormData()
+		},
 
+		updated() {
+			this.setUpFormData()
+		},
+
+		data() {
 			return {
-				academicUnit,
 				isEditing: false,
-				unitName: academicUnit.name,
-				unitOrder: academicUnit.order,
-				unitParent: academicUnit.parent,
+				unitName: '',
+				unitOrder: '',
+				unitParent: ''
 			}
 		},
 
@@ -199,6 +208,12 @@
 						namesKey: 'academicUnitNames',
 					} )
 				} )
+			},
+
+			setUpFormData() {
+				this.unitName = this.academicUnit.name
+				this.unitOrder = this.academicUnit.order
+				this.unitParent = this.academicUnit.parent
 			}
 		},
 
