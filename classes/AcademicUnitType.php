@@ -246,4 +246,16 @@ class AcademicUnitType {
 	public function set_wp_post_id( int $wp_post_id ) {
 		$this->data['wp_post_id'] = $wp_post_id;
 	}
+
+	/**
+	 * Is the current type selectable by a member of a given type?
+	 *
+	 * Returns true for cases of 'required' or 'optional'.
+	 *
+	 * @param string $member_type_slug
+	 */
+	public function is_selectable_by_member_type( $member_type_slug ) {
+		$type_settings = $this->get_member_types();
+		return isset( $type_settings[ $member_type_slug ] ) && in_array( $type_settings[ $member_type_slug ], array( 'required', 'optional' ), true );
+	}
 }

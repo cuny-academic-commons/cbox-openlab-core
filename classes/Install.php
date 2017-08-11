@@ -312,6 +312,7 @@ class Install {
 			'schools' => array(
 				'name' => __( 'Schools', 'cbox-openlab-core' ),
 				'parent' => '',
+				'order' => 1,
 				'member_types' => array(
 					'student' => 'optional',
 					'faculty' => 'required',
@@ -328,6 +329,7 @@ class Install {
 			'departments' => array(
 				'name' => __( 'Departments', 'cbox-openlab-core' ),
 				'parent' => 'schools',
+				'order' => 2,
 				'member_types' => array(
 					'student' => 'optional',
 					'faculty' => 'required',
@@ -348,6 +350,7 @@ class Install {
 			$type_obj->set_slug( $type_slug );
 			$type_obj->set_name( $type_data['name'] );
 			$type_obj->set_parent( $type_data['parent'] );
+			$type_obj->set_order( $type_data['order'] );
 			$type_obj->set_member_types( $type_data['member_types'] );
 			$type_obj->set_group_types( $type_data['group_types'] );
 			$type_obj->save();

@@ -114,6 +114,10 @@ function cboxol_academic_units_main_admin_page() {
  * @params array $args
  */
 function cboxol_get_academic_unit_types( $args = array() ) {
+	$r = array_merge( array(
+		'member_type' => null,
+	), $args );
+
 	$post_args = array(
 		'post_type' => 'cboxol_acadunit_type',
 		'post_status' => 'publish',
@@ -138,7 +142,13 @@ function cboxol_get_academic_unit_types( $args = array() ) {
 
 	$types = array();
 	foreach ( $type_posts as $type_post ) {
-		$types[ $type_post->post_name ] = \CBOX\OL\AcademicUnitType::get_instance_from_wp_post( $type_post );
+		$type_obj = \CBOX\OL\AcademicUnitType::get_instance_from_wp_post( $type_post );
+
+		if ( null !== $r['member_type'] && ! $type_obj->is_selectable_by_member_type( $r['member_type'] ) ) {
+			continue;
+		}
+
+		$types[ $type_obj->get_slug() ] = $type_obj;
 	}
 
 	return $types;
@@ -150,6 +160,10 @@ function cboxol_get_academic_unit_types( $args = array() ) {
  * @params array $args
  */
 function cboxol_get_academic_units( $args = array() ) {
+	$r = array_merge( array(
+		'type' => null,
+	), $args );
+
 	$post_args = array(
 		'post_type' => 'cboxol_acadunit',
 		'post_status' => 'publish',
@@ -161,6 +175,7 @@ function cboxol_get_academic_units( $args = array() ) {
 		'fields' => 'ids',
 	);
 
+	// For a simplified cache, filters are post-processed.
 	$last_changed = wp_cache_get_last_changed( 'posts' );
 	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids = wp_cache_get( $cache_key, 'cboxol_academic_units' );
@@ -174,8 +189,97 @@ function cboxol_get_academic_units( $args = array() ) {
 
 	$types = array();
 	foreach ( $type_posts as $type_post ) {
-		$types[ $type_post->post_name ] = \CBOX\OL\AcademicUnit::get_instance_from_wp_post( $type_post );
+		$type_obj = \CBOX\OL\AcademicUnit::get_instance_from_wp_post( $type_post );
+
+		if ( null !== $r['type'] && $r['type'] !== $type_obj->get_type() ) {
+			continue;
+		}
+
+		$types[ $type_obj->get_slug() ] = $type_obj;
 	}
 
 	return $types;
+}
+
+/**
+ * Get a map of academic units.
+ */
+function cboxol_get_academic_unit_map() {
+	$units = cboxol_get_academic_units();
+	$map = array();
+	foreach ( $units as $unit ) {
+
+		//$ids[ $unit->get_wp_post_id() ] =
+	}
+}
+
+/**
+ * Get the markup for the Academic Unit selector.
+ */
+function cboxol_get_academic_unit_selector( $args = array() ) {
+	// @todo selected
+	$r = array_merge( array(
+		'member_type' => null,
+	), $args );
+
+	$academic_unit_types = cboxol_get_academic_unit_types( array(
+		'member_type' => $r['member_type'],
+	) );
+
+	ob_start();
+
+	?>
+	<div class="cboxol-academic-unit-selector">
+	<?php
+
+	$map = cboxol_get_academic_unit_map();
+
+	foreach ( $academic_unit_types as $academic_unit_type ) {
+		$units_of_type = cboxol_get_academic_units( array(
+			'type' => $academic_unit_type->get_slug(),
+		) );
+
+		if ( ! $units_of_type ) {
+			continue;
+		}
+
+		?>
+		<div class="cboxol-academic-unit-selector-for-type cboxol-academic-unit-selector-for-type-<?php echo esc_attr( $academic_unit_type->get_slug() ); ?>">
+			<fieldset>
+				<legend><?php echo esc_html( $academic_unit_type->get_name() ); ?></legend>
+
+				<div class="cboxol-units-of-type">
+					<ul>
+						<?php foreach ( $units_of_type as $unit ) : ?>
+							<li class="academic-unit academic-unit-visible">
+								<?php
+								$parent_attr = $unit->get_parent();
+								$id_attr = 'academic-unit-' . $unit->get_slug();
+								?>
+
+								<input
+									class="academic-unit-checkbox"
+									data-parent="<?php echo esc_attr( $parent_attr ); ?>"
+									id="<?php echo esc_attr( $id_attr ); ?>"
+									name="academic-units[]"
+									type="checkbox"
+									value="<?php echo esc_attr( $unit->get_slug() ); ?>"
+								/> <label for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $unit->get_name() ); ?>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</fieldset>
+		</div>
+		<?php
+	}
+
+	?>
+	</div>
+	<?php
+
+	$markup = ob_get_contents();
+	ob_end_clean();
+
+	return $markup;
 }
