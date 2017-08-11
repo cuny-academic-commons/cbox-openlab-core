@@ -2,9 +2,11 @@
  * JS functionality for Academic Unit frontend selector.
  */
 (function($){
-	console.log($);
 
-	var $accountTypeSelector;
+	var $accountTypeSelector,
+		$academicUnitCheckboxes,
+		$academicUnits;
+
 	$(document).ready(function() {
 		$accountTypeSelector = $('#account-type');
 
@@ -13,8 +15,8 @@
 			showAcademicUnitTypesForMemberType( this.value );
 		} );
 
-		var $academicUnits = $('.academic-unit');
-		var $academicUnitCheckboxes = $('.academic-unit-checkbox');
+		$academicUnits = $('.academic-unit');
+		$academicUnitCheckboxes = $('.academic-unit-checkbox');
 		validateAcademicTypeSelector();
 		$academicUnitCheckboxes.change( validateAcademicTypeSelector );
 	});

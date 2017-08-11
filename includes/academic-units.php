@@ -5,6 +5,10 @@
  */
 
 add_action( 'init', 'cboxol_academic_units_register_post_types' );
+add_action( 'bp_signup_usermeta', 'cboxol_save_signup_academic_units' );
+
+// Run at 20 to ensure that member type is set.
+add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_academic_units', 20, 3 );
 
 /**
  * Register post types for Academic Units.
@@ -165,6 +169,25 @@ function cboxol_get_academic_unit_types( $args = array() ) {
 }
 
 /**
+ * Get a specific academic unit type.
+ *
+ * @param string Type slug.
+ * @return \WP_Error|\CBOX\OL\AcademicUnitType
+ */
+function cboxol_get_academic_unit_type( $slug ) {
+	if ( $slug ) {
+		$types = cboxol_get_academic_unit_types();
+		foreach ( $types as $type ) {
+			if ( $type->get_slug() === $slug ) {
+				return $type;
+			}
+		}
+	}
+
+	return new WP_Error( 'no_academic_unit_type_found', __( 'No academic unit type found.', 'cbox-openlab-core' ) );
+}
+
+/**
  * Get registered Academic Units.
  *
  * @params array $args
@@ -212,6 +235,67 @@ function cboxol_get_academic_units( $args = array() ) {
 }
 
 /**
+ * Get a specific academic unit.
+ *
+ * Assumes unique slugs.
+ *
+ * @param string Unit slug.
+ * @return \WP_Error|\CBOX\OL\AcademicUnit
+ */
+function cboxol_get_academic_unit( $slug ) {
+	if ( $slug ) {
+		$units = cboxol_get_academic_units();
+		foreach ( $units as $unit ) {
+			if ( $unit->get_slug() === $slug ) {
+				return $unit;
+			}
+		}
+	}
+
+	return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found.', 'cbox-openlab-core' ) );
+}
+
+/**
+ * Associate an object with academic types.
+ */
+function cboxol_associate_object_with_academic_types( $args = array() ) {
+	$r = array_merge( array(
+		'object_id' => null,
+		'object_type' => null,
+		'type_ids' => null,
+	), $args );
+
+	if ( ! $r['object_id'] || ! $r['type_ids'] || ! in_array( $r['object_type'], array( 'user', 'group' ), true ) ) {
+		return false;
+	}
+
+	$object_id = (int) $r['object_id'];
+
+	$taxonomy = '';
+	switch ( $r['object_type'] ) {
+		case 'user' :
+			$taxonomy = 'cboxol_member_in_acadunit';
+			break;
+
+		case 'group' :
+			$taxonomy = 'cboxol_group_in_acadunit';
+			break;
+	}
+
+	if ( ! $taxonomy ) {
+		return false;
+	}
+
+	$type_slugs = array_map( function( $id ) {
+		return 'acad_unit_' . intval( $id );
+	}, $r['type_ids'] );
+
+	$set = wp_set_object_terms( $object_id, $type_slugs, $taxonomy, false );
+
+	return ! is_wp_error( $set );
+}
+
+/**
  * Get the markup for the Academic Unit selector.
  */
 function cboxol_get_academic_unit_selector( $args = array() ) {
@@ -247,8 +331,6 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 	?>
 	<div class="cboxol-academic-unit-selector">
 	<?php
-
-	$map = cboxol_get_academic_unit_map();
 
 	foreach ( $academic_unit_types as $academic_unit_type ) {
 		$units_of_type = cboxol_get_academic_units( array(
@@ -298,4 +380,67 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 	ob_end_clean();
 
 	return $markup;
+}
+
+/**
+ * Save user's academic units at registration.
+ *
+ * @param array $usermeta
+ * @return array
+ */
+function cboxol_save_signup_academic_units( $usermeta ) {
+	$academic_units = array();
+	if ( isset( $_POST['academic-units'] ) ) {
+		$academic_units = wp_unslash( $_POST['academic-units'] );
+	}
+
+	$usermeta['academic-units'] = $academic_units;
+
+	return $usermeta;
+}
+
+/**
+ * Apply a user's chosen academic units at activation.
+ *
+ * @param int    $user_id
+ * @param string $key
+ * @param array  $user
+ */
+function cboxol_save_activated_user_academic_units( $user_id, $key, $user ) {
+	$academic_units = array();
+
+	if ( isset( $user['meta']['academic-units'] ) ) {
+		$academic_units = $user['meta']['academic-units'];
+	}
+
+	$member_type = cboxol_get_user_member_type( $user_id );
+	$units_to_save = array();
+	if ( $academic_units && ! is_wp_error( $member_type ) ) {
+		foreach ( $academic_units as $academic_unit_slug ) {
+			$acad_unit_obj = cboxol_get_academic_unit( $academic_unit_slug );
+			if ( is_wp_error( $acad_unit_obj ) ) {
+				continue;
+			}
+
+			$unit_type_obj = cboxol_get_academic_unit_type( $acad_unit_obj->get_type() );
+			if ( is_wp_error( $unit_type_obj ) ) {
+				continue;
+			}
+
+			if ( ! $unit_type_obj->is_selectable_by_member_type( $member_type->get_slug() ) ) {
+				continue;
+			}
+
+			$units_to_save[] = $acad_unit_obj->get_wp_post_id();
+
+		}
+	}
+
+	if ( $units_to_save ) {
+		$saved = cboxol_associate_object_with_academic_types( array(
+			'object_id' => $user_id,
+			'object_type' => 'user',
+			'type_ids' => $units_to_save,
+		) );
+	}
 }
