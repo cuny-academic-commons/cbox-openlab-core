@@ -226,6 +226,24 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 		'member_type' => $r['member_type'],
 	) );
 
+	wp_enqueue_script( 'cboxol-academic-types', CBOXOL_PLUGIN_URL . '/assets/js/academic-units.js', array( 'jquery' ), false, true );
+
+	$member_type_unit_types = $group_type_unit_types = array();
+	foreach ( $academic_unit_types as $academic_unit_type ) {
+		foreach ( $academic_unit_type->get_member_types() as $member_type => $setting ) {
+			if ( $academic_unit_type->is_selectable_by_member_type( $member_type ) ) {
+				$member_type_unit_types[ $member_type ][] = $academic_unit_type->get_slug();
+			}
+		}
+		foreach ( $academic_unit_type->get_group_types() as $group_type => $setting ) {
+			$group_type_unit_types[ $group_type ][] = $academic_unit_type->get_slug();
+		}
+	}
+	wp_localize_script( 'cboxol-academic-types', 'CBOXOLAcademicTypes', array(
+		'typesByMemberType' => $member_type_unit_types,
+		'typesByGroupType' => $group_type_unit_types,
+	) );
+
 	ob_start();
 
 	?>
