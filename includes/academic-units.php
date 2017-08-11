@@ -100,7 +100,7 @@ function cboxol_academic_units_main_admin_page() {
 		<p>Academic Units officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
 
 		<script type="text/javascript">
-			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
+			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
 		</script>
 
 		<div id="cboxol-admin"></div>
@@ -130,7 +130,7 @@ function cboxol_get_academic_unit_types( $args = array() ) {
 	);
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$cache_key = 'cboxol_types_' . md5( wp_json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids = wp_cache_get( $cache_key, 'cboxol_academic_unit_types' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
@@ -177,7 +177,7 @@ function cboxol_get_academic_units( $args = array() ) {
 
 	// For a simplified cache, filters are post-processed.
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$cache_key = 'cboxol_types_' . md5( wp_json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids = wp_cache_get( $cache_key, 'cboxol_academic_units' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
