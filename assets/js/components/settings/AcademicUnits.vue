@@ -17,7 +17,7 @@
 				<legend>{{ strings.parent }}</legend>
 
 				<AcademicUnitParentSelector
-					:academicUnitTypeSlug="academicUnitTypeSlug"
+					:academicUnitTypeSlug="academicUnitType.parent"
 					:thisUnitSlug="newUnitSlug"
 				/>
 

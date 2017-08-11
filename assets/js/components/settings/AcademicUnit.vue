@@ -22,7 +22,7 @@
 					<div class="academic-unit-edit-field" v-if="typeSupportsParent">
 						<label :v-for="academicUnit.type + '-' + slug + '-parent'">{{ strings.parent }}</label>
 						<AcademicUnitParentSelector
-							:academicUnitTypeSlug="academicUnit.type"
+							:academicUnitTypeSlug="typeParent"
 							:thisUnitSlug="academicUnit.slug"
 						/>
 					</div>
@@ -93,6 +93,15 @@
 				}
 
 				return name
+			},
+
+			typeParent() {
+				if ( this.typeSupportsParent ) {
+					const typeSlug = this.academicUnit.type
+					return this.$store.state.academicUnitTypes[ typeSlug ].parent
+				} else {
+					return null
+				}
 			},
 
 			typeSupportsParent() {
