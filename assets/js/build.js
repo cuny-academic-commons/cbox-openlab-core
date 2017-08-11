@@ -226,10 +226,6 @@ var store = new _vuex2.default.Store({
 					return 0;
 				}
 
-				console.log(order_a);
-				console.log(order_b);
-				console.log(order_a > order_b);
-
 				return order_a > order_b;
 			});
 
