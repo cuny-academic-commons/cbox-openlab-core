@@ -52,6 +52,27 @@ class AcademicUnits extends WP_REST_Controller {
 		return $this->create_update_helper( $academic_unit, $data );
 	}
 
+	public function update_item_permissions_check( $request ) {
+		return current_user_can( 'manage_network_options' );
+	}
+
+	public function update_item( $request ) {
+		$params = $request->get_params();
+		$data = $params['typeData'];
+		$id = $params['id'];
+
+		$academic_unit = new AcademicUnit();
+
+		$post = get_post( $id );
+		if ( ! $post || 'cboxol_acadunit' !== $post->post_type ) {
+			return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found', 'cbox-openlab-core' ) );
+		}
+
+		$academic_unit = AcademicUnit::get_instance_from_wp_post( $post );
+
+		return $this->create_update_helper( $academic_unit, $data );
+	}
+
 	protected function create_update_helper( AcademicUnit $academic_unit, $data ) {
 		$academic_unit->set_name( $data['name'] );
 		$academic_unit->set_parent( $data['parent'] );

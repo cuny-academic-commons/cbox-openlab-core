@@ -215,3 +215,56 @@ a .action-arrow {
 .cboxol-admin-content-subsection-header {
 	color: #0073aa;
 }
+
+.cboxol-academic-units-of-type {
+	margin-top: 25px;
+	overflow: hidden;
+}
+
+.add-new-academic-unit {
+	float: left;
+	width: 200px;
+}
+
+.add-new-academic-unit label,
+.add-new-academic-unit legend {
+	font-weight: bold;
+	margin-top: 12px;
+}
+
+.academic-unit-list {
+	margin-left: 220px;
+}
+
+.academic-unit-list .widefat {
+	clear: none;
+}
+
+.academic-unit-list .column-parent {
+	width: 80px;
+}
+
+.widefat td.academic-unit-edit {
+	padding-bottom: 15px;
+}
+
+.academic-unit-edit h4 {
+	font-weight: bold;
+	margin-top: 0;
+	text-transform: uppercase;
+}
+
+.academic-unit-edit-field label {
+	display: inline-block;
+	font-style: italic;
+	width: 80px;
+}
+
+.button.academic-unit-edit-button {
+	margin-top: 12px;
+}
+
+.button.academic-unit-edit-save {
+	float: right;
+	margin-right: 2.5rem;
+}

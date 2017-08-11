@@ -572,7 +572,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-428061ba", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-428061ba", __vue__options__)
+    hotAPI.reload("data-v-428061ba", __vue__options__)
   }
 })()}
 },{"./AcademicUnitsUI.vue":2,"./GroupCategoriesUI.vue":8,"./Registration.vue":12,"./TypesUI.vue":17,"vue":75,"vue-hot-reload-api":74}],5:[function(require,module,exports){
@@ -740,7 +740,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-2576d798", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2576d798", __vue__options__)
+    hotAPI.reload("data-v-2576d798", __vue__options__)
   }
 })()}
 },{"../mixins/EntityTools.js":28,"./AddNewEntityLink.vue":3,"./EntityListItem.vue":7,"vue":75,"vue-hot-reload-api":74}],7:[function(require,module,exports){
@@ -987,7 +987,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6e83156a", __vue__options__)
+    hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":27,"../mixins/EntityTools.js":28,"../mixins/i18nTools.js":30,"./OnOffSwitch.vue":11,"./TypeLabel.vue":16,"./settings/AcademicUnits.vue":20,"./settings/AssociatedGroupTypeCheckboxes.vue":21,"./settings/AssociatedTypeDropdowns.vue":23,"./settings/MayChangeMemberTypeTo.vue":24,"./settings/MayCreateCourses.vue":25,"./settings/Order.vue":26,"vue":75,"vue-hot-reload-api":74}],8:[function(require,module,exports){
@@ -1042,7 +1042,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-64c4ccb0", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-64c4ccb0", __vue__options__)
+    hotAPI.reload("data-v-64c4ccb0", __vue__options__)
   }
 })()}
 },{"./EntityList.vue":6,"vue":75,"vue-hot-reload-api":74}],9:[function(require,module,exports){
@@ -1706,6 +1706,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _AcademicUnitParentSelector = require('./AcademicUnitParentSelector.vue');
+
+var _AcademicUnitParentSelector2 = _interopRequireDefault(_AcademicUnitParentSelector);
+
 var _i18nTools = require('../../mixins/i18nTools.js');
 
 var _i18nTools2 = _interopRequireDefault(_i18nTools);
@@ -1713,10 +1717,11 @@ var _i18nTools2 = _interopRequireDefault(_i18nTools);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+	components: {
+		AcademicUnitParentSelector: _AcademicUnitParentSelector2.default
+	},
+
 	computed: {
-		academicUnit: function academicUnit() {
-			return this.$store.state.academicUnits[this.slug];
-		},
 		checkboxLabel: function checkboxLabel() {
 			return this.strings.selectUnit.replace('%s', this.academicUnit.name);
 		},
@@ -1729,8 +1734,25 @@ exports.default = {
 			}
 
 			return name;
+		},
+		typeSupportsParent: function typeSupportsParent() {
+			var typeSlug = this.academicUnit.type;
+			return this.$store.state.academicUnitTypes[typeSlug].parent.length > 0;
 		}
 	},
+
+	data: function data() {
+		var academicUnit = this.$store.state.academicUnits[this.slug];
+
+		return {
+			academicUnit: academicUnit,
+			isEditing: false,
+			unitName: academicUnit.name,
+			unitOrder: academicUnit.order,
+			unitParent: academicUnit.parent
+		};
+	},
+
 
 	methods: {
 		onDeleteClick: function onDeleteClick(event) {
@@ -1756,9 +1778,47 @@ exports.default = {
 				});
 			}
 		},
+		onCancelClick: function onCancelClick(event) {
+			event.preventDefault();
+			this.isEditing = !this.isEditing;
+			this.unitName = this.academicUnit.name;
+			this.unitOrder = this.academicUnit.order;
+			this.unitParent = this.academicUnit.parent;
+		},
 		onEditClick: function onEditClick(event) {
 			event.preventDefault();
-			console.log('ok');
+			this.isEditing = !this.isEditing;
+		},
+		onSaveClick: function onSaveClick(event) {
+			event.preventDefault();
+			var unit = this;
+			unit.addNewIsLoading = true;
+
+			unit.$store.commit('setEntityProperty', {
+				itemsKey: 'academicUnits',
+				property: 'name',
+				slug: unit.academicUnit.slug,
+				value: this.unitName
+			});
+
+			unit.$store.commit('setEntityProperty', {
+				itemsKey: 'academicUnits',
+				property: 'order',
+				slug: unit.academicUnit.slug,
+				value: this.unitOrder
+			});
+
+			unit.$store.dispatch('submitEntity', {
+				apiRoute: 'academic-unit',
+				itemsKey: 'academicUnits',
+				slug: this.academicUnit.slug
+			}).then(unit.checkStatus).then(unit.parseJSON, unit.ajaxError).then(function (response) {
+				return response.json();
+			}).then(function (data) {
+				unit.addNewIsLoading = false;
+				unit.isEditing = false;
+				unit.academicUnit = data;
+			});
 		}
 	},
 
@@ -1775,7 +1835,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[_c('th',{staticClass:"check-column",attrs:{"scope":"row"}},[_c('label',{staticClass:"screen-reader-text",attrs:{"v-for":_vm.academicUnit.type + '-' + _vm.slug + '-cb'}},[_vm._v(_vm._s(_vm.checkboxLabel))]),_vm._v(" "),_c('input',{attrs:{"type":"checkbox","v-id":_vm.academicUnit.type + '-' + _vm.slug + '-cb'},domProps:{"value":_vm.academicUnit.id}})]),_vm._v(" "),_c('td',{staticClass:"name column-name has-row-actions column-primary"},[_c('strong',[_vm._v(_vm._s(_vm.academicUnit.name))]),_vm._v(" "),_c('br'),_vm._v(" "),_c('div',{staticClass:"row-actions"},[_c('span',{staticClass:"edit"},[_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]),_vm._v(" | ")]),_vm._v(" "),_c('span',{staticClass:"delete"},[_c('a',{staticClass:"delete-tag",attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])]),_vm._v(" "),_c('td',{staticClass:"parent column-parent"},[_vm._v("\n\t\t"+_vm._s(_vm.parentName)+"\n\t")]),_vm._v(" "),_c('td',{staticClass:"posts column-posts"},[_vm._v("\n\t\t"+_vm._s(_vm.academicUnit.count)+"\n\t")])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('tr',[(_vm.isEditing)?[_c('th',{staticClass:"check-column",attrs:{"scope":"row"}}),_vm._v(" "),_c('td',{staticClass:"academic-unit-edit",attrs:{"colspan":"3"}},[_c('h4',[_vm._v(_vm._s(_vm.strings.edit))]),_vm._v(" "),_c('div',{staticClass:"academic-unit-edit-field-set"},[_c('div',{staticClass:"academic-unit-edit-field"},[_c('label',{attrs:{"v-for":_vm.academicUnit.type + '-' + _vm.slug + '-name'}},[_vm._v(_vm._s(_vm.strings.name))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.unitName),expression:"unitName"}],attrs:{"v-id":_vm.academicUnit.type + '-' + _vm.slug + '-name'},domProps:{"value":(_vm.unitName)},on:{"input":function($event){if($event.target.composing){ return; }_vm.unitName=$event.target.value}}})]),_vm._v(" "),_c('div',{staticClass:"academic-unit-edit-field"},[_c('label',{attrs:{"v-for":_vm.academicUnit.type + '-' + _vm.slug + '-order'}},[_vm._v(_vm._s(_vm.strings.orderLegend))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.unitOrder),expression:"unitOrder"}],attrs:{"v-id":_vm.academicUnit.type + '-' + _vm.slug + '-order'},domProps:{"value":(_vm.unitOrder)},on:{"input":function($event){if($event.target.composing){ return; }_vm.unitOrder=$event.target.value}}})])]),_vm._v(" "),_c('div',{staticClass:"academic-unit-edit-field-set"},[(_vm.typeSupportsParent)?_c('div',{staticClass:"academic-unit-edit-field"},[_c('label',{attrs:{"v-for":_vm.academicUnit.type + '-' + _vm.slug + '-parent'}},[_vm._v(_vm._s(_vm.strings.parent))]),_vm._v(" "),_c('AcademicUnitParentSelector',{attrs:{"academicUnitTypeSlug":_vm.academicUnit.type,"thisUnitSlug":_vm.academicUnit.slug}})],1):_vm._e()]),_vm._v(" "),_c('button',{staticClass:"academic-unit-edit-button academic-unit-edit-cancel button button-secondary",on:{"click":_vm.onCancelClick}},[_vm._v(_vm._s(_vm.strings.cancel))]),_vm._v(" "),_c('button',{staticClass:"academic-unit-edit-button academic-unit-edit-save button button-primary",on:{"click":_vm.onSaveClick}},[_vm._v(_vm._s(_vm.strings.update))])])]:[_c('th',{staticClass:"check-column",attrs:{"scope":"row"}},[_c('label',{staticClass:"screen-reader-text",attrs:{"v-for":_vm.academicUnit.type + '-' + _vm.slug + '-cb'}},[_vm._v(_vm._s(_vm.checkboxLabel))]),_vm._v(" "),_c('input',{attrs:{"type":"checkbox","v-id":_vm.academicUnit.type + '-' + _vm.slug + '-cb'},domProps:{"value":_vm.academicUnit.id}})]),_vm._v(" "),_c('td',{staticClass:"name column-name has-row-actions column-primary"},[_c('strong',[_vm._v(_vm._s(_vm.academicUnit.name))]),_vm._v(" "),_c('br'),_vm._v(" "),_c('div',{staticClass:"row-actions"},[_c('span',{staticClass:"edit"},[_c('a',{attrs:{"href":"#"},on:{"click":_vm.onEditClick}},[_vm._v(_vm._s(_vm.strings.edit))]),_vm._v(" | ")]),_vm._v(" "),_c('span',{staticClass:"delete"},[_c('a',{staticClass:"delete-tag",attrs:{"href":"#"},on:{"click":_vm.onDeleteClick}},[_vm._v(_vm._s(_vm.strings.delete))])])])]),_vm._v(" "),_c('td',{staticClass:"parent column-parent"},[_vm._v("\n\t\t\t"+_vm._s(_vm.parentName)+"\n\t\t")]),_vm._v(" "),_c('td',{staticClass:"posts column-posts"},[_vm._v("\n\t\t\t"+_vm._s(_vm.academicUnit.count)+"\n\t\t")])]],2)}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -1784,10 +1844,10 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-04520930", __vue__options__)
   } else {
-    hotAPI.reload("data-v-04520930", __vue__options__)
+    hotAPI.rerender("data-v-04520930", __vue__options__)
   }
 })()}
-},{"../../mixins/i18nTools.js":30,"vue":75,"vue-hot-reload-api":74}],19:[function(require,module,exports){
+},{"../../mixins/i18nTools.js":30,"./AcademicUnitParentSelector.vue":19,"vue":75,"vue-hot-reload-api":74}],19:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -1874,7 +1934,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-4915f579", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4915f579", __vue__options__)
+    hotAPI.reload("data-v-4915f579", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"vue":75,"vue-hot-reload-api":74}],20:[function(require,module,exports){
@@ -1992,7 +2052,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"add-new-academic-unit"},[_c('h3',[_vm._v(_vm._s(_vm.strings.addNewAcademicUnitTitle))]),_vm._v(" "),_c('label',{attrs:{"for":'new-academic-unit-name-' + _vm.academicUnitTypeSlug}},[_vm._v(_vm._s(_vm.strings.academicUnitNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newUnitName),expression:"newUnitName"}],attrs:{"id":'new-academic-unit-name-' + _vm.academicUnitTypeSlug},domProps:{"value":(_vm.newUnitName)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newUnitName=$event.target.value}}}),_vm._v(" "),(_vm.typeSupportsParent)?_c('fieldset',{staticClass:"new-academic-unit-parent"},[_c('legend',[_vm._v(_vm._s(_vm.strings.parent))]),_vm._v(" "),_c('AcademicUnitParentSelector',{attrs:{"academicUnitTypeSlug":_vm.academicUnitTypeSlug,"thisUnitSlug":_vm.newUnitSlug}})],1):_vm._e(),_vm._v(" "),_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.addNewIsLoading || ! _vm.newUnitName},on:{"click":_vm.onAddNewSubmit}},[_vm._v(_vm._s(_vm.strings.addNewAcademicUnitTitle))])]),_vm._v(" "),_c('div',{staticClass:"academic-unit-list"},[_c('table',{staticClass:"wp-list-table widefat fixed striped"},[_c('thead',[_c('tr',[_c('td',{staticClass:"manage-column column-cb check-column",attrs:{"id":_vm.academicUnitTypeSlug + '-cb'}},[_c('label',{staticClass:"screen-reader-text",attrs:{"for":_vm.academicUnitTypeSlug + '-cb-select-all'}},[_vm._v(_vm._s(_vm.strings.selectAll))]),_vm._v(" "),_c('input',{attrs:{"id":_vm.academicUnitTypeSlug + '-cb-select-all',"type":"checkbox"}})]),_vm._v(" "),_c('td',{staticClass:"manage-column column-name column-primary",attrs:{"id":_vm.academicUnitTypeSlug + '-name',"scope":"col"}},[_vm._v("\n\t\t\t\t\t"+_vm._s(_vm.strings.name)+"\n\t\t\t\t")]),_vm._v(" "),_c('td',{staticClass:"manage-column column-parent",attrs:{"id":_vm.academicUnitTypeSlug + '-parent',"scope":"col"}},[_vm._v("\n\t\t\t\t\t"+_vm._s(_vm.strings.parent)+"\n\t\t\t\t")]),_vm._v(" "),_c('td',{staticClass:"manage-posts column-posts",attrs:{"id":_vm.academicUnitTypeSlug + '-posts',"scope":"col"}},[_vm._v("\n\t\t\t\t\t"+_vm._s(_vm.strings.count)+"\n\t\t\t\t")])])]),_vm._v(" "),_c('tbody',[_vm._l((_vm.unitsOfType),function(unitSlug){return (_vm.unitsOfType.length > 0)?[_c('AcademicUnit',{attrs:{"slug":unitSlug}})]:_vm._e()}),_vm._v(" "),(_vm.unitsOfType.length === 0)?_c('tr',[_c('td',{attrs:{"colspan":"4"}},[_vm._v(_vm._s(_vm.strings.noUnitsOfType))])]):_vm._e()],2)])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"add-new-academic-unit"},[_c('h3',[_vm._v(_vm._s(_vm.strings.addNewAcademicUnitTitle))]),_vm._v(" "),_c('label',{attrs:{"for":'new-academic-unit-name-' + _vm.academicUnitTypeSlug}},[_vm._v(_vm._s(_vm.strings.academicUnitNameLabel))]),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.newUnitName),expression:"newUnitName"}],attrs:{"id":'new-academic-unit-name-' + _vm.academicUnitTypeSlug},domProps:{"value":(_vm.newUnitName)},on:{"input":function($event){if($event.target.composing){ return; }_vm.newUnitName=$event.target.value}}}),_vm._v(" "),_c('p',{staticClass:"add-new-academic-unit-field-description"},[_vm._v("Sint omnis debitis aut libero accusantium cumque fugit quo. Eveniet dolore ut optio autem tempora.")]),_vm._v(" "),(_vm.typeSupportsParent)?_c('fieldset',{staticClass:"new-academic-unit-parent"},[_c('legend',[_vm._v(_vm._s(_vm.strings.parent))]),_vm._v(" "),_c('AcademicUnitParentSelector',{attrs:{"academicUnitTypeSlug":_vm.academicUnitTypeSlug,"thisUnitSlug":_vm.newUnitSlug}})],1):_vm._e(),_vm._v(" "),_c('p',{staticClass:"add-new-academic-unit-field-description"},[_vm._v("Sint omnis debitis aut libero accusantium cumque fugit quo. Eveniet dolore ut optio autem tempora.")]),_vm._v(" "),_c('button',{staticClass:"button button-primary",attrs:{"disabled":_vm.addNewIsLoading || ! _vm.newUnitName},on:{"click":_vm.onAddNewSubmit}},[_vm._v(_vm._s(_vm.strings.addNewAcademicUnitTitle))])]),_vm._v(" "),_c('div',{staticClass:"academic-unit-list"},[_c('table',{staticClass:"wp-list-table widefat fixed striped"},[_c('thead',[_c('tr',[_c('td',{staticClass:"manage-column column-cb check-column",attrs:{"id":_vm.academicUnitTypeSlug + '-cb'}},[_c('label',{staticClass:"screen-reader-text",attrs:{"for":_vm.academicUnitTypeSlug + '-cb-select-all'}},[_vm._v(_vm._s(_vm.strings.selectAll))]),_vm._v(" "),_c('input',{attrs:{"id":_vm.academicUnitTypeSlug + '-cb-select-all',"type":"checkbox"}})]),_vm._v(" "),_c('td',{staticClass:"manage-column column-name column-primary",attrs:{"id":_vm.academicUnitTypeSlug + '-name',"scope":"col"}},[_vm._v("\n\t\t\t\t\t"+_vm._s(_vm.strings.name)+"\n\t\t\t\t")]),_vm._v(" "),_c('td',{staticClass:"manage-column column-parent",attrs:{"id":_vm.academicUnitTypeSlug + '-parent',"scope":"col"}},[_vm._v("\n\t\t\t\t\t"+_vm._s(_vm.strings.parent)+"\n\t\t\t\t")]),_vm._v(" "),_c('td',{staticClass:"manage-posts column-posts",attrs:{"id":_vm.academicUnitTypeSlug + '-posts',"scope":"col"}},[_vm._v("\n\t\t\t\t\t"+_vm._s(_vm.strings.count)+"\n\t\t\t\t")])])]),_vm._v(" "),_c('tbody',[_vm._l((_vm.unitsOfType),function(unitSlug){return (_vm.unitsOfType.length > 0)?[_c('AcademicUnit',{attrs:{"slug":unitSlug}})]:_vm._e()}),_vm._v(" "),(_vm.unitsOfType.length === 0)?_c('tr',[_c('td',{attrs:{"colspan":"4"}},[_vm._v(_vm._s(_vm.strings.noUnitsOfType))])]):_vm._e()],2)])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -2001,7 +2061,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ecca841a", __vue__options__)
   } else {
-    hotAPI.reload("data-v-ecca841a", __vue__options__)
+    hotAPI.rerender("data-v-ecca841a", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"./AcademicUnit.vue":18,"./AcademicUnitParentSelector.vue":19,"vue":75,"vue-hot-reload-api":74}],21:[function(require,module,exports){
