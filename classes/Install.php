@@ -313,7 +313,7 @@ class Install {
 				'name' => __( 'Schools', 'cbox-openlab-core' ),
 				'parent' => '',
 				'member_types' => array(
-					'students' => 'optional',
+					'student' => 'optional',
 					'faculty' => 'required',
 					'staff' => '',
 					'alumni' => '',
