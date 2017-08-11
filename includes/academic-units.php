@@ -212,18 +212,6 @@ function cboxol_get_academic_units( $args = array() ) {
 }
 
 /**
- * Get a map of academic units.
- */
-function cboxol_get_academic_unit_map() {
-	$units = cboxol_get_academic_units();
-	$map = array();
-	foreach ( $units as $unit ) {
-
-		//$ids[ $unit->get_wp_post_id() ] =
-	}
-}
-
-/**
  * Get the markup for the Academic Unit selector.
  */
 function cboxol_get_academic_unit_selector( $args = array() ) {
