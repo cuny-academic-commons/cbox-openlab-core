@@ -52,6 +52,9 @@
 			var hasParent = v.dataset.hasOwnProperty( 'parent' ) && v.dataset.parent.length > 0;
 			if ( ! hasParent || -1 !== selectedUnitSlugs.indexOf( v.dataset.parent ) ) {
 				$( v ).closest( '.academic-unit' ).removeClass( 'academic-unit-hidden' ).addClass( 'academic-unit-visible' );
+			} else {
+				// Hidden fields can't be checked.
+				$( v ).prop( 'checked', false );
 			}
 		} );
 	}
