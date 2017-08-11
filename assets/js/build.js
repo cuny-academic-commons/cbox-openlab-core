@@ -876,6 +876,8 @@ exports.default = {
 		itemClass: function itemClass() {
 			var itemClass = 'cboxol-entity';
 
+			itemClass += ' cboxol-entity-' + this.entityType;
+
 			if (this.isCollapsed) {
 				itemClass += ' collapsed';
 			}

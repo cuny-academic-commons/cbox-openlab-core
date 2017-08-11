@@ -216,6 +216,12 @@ a .action-arrow {
 	color: #0073aa;
 }
 
+.cboxol-entity-academicUnitType label.cboxol-entity-content-section-header {
+	display: inline-block;
+	font-size: 10pt;
+	width: 130px;
+}
+
 .cboxol-academic-units-of-type {
 	margin-top: 25px;
 	overflow: hidden;

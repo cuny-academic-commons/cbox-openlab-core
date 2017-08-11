@@ -204,6 +204,8 @@
 			itemClass() {
 				let itemClass = 'cboxol-entity'
 
+				itemClass += ' cboxol-entity-' + this.entityType
+
 				if ( this.isCollapsed ) {
 					itemClass += ' collapsed'
 				}
