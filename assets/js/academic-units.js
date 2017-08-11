@@ -9,6 +9,9 @@
 
 	$(document).ready(function() {
 		$accountTypeSelector = $('#account-type');
+		if ( ! $accountTypeSelector.length ) {
+			$accountTypeSelector = $('#member-type');
+		}
 
 		showAcademicUnitTypesForMemberType( $accountTypeSelector.val() );
 		$accountTypeSelector.change( function() {

@@ -9,6 +9,7 @@ add_action( 'bp_signup_usermeta', 'cboxol_save_signup_academic_units' );
 
 // Run at 20 to ensure that member type is set.
 add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_academic_units', 20, 3 );
+add_action( 'xprofile_updated_profile', 'cboxol_academic_units_process_change' );
 
 /**
  * Register post types for Academic Units.
@@ -412,6 +413,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 	// @todo selected
 	$r = array_merge( array(
 		'member_type' => null,
+		'selected' => array(),
 	), $args );
 
 	$academic_unit_types = cboxol_get_academic_unit_types( array(
@@ -466,6 +468,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 								?>
 
 								<input
+									<?php checked( in_array( $unit->get_slug(), $r['selected'], true ) ); ?>
 									class="academic-unit-checkbox"
 									data-parent="<?php echo esc_attr( $parent_attr ); ?>"
 									id="<?php echo esc_attr( $id_attr ); ?>"
@@ -553,4 +556,49 @@ function cboxol_save_activated_user_academic_units( $user_id, $key, $user ) {
 			'type_ids' => $units_to_save,
 		) );
 	}
+}
+
+/**
+ * Process academic unit save from profile edit screen.
+ *
+ * @param int $user_id
+ */
+function cboxol_academic_units_process_change( $user_id ) {
+	$academic_units = array();
+	if ( isset( $_POST['academic-units'] ) ) {
+		$academic_units = wp_unslash( $_POST['academic-units'] );
+	}
+
+	// Ensure that user has the ability to do this.
+	$can_change = current_user_can( 'bp_moderate' ) || $user_id === bp_loggedin_user_id();
+	if ( ! $can_change ) {
+		return;
+	}
+
+	$member_type = cboxol_get_user_member_type( $user_id );
+
+	$units_to_save = array();
+	foreach ( $academic_units as $academic_unit_slug ) {
+		$acad_unit_obj = cboxol_get_academic_unit( $academic_unit_slug );
+		if ( is_wp_error( $acad_unit_obj ) ) {
+			continue;
+		}
+
+		$unit_type_obj = cboxol_get_academic_unit_type( $acad_unit_obj->get_type() );
+		if ( is_wp_error( $unit_type_obj ) ) {
+			continue;
+		}
+
+		if ( ! $unit_type_obj->is_selectable_by_member_type( $member_type->get_slug() ) ) {
+			continue;
+		}
+
+		$units_to_save[] = $acad_unit_obj->get_wp_post_id();
+	}
+
+	$saved = cboxol_associate_object_with_academic_units( array(
+		'object_id' => $user_id,
+		'object_type' => 'user',
+		'type_ids' => $units_to_save,
+	) );
 }
