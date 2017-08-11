@@ -17,6 +17,7 @@ class Install {
 		$this->install_default_member_types();
 		$this->install_default_group_types();
 		$this->install_default_group_categories();
+		$this->install_default_academic_types();
 		$this->install_default_brand_pages();
 	}
 
@@ -303,6 +304,75 @@ class Install {
 			$c->set_name( $cat['name'] );
 			$c->set_group_types( $cat['types'] );
 			$c->save();
+		}
+	}
+
+	protected function install_default_academic_types() {
+		$types = array(
+			'schools' => array(
+				'name' => __( 'Schools', 'cbox-openlab-core' ),
+				'parent' => '',
+				'member_types' => array(
+					'students' => 'optional',
+					'faculty' => 'required',
+					'staff' => '',
+					'alumni' => '',
+				),
+				'group_types' => array(
+					'course' => 'required',
+					'project' => 'optional',
+					'club' => '',
+					'portfolios' => '',
+				),
+			),
+			'departments' => array(
+				'name' => __( 'Departments', 'cbox-openlab-core' ),
+				'parent' => 'schools',
+				'member_types' => array(
+					'student' => 'optional',
+					'faculty' => 'required',
+					'staff' => '',
+					'alumni' => '',
+				),
+				'group_types' => array(
+					'course' => 'required',
+					'project' => 'optional',
+					'club' => '',
+					'portfolios' => '',
+				),
+			),
+		);
+
+		foreach ( $types as $type_slug => $type_data ) {
+			$type_obj = new AcademicUnitType();
+			$type_obj->set_slug( $type_slug );
+			$type_obj->set_name( $type_data['name'] );
+			$type_obj->set_parent( $type_data['parent'] );
+			$type_obj->set_member_types( $type_data['member_types'] );
+			$type_obj->set_group_types( $type_data['group_types'] );
+			$type_obj->save();
+		}
+
+		$units = array(
+			'arts-and-sciences' => array(
+				'type' => 'schools',
+				'name' => __( 'Arts and Sciences', 'cbox-openlab-core' ),
+				'parent' => '',
+			),
+			'english' => array(
+				'type' => 'departments',
+				'name' => __( 'English', 'cbox-openlab-core' ),
+				'parent' => 'arts-and-sciences',
+			),
+		);
+
+		foreach ( $units as $unit_slug => $unit_data ) {
+			$unit_obj = new AcademicUnit();
+			$unit_obj->set_slug( $unit_slug );
+			$unit_obj->set_name( $unit_data['name'] );
+			$unit_obj->set_parent( $unit_data['parent'] );
+			$unit_obj->set_type( $unit_data['type'] );
+			$unit_obj->save();
 		}
 	}
 

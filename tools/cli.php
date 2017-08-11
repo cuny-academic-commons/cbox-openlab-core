@@ -59,6 +59,12 @@ class CBOXOL_Command extends WP_CLI_Command {
 			wp_delete_term( $group_cat_id, 'bp_group_categories' );
 		}
 
+		// Academic units and types.
+		$acad_unit_ids = $wpdb->get_col( "SELECT ID FROM $wpdb->posts WHERE post_type IN ('cboxol_acadunit', 'cboxol_acadunit_type')" );
+		foreach ( $acad_unit_ids as $acad_unit_id ) {
+			wp_delete_post( $acad_unit_id, true );
+		}
+
 		delete_site_option( 'cboxol_ver' );
 
 		// Perform theme resets as well.
