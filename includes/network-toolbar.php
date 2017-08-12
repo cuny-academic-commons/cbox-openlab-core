@@ -713,66 +713,66 @@ HTML;
 			) );
 		}
 
-				if ( bp_is_active( 'friends' ) ) {
-					$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
-					$request_count = openlab_admin_bar_counts( count( $request_ids ) );
-					$wp_admin_bar->add_node( array(
-						'parent' => 'my-openlab',
-						'id'     => 'my-friends',
-						'title'  => 'My Friends ' . $request_count,
-						'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() ),
-								'meta' => array(
-									'class' => 'admin-bar-menu-item mobile-no-hover',
-								),
-					) );
-				}
+		if ( bp_is_active( 'friends' ) ) {
+			$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+			$request_count = openlab_admin_bar_counts( count( $request_ids ) );
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-friends',
+				'title'  => 'My Friends ' . $request_count,
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() ),
+						'meta' => array(
+							'class' => 'admin-bar-menu-item mobile-no-hover',
+						),
+			) );
+		}
 
-				if ( bp_is_active( 'messages' ) ) {
-						$messages_count = openlab_admin_bar_counts( bp_get_total_unread_messages_count() );
-					$wp_admin_bar->add_node( array(
-						'parent' => 'my-openlab',
-						'id'     => 'my-messages',
-						'title'  => sprintf( 'My Messages %s', $messages_count ),
-						'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
-								'meta' => array(
-									'class' => 'admin-bar-menu-item mobile-no-hover',
-								),
-					) );
-				}
+		if ( bp_is_active( 'messages' ) ) {
+				$messages_count = openlab_admin_bar_counts( bp_get_total_unread_messages_count() );
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-messages',
+				'title'  => sprintf( 'My Messages %s', $messages_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
+						'meta' => array(
+							'class' => 'admin-bar-menu-item mobile-no-hover',
+						),
+			) );
+		}
 
-				if ( bp_is_active( 'groups' ) ) {
-					$invites = groups_get_invites_for_user();
-					$invite_count = openlab_admin_bar_counts( isset( $invites['total'] ) ? (int) $invites['total'] : 0 );
-					$wp_admin_bar->add_node( array(
-						'parent' => 'my-openlab',
-						'id'     => 'my-invitations',
-						'title'  => sprintf( 'My Invitations %s', $invite_count ),
-						'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' ),
-								'meta' => array(
-									'class' => 'admin-bar-menu-item mobile-no-hover',
-								),
-					) );
+		if ( bp_is_active( 'groups' ) ) {
+			$invites = groups_get_invites_for_user();
+			$invite_count = openlab_admin_bar_counts( isset( $invites['total'] ) ? (int) $invites['total'] : 0 );
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-invitations',
+				'title'  => sprintf( 'My Invitations %s', $invite_count ),
+				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' ),
+						'meta' => array(
+							'class' => 'admin-bar-menu-item mobile-no-hover',
+						),
+			) );
 
-				}
+		}
 
-				// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
-				// this panel only works if looking at a site where the user has Dashboard-level
-				// permissions. So we have to find a valid site for the logged in user.
-				$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
-				$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
+		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
+		// this panel only works if looking at a site where the user has Dashboard-level
+		// permissions. So we have to find a valid site for the logged in user.
+		$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
+		$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
 
-				if ( ! empty( $primary_site_id ) && ! empty( $primary_site_url ) ) {
+		if ( ! empty( $primary_site_id ) && ! empty( $primary_site_url ) ) {
 
-					$wp_admin_bar->add_node( array(
-						'parent' => 'my-openlab',
-						'id'     => 'my-dashboard',
-						'title'  => 'My Dashboard',
-						'href'   => $primary_site_url . '/wp-admin/my-sites.php',
-								'meta' => array(
-									'class' => 'admin-bar-menu-item mobile-no-hover exit',
-								),
-					) );
-				}
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-dashboard',
+				'title'  => 'My Dashboard',
+				'href'   => $primary_site_url . '/wp-admin/my-sites.php',
+						'meta' => array(
+							'class' => 'admin-bar-menu-item mobile-no-hover exit',
+						),
+			) );
+		}
 	}
 
 	/**
