@@ -11,7 +11,7 @@ add_action( 'bp_signup_usermeta', 'cboxol_save_signup_academic_units' );
 add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_academic_units', 20, 3 );
 add_action( 'xprofile_updated_profile', 'cboxol_academic_units_process_change_for_user' );
 
-add_action( 'groups_group_after_save', 'cboxol_academic_units_process_change_for_group' );
+add_action( 'groups_group_after_save', 'cboxol_academic_units_process_change_for_group', 20 );
 
 /**
  * Register post types for Academic Units.
@@ -654,7 +654,12 @@ function cboxol_academic_units_process_change_for_group( $group ) {
 		$academic_units = wp_unslash( $_POST['academic-units'] );
 	}
 
-	$group_type = cboxol_get_group_group_type( $group->id );
+	if ( bp_is_group_create() ) {
+		// This is a hack because group type association happens a bit later.
+		$group_type = cboxol_get_group_type( $_POST['group-type'] );
+	} else {
+		$group_type = cboxol_get_group_group_type( $group->id );
+	}
 
 	$units_to_save = array();
 	foreach ( $academic_units as $academic_unit_slug ) {
