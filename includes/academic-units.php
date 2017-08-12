@@ -9,7 +9,9 @@ add_action( 'bp_signup_usermeta', 'cboxol_save_signup_academic_units' );
 
 // Run at 20 to ensure that member type is set.
 add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_academic_units', 20, 3 );
-add_action( 'xprofile_updated_profile', 'cboxol_academic_units_process_change' );
+add_action( 'xprofile_updated_profile', 'cboxol_academic_units_process_change_for_user' );
+
+add_action( 'groups_group_after_save', 'cboxol_academic_units_process_change_for_group' );
 
 /**
  * Register post types for Academic Units.
@@ -131,6 +133,7 @@ function cboxol_academic_units_main_admin_page() {
 function cboxol_get_academic_unit_types( $args = array() ) {
 	$r = array_merge( array(
 		'member_type' => null,
+		'group_type' => null,
 	), $args );
 
 	$post_args = array(
@@ -160,6 +163,10 @@ function cboxol_get_academic_unit_types( $args = array() ) {
 		$type_obj = \CBOX\OL\AcademicUnitType::get_instance_from_wp_post( $type_post );
 
 		if ( null !== $r['member_type'] && ! $type_obj->is_selectable_by_member_type( $r['member_type'] ) ) {
+			continue;
+		}
+
+		if ( null !== $r['group_type'] && ! $type_obj->is_selectable_by_group_type( $r['group_type'] ) ) {
 			continue;
 		}
 
@@ -413,12 +420,21 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 	// @todo selected
 	$r = array_merge( array(
 		'member_type' => null,
+		'group_type' => null,
+		'entity_type' => null,
 		'selected' => array(),
 	), $args );
 
-	$academic_unit_types = cboxol_get_academic_unit_types( array(
-		'member_type' => $r['member_type'],
-	) );
+	$unit_type_args = array();
+	if ( null !== $r['member_type'] ) {
+		$unit_type_args['member_type'] = $r['member_type'];
+	}
+
+	if ( null !== $r['group_type'] ) {
+		$unit_type_args['group_type'] = $r['group_type'];
+	}
+
+	$academic_unit_types = cboxol_get_academic_unit_types( $unit_type_args );
 
 	wp_enqueue_script( 'cboxol-academic-types', CBOXOL_PLUGIN_URL . '/assets/js/academic-units.js', array( 'jquery' ), false, true );
 
@@ -433,7 +449,15 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 			$group_type_unit_types[ $group_type ][] = $academic_unit_type->get_slug();
 		}
 	}
+
+	$entity_type = $r['entity_type'];
+	if ( ! in_array( $entity_type, array( 'user', 'group' ), true ) ) {
+		$entity_type = '';
+	}
+
 	wp_localize_script( 'cboxol-academic-types', 'CBOXOLAcademicTypes', array(
+		'entityType' => $entity_type,
+		'groupType' => $group_type,
 		'typesByMemberType' => $member_type_unit_types,
 		'typesByGroupType' => $group_type_unit_types,
 	) );
@@ -481,6 +505,9 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 					</ul>
 				</div>
 			</fieldset>
+
+			<?php wp_nonce_field( 'cboxol-academic-unit-selector', 'cboxol-academic-unit-selector-nonce', false ); ?>
+
 		</div>
 		<?php
 	}
@@ -563,7 +590,7 @@ function cboxol_save_activated_user_academic_units( $user_id, $key, $user ) {
  *
  * @param int $user_id
  */
-function cboxol_academic_units_process_change( $user_id ) {
+function cboxol_academic_units_process_change_for_user( $user_id ) {
 	$academic_units = array();
 	if ( isset( $_POST['academic-units'] ) ) {
 		$academic_units = wp_unslash( $_POST['academic-units'] );
@@ -599,6 +626,58 @@ function cboxol_academic_units_process_change( $user_id ) {
 	$saved = cboxol_associate_object_with_academic_units( array(
 		'object_id' => $user_id,
 		'object_type' => 'user',
+		'type_ids' => $units_to_save,
+	) );
+}
+
+/**
+ * Process the saving of a group's academic units.
+ */
+function cboxol_academic_units_process_change_for_group( $group ) {
+	$nonce = '';
+
+	if ( isset( $_POST['cboxol-academic-unit-selector-nonce'] ) ) {
+		$nonce = urldecode( $_POST['cboxol-academic-unit-selector-nonce'] );
+	}
+
+	if ( ! wp_verify_nonce( $nonce, 'cboxol-academic-unit-selector' ) ) {
+		return;
+	}
+
+	// Admins only.
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
+	$academic_units = array();
+	if ( isset( $_POST['academic-units'] ) ) {
+		$academic_units = wp_unslash( $_POST['academic-units'] );
+	}
+
+	$group_type = cboxol_get_group_group_type( $group->id );
+
+	$units_to_save = array();
+	foreach ( $academic_units as $academic_unit_slug ) {
+		$acad_unit_obj = cboxol_get_academic_unit( $academic_unit_slug );
+		if ( is_wp_error( $acad_unit_obj ) ) {
+			continue;
+		}
+
+		$unit_type_obj = cboxol_get_academic_unit_type( $acad_unit_obj->get_type() );
+		if ( is_wp_error( $unit_type_obj ) ) {
+			continue;
+		}
+
+		if ( ! $unit_type_obj->is_selectable_by_group_type( $group_type->get_slug() ) ) {
+			continue;
+		}
+
+		$units_to_save[] = $acad_unit_obj->get_wp_post_id();
+	}
+
+	$saved = cboxol_associate_object_with_academic_units( array(
+		'object_id' => $group->id,
+		'object_type' => 'group',
 		'type_ids' => $units_to_save,
 	) );
 }

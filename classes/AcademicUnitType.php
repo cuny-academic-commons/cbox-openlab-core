@@ -258,4 +258,16 @@ class AcademicUnitType {
 		$type_settings = $this->get_member_types();
 		return isset( $type_settings[ $member_type_slug ] ) && in_array( $type_settings[ $member_type_slug ], array( 'required', 'optional' ), true );
 	}
+
+	/**
+	 * Is the current type selectable by a group of a given type?
+	 *
+	 * Returns true for cases of 'required' or 'optional'.
+	 *
+	 * @param string $member_type_slug
+	 */
+	public function is_selectable_by_group_type( $group_type_slug ) {
+		$type_settings = $this->get_group_types();
+		return isset( $type_settings[ $group_type_slug ] ) && in_array( $type_settings[ $group_type_slug ], array( 'required', 'optional' ), true );
+	}
 }
