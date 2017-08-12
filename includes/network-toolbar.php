@@ -562,29 +562,29 @@ HTML;
 			) );
 	}
 
-		/**
-		 * Adds 'My OpenLab' menu
-		 */
+	/**
+	 * Adds 'My OpenLab' menu
+	 */
 	function add_my_openlab_menu( $wp_admin_bar ) {
 
-			$current_user = wp_get_current_user();
+		$current_user = wp_get_current_user();
 
-			$howdy = sprintf( __( 'Hi, %1$s' ), $current_user->display_name );
+		$howdy = sprintf( __( 'Hi, %1$s' ), $current_user->display_name );
 
 		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
 			'title' => 'My OpenLab <span class="fa fa-caret-down" aria-hidden="true"></span>',
 			'href'  => bp_loggedin_user_domain(),
-					'meta'  => array(
-						'class' => 'admin-bar-menu',
-						'tabindex' => 0,
-					),
+				'meta'  => array(
+					'class' => 'admin-bar-menu',
+					'tabindex' => 0,
+				),
 		) );
 	}
 
-		/**
-		 * Hamurger menu (mobile only)
-		 */
+	/**
+	 * Hamburger menu (mobile only)
+	 */
 	function openlab_hamburger_menu( $wp_admin_bar ) {
 
 		$hamburger = <<<HTML
