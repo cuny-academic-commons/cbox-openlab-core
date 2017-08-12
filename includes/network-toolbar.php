@@ -687,45 +687,31 @@ HTML;
 						),
 		) );
 
-				$wp_admin_bar->add_node( array(
-					'parent' => 'my-openlab',
-					'id'     => 'my-settings',
-					'title'  => 'My Settings',
-					'href'   => trailingslashit( bp_loggedin_user_domain() . 'settings' ),
-						'meta' => array(
-							'class' => 'admin-bar-menu-item mobile-no-hover',
-						),
-				) );
+		$wp_admin_bar->add_node( array(
+			'parent' => 'my-openlab',
+			'id'     => 'my-settings',
+			'title'  => 'My Settings',
+			'href'   => trailingslashit( bp_loggedin_user_domain() . 'settings' ),
+				'meta' => array(
+					'class' => 'admin-bar-menu-item mobile-no-hover',
+				),
+		) );
 
-				$wp_admin_bar->add_node( array(
-					'parent' => 'my-openlab',
-					'id'     => 'my-courses',
-					'title'  => 'My Courses',
-					'href'   => trailingslashit( bp_get_root_domain() . '/my-courses' ),
-						'meta' => array(
-							'class' => 'admin-bar-menu-item mobile-no-hover',
-						),
-				) );
+		$group_types = cboxol_get_group_types( array(
+			'exclude_portfolio' => true,
+		) );
 
-				$wp_admin_bar->add_node( array(
-					'parent' => 'my-openlab',
-					'id'     => 'my-projects',
-					'title'  => 'My Projects',
-					'href'   => trailingslashit( bp_get_root_domain() . '/my-projects' ),
-						'meta' => array(
-							'class' => 'admin-bar-menu-item mobile-no-hover',
-						),
-				) );
-
-				$wp_admin_bar->add_node( array(
-					'parent' => 'my-openlab',
-					'id'     => 'my-clubs',
-					'title'  => 'My Clubs',
-					'href'   => trailingslashit( bp_get_root_domain() . '/my-clubs' ),
-						'meta' => array(
-							'class' => 'admin-bar-menu-item mobile-no-hover',
-						),
-				) );
+		foreach ( $group_types as $group_type ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => 'my-openlab',
+				'id'     => 'my-groups-' . $group_type->get_slug(),
+				'title'  => $group_type->get_label( 'my_groups' ),
+				'href'   => openlab_get_user_group_type_directory_url( $group_type, bp_loggedin_user_id() ),
+					'meta' => array(
+						'class' => 'admin-bar-menu-item mobile-no-hover',
+					),
+			) );
+		}
 
 				if ( bp_is_active( 'friends' ) ) {
 					$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
