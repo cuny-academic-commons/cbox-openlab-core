@@ -382,7 +382,10 @@ function cboxol_get_object_academic_unit_data_for_display( $args = array() ) {
 			break;
 
 		case 'group' :
-			$type_args['group_type'] = cboxol_get_group_group_type( $r['object_id'] );
+			$group_type = cboxol_get_group_group_type( $r['object_id'] );
+			if ( ! is_wp_error( $group_type ) ) {
+				$type_args['group_type'] = $group_type->get_slug();
+			}
 			break;
 	}
 
