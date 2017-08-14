@@ -167,7 +167,7 @@ class AcademicUnit {
 	 *
 	 * @param int
 	 */
-	public function set_order( int $order ) {
+	public function set_order( $order ) {
 		$this->data['order'] = $order;
 	}
 
@@ -203,7 +203,7 @@ class AcademicUnit {
 	 *
 	 * @param int
 	 */
-	public function set_wp_post_id( int $wp_post_id ) {
+	public function set_wp_post_id( $wp_post_id ) {
 		$this->data['wp_post_id'] = $wp_post_id;
 	}
 }
