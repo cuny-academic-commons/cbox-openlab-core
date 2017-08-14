@@ -138,6 +138,8 @@ class Install {
 					'course_information' => __( 'Course Information', 'cbox-openlab-core' ),
 					'course_information_description' => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'cbox-openlab-core' ),
 					'section_code' => __( 'Section Code', 'cbox-openlab-core' ),
+					'group_site' => __( 'Course Site', 'cbox-openlab-core' ),
+					'visit_group_site' => __( 'Visit Course Site', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -172,6 +174,8 @@ class Install {
 					'my_portfolio' => __( 'My Portfolio', 'cbox-openlab-core' ),
 					'my_portfolio_site' => __( 'My Portfolio Site', 'cbox-openlab-core' ),
 					'visit_portfolio_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
+					'visit_group_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
+					'group_site' => __( 'Portfolio Site', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -198,6 +202,8 @@ class Install {
 					'singular' => __( 'Club', 'cbox-openlab-core' ),
 					'plural' => __( 'Clubs', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Clubs', 'cbox-openlab-core' ),
+					'group_site' => __( 'Club Site', 'cbox-openlab-core' ),
+					'visit_group_site' => __( 'Visit Club Site', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -224,6 +230,8 @@ class Install {
 					'singular' => __( 'Project', 'cbox-openlab-core' ),
 					'plural' => __( 'Projects', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Projects', 'cbox-openlab-core' ),
+					'group_site' => __( 'Project Site', 'cbox-openlab-core' ),
+					'visit_group_site' => __( 'Visit Project Site', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,

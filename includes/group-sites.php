@@ -715,7 +715,7 @@ add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10,
  * This function checks the blog_public option of the group site, and depending on the result,
  * returns whether the current user can view the site.
  */
-function wds_site_can_be_viewed() {
+function cboxol_site_can_be_viewed( $group_id = null ) {
 	global $user_ID;
 
 	// External sites can always be viewed
@@ -723,8 +723,11 @@ function wds_site_can_be_viewed() {
 		return true;
 	}
 
+	if ( null === $group_id ) {
+		$group_id = bp_get_group_id();
+	}
+
 	$blog_public = false;
-	$group_id = bp_get_group_id();
 	$wds_bp_group_site_id = cboxol_get_group_site_id( $group_id );
 
 	if ( $wds_bp_group_site_id != "" ) {

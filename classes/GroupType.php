@@ -113,6 +113,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'course_information_description',
 				'course_code',
 				'section_code',
+				'group_site',
+				'visit_group_site',
 			),
 			'portfolio' => array(
 				'singular',
@@ -121,11 +123,15 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'my_portfolio',
 				'my_portfolio_site',
 				'visit_portfolio_site',
+				'group_site',
+				'visit_group_site',
 			),
 			'default' => array(
 				'singular',
 				'plural',
 				'my_groups',
+				'group_site',
+				'visit_group_site',
 			),
 		);
 
@@ -205,6 +211,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'description' => __( 'The text used for "Create" links.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
+			'group_site' => array(
+				'slug' => 'group_site',
+				'label' => __( 'Group Site', 'cbox-openlab-core' ),
+				'description' => __( 'Used in group directories and elsewhere to create links to the group\'s site.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
 			'my_groups' => array(
 				'slug' => 'my_groups',
 				'label' => _x( 'My Groups', 'Group Type label', 'cbox-openlab-core' ),
@@ -239,6 +251,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'singular',
 				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
 				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'visit_group_site' => array(
+				'slug' => 'visit_group_site',
+				'label' => __( 'Visit Group Site', 'cbox-openlab-core' ),
+				'description' => __( 'Used in group navigation and elsewhere to create links to the group\'s site.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'visit_portfolio_site' => array(
