@@ -871,6 +871,5 @@ function cboxol_shim_tax_query_for_bp_members( BP_User_Query $query ) {
 		$include = (array) $query->query_vars['include'];
 		$query->query_vars['include'] = array_intersect( $query->query_vars['include'], $object_ids );
 	}
-	_b( $query );
 }
 add_filter( 'bp_pre_user_query_construct', 'cboxol_shim_tax_query_for_bp_members' );
