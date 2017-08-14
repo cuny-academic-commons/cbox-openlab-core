@@ -808,3 +808,69 @@ function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 }
 add_filter( 'bp_groups_get_paged_groups_sql', 'cboxol_shim_tax_query_for_bp_groups', 10, 3 );
 add_filter( 'bp_groups_get_total_groups_sql', 'cboxol_shim_tax_query_for_bp_groups', 10, 3 );
+
+/**
+ * Shim for missing tax_query functionality in BP user queries.
+ */
+function cboxol_shim_tax_query_for_bp_members( BP_User_Query $query ) {
+	global $wpdb;
+
+	$academic_units = array();
+	foreach ( $_GET as $get_key => $get_value ) {
+		if ( 'academic-unit-' !== substr( $get_key, 0, 14 ) ) {
+			continue;
+		}
+
+		if ( empty( $get_value ) ) {
+			continue;
+		}
+
+		if ( 'all' === $get_value ) {
+			$type_slug = substr( $get_key, 14 );
+			$units_of_type = cboxol_get_academic_units( array(
+				'type' => $type_slug,
+			) );
+			foreach ( $units_of_type as $unit_of_type ) {
+				$academic_units[] = $unit_of_type->get_slug();
+			}
+		} else {
+			$academic_units[] = urldecode( wp_unslash( $get_value ) );
+		}
+	}
+
+	$academic_units = array_filter( $academic_units );
+
+	if ( ! $academic_units ) {
+		return $sql;
+	}
+
+	$term_slugs = array_map( function( $unit_slug ) {
+		$unit = cboxol_get_academic_unit( $unit_slug );
+		if ( ! is_wp_error( $unit ) ) {
+			return 'acad_unit_' . $unit->get_wp_post_id();
+		}
+	}, $academic_units );
+
+	// Convert to IN.
+	$term_ids = get_terms( array(
+		'taxonomy' => 'cboxol_member_in_acadunit',
+		'orderby' => 'none',
+		'hide_empty' => false,
+		'slug' => $term_slugs,
+		'fields' => 'ids',
+	) );
+
+	$object_ids = get_objects_in_term( $term_ids, 'cboxol_member_in_acadunit' );
+	if ( ! $object_ids ) {
+		$object_ids = array( 0 );
+	}
+
+	if ( empty( $query->query_vars['include'] ) ) {
+		$query->query_vars['include'] = $object_ids;
+	} else {
+		$include = (array) $query->query_vars['include'];
+		$query->query_vars['include'] = array_intersect( $query->query_vars['include'], $object_ids );
+	}
+	_b( $query );
+}
+add_filter( 'bp_pre_user_query_construct', 'cboxol_shim_tax_query_for_bp_members' );
