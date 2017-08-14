@@ -263,6 +263,17 @@ function cboxol_get_academic_unit( $slug ) {
 	return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found.', 'cbox-openlab-core' ) );
 }
 
+function cboxol_get_academic_unit_map() {
+	$units = cboxol_get_academic_units();
+	$retval = array();
+
+	foreach ( $units as $unit ) {
+		$retval[] = $unit->get_for_endpoint();
+	}
+
+	return $retval;
+}
+
 /**
  * Associate an object with academic units.
  */
@@ -417,10 +428,51 @@ function cboxol_get_object_academic_unit_data_for_display( $args = array() ) {
 }
 
 /**
+ * Get a tax query based on academic units.
+ */
+function cboxol_get_tax_query_for_academic_units( array $args ) {
+	$r = array_merge( array(
+		'units' => array(),
+		'object_type' => '',
+	), $args );
+
+	$taxonomy = '';
+	switch ( $r['object_type'] ) {
+		case 'user' :
+			$taxonomy = 'cboxol_member_in_acadunit';
+			break;
+
+		case 'group' :
+			$taxonomy = 'cboxol_group_in_acadunit';
+			break;
+	}
+
+	if ( ! $taxonomy ) {
+		return false;
+	}
+
+	$term_slugs = array();
+	foreach ( $r['units'] as $unit ) {
+		$unit_obj = cboxol_get_academic_unit( $unit );
+		if ( is_wp_error( $unit_obj ) ) {
+			continue;
+		}
+		$term_slugs[] = 'acad_unit_' . $unit_obj->get_wp_post_id();
+	}
+
+	$tax_query = array(
+		'taxonomy' => $taxonomy,
+		'terms' => $term_slugs,
+		'field' => 'slug',
+	);
+
+	return $tax_query;
+}
+
+/**
  * Get the markup for the Academic Unit selector.
  */
 function cboxol_get_academic_unit_selector( $args = array() ) {
-	// @todo selected
 	$r = array_merge( array(
 		'member_type' => null,
 		'group_type' => null,
@@ -689,3 +741,59 @@ function cboxol_academic_units_process_change_for_group( $group ) {
 		'type_ids' => $units_to_save,
 	) );
 }
+
+
+/**
+ * Shim for missing tax_query functionality in BP group queries.
+ */
+function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
+	global $wpdb;
+
+	if ( ! empty( $_GET['academic-units'] ) ) {
+		$academic_units = urldecode_deep( wp_unslash( $_GET['academic-units'] ) );
+		$academic_units = array_filter( $academic_units );
+
+		if ( $academic_units ) {
+			$term_slugs = array_map( function( $unit_slug ) {
+				$unit = cboxol_get_academic_unit( $unit_slug );
+				if ( ! is_wp_error( $unit ) ) {
+					return 'acad_unit_' . $unit->get_wp_post_id();
+				}
+			}, $academic_units );
+
+			// Convert to IN.
+			$term_ids = get_terms( array(
+				'taxonomy' => 'cboxol_group_in_acadunit',
+				'orderby' => 'none',
+				'hide_empty' => false,
+				'slug' => $term_slugs,
+				'fields' => 'ids',
+			) );
+
+			$object_ids = get_objects_in_term( $term_ids, 'cboxol_group_in_acadunit' );
+			if ( ! $object_ids ) {
+				$object_ids = array( 0 );
+			}
+
+			if ( 'bp_groups_get_paged_groups_sql' === current_filter() ) {
+				$sql = str_replace( 'ORDER BY', ' AND g.id IN (' . implode( ',', array_map( 'intval', $object_ids ) ) . ') ORDER BY', $sql );
+			} else {
+				$sql .= ' AND g.id IN (' . implode( ',', array_map( 'intval', $object_ids ) ) . ')';
+			}
+			return $sql;
+			$tq = new WP_Tax_Query( array( $academic_units_tax_query ) );
+			$tq_sql = $tq->get_sql( buddypress()->groups->table_name, 'id' );
+
+			// Enforce unique table alias.
+			$join = $tq_sql['join'];
+			$join = str_replace( 'JOIN ' . $wpdb->term_relationships, 'JOIN ' . $wpdb->term_relationships . ' tr_cboxol_tq', $join );
+			$join = str_replace( $wpdb->term_relationships . '.', 'tr_cboxol_tq.', $join );
+			$sql = str_replace( 'WHERE', $join . ' WHERE', $sql );
+
+			$sql = str_replace( ' ORDER BY', str_replace( $wpdb->term_relationships, 'tr_cboxol_tq', $tq_sql['where'] ) . ' ORDER BY', $sql );
+		}
+	}
+	return $sql;
+}
+add_filter( 'bp_groups_get_paged_groups_sql', 'cboxol_shim_tax_query_for_bp_groups', 10, 3 );
+add_filter( 'bp_groups_get_total_groups_sql', 'cboxol_shim_tax_query_for_bp_groups', 10, 3 );
