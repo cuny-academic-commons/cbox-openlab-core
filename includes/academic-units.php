@@ -841,7 +841,7 @@ function cboxol_shim_tax_query_for_bp_members( BP_User_Query $query ) {
 	$academic_units = array_filter( $academic_units );
 
 	if ( ! $academic_units ) {
-		return $sql;
+		return;
 	}
 
 	$term_slugs = array_map( function( $unit_slug ) {
