@@ -67,6 +67,11 @@ class CBOXOL_Command extends WP_CLI_Command {
 
 		delete_site_option( 'cboxol_ver' );
 
+		$brand_pages = cboxol_get_brand_pages();
+		foreach ( $brand_pages as $brand_page ) {
+			wp_delete_post( $brand_page['id'], true );
+		}
+
 		// Perform theme resets as well.
 		$this->reset_theme();
 	}
