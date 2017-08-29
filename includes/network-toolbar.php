@@ -437,7 +437,9 @@ HTML;
 	function openlab_menu_items( $parent ) {
 		global $wp_admin_bar;
 
-		$wp_admin_bar->add_node(array(
+		$brand_pages = cboxol_get_brand_pages();
+
+		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id' => 'home-' . $parent,
 			'title' => esc_html__( 'Home', 'cbox-openlab-core' ),
@@ -445,17 +447,19 @@ HTML;
 			'meta' => array(
 				'class' => 'mobile-no-hover',
 			),
-		));
-
-		$wp_admin_bar->add_node( array(
-			'parent' => $parent,
-			'id'     => 'about-' . $parent,
-			'title'  => 'About',
-			'href'   => trailingslashit( bp_get_root_domain() . '/about' ),
-				'meta' => array(
-					'class' => 'mobile-no-hover',
-				),
 		) );
+
+		if ( isset( $brand_pages['about'] ) ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => $parent,
+				'id'     => 'about-' . $parent,
+				'title'  => esc_html( $brand_pages['about']['title'] ),
+				'href'   => esc_url( $brand_pages['about']['preview_url'] ),
+					'meta' => array(
+						'class' => 'mobile-no-hover',
+					),
+			) );
+		}
 
 		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
