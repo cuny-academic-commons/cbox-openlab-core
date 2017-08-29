@@ -100,6 +100,13 @@ function cboxol_get_member_types( $args = array() ) {
 		'fields' => 'ids',
 	);
 
+	$switched = false;
+	$main_site_id = cbox_get_main_site_id();
+	if ( get_current_blog_id() !== $main_site_id ) {
+		switch_to_blog( $main_site_id );
+		$switched = true;
+	}
+
 	$last_changed = wp_cache_get_last_changed( 'posts' );
 	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids = wp_cache_get( $cache_key, 'cboxol_member_types' );
@@ -114,6 +121,10 @@ function cboxol_get_member_types( $args = array() ) {
 	$types = array();
 	foreach ( $type_posts as $type_post ) {
 		$types[ $type_post->post_name ] = \CBOX\OL\MemberType::get_instance_from_wp_post( $type_post );
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
 	}
 
 	return $types;
