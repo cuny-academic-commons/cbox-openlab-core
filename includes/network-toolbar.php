@@ -440,7 +440,7 @@ HTML;
 		$wp_admin_bar->add_node(array(
 			'parent' => $parent,
 			'id' => 'home-' . $parent,
-			'title' => 'Home',
+			'title' => esc_html__( 'Home', 'cbox-openlab-core' ),
 			'href' => bp_get_root_domain(),
 			'meta' => array(
 				'class' => 'mobile-no-hover',
@@ -457,65 +457,38 @@ HTML;
 				),
 		) );
 
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => 'people-' . $parent,
-				'title'  => 'People',
-				'href'   => trailingslashit( bp_get_root_domain() . '/people' ),
-				'meta' => array(
-					'class' => 'mobile-no-hover',
-				),
-			) );
+		$wp_admin_bar->add_node( array(
+			'parent' => $parent,
+			'id'     => 'people-' . $parent,
+			'title'  => bp_get_directory_title( 'members' ),
+			'href'   => bp_get_members_directory_permalink(),
+			'meta' => array(
+				'class' => 'mobile-no-hover',
+			),
+		) );
 
+		$group_types = cboxol_get_group_types();
+		foreach ( $group_types as $group_type ) {
 			$wp_admin_bar->add_node( array(
 				'parent' => $parent,
-				'id'     => 'courses-' . $parent,
-				'title'  => 'Courses',
-				'href'   => trailingslashit( bp_get_root_domain() . '/courses' ),
+				'id'     => esc_attr( $group_type->get_slug() . '-' . $parent ),
+				'title'  => esc_html( $group_type->get_label( 'plural' ) ),
+				'href'   => bp_get_group_type_directory_permalink( $group_type->get_slug() ),
 				'meta' => array(
 					'class' => 'mobile-no-hover',
 				),
 			) );
+		}
 
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => 'projects-' . $parent,
-				'title'  => 'Projects',
-				'href'   => trailingslashit( bp_get_root_domain() . '/projects' ),
-				'meta' => array(
-					'class' => 'mobile-no-hover',
-				),
-			) );
-
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => 'clubs-' . $parent,
-				'title'  => 'Clubs',
-				'href'   => trailingslashit( bp_get_root_domain() . '/clubs' ),
-				'meta' => array(
-					'class' => 'mobile-no-hover',
-				),
-			) );
-
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => 'portfolios-' . $parent,
-				'title'  => 'Portfolios',
-				'href'   => trailingslashit( bp_get_root_domain() . '/portfolios' ),
-				'meta' => array(
-					'class' => 'mobile-no-hover',
-				),
-			) );
-
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => 'help-' . $parent,
-				'title'  => 'Help',
-				'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' ),
-				'meta' => array(
-					'class' => 'mobile-no-hover',
-				),
-			) );
+		$wp_admin_bar->add_node( array(
+			'parent' => $parent,
+			'id'     => 'help-' . $parent,
+			'title'  => 'Help',
+			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' ),
+			'meta' => array(
+				'class' => 'mobile-no-hover',
+			),
+		) );
 	}
 
 		 /**
@@ -706,7 +679,7 @@ HTML;
 				'parent' => 'my-openlab',
 				'id'     => 'my-groups-' . $group_type->get_slug(),
 				'title'  => $group_type->get_label( 'my_groups' ),
-				'href'   => openlab_get_user_group_type_directory_url( $group_type, bp_loggedin_user_id() ),
+				'href'   => cboxol_get_user_group_type_directory_url( $group_type, bp_loggedin_user_id() ),
 					'meta' => array(
 						'class' => 'admin-bar-menu-item mobile-no-hover',
 					),
