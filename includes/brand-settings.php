@@ -52,11 +52,13 @@ function cboxol_get_brand_pages() {
 	$pages = array(
 		'about' => array(
 			'id' => 0,
+			'title' => '',
 			'edit_url' => '',
 			'preview_url' => '',
 		),
 		'help' => array(
 			'id' => 0,
+			'title' => '',
 			'edit_url' => '',
 			'preview_url' => '',
 		),
@@ -78,6 +80,7 @@ function cboxol_get_brand_pages() {
 		}
 
 		$pages[ $page_type ]['id'] = $page_id;
+		$pages[ $page_type ]['title'] = get_the_title( $page_id );
 		$pages[ $page_type ]['edit_url'] = get_admin_url( $main_site_id, 'post.php?post=' . intval( $page_id ) . '&action=edit' );
 		$pages[ $page_type ]['preview_url'] = get_permalink( $page_id );
 	}
