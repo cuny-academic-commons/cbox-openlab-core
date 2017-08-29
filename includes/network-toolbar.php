@@ -484,28 +484,30 @@ HTML;
 			) );
 		}
 
-		$wp_admin_bar->add_node( array(
-			'parent' => $parent,
-			'id'     => 'help-' . $parent,
-			'title'  => 'Help',
-			'href'   => trailingslashit( bp_get_root_domain() . '/blog/help/openlab-help' ),
-			'meta' => array(
-				'class' => 'mobile-no-hover',
-			),
-		) );
+		if ( isset( $brand_pages['help'] ) ) {
+			$wp_admin_bar->add_node( array(
+				'parent' => $parent,
+				'id'     => 'help-' . $parent,
+				'title'  => esc_html( $brand_pages['help']['title'] ),
+				'href'   => esc_url( $brand_pages['help']['preview_url'] ),
+					'meta' => array(
+						'class' => 'mobile-no-hover',
+					),
+			) );
+		}
 	}
 
-		 /**
-		 * The MOL link on mobile needs to sit between the hamburger menus and the logout link
-		 * So we'll need a third group for this (makes styling easier)
-		 */
+	/**
+	 * The MOL link on mobile needs to sit between the hamburger menus and the logout link
+	 * So we'll need a third group for this (makes styling easier)
+	 */
 	function add_middle_group_for_mobile( $wp_admin_bar ) {
-		$wp_admin_bar->add_group(array(
+		$wp_admin_bar->add_group( array(
 			'id' => 'mobile-centered',
 			'meta' => array(
 			'class' => 'ab-mobile-centered',
 			),
-		));
+		) );
 	}
 
 	/**
