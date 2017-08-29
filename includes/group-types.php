@@ -189,6 +189,13 @@ function cboxol_get_group_types( $args = array() ) {
 		'fields' => 'ids',
 	);
 
+	$switched = false;
+	$main_site_id = cbox_get_main_site_id();
+	if ( get_current_blog_id() !== $main_site_id ) {
+		switch_to_blog( $main_site_id );
+		$switched = true;
+	}
+
 	$last_changed = wp_cache_get_last_changed( 'posts' );
 	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids = wp_cache_get( $cache_key, 'cboxol_group_types' );
@@ -209,6 +216,10 @@ function cboxol_get_group_types( $args = array() ) {
 		}
 
 		$types[ $type_post->post_name ] = $group_type;
+	}
+
+	if ( $switched ) {
+		restore_current_blog();
 	}
 
 	return $types;
