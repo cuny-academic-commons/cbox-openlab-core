@@ -563,7 +563,7 @@ HTML;
 	}
 
 	/**
-	 * Adds 'My OpenLab' menu
+	 * Adds 'My Profile' menu
 	 */
 	function add_my_openlab_menu( $wp_admin_bar ) {
 
@@ -573,7 +573,7 @@ HTML;
 
 		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
-			'title' => 'My OpenLab <span class="fa fa-caret-down" aria-hidden="true"></span>',
+			'title' => esc_html__( 'My Profile', 'cbox-openlab-core' ) . ' <span class="fa fa-caret-down" aria-hidden="true"></span>',
 			'href'  => bp_loggedin_user_domain(),
 				'meta'  => array(
 					'class' => 'admin-bar-menu',
