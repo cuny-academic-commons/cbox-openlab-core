@@ -5,7 +5,7 @@
  */
 
 if ( ! defined( 'DOING_AJAX' ) ) {
-	add_action( cbox_admin_prop( 'menu' ), 'cboxol_register_admin_menu' );
+	add_action( 'cbox_openlab_admin_menu', 'cboxol_register_admin_menu' );
 }
 
 add_action( 'admin_enqueue_scripts', 'cboxol_register_assets' );
