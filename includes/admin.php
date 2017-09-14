@@ -430,7 +430,7 @@ function cboxol_brand_settings_admin_page() {
 }
 
 function cboxol_communication_settings_admin_page() {
-	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'types';
+	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'email';
 	cboxol_admin_page( 'communication-settings', $current_section );
 }
 
