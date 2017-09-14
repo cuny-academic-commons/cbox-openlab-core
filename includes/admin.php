@@ -61,6 +61,17 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
+		__( 'Communication Settings', 'cbox-openlab-core' ),
+		__( 'Communication Settings', 'cbox-openlab-core' ),
+		'manage_network_options',
+		cboxol_admin_slug( 'communication-settings' ),
+		'cboxol_communication_settings_admin_page',
+		'',
+		2
+	);
+
+	add_submenu_page(
+		cboxol_admin_slug(),
 		__( 'Academic Units', 'cbox-openlab-core' ),
 		__( 'Academic Units', 'cbox-openlab-core' ),
 		'manage_network_options',
@@ -169,6 +180,9 @@ function cboxol_admin_slug( $parent_page = '' ) {
 		case 'academic-units' :
 			return 'cbox-ol-academic-units';
 
+		case 'communication-settings' :
+			return 'cbox-ol-communication-settings';
+
 		default :
 			return 'cbox';
 	}
@@ -184,6 +198,9 @@ function cboxol_admin_page_label( $page ) {
 
 		case 'brand-settings' :
 			return __( 'Brand Settings', 'cbox-openlab-core' );
+
+		case 'communication-settings' :
+			return __( 'Communication Settings', 'cbox-openlab-core' );
 
 		case 'academic-units' :
 			return __( 'Academic Units', 'cbox-openlab-core' );
@@ -214,6 +231,15 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 
 				case 'group-categories' :
 					return _x( 'Group Categories', 'Group categories admin label', 'cbox-openlab-core' );
+			}
+
+		case 'communication-settings' :
+			switch ( $page ) {
+				case 'email' :
+					return _x( 'Email', 'Communication Settings admin label', 'cbox-openlab-core' );
+
+				case 'invitations' :
+					return _x( 'Invitations', 'Communication Settings admin label', 'cbox-openlab-core' );
 			}
 	}
 }
@@ -319,6 +345,21 @@ function cboxol_get_admin_tabs( $parent_page ) {
 			);
 
 			break;
+
+		case 'communication-settings' :
+			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'communication-settings' ), 'admin.php' ) );
+			$tabs = array(
+				'0' => array(
+					'href' => add_query_arg( 'cboxol-section', 'email', $base ),
+					'name' => 'email',
+					'label' => cboxol_admin_subpage_label( 'communication-settings', 'email' ),
+				),
+				'1' => array(
+					'href' => add_query_arg( 'cboxol-section', 'invitations', $base ),
+					'name' => 'invitations',
+					'label' => cboxol_admin_subpage_label( 'communication-settings', 'invitations' ),
+				),
+			);
 	}
 
 	return $tabs;
@@ -355,6 +396,18 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 			cboxol_brand_admin_page();
 		break;
 
+		case 'communication-settings' :
+			switch ( $sub_page ) {
+				case 'email' :
+					cboxol_communication_admin_page_email();
+				break;
+
+				case 'invitations' :
+					cboxol_communication_admin_page_invitations();
+				break;
+			}
+		break;
+
 		case 'academic-units' :
 			cboxol_academic_units_main_admin_page();
 		break;
@@ -374,6 +427,11 @@ function cboxol_member_settings_admin_page() {
 function cboxol_brand_settings_admin_page() {
 	$current_section = '';
 	cboxol_admin_page( 'brand-settings', $current_section );
+}
+
+function cboxol_communication_settings_admin_page() {
+	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'types';
+	cboxol_admin_page( 'communication-settings', $current_section );
 }
 
 function cboxol_academic_units_admin_page() {

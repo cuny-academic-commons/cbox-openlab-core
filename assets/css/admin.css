@@ -274,3 +274,7 @@ a .action-arrow {
 	float: right;
 	margin-right: 2.5rem;
 }
+
+.cboxol-communication-settings > li {
+	margin: 1rem 0;
+}
