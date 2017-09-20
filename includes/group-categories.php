@@ -74,3 +74,11 @@ function cboxol_get_group_categories() {
 
 	return $cats;
 }
+
+/**
+ * Remove the plugin's native Dashboard panel.
+ */
+function cboxol_remove_group_categories_dashboard_panel() {
+	remove_menu_page( 'bp-group-categories' );
+}
+add_action( 'admin_menu', 'cboxol_remove_group_categories_dashboard_panel', 50 );
