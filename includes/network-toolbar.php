@@ -1692,6 +1692,7 @@ add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
  */
 function openlab_get_loginform() {
 	$form_out = '';
+	return $form_out;
 
 	$request_uri = $_SERVER['REQUEST_URI'];
 
