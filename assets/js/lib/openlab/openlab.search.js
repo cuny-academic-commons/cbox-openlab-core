@@ -2,18 +2,14 @@
  * OpenLab search dropdowns
  */
 
-(function ($) {
+if (window.OpenLab === undefined) {
+    var OpenLab = {};
+}
 
-    if (window.OpenLab === undefined) {
-        window.OpenLab = {};
-    }
+var searchResizeTimer = {};
 
-		var OpenLab = window.OpenLab;
-
-    var legacyWidth = $(window).width();
-    var resizeTimer;
-
-    OpenLab.search = {
+OpenLab.search = (function ($) {
+    return{
         init: function () {
 
             //search
@@ -93,6 +89,11 @@
             return $('.device-' + alias).is(':visible');
         },
     }
+})(jQuery, OpenLab);
+
+(function ($) {
+    
+    var legacyWidth = $(window).width();
 
     $(document).ready(function () {
 
@@ -102,8 +103,8 @@
 
     $(window).on('resize', function (e) {
 
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
+        clearTimeout(searchResizeTimer);
+        searchResizeTimer = setTimeout(function () {
 
             if ($(this).width() != legacyWidth) {
                 legacyWidth = $(this).width();
