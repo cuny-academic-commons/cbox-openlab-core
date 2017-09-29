@@ -354,6 +354,17 @@ class Install {
 		);
 
 		foreach ( $types as $type_slug => $type_data ) {
+			// Don't overwrite existing item.
+			$existing = get_posts( array(
+				'post_type' => 'cboxol_acad_unit_type',
+				'post_status' => array( 'publish', 'draft' ),
+				'name' => $type_slug,
+			) );
+
+			if ( $existing ) {
+				continue;
+			}
+
 			$type_obj = new AcademicUnitType();
 			$type_obj->set_slug( $type_slug );
 			$type_obj->set_name( $type_data['name'] );
@@ -378,6 +389,17 @@ class Install {
 		);
 
 		foreach ( $units as $unit_slug => $unit_data ) {
+			// Don't overwrite existing item.
+			$existing = get_posts( array(
+				'post_type' => 'cboxol_acad_unit',
+				'post_status' => array( 'publish', 'draft' ),
+				'name' => $type_slug,
+			) );
+
+			if ( $existing ) {
+				continue;
+			}
+
 			$unit_obj = new AcademicUnit();
 			$unit_obj->set_slug( $unit_slug );
 			$unit_obj->set_name( $unit_data['name'] );
