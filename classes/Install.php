@@ -319,6 +319,10 @@ class Install {
 		$types = array(
 			'schools' => array(
 				'name' => __( 'Schools', 'cbox-openlab-core' ),
+				'labels' => array(
+					'singular' => __( 'School', 'cbox-openlab-core' ),
+					'plural' => __( 'Schools', 'cbox-openlab-core' ),
+				),
 				'parent' => '',
 				'order' => 1,
 				'member_types' => array(
@@ -336,6 +340,10 @@ class Install {
 			),
 			'departments' => array(
 				'name' => __( 'Departments', 'cbox-openlab-core' ),
+				'labels' => array(
+					'singular' => __( 'Department', 'cbox-openlab-core' ),
+					'plural' => __( 'Departments', 'cbox-openlab-core' ),
+				),
 				'parent' => 'schools',
 				'order' => 2,
 				'member_types' => array(
@@ -372,6 +380,11 @@ class Install {
 			$type_obj->set_order( $type_data['order'] );
 			$type_obj->set_member_types( $type_data['member_types'] );
 			$type_obj->set_group_types( $type_data['group_types'] );
+
+			foreach ( $type_data['labels'] as $label_type => $label_data ) {
+				$type_obj->set_label( $label_type, $label_data );
+			}
+
 			$type_obj->save();
 		}
 

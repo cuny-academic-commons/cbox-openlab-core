@@ -417,8 +417,15 @@ function cboxol_get_object_academic_unit_data_for_display( $args = array() ) {
 				$names[] = $unit_of_type->get_name();
 			}
 
+			// @todo This may not work in all languages.
+			if ( count( $units_of_type ) > 1 ) {
+				$label = $type->get_label( 'plural' );
+			} else {
+				$label = $type->get_label( 'singular' );
+			}
+
 			$type_sorted[ $type->get_slug() ] = array(
-				'label' => $type->get_name(),
+				'label' => $label,
 				'value' => implode( ', ', $names ),
 			);
 		}
@@ -512,7 +519,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 
 	wp_localize_script( 'cboxol-academic-types', 'CBOXOLAcademicTypes', array(
 		'entityType' => $entity_type,
-		'groupType' => $group_type,
+		'groupType' => $r['group_type'],
 		'typesByMemberType' => $member_type_unit_types,
 		'typesByGroupType' => $group_type_unit_types,
 	) );
