@@ -172,15 +172,22 @@ function cboxol_copyr( $source, $dest ) {
  * Detect whether CBOX-OL must install or upgrade, and run upgrader.
  */
 function cboxol_maybe_install() {
+	if ( get_option( 'cboxol_installing' ) ) {
+		return;
+	}
+
 	$ver = get_site_option( 'cboxol_ver' );
 
 	if ( ! $ver ) {
 		$install = \CBOX\OL\Install::get_instance();
+		update_option( 'cboxol_installing', 1 );
 		$install->install();
 	} elseif ( version_compare( CBOXOL_PLUGIN_VER, $ver, '>' ) ) {
+		update_option( 'cboxol_installing', 1 );
 		$install = \CBOX\OL\Install::get_instance();
 		$install->upgrade();
 	}
 
+	delete_option( 'cboxol_installing' );
 	update_site_option( 'cboxol_ver', CBOXOL_PLUGIN_VER );
 }
