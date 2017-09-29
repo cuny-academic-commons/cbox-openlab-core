@@ -98,7 +98,11 @@
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
 				<div v-for="label in entityData.labels">
-					<type-label v-bind:typeSlug="slug" v-bind:labelSlug="label.slug"></type-label>
+					<type-label
+						:entityType="entityType"
+						v-bind:typeSlug="slug"
+						v-bind:labelSlug="label.slug"
+					></type-label>
 				</div>
 			</div>
 

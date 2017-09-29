@@ -272,7 +272,7 @@ const store = new Vuex.Store({
 		},
 
 		setLabel ( state, payload ) {
-			state.types[ payload.typeSlug ].labels[ payload.labelSlug ].value = payload.value
+			state[ payload.itemsKey ][ payload.typeSlug ].labels[ payload.labelSlug ].value = payload.value
 		},
 
 		setOrder ( state, payload ) {

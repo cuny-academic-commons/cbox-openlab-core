@@ -104,6 +104,10 @@ class AcademicUnitTypes extends WP_REST_Controller {
 		$academic_unit_type->set_parent( $data['parent'] );
 		$academic_unit_type->set_order( $data['settings']['Order']['data'] );
 
+		foreach ( $data['labels'] as $label_type => $label_data ) {
+			$academic_unit_type->set_label( $label_type, $label_data['value'] );
+		}
+
 		$academic_unit_type->save();
 
 		$retval = $academic_unit_type->get_for_endpoint();

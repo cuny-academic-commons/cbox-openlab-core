@@ -5,6 +5,7 @@ namespace CBOX\OL;
 class AcademicUnitType {
 	protected $data = array(
 		'group_types' => array(),
+		'labels' => array(),
 		'member_types' => array(),
 		'order' => null,
 		'name' => null,
@@ -47,6 +48,16 @@ class AcademicUnitType {
 		}
 
 		// @todo validate?
+		$meta_value = array();
+		foreach ( $this->get_labels() as $label_type => $label_data ) {
+			// A total mess. Prevents double saving of an array.
+			if ( is_array( $label_data ) && isset( $label_data['value'] ) ) {
+				$label_data = $label_data['value'];
+			}
+			$meta_value[ $label_type ] = $label_data;
+		}
+		update_post_meta( $post_id, 'cboxol_item_type_labels', $meta_value );
+
 		update_post_meta( $post_id, 'cboxol_associated_member_types', $this->get_member_types() );
 		update_post_meta( $post_id, 'cboxol_associated_group_types', $this->get_group_types() );
 		update_post_meta( $post_id, 'cboxol_academic_unit_type_parent', $this->get_parent() );
@@ -109,6 +120,30 @@ class AcademicUnitType {
 	}
 
 	/**
+	 * Get a specific label.
+	 *
+	 * @param string $label_type
+	 * @return string|null Null on failure.
+	 */
+	public function get_label( $label_type ) {
+		$label = null;
+		if ( isset( $this->data['labels'][ $label_type ] ) ) {
+			$label = $this->data['labels'][ $label_type ]['value'];
+		}
+
+		return $label;
+	}
+
+	/**
+	 * Get all labels for this unit type.
+	 *
+	 * @return array
+	 */
+	public function get_labels() {
+		return $this->data['labels'];
+	}
+
+	/**
 	 * Get post ID.
 	 *
 	 * @return int
@@ -129,6 +164,20 @@ class AcademicUnitType {
 		$type->set_slug( $post->post_name );
 		$type->set_order( $post->menu_order );
 
+		// Labels.
+		$saved_labels = get_post_meta( $post->ID, 'cboxol_item_type_labels', true );
+		if ( empty( $saved_labels ) ) {
+			$saved_labels = array();
+		}
+
+		foreach ( $type->get_label_types() as $label_type => $label_labels ) {
+			if ( isset( $saved_labels[ $label_type ] ) ) {
+				$label_labels['value'] = $saved_labels[ $label_type ];
+			}
+
+			$type->set_label( $label_type, $label_labels );
+		}
+
 		$parent = get_post_meta( $post->ID, 'cboxol_academic_unit_type_parent', true );
 		$type->set_parent( $parent );
 
@@ -144,6 +193,7 @@ class AcademicUnitType {
 	public function get_for_endpoint() {
 		$retval = array(
 			'groupTypes' => array(),
+			'labels' => $this->get_labels(),
 			'memberTypes' => array(),
 			'name' => $this->get_name(),
 			'parent' => $this->get_parent(),
@@ -239,6 +289,16 @@ class AcademicUnitType {
 	}
 
 	/**
+	 * Set label.
+	 *
+	 * @param string $label_type
+	 * @param string $label
+	 */
+	public function set_label( $label_type, $label ) {
+		$this->data['labels'][ $label_type ] = $label;
+	}
+
+	/**
 	 * Set WP post ID.
 	 *
 	 * @param int
@@ -269,5 +329,27 @@ class AcademicUnitType {
 	public function is_selectable_by_group_type( $group_type_slug ) {
 		$type_settings = $this->get_group_types();
 		return isset( $type_settings[ $group_type_slug ] ) && in_array( $type_settings[ $group_type_slug ], array( 'required', 'optional' ), true );
+	}
+
+	/**
+	 * Get label types.
+	 *
+	 * @return array
+	 */
+	public static function get_label_types() {
+		return array(
+			'plural' => array(
+				'slug' => 'plural',
+				'label' => _x( 'Plural', 'Academic Unit Type plural label', 'cbox-openlab-core' ),
+				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'singular' => array(
+				'slug' => 'singular',
+				'label' => _x( 'Singular', 'Academic Unit Type singular label', 'cbox-openlab-core' ),
+				'description' => __( 'Used on group and member profiles.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+		);
 	}
 }
