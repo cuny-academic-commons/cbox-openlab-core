@@ -217,9 +217,6 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 				case 'registration' :
 					return _x( 'Registration', 'Registration admin label', 'cbox-openlab-core' );
 
-				case 'academic-units' :
-					return _x( 'Academic Units', 'Member academic units admin label', 'cbox-openlab-core' );
-
 				case 'profile-fields' :
 					return _x( 'Profile Fields', 'Member profile fields admin label', 'cbox-openlab-core' );
 			}
@@ -316,11 +313,6 @@ function cboxol_get_admin_tabs( $parent_page ) {
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'registration' ),
 				),
 				'2' => array(
-					'href' => add_query_arg( 'cboxol-section', 'academic-units', $base ),
-					'name' => 'academic-units',
-					'label' => cboxol_admin_subpage_label( 'member-settings', 'academic-units' ),
-				),
-				'3' => array(
 					'href' => add_query_arg( 'cboxol-section', 'profile-fields', $base ),
 					'name' => 'profile-fields',
 					'label' => cboxol_admin_subpage_label( 'member-settings', 'profile-fields' ),
