@@ -128,21 +128,12 @@ function cboxol_save_group_extras( $group ) {
 	if ( isset( $_POST['wds_section_code'] ) ) {
 		groups_update_groupmeta( $group->id, 'wds_section_code', $_POST['wds_section_code'] );
 	}
-	if ( isset( $_POST['wds_semester'] ) ) {
-		groups_update_groupmeta( $group->id, 'wds_semester', $_POST['wds_semester'] );
-	}
-	if ( isset( $_POST['wds_year'] ) ) {
-		groups_update_groupmeta( $group->id, 'wds_year', $_POST['wds_year'] );
-	}
 	if ( isset( $_POST['wds_course_html'] ) ) {
 		groups_update_groupmeta( $group->id, 'wds_course_html', $_POST['wds_course_html'] );
 	}
 	if ( isset( $_POST['group_project_type'] ) ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type'] );
 	}
-
-	// Clear the active semester cache
-	delete_transient( 'openlab_active_semesters' );
 
 	// Site association. Non-portfolios have the option of not having associated sites (thus the
 	// set-up-site-toggle value).
