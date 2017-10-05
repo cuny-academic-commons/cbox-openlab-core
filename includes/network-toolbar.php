@@ -733,25 +733,6 @@ HTML;
 			) );
 
 		}
-
-		// My Dashboard points to the my-sites.php Dashboard panel for this user. However,
-		// this panel only works if looking at a site where the user has Dashboard-level
-		// permissions. So we have to find a valid site for the logged in user.
-		$primary_site_id = get_user_meta( bp_loggedin_user_id(), 'primary_blog', true );
-		$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
-
-		if ( ! empty( $primary_site_id ) && ! empty( $primary_site_url ) ) {
-
-			$wp_admin_bar->add_node( array(
-				'parent' => 'my-openlab',
-				'id'     => 'my-dashboard',
-				'title'  => 'My Dashboard',
-				'href'   => $primary_site_url . '/wp-admin/my-sites.php',
-						'meta' => array(
-							'class' => 'admin-bar-menu-item mobile-no-hover exit',
-						),
-			) );
-		}
 	}
 
 	/**
