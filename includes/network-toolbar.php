@@ -1692,12 +1692,9 @@ add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
  */
 function openlab_get_loginform() {
 	$form_out = '';
-	return $form_out;
-
-	$request_uri = $_SERVER['REQUEST_URI'];
 
 	ob_start();
-	include( WPMU_PLUGIN_DIR . '/parts/persistent/loginform.php' );
+	include( CBOXOL_PLUGIN_DIR . '/templates/loginform.php' );
 	$form_out = ob_get_clean();
 
 	return $form_out;
