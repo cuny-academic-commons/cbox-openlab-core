@@ -368,6 +368,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 				case 'registration' :
 					cboxol_registration_admin_page();
 				break;
+
+				case 'profile-fields' :
+					cboxol_profile_fields_admin_page();
+				break;
 			}
 		break;
 

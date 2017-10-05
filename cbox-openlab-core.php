@@ -33,6 +33,7 @@ function cboxol_init() {
 	require CBOXOL_PLUGIN_DIR . 'includes/registration.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/communication-settings.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/profile-fields.php';
 
 	require CBOXOL_PLUGIN_DIR . 'includes/group-categories.php';
 	if ( ! class_exists( 'Bp_Customizable_Group_Categories' ) ) {
