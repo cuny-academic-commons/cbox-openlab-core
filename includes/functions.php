@@ -191,3 +191,7 @@ function cboxol_maybe_install() {
 	delete_option( 'cboxol_installing' );
 	update_site_option( 'cboxol_ver', CBOXOL_PLUGIN_VER );
 }
+
+// Hack - disable BuddyPress Docs attachments.
+add_filter( 'bp_docs_enable_attachments', '__return_false' );
+
