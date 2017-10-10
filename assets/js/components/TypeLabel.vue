@@ -44,11 +44,11 @@
 						this.isModified = true
 					}
 
-					this.$store.commit( 'setLabel', { 
+					this.$store.commit( 'setLabel', {
 						itemsKey: this.itemsKey,
-						labelSlug: this.labelSlug, 
-						typeSlug: this.typeSlug, 
-						value 
+						labelSlug: this.labelSlug,
+						typeSlug: this.typeSlug,
+						value
 					} )
 				}
 			},

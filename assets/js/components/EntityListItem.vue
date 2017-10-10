@@ -313,6 +313,23 @@
 			onSubmit: function() {
 				let itemType = this
 				itemType.isLoading = true
+
+				// Any empty labels should be set to the value of 'name'.
+				let itemLabel
+				if ( 'undefined' !== itemType.entityData.labels ) {
+					for ( let i in itemType.entityData.labels ) {
+						itemLabel = itemType.entityData.labels[ i ]
+						if ( '' === itemLabel.value ) {
+							itemType.$store.commit( 'setLabel', {
+								itemsKey: this.itemsKey,
+								labelSlug: itemLabel.slug,
+								typeSlug: this.slug,
+								value: this.name
+							} )
+						}
+					}
+				}
+
 				itemType.$store.dispatch( 'submitEntity', {
 					apiRoute: itemType.apiRoute,
 					itemsKey: itemType.itemsKey,
