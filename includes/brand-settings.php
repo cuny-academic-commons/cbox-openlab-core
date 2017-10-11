@@ -91,3 +91,24 @@ function cboxol_get_brand_pages() {
 
 	return $pages;
 }
+
+/**
+ * Determines whether a given post is a brand page of a specific type.
+ *
+ * @param string $page_type Type of page, eg 'about'.
+ * @param int    $post_id   Optional. Defaults to get_queried_object_id().
+ * @return bool
+ */
+function cboxol_is_brand_page( $page_type, $post_id = null ) {
+	$is_brand_page = false;
+	if ( null === $post_id ) {
+		$post_id = get_queried_object_id();
+	}
+
+	$brand_pages = cboxol_get_brand_pages();
+	if ( ! isset( $brand_pages[ $page_type ] ) ) {
+		return false;
+	}
+
+	return $brand_pages[ $page_type ]['id'] === $post_id;
+}
