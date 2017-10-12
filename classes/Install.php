@@ -2,6 +2,8 @@
 
 namespace CBOX\OL;
 
+use \CBox_Widget_Setter;
+
 class Install {
 	public static function get_instance() {
 		static $instance;
@@ -19,6 +21,10 @@ class Install {
 		$this->install_default_group_categories();
 		$this->install_default_academic_types();
 		$this->install_default_brand_pages();
+
+		$this->install_default_widgets();
+		$this->install_default_nav_menus();
+		$this->install_default_slides();
 	}
 
 	public function upgrade() { }
@@ -292,6 +298,8 @@ class Install {
 
 			$type->create_template_site();
 		}
+
+		cboxol_grouptypes_register_group_types();
 	}
 
 	protected function install_default_group_categories() {
@@ -450,5 +458,247 @@ class Install {
 		}
 
 		update_site_option( 'cboxol_brand_page_ids', $page_ids );
+	}
+
+	protected function install_default_widgets() {
+		openlab_register_sidebars();
+
+		require CBOXOL_PLUGIN_DIR . '/lib/cbox-widget-setter.php';
+
+		// Group Type widgets.
+		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'home-main' ) ) {
+			$group_types = cboxol_get_group_types();
+			foreach ( $group_types as $group_type ) {
+				$result = CBox_Widget_Setter::set_widget( array(
+					'id_base'    => 'openlab_group_type',
+					'sidebar_id' => 'home-main',
+					'settings'   => array(
+						'title' => $group_type->get_label( 'plural' ),
+						'group_type' => $group_type->get_slug(),
+					),
+				) );
+				_b( get_option( 'sidebars_widgets' ) );
+			}
+		}
+
+		// Home sidebar.
+		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'home-sidebar' ) ) {
+			CBox_Widget_Setter::set_widget( array(
+				'id_base'    => 'cac_featured_content_widget',
+				'sidebar_id' => 'home-sidebar',
+				'settings'   => array(
+					'crop_length' => 300,
+					'custom_description' => __( 'Use this space to highlight content from around your network.', 'openlab-theme' ),
+					'display_images' => true,
+					'featured_content_type' => 'resource',
+					'featured_resource_title' => __( 'Featured Item', 'openlab-theme' ),
+					'featured_resource_link' => home_url(),
+					'image_url' => bp_core_avatar_default(),
+					'image_height' => 50,
+					'image_width' => 50,
+					'read_more' => '',
+					'title' => __( 'In The Spotlight', 'openlab-theme' ),
+					'title_element' => 'h2',
+				),
+			) );
+
+			CBox_Widget_Setter::set_widget( array(
+				'id_base'    => 'openlab-whats-happening',
+				'sidebar_id' => 'home-sidebar',
+			) );
+
+			CBox_Widget_Setter::set_widget( array(
+				'id_base'    => 'openlab-whos-online',
+				'sidebar_id' => 'home-sidebar',
+			) );
+
+			CBox_Widget_Setter::set_widget( array(
+				'id_base'    => 'openlab-new-members',
+				'sidebar_id' => 'home-sidebar',
+			) );
+		}
+
+		// Footer sidebar.
+		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'footer' ) ) {
+			$welcome_text = __( 'The footer areas can be used to display general information about your site, such as contact information and links to terms of service.', 'openlab-theme' );
+
+			CBox_Widget_Setter::set_widget( array(
+				'id_base'    => 'text',
+				'sidebar_id' => 'footer',
+				'settings'   => array(
+					'title' => __( 'Footer area 1', 'openlab-theme' ),
+					'text'  => $welcome_text,
+					'filter' => false,
+				),
+			) );
+
+			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme' ), admin_url( 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
+
+			CBox_Widget_Setter::set_widget( array(
+				'id_base'    => 'text',
+				'sidebar_id' => 'footer',
+				'settings'   => array(
+					'title' => __( 'Footer area 2', 'openlab-theme' ),
+					'text'  => $welcome_text,
+					'filter' => false,
+				),
+			) );
+		}
+	}
+
+	protected function install_default_nav_menus() {
+		// Main Menu.
+		$menu_name = wp_slash( __( 'Main Menu', 'cbox-openlab-core' ) );
+		$menu_id = wp_create_nav_menu( $menu_name );
+
+		if ( is_wp_error( $menu_id ) ) {
+			return;
+		}
+
+		$brand_pages = cboxol_get_brand_pages();
+		if ( isset( $brand_pages['about'] ) ) {
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title' => $brand_pages['about']['title'],
+					'menu-item-classes' => 'about',
+					'menu-item-url' => $brand_pages['about']['preview_url'],
+					'menu-item-status' => 'publish',
+				)
+			);
+		}
+
+		wp_update_nav_menu_item(
+			$menu_id,
+			0,
+			array(
+				'menu-item-title' => bp_get_directory_title( 'members' ),
+				'menu-item-classes' => 'home',
+				'menu-item-url' => bp_get_members_directory_permalink(),
+				'menu-item-status' => 'publish',
+			)
+		);
+
+		$group_types = cboxol_get_group_types();
+		foreach ( $group_types as $group_type ) {
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title' => $group_type->get_label( 'plural' ),
+					'menu-item-classes' => 'group-type ' . $group_type->get_slug(),
+					'menu-item-url' => bp_get_group_type_directory_permalink( $group_type->get_slug() ),
+					'menu-item-status' => 'publish',
+				)
+			);
+		}
+
+		if ( isset( $brand_pages['help'] ) ) {
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title' => $brand_pages['help']['title'],
+					'menu-item-classes' => 'help',
+					'menu-item-url' => $brand_pages['help']['preview_url'],
+					'menu-item-status' => 'publish',
+				)
+			);
+		}
+
+		$locations = get_theme_mod( 'nav_menu_locations' );
+		$locations['main'] = $menu_id;
+		set_theme_mod( 'nav_menu_locations', $locations );
+
+		// About Menu.
+		if ( isset( $brand_pages['about'] ) ) {
+			$menu_name = wp_slash( __( 'About Menu', 'cbox-openlab-core' ) );
+			$menu_id = wp_create_nav_menu( $menu_name );
+
+			if ( is_wp_error( $menu_id ) ) {
+				return;
+			}
+
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title' => $brand_pages['about']['title'],
+					'menu-item-classes' => 'about',
+					'menu-item-url' => $brand_pages['about']['preview_url'],
+					'menu-item-status' => 'publish',
+				)
+			);
+
+			$locations = get_theme_mod( 'nav_menu_locations' );
+			$locations['aboutmenu'] = $menu_id;
+			set_theme_mod( 'nav_menu_locations', $locations );
+		}
+	}
+
+	protected function install_default_slides() {
+		$slides = array(
+			array(
+				'title' => __( 'Your Second Sample Slide', 'openlab-theme' ),
+				'content' => 'Ex consequatur ipsam iusto id impedit nesciunt. Velit perspiciatis laborum et culpa rem earum. Beatae fugit perspiciatis dolorum. Incidunt voluptate officia cupiditate ipsum. Officiis eius quo incidunt voluptatem vitae deleniti aut. Non dolorem iste qui voluptates id ratione unde accusantium.',
+				'image' => get_template_directory() . '/images/default-slide-1.jpeg',
+			),
+			array(
+				'title' => __( 'Your First Sample Slide', 'openlab-theme' ),
+				'content' => 'Ipsam et voluptas sed qui vel voluptatem quam. Qui pariatur occaecati consequatur quibusdam reiciendis aut asperiores nam. Esse et et id amet et quis. Beatae quaerat a ea expedita blanditiis quia. Doloremque ad nemo culpa. Quia at qui et.',
+				'image' => get_template_directory() . '/images/default-slide-2.jpeg',
+			),
+		);
+
+		// only need these if performing outside of admin environment
+		if ( ! function_exists( 'media_sideload_image' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/media.php' );
+			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		}
+
+		foreach ( $slides as $slide ) {
+			$slide_id = wp_insert_post( array(
+				'post_type' => 'slider',
+				'post_status' => 'publish',
+				'post_title' => $slide['title'],
+				'post_content' => $slide['content'],
+			) );
+
+			$file_path = $slide['image'];
+
+			// Generate attachment and set as featured post.
+			$tmpfname = wp_tempnam( $file_path );
+			copy( $file_path, $tmpfname );
+
+			$file = array(
+				'error' => null,
+				'tmp_name' => $tmpfname,
+				'size' => filesize( $file_path ),
+				'name' => basename( $file_path ),
+			);
+
+			$overrides = array(
+				'test_form' => false,
+				'test_size' => false,
+			);
+
+			$sideloaded = wp_handle_sideload( $file, $overrides );
+
+			$attachment = array(
+				'post_mime_type' => $sideloaded['type'],
+				'post_title' => basename( $tmpfname ),
+				'post_content' => '',
+				'post_status' => 'inherit',
+				'post_parent' => $slide_id,
+			);
+
+			$attachment_id = wp_insert_attachment( $attachment, $sideloaded['file'] );
+			$attach_data = wp_generate_attachment_metadata( $attachment_id, $sideloaded );
+			wp_update_attachment_metadata( $attachment_id, $attach_data );
+
+			set_post_thumbnail( $slide_id, $attachment_id );
+		}
 	}
 }

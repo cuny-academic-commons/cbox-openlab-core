@@ -17,6 +17,8 @@ class CBOXOL_Command extends WP_CLI_Command {
 	public function reset() {
 		global $wpdb;
 
+		delete_option( 'cboxol_installing' );
+
 		$group_types = cboxol_get_group_types( array(
 			'enabled' => null,
 		) );
@@ -77,20 +79,29 @@ class CBOXOL_Command extends WP_CLI_Command {
 	}
 
 	public function reset_theme() {
+		global $wpdb;
+
 		if ( 'openlab-theme' !== get_stylesheet() ) {
 			return;
 		}
 
 		// This doesn't work but I don't have the patience to fix it.
 		wp_set_sidebars_widgets( array() );
+		delete_option( 'sidebars_widgets' );
 		remove_theme_mod( 'sidebars_widgets' );
 
+		$widget_options = $wpdb->get_col( "SELECT option_name FROM $wpdb->options WHERE option_name like 'widget_%'" );
+		foreach ( $widget_options as $widget_option ) {
+			delete_option( $widget_option );
+		}
+
 		wp_delete_nav_menu( 'Main Menu' );
+		wp_delete_nav_menu( 'About Menu' );
 		update_option( 'nav_menu_locations', array() );
 
 		remove_action( 'after_switch_theme', '_wp_sidebars_changed' );
 
-		update_option( 'theme_switched', 'openlab-theme' );
+//		update_option( 'theme_switched', 'openlab-theme' );
 		delete_option( 'openlab_theme_installed' );
 	}
 }
