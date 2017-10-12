@@ -477,7 +477,6 @@ class Install {
 						'group_type' => $group_type->get_slug(),
 					),
 				) );
-				_b( get_option( 'sidebars_widgets' ) );
 			}
 		}
 
