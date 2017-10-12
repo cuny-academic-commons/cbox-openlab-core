@@ -431,6 +431,7 @@ class Install {
 	}
 
 	protected function install_default_brand_pages() {
+		$brand_page_types = cboxol_get_brand_page_types();
 		$pages = array(
 			'about' => array(
 				'post_title' => __( 'About', 'cbox-openlab-core' ),
@@ -440,20 +441,43 @@ class Install {
 				'post_title' => __( 'Help', 'cbox-openlab-core' ),
 				'post_content' => __( 'This is the content of your Help page.', 'cbox-openlab-core' ),
 			),
+			'terms-of-use' => array(
+				'post_title' => __( 'Terms of Use', 'cbox-openlab-core' ),
+				'post_content' => __( 'This is the content of your Terms of Use page.', 'cbox-openlab-core' ),
+			),
+			'contact-us' => array(
+				'post_title' => __( 'Contact Us', 'cbox-openlab-core' ),
+				'post_content' => __( 'This is the content of your Contact Us page.', 'cbox-openlab-core' ),
+			),
 		);
 
 		$page_ids = array();
-		foreach ( $pages as $post_name => $page ) {
-			$page_id = wp_insert_post( array(
+		foreach ( $brand_page_types as $brand_page_type_name => $brand_page_type_info ) {
+			if ( ! isset( $pages[ $brand_page_type_name ] ) ) {
+				continue;
+			}
+
+			$page = $pages[ $brand_page_type_name ];
+
+			$page_args = array(
 				'post_type' => 'page',
 				'post_title' => $page['post_title'],
 				'post_content' => $page['post_content'],
-				'post_name' => $post_name,
+				'post_name' => $brand_page_type_name,
 				'post_status' => 'publish',
-			) );
+			);
+
+			if ( isset( $brand_page_type_info['parent'] ) ) {
+				$parent_page_name = $brand_page_type_info['parent'];
+				if ( isset( $page_ids[ $parent_page_name ] ) ) {
+					$page_args['post_parent'] = $page_ids[ $parent_page_name ];
+				}
+			}
+
+			$page_id = wp_insert_post( $page_args );
 
 			if ( $page_id ) {
-				$page_ids[ $post_name ] = $page_id;
+				$page_ids[ $brand_page_type_name ] = $page_id;
 			}
 		}
 
@@ -629,6 +653,23 @@ class Install {
 					'menu-item-status' => 'publish',
 				)
 			);
+
+			foreach ( $brand_pages as $brand_page_name => $brand_page ) {
+				if ( ! isset( $brand_page['parent'] ) || 'about' !== $brand_page['parent'] ) {
+					continue;
+				}
+
+				wp_update_nav_menu_item(
+					$menu_id,
+					0,
+					array(
+						'menu-item-title' => $brand_page['title'],
+						'menu-item-classes' => 'about ' . $brand_page_name,
+						'menu-item-url' => $brand_page['preview_url'],
+						'menu-item-status' => 'publish',
+					)
+				);
+			}
 
 			$locations = get_theme_mod( 'nav_menu_locations' );
 			$locations['aboutmenu'] = $menu_id;

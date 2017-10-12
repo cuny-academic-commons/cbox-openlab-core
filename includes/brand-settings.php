@@ -23,46 +23,56 @@ function cboxol_brand_admin_page() {
 		<div class="cboxol-admin-content-copy">
 			<p>Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut </p>
 
-			<?php if ( $pages['about']['id'] ) : ?>
-				<div class="cboxol-admin-content-subsection">
-					<h4 class="cboxol-admin-content-subsection-header"><?php esc_html_e( 'About Page', 'cbox-openlab-core' ); ?></h4>
-					<p>Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.</p>
+			<?php foreach ( $pages as $page_name => $page_info ) : ?>
+				<?php if ( ! empty( $page_info['id'] ) ) : ?>
+					<div class="cboxol-admin-content-subsection">
+						<h4 class="cboxol-admin-content-subsection-header"><?php echo esc_html( $page_info['settings_page_title'] ); ?></h4>
+						<p><?php echo esc_html( $page_info['settings_page_description'] ); ?></p>
 
-					<div class="cboxol-brand-settings-copy-links">
-						<a href="<?php echo esc_url( $pages['about']['edit_url'] ); ?>"><?php esc_html_e( 'Edit', 'cbox-openlab-core' ); ?></a> | <a href="<?php echo esc_url( $pages['about']['preview_url'] ); ?>"><?php esc_html_e( 'Preview', 'cbox-openlab-core' ); ?></a>
+						<div class="cboxol-brand-settings-copy-links">
+							<a href="<?php echo esc_url( $page_info['edit_url'] ); ?>"><?php esc_html_e( 'Edit', 'cbox-openlab-core' ); ?></a> | <a href="<?php echo esc_url( $page_info['preview_url'] ); ?>"><?php esc_html_e( 'Preview', 'cbox-openlab-core' ); ?></a>
+						</div>
 					</div>
-				</div>
-			<?php endif; ?>
-
-			<?php if ( $pages['help']['id'] ) : ?>
-				<div class="cboxol-admin-content-subsection">
-					<h4 class="cboxol-admin-content-subsection-header"><?php esc_html_e( 'Help Page', 'cbox-openlab-core' ); ?></h4>
-					<p>Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.</p>
-
-					<div class="cboxol-brand-settings-copy-links">
-						<a href="<?php echo esc_url( $pages['help']['edit_url'] ); ?>"><?php esc_html_e( 'Edit', 'cbox-openlab-core' ); ?></a> | <a href="<?php echo esc_url( $pages['help']['preview_url'] ); ?>"><?php esc_html_e( 'Preview', 'cbox-openlab-core' ); ?></a>
-					</div>
-				</div>
-			<?php endif; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</div>
 	<?php
 }
 
-function cboxol_get_brand_pages() {
-	$pages = array(
+function cboxol_get_brand_page_types() {
+	return array(
 		'about' => array(
-			'id' => 0,
-			'title' => '',
-			'edit_url' => '',
-			'preview_url' => '',
+			'settings_page_title' => __( 'About Page', 'cbox-openlab-core' ),
+			'settings_page_description' => __( 'Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
 		),
 		'help' => array(
+			'settings_page_title' => __( 'Help Page', 'cbox-openlab-core' ),
+			'settings_page_description' => __( 'Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
+		),
+		'terms-of-use' => array(
+			'settings_page_title' => __( 'Contact Page', 'cbox-openlab-core' ),
+			'settings_page_description' => __( 'Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
+			'parent' => 'about',
+		),
+		'contact-us' => array(
+			'settings_page_title' => __( 'Contact Page', 'cbox-openlab-core' ),
+			'settings_page_description' => __( 'Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
+			'parent' => 'about',
+		),
+	);
+}
+
+function cboxol_get_brand_pages() {
+	$brand_page_types = cboxol_get_brand_page_types();
+	$pages = array();
+	foreach ( $brand_page_types as $brand_page_type_name => $brand_page_type ) {
+		$pages[ $brand_page_type_name ] = array_merge( $brand_page_type, array(
 			'id' => 0,
 			'title' => '',
 			'edit_url' => '',
 			'preview_url' => '',
-		),
-	);
+		) );
+	}
 
 	$page_ids = get_site_option( 'cboxol_brand_page_ids' );
 
