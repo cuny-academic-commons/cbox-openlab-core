@@ -612,12 +612,13 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
 function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
-	$path = isset( $_POST['path'] ) ? $_POST['path'] : '';
-	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
+	$slug = isset( $_POST['path'] ) ? wp_unslash( $_POST['path'] ) : '';
+	if ( get_id_from_blogname( $slug ) ) {
 		$retval = 'exists';
 	} else {
 		$retval = '';
 	}
+
 	die( $retval );
 }
 
