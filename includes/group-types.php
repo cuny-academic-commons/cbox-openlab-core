@@ -5,7 +5,7 @@ add_action( 'bp_groups_register_group_types', 'cboxol_grouptypes_register_group_
 
 // Group creation. We roll our own because we skip BP's validation.
 add_action( 'bp_after_group_details_creation_step', 'cboxol_grouptypes_hidden_field' );
-add_action( 'groups_create_group_step_save_group-details', 'cboxol_grouptypes_save_group_type' );
+add_action( 'groups_group_after_save', 'cboxol_grouptypes_save_group_type', 15 );
 
 // Group creation must always have a group_type.
 add_action( 'bp_actions', 'cboxol_enforce_group_type_on_creation' );
