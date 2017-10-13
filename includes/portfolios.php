@@ -202,14 +202,24 @@ function openlab_suggest_portfolio_name() {
 }
 
 /**
- * Suggest a path for a portfolio, based on the user's FN + LN
+ * Suggest a path for a portfolio, based on the user's display name.
  */
 function openlab_suggest_portfolio_path() {
-	$fname = xprofile_get_field_data( 'First Name', bp_loggedin_user_id() );
-	$lname = xprofile_get_field_data( 'Last Name', bp_loggedin_user_id() );
+	$portfolio_type = cboxol_get_portfolio_group_type();
+	if ( is_wp_error( $portfolio_type ) ) {
+		return '';
+	}
 
-	$slug = strtolower( substr( $fname, 0, 1 ) . $lname . '-' . strtolower( openlab_get_portfolio_label( 'user_id=' . bp_loggedin_user_id() ) ) );
-	$slug = sanitize_title( $slug );
+	$display_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
+	$slug = sanitize_title( $display_name . '-' . $portfolio_type->get_slug() );
+
+	// Ensure uniqueness.
+	$incr = 2;
+	$base = $slug;
+	while ( $foo = get_id_from_blogname( $slug ) ) {
+		$slug = $base . '-' . $incr;
+		$incr++;
+	}
 
 	return $slug;
 }
