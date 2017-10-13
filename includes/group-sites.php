@@ -1317,7 +1317,8 @@ function cboxol_copy_blog_page( $group_id ) {
 	// Validate.
 	$validate = wpmu_validate_blog_signup( $blog['domain'], $group->name, $current_user );
 
-	if ( ! empty( $validate->errors ) ) {
+	$error_codes = $validate['errors']->get_error_codes();
+	if ( ! empty( $error_codes ) ) {
 		return $validate;
 	}
 
@@ -1481,3 +1482,35 @@ function cboxol_group_is_hidden( $group_id = 0 ) {
 		return isset( $group->status ) && 'hidden' == $group->status;
 	}
 }
+
+function cboxol_allow_extended_blogname_charset( $retval ) {
+	if ( empty( $retval['errors'] ) ) {
+		return $retval;
+	}
+
+	$blogname_messages = $retval['errors']->get_error_messages( 'blogname' );
+	if ( empty( $blogname_messages ) ) {
+		return $retval;
+	}
+
+	$chars_message = __( 'Site names can only contain lowercase letters (a-z) and numbers.' );
+	if ( ! in_array( $chars_message, $blogname_messages, true  ) ) {
+		return $retval;
+	}
+
+	// Allow hyphens and underscores.
+	if ( preg_match( '/[^a-z0-9\-_]+/', $retval['blogname'] ) ) {
+		return $retval;
+	}
+
+	$new_blogname_messages = array_diff( $blogname_messages, array( $chars_message ) );
+	$retval['errors']->remove( 'blogname' );
+	if ( $new_blogname_messages ) {
+		foreach ( $new_blogname_messages as $new_blogname_message ) {
+			$retval['errors']->add( 'blogname', $new_blogname_message );
+		}
+	}
+
+	return $retval;
+}
+add_filter( 'wpmu_validate_blog_signup', 'cboxol_allow_extended_blogname_charset' );
