@@ -292,7 +292,7 @@ function cboxol_grouptypes_hidden_field() {
 /**
  * Save group type.
  */
-function cboxol_grouptypes_save_group_type() {
+function cboxol_grouptypes_save_group_type( $group ) {
 	if ( ! isset( $_POST['group-type'] ) ) {
 		return;
 	}
@@ -317,7 +317,7 @@ function cboxol_grouptypes_save_group_type() {
 		return;
 	}
 
-	bp_groups_set_group_type( bp_get_new_group_id(), $group_type->get_slug() );
+	bp_groups_set_group_type( $group->id, $group_type->get_slug() );
 }
 
 /**
