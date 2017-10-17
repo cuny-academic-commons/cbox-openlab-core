@@ -71,7 +71,7 @@ class AcademicUnitType {
 	 * @return string
 	 */
 	public function get_name() {
-		return $this->data['name'];
+		return (string) $this->data['name'];
 	}
 
 	/**
@@ -80,7 +80,7 @@ class AcademicUnitType {
 	 * @return string
 	 */
 	public function get_parent() {
-		return $this->data['parent'];
+		return (string) $this->data['parent'];
 	}
 
 	/**
