@@ -1493,12 +1493,15 @@ HTML;
 			),
 		) );
 
-		$wp_admin_bar->add_menu( array(
-			'id'    => 'bp-register',
-			'meta'	=> array(
-				'tabindex' => 0,
-			),
-		) );
+		$signup = $wp_admin_bar->get_node( 'bp-register' );
+		if ( $signup ) {
+			$wp_admin_bar->add_menu( array(
+				'id'    => 'bp-register',
+				'meta'	=> array(
+					'tabindex' => 0,
+				),
+			) );
+		}
 	}
 
 	function body_class( $body_class ) {
