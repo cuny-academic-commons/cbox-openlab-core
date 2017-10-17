@@ -1473,14 +1473,14 @@ HTML;
 		$wp_admin_bar->remove_node( 'bp-login' );
 
 		// Change the title of the signup node
-		$signup->title = 'Sign Up';
-
 		// Move them both to top-secondary, to appear at the right
-		$signup->parent = 'top-secondary';
-		$login->parent  = 'top-secondary';
+		if ( $signup ) {
+			$signup->title = __( 'Sign Up', 'cbox-openlab-core' );
+			$signup->parent = 'top-secondary';
+			$wp_admin_bar->add_node( (array) $signup );
+		}
 
-		// Re-add
-		$wp_admin_bar->add_node( (array) $signup );
+		$login->parent  = 'top-secondary';
 		$wp_admin_bar->add_node( (array) $login );
 	}
 
