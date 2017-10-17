@@ -151,30 +151,45 @@ add_action( 'in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites
 function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location ) {
 	$mobile_mup = '';
 
+	$button_sr_text = esc_html__( 'Open Search', 'cbox-openlab-core' );
+
 	if ( $mode == 'desktop' ) :
 
 		$mobile_mup .= <<<HTML
 <div class="search-trigger-wrapper">
-    <button class="search-trigger btn-link" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'cbox-openlab-core' ); ?></span></button>
+    <button class="search-trigger btn-link" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">{$button_sr_text}</span></button>
 </div>
 HTML;
 	endif;
 
-	$form_action = bp_search_form_action();
+	$form_action = trailingslashit( bp_get_root_domain() );
 	$nonce = wp_create_nonce( 'bp_search_form' );
+
+	$sr_text = esc_html__( 'Search by People or Group Type', 'cbox-openlab-core' );
+	$search_placeholder = esc_attr__( 'Search', 'cbox-openlab-core' );
+
+	$options = array(
+		'<option value="members">' . esc_html__( 'People', 'cbox-openlab-core' ) . '</option>',
+	);
+
+	foreach ( cboxol_get_group_types() as $group_type ) {
+		$options[] = sprintf(
+			'<option value="%s">%s</option>',
+			esc_attr( $group_type->get_slug() ),
+			esc_html( $group_type->get_label( 'plural' ) )
+		);
+	}
+
+	$options_html = implode( "\n\r", $options );
 
 	$mobile_mup .= <<<HTML
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
     <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
-        <div class="sr-only"><?php esc_html_e( 'Search by People or Group Type', 'cbox-openlab-core' ); ?></div>
-        <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="Search" />
+        <div class="sr-only">{$sr_text}</div>
+        <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="{$search_placeholder}" />
         <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
-            <option value="members">People</option>
-            <option value="courses">Courses</option>
-            <option value="projects">Projects</option>
-            <option value="clubs">Clubs</option>
-            <option value="portfolios">Portfolios</option>
+			{$options_html}
         </select>
 
         <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><i class="fa fa-search"></i></button>
@@ -187,34 +202,38 @@ HTML;
 	echo $mobile_mup;
 }
 
-add_action( 'init', 'openlab_mu_search_override', 1 );
-
+/**
+ * Catch and redirect searches.
+ */
 function openlab_mu_search_override() {
 	global $bp;
-	if ( isset( $_POST['search'] ) && $_POST['search-which'] ) {
+
+	if ( isset( $_POST['search'] ) && ! empty( $_POST['search-which'] ) ) {
 		$nonce = isset( $_POST['_bp_search_nonce'] ) ? $_POST['_bp_search_nonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, 'bp_search_form' ) ) {
 			return;
 		}
 
-		if ( $_POST['search-which'] == 'members' ) {
-			wp_redirect( $bp->root_domain . '/people/?search=' . $_POST['search'] );
-			exit();
-		} elseif ( $_POST['search-which'] == 'courses' ) {
-			wp_redirect( $bp->root_domain . '/courses/?search=' . $_POST['search'] );
-			exit();
-		} elseif ( $_POST['search-which'] == 'projects' ) {
-			wp_redirect( $bp->root_domain . '/projects/?search=' . $_POST['search'] );
-			exit();
-		} elseif ( $_POST['search-which'] == 'clubs' ) {
-			wp_redirect( $bp->root_domain . '/clubs/?search=' . $_POST['search'] );
-			exit();
-		} elseif ( $_POST['search-which'] == 'portfolios' ) {
-			wp_redirect( $bp->root_domain . '/portfolios/?search=' . $_POST['search'] );
-			exit();
+		$search_which = wp_unslash( $_POST['search-which'] );
+		$search = wp_unslash( $_POST['search'] );
+
+		$redirect = null;
+		if ( 'members' === $search_which ) {
+			$redirect = add_query_arg( 'search', $search, bp_get_members_directory_permalink() );
+		} else {
+			$group_type = cboxol_get_group_type( $search_which );
+			if ( ! is_wp_error( $group_type ) ) {
+				$redirect = add_query_arg( 'search', $search, bp_get_group_type_directory_permalink( $search_which ) );
+			}
+		}
+
+		if ( $redirect ) {
+			wp_safe_redirect( $redirect );
+			die();
 		}
 	}
 }
+add_action( 'wp', 'openlab_mu_search_override', 1 );
 
 /**
  * Ensure that the toolbar always shows
