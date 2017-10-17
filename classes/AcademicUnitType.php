@@ -205,17 +205,6 @@ class AcademicUnitType {
 				),
 			),
 
-			// @todo
-			'units' => array(
-				array(
-					'slug' => 'foo',
-					'label' => 'Foo',
-				),
-				array(
-					'slug' => 'bar',
-					'label' => 'Bar',
-				),
-			),
 			'id' => $this->get_wp_post_id(),
 
 			'canBeDeleted' => true,
