@@ -119,7 +119,7 @@ function openlab_sitewide_header( $location = 'header' ) {
 				<header class="menu-title pull-left"><a href="<?php echo bp_get_root_domain(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></header>
 				<div class="pull-right search">
 					<div class="search-trigger-wrapper">
-						<button  class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Open Search</span></button>
+						<button  class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'cbox-openlab-core' ); ?></span></button>
 					</div>
 				</div>
 			</div>
@@ -155,7 +155,7 @@ function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location ) {
 
 		$mobile_mup .= <<<HTML
 <div class="search-trigger-wrapper">
-    <button class="search-trigger btn-link" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">Open Search</span></button>
+    <button class="search-trigger btn-link" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'cbox-openlab-core' ); ?></span></button>
 </div>
 HTML;
 	endif;
@@ -167,7 +167,7 @@ HTML;
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
     <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
-        <div class="sr-only">Search by People or Group Type</div>
+        <div class="sr-only"><?php esc_html_e( 'Search by People or Group Type', 'cbox-openlab-core' ); ?></div>
         <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="Search" />
         <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
             <option value="members">People</option>
