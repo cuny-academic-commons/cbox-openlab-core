@@ -106,7 +106,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 			);
 		}, $types );
 
-		return array(
+		$data = array(
 			'id' => $this->get_wp_post_id(),
 			'isCollapsed' => true,
 			'isEnabled' => $this->get_is_enabled(),
@@ -114,10 +114,6 @@ class MemberType extends ItemTypeBase implements ItemType {
 			'isModified' => false,
 			'canBeDeleted' => $this->get_can_be_deleted(),
 			'settings' => array(
-				'MayCreateCourses' => array(
-					'component' => 'MayCreateCourses',
-					'data' => $this->get_can_create_courses(),
-				),
 				'MayChangeMemberTypeTo' => array(
 					'component' => 'MayChangeMemberTypeTo',
 					'data' => array(
@@ -134,6 +130,18 @@ class MemberType extends ItemTypeBase implements ItemType {
 			'slug' => $this->get_slug(),
 			'labels' => $this->get_labels(),
 		);
+
+		$course_group_type = cboxol_get_course_group_type();
+		if ( $course_group_type ) {
+			$data['settings'] = array(
+				'MayCreateCourses' => array(
+					'component' => 'MayCreateCourses',
+					'data' => $this->get_can_create_courses(),
+				)
+			) + $data['settings'];
+		}
+
+		return $data;
 	}
 
 	public function save() {

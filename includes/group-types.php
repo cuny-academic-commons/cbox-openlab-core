@@ -392,3 +392,19 @@ function cboxol_get_user_group_type_directory_url( \CBOX\OL\GroupType $group_typ
 
 	return $url;
 }
+
+/**
+ * Get the course group type.
+ *
+ * @return \CBOX\OL\GroupType|null Null if none is found.
+ */
+function cboxol_get_course_group_type() {
+	$group_types = cboxol_get_group_types();
+	foreach ( $group_types as $group_type ) {
+		if ( $group_type->get_is_course() ) {
+			return $group_type;
+		}
+	}
+
+	return null;
+}
