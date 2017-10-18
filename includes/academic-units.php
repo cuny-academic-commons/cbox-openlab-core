@@ -530,7 +530,8 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 		'groupType' => $r['group_type'],
 		'typesByMemberType' => $member_type_unit_types,
 		'typesByGroupType' => $group_type_unit_types,
-		'requiredLabel' => __( '(required)', 'cbox-openlab-core' ),
+		'requiredError' => esc_html__( 'Please make sure you fill in all required fields before saving.', 'cbox-openlab-core' ),
+		'requiredLabel' => esc_html__( '(required)', 'cbox-openlab-core' ),
 	) );
 
 	ob_start();

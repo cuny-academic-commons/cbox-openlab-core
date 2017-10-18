@@ -26,6 +26,10 @@
 		$academicUnitCheckboxes = $('.academic-unit-checkbox');
 		validateAcademicTypeSelector();
 		$academicUnitCheckboxes.change( validateAcademicTypeSelector );
+
+		$('.cboxol-academic-unit-selector').closest('form').on('submit', function(e) {
+			return validateRequiredTypes();
+		});
 	});
 
 	/**
@@ -33,6 +37,7 @@
 	 */
 	function showAcademicUnitTypesForMemberType( memberType ) {
 		$('.cboxol-academic-unit-selector-for-type').hide();
+		var typesValidated, checked = true;
 		if ( CBOXOLAcademicTypes.typesByMemberType.hasOwnProperty( memberType ) ) {
 			var typeObject, $selector;
 			for ( var i in CBOXOLAcademicTypes.typesByMemberType[ memberType ] ) {
@@ -83,5 +88,41 @@
 				$( v ).prop( 'checked', false );
 			}
 		} );
+	}
+
+	/**
+	 * Validate form to ensure that required types are present.
+	 */
+	function validateRequiredTypes() {
+		var entityType = CBOXOLAcademicTypes.entityType;
+		var typeOfType, entityTypeUnitTypes;
+		var validated = true;
+
+		if ( 'group' === entityType ) {
+			typeOfType = CBOXOLAcademicTypes.groupType;
+			entityTypeUnitTypes = CBOXOLAcademicTypes.typesByGroupType[ typeOfType ];
+		} else {
+			typeOfType = $accountTypeSelector.val();
+			entityTypeUnitTypes = CBOXOLAcademicTypes.typesByMemberType[ typeOfType ];
+		}
+
+		for ( var i in entityTypeUnitTypes ) {
+			if ( 'required' !== entityTypeUnitTypes[ i ].status ) {
+				continue;
+			}
+
+			if ( 0 === $('.cboxol-academic-unit-selector-for-type-' + entityTypeUnitTypes[ i ].slug).find(':checked').length ) {
+				validated = false;
+				break;
+			}
+		}
+
+		if ( validated ) {
+			$('.academic-unit-notice').remove();
+		} else {
+			$('.cboxol-academic-unit-selector').closest('.panel-body').prepend('<div id="message" class="bp-template-notice error academic-unit-notice"><p>' + CBOXOLAcademicTypes.requiredError + '</p></div>');
+		}
+
+		return validated;
 	}
 }(jQuery))
