@@ -504,11 +504,19 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 	foreach ( $academic_unit_types as $academic_unit_type ) {
 		foreach ( $academic_unit_type->get_member_types() as $member_type => $setting ) {
 			if ( $academic_unit_type->is_selectable_by_member_type( $member_type ) ) {
-				$member_type_unit_types[ $member_type ][] = $academic_unit_type->get_slug();
+				$status = $academic_unit_type->is_required_for_member_type( $member_type ) ? 'required' : 'optional';
+				$member_type_unit_types[ $member_type ][] = array(
+					'slug' => $academic_unit_type->get_slug(),
+					'status' => $status,
+				);
 			}
 		}
 		foreach ( $academic_unit_type->get_group_types() as $group_type => $setting ) {
-			$group_type_unit_types[ $group_type ][] = $academic_unit_type->get_slug();
+			$status = $academic_unit_type->is_required_for_group_type( $group_type ) ? 'required' : 'optional';
+			$group_type_unit_types[ $group_type ][] = array(
+				'slug' => $academic_unit_type->get_slug(),
+				'status' => $status,
+			);
 		}
 	}
 
@@ -522,6 +530,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 		'groupType' => $r['group_type'],
 		'typesByMemberType' => $member_type_unit_types,
 		'typesByGroupType' => $group_type_unit_types,
+		'requiredLabel' => __( '(required)', 'cbox-openlab-core' ),
 	) );
 
 	ob_start();
@@ -542,7 +551,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 		?>
 		<div class="cboxol-academic-unit-selector-for-type cboxol-academic-unit-selector-for-type-<?php echo esc_attr( $academic_unit_type->get_slug() ); ?>">
 			<fieldset>
-				<legend><?php echo esc_html( $academic_unit_type->get_name() ); ?></legend>
+				<legend aria-live="polite"><?php echo esc_html( $academic_unit_type->get_name() ); ?> <span class="academic-unit-type-required-label"></span></legend>
 
 				<div class="cboxol-units-of-type">
 					<ul>

@@ -297,6 +297,50 @@ class AcademicUnitType {
 	}
 
 	/**
+	 * Is the current type required for members of a given type?
+	 *
+	 * @param string $member_type_slug
+	 * @return bool
+	 */
+	public function is_required_for_member_type( $member_type_slug ) {
+		$type_settings = $this->get_member_types();
+		return isset( $type_settings[ $member_type_slug ] ) && 'required' === $type_settings[ $member_type_slug ];
+	}
+
+	/**
+	 * Is the current type required for groups of a given type?
+	 *
+	 * @param string $group_type_slug
+	 * @return bool
+	 */
+	public function is_required_for_group_type( $group_type_slug ) {
+		$type_settings = $this->get_group_types();
+		return isset( $type_settings[ $group_type_slug ] ) && 'required' === $type_settings[ $group_type_slug ];
+	}
+
+	/**
+	 * Is the current type optional for members of a given type?
+	 *
+	 * @param string $member_type_slug
+	 * @return bool
+	 */
+	public function is_optional_for_member_type( $member_type_slug ) {
+		$type_settings = $this->get_member_types();
+		return isset( $type_settings[ $member_type_slug ] ) && 'optional' === $type_settings[ $member_type_slug ];
+	}
+
+	/**
+	 * Is the current type optional for groups of a given type?
+	 *
+	 * @param string $group_type_slug
+	 * @return bool
+	 */
+	public function is_optional_for_group_type( $group_type_slug ) {
+		$type_settings = $this->get_group_types();
+		return isset( $type_settings[ $group_type_slug ] ) && 'optional' === $type_settings[ $group_type_slug ];
+	}
+
+	/**
 	 * Is the current type selectable by a member of a given type?
 	 *
 	 * Returns true for cases of 'required' or 'optional'.

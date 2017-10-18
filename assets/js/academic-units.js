@@ -34,8 +34,17 @@
 	function showAcademicUnitTypesForMemberType( memberType ) {
 		$('.cboxol-academic-unit-selector-for-type').hide();
 		if ( CBOXOLAcademicTypes.typesByMemberType.hasOwnProperty( memberType ) ) {
+			var typeObject, $selector;
 			for ( var i in CBOXOLAcademicTypes.typesByMemberType[ memberType ] ) {
-				$('.cboxol-academic-unit-selector-for-type-' + CBOXOLAcademicTypes.typesByMemberType[ memberType ][ i ] ).show();
+				typeObject = CBOXOLAcademicTypes.typesByMemberType[ memberType ][ i ];
+				$selector = $('.cboxol-academic-unit-selector-for-type-' + typeObject.slug);
+				$selector.show();
+
+				if ( 'required' === typeObject.status ) {
+					$selector.find('.academic-unit-type-required-label').html(CBOXOLAcademicTypes.requiredLabel);
+				} else {
+					$selector.find('.academic-unit-type-required-label').html('');
+				}
 			}
 		}
 	}
@@ -47,7 +56,8 @@
 		$('.cboxol-academic-unit-selector-for-type').hide();
 		if ( CBOXOLAcademicTypes.typesByGroupType.hasOwnProperty( groupType ) ) {
 			for ( var i in CBOXOLAcademicTypes.typesByGroupType[ groupType ] ) {
-				$('.cboxol-academic-unit-selector-for-type-' + CBOXOLAcademicTypes.typesByGroupType[ groupType ][ i ] ).show();
+				typeObject = CBOXOLAcademicTypes.typesByGroupType[ groupType ][ i ];
+				$('.cboxol-academic-unit-selector-for-type-' + typeObject.slug).show();
 			}
 		}
 	}
