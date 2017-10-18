@@ -284,7 +284,7 @@ function cboxol_associate_object_with_academic_units( $args = array() ) {
 		'type_ids' => null,
 	), $args );
 
-	if ( ! $r['object_id'] || ! $r['type_ids'] || ! in_array( $r['object_type'], array( 'user', 'group' ), true ) ) {
+	if ( ! $r['object_id'] || ! in_array( $r['object_type'], array( 'user', 'group' ), true ) ) {
 		return false;
 	}
 
