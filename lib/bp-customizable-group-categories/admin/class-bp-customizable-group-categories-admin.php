@@ -217,7 +217,12 @@ class Bp_Customizable_Group_Categories_Admin {
         $post_type = 'bp_group';
         $taxnow = $taxonomy = 'bp_group_categories';
 
-        $redirect_to = add_query_arg('page', 'bp-group-categories', get_admin_url('admin.php'));
+        $redirect_to = add_query_arg(
+			'page',
+			'bp-group-categories',
+			get_admin_url( bp_get_root_blog_id(), 'admin.php' )
+		);
+
         // Filter the updated messages
         //add_filter('term_updated_messages', array($this, 'admin_updated_message'), 10, 1);
 

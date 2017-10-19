@@ -300,7 +300,7 @@ function cboxol_get_admin_tabs( $parent_page ) {
 
 	switch ( $parent_page ) {
 		case 'member-settings' :
-			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'member-settings' ), 'admin.php' ) );
+			$base = self_admin_url( add_query_arg( 'page', cboxol_admin_slug( 'member-settings' ), 'admin.php' ) );
 			$tabs = array(
 				'0' => array(
 					'href' => add_query_arg( 'cboxol-section', 'types', $base ),
@@ -322,7 +322,7 @@ function cboxol_get_admin_tabs( $parent_page ) {
 			break;
 
 		case 'group-settings' :
-			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'group-settings' ), 'admin.php' ) );
+			$base = self_admin_url( add_query_arg( 'page', cboxol_admin_slug( 'group-settings' ), 'admin.php' ) );
 			$tabs = array(
 				'0' => array(
 					'href' => add_query_arg( 'cboxol-section', 'types', $base ),
@@ -339,7 +339,7 @@ function cboxol_get_admin_tabs( $parent_page ) {
 			break;
 
 		case 'communication-settings' :
-			$base = admin_url( add_query_arg( 'page', cboxol_admin_slug( 'communication-settings' ), 'admin.php' ) );
+			$base = self_admin_url( add_query_arg( 'page', cboxol_admin_slug( 'communication-settings' ), 'admin.php' ) );
 			$tabs = array(
 				'0' => array(
 					'href' => add_query_arg( 'cboxol-section', 'email', $base ),

@@ -1256,6 +1256,10 @@ function openlab_cloned_course_notice() {
 	$dismiss_url = add_query_arg( 'ol-clone-dismiss', '1', $dismiss_url );
 	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
+	$posts_url = admin_url( 'edit.php' );
+	$pages_url = admin_url( 'edit.php' );
+	$menus_url = admin_url( 'nav-menus.php' );
+
 	?>
 	<style type="text/css">
 		.ol-cloned-message {
@@ -1270,8 +1274,8 @@ function openlab_cloned_course_notice() {
 		}
 	</style>
 	<div class="updated fade ol-cloned-message">
-		<p><span>Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="<?php echo admin_url( 'edit.php' ); ?>">Posts</a> and <a href="<?php echo admin_url( 'edit.php?post_type=page' ); ?>">Pages</a>. Custom menus will need to be reactivated via <a href="<?php echo admin_url( 'nav-menus.php' ); ?>">Appearance > Menus</a>.</span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">Dismiss</a>
+		<p><span><?php printf( __( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="%1$s">Posts</a> and <a href="%2$s">Pages</a>. Custom menus will need to be reactivated via <a href="%3$s">Appearance > Menus</a>', 'cbox-openlab-core' ), esc_url( $posts_url ), esc_url( $pages_url ), esc_url( $menus_url ) ); ?>.</span>
+		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'cbox-openlab-core' ); ?></a>
 		</p>
 	</div>
 	<?php

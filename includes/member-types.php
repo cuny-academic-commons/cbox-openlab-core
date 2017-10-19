@@ -152,7 +152,7 @@ function cboxol_membertypes_admin_page() {
 		'dummy' => $dummy_data,
 	);
 
-	$registration_url = admin_url( add_query_arg( array(
+	$registration_url = self_admin_url( add_query_arg( array(
 		'page' => cboxol_admin_slug( 'member-settings' ),
 		'cboxol-section' => 'registration',
 	), 'admin.php' ) );
