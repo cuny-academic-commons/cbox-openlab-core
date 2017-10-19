@@ -68,9 +68,7 @@ function cboxol_registration_admin_page() {
 	?>
 
 	<div class="cboxol-admin-content">
-		<p>
-			Subheader text
-		</p>
+		<p><?php esc_html_e( 'Registration management allows you to control who can create accounts and what types of accounts different types of users can create.', 'cbox-openlab-core' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;

@@ -435,7 +435,7 @@ class Install {
 		$pages = array(
 			'about' => array(
 				'post_title' => __( 'About', 'cbox-openlab-core' ),
-				'post_content' => __( 'This is the content of your About page.', 'cbox-openlab-core' ),
+				'post_content' => __( '<p>This page can contain an introduction to your site, institution, or organization.</p><p>This text can be edited in the Pages area of the dashboard</p>.', 'cbox-openlab-core' ),
 			),
 			'help' => array(
 				'post_title' => __( 'Help', 'cbox-openlab-core' ),

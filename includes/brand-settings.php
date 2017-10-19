@@ -10,7 +10,7 @@ function cboxol_brand_admin_page() {
 	<div class="cboxol-admin-content">
 		<h3 class="cboxol-admin-content-header"><?php esc_html_e( 'Visual', 'cbox-openlab-core' ); ?></h3>
 		<div class="cboxol-admin-content-copy">
-			<p>Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut </p>
+			<p><?php esc_html_e( 'Customize your site’s look, including the color scheme, custom logo, homepage layout, widgets and more.', 'cbox-openlab-core' ); ?></p>
 
 			<p>
 				<a class="button" href="<?php echo esc_url( $customize_url ); ?>"><?php esc_html_e( 'Customize', 'cbox-openlab-core' ); ?></a>
@@ -21,7 +21,7 @@ function cboxol_brand_admin_page() {
 	<div class="cboxol-admin-content has-top-border">
 		<h3 class="cboxol-admin-content-header"><?php esc_html_e( 'Copy', 'cbox-openlab-core' ); ?></h3>
 		<div class="cboxol-admin-content-copy">
-			<p>Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut Qui fugiat alias rem dolor sint. Ullam minima corrupti voluptatem. Commodi vel quae aut </p>
+			<p><?php esc_html_e( 'Change the copy on your About, Help, and other pages here.', 'cbox-openlab-core' ); ?></p>
 
 			<?php foreach ( $pages as $page_name => $page_info ) : ?>
 				<?php if ( ! empty( $page_info['id'] ) ) : ?>

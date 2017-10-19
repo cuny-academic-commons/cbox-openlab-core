@@ -113,8 +113,9 @@ function cboxol_academic_units_main_admin_page() {
 
 	?>
 	<div class="cboxol-admin-content">
-		<?php /* @todo */ ?>
-		<p>Academic Units officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+		<p><?php esc_html_e( 'Academic Units allow your members to identify themselves and their groups with the appropriate divisions within your institution. Create the top-level unit types that best describe how your institution is organized - for example, Departments that are located within Divisions - and then define the specific units within each type. Members will then be able to associate themselves with these units when editing their profiles or when administering their groups.', 'cbox-openlab-core' ); ?></p>
+
+		<p><?php esc_html_e( 'Please choose whether this academic unit should be a required or optional choice, or not an available choice for any of the following member types.', 'cbox-openlab-core' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
