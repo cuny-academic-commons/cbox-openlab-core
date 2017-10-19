@@ -11,8 +11,6 @@
 				v-model="newUnitName"
 			>
 
-			<p class="add-new-academic-unit-field-description">Sint omnis debitis aut libero accusantium cumque fugit quo. Eveniet dolore ut optio autem tempora.</p>
-
 			<fieldset v-if="typeSupportsParent" class="new-academic-unit-parent">
 				<legend>{{ strings.parent }}</legend>
 
@@ -21,7 +19,7 @@
 					:thisUnitSlug="newUnitSlug"
 				/>
 
-				<p class="add-new-academic-unit-field-description">Sint omnis debitis aut libero accusantium cumque fugit quo. Eveniet dolore ut optio autem tempora.</p>
+				<p class="add-new-academic-unit-field-description">{{ strings.academicUnitParentLegend }}</p>
 			</fieldset>
 
 			<button

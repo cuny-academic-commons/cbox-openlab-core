@@ -238,6 +238,10 @@ a .action-arrow {
 	margin-top: 12px;
 }
 
+.add-new-academic-unit input {
+	margin-bottom: .5rem;
+}
+
 .academic-unit-list {
 	margin-left: 220px;
 }
