@@ -82,7 +82,7 @@ function cboxol_grouptypes_admin_page() {
 
 	<div class="cboxol-admin-content">
 		<?php /* @todo */ ?>
-		<p>Group Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+		<p><?php esc_html_e( 'Group Types allow your site\'s groups to be categorized in various ways. Each group type gets its own directory, and groups of different types may differ in functionality and appearance.', 'cbox-openlab-core' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
