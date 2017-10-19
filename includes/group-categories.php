@@ -33,8 +33,7 @@ function cboxol_groupcategories_admin_page() {
 	?>
 
 	<div class="cboxol-admin-content">
-		<?php /* @todo */ ?>
-		<p>Group Categories are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+		<p><?php esc_html_e( 'Group categories make it easier to organize and discover groups. Group administrators can add the categories you create here to their groups, which will then be filterable by category on group directory pages.', 'cbox-openlab-core' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;

@@ -152,11 +152,15 @@ function cboxol_membertypes_admin_page() {
 		'dummy' => $dummy_data,
 	);
 
+	$registration_url = admin_url( add_query_arg( array(
+		'page' => cboxol_admin_slug( 'member-settings' ),
+		'cboxol-section' => 'registration',
+	), 'admin.php' ) );
+
 	?>
 
 	<div class="cboxol-admin-content">
-		<?php /* @todo */ ?>
-		<p>Member Types are et officia pariatur tenetur autem. Libero illum quaerat cum iusto non. Voluptatem dignissimos et suscipit nesciunt eum nobis deleniti maiores. Dolor voluptatem qui aut maiores ut. Veritatis rerum velit aut laborum et ut ut. Aut quo nostrum assumenda dolorem quibusdam deleniti consequatur doloremque.</p>
+		<p><?php printf( __( 'Member Types are used to organize your site’s users. Members are able to choose their own Member Type according to the rules that you configure on this page, as well as in <a href="%s">Registration settings</a>.', 'cbox-openlab-core' ), esc_url( $registration_url ) ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
