@@ -4,7 +4,7 @@
  * Academic Units functionality.
  */
 
-add_action( 'init', 'cboxol_academic_units_register_post_types' );
+add_action( 'init', 'cboxol_academic_units_register_post_types', 8 );
 add_action( 'bp_signup_usermeta', 'cboxol_save_signup_academic_units' );
 
 // Run at 20 to ensure that member type is set.
