@@ -594,8 +594,10 @@ add_action( 'bp_actions', 'openlab_remove_bpges_settings_for_portfolios', 1 );
 function openlab_associate_portfolio_group_with_user( $group_id, $user_id ) {
 	bp_update_user_meta( $user_id, 'portfolio_group_id', $group_id );
 
-	$account_type = xprofile_get_field_data( 'Account Type', $user_id );
-	groups_update_groupmeta( $group_id, 'portfolio_user_type', $account_type );
+	$member_type = cboxol_get_user_member_type( $user_id );
+	if ( ! is_wp_error( $member_type ) ) {
+		groups_update_groupmeta( $group_id, 'portfolio_user_type', $member_type->get_slug() );
+	}
 }
 
 /**
