@@ -884,13 +884,24 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 			$group_name = $group->name;
 			$group_permalink = bp_get_group_permalink( $group );
 
+			$group_link = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $group_permalink ),
+				esc_html( $group_name )
+			);
+
+			$post_link = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $item['permalink'] ),
+				esc_html( $item['title'] )
+			);
+
 			if ( 'posts' === $item_type ) {
 				/* translators: 1. Post link, 2. Group link */
-				$action = sprintf( __( 'A new post %s was published in %s', 'cbox-openlab-core' ), '<a href="' . esc_url( $group_permalink ) . '">' . esc_html( $group_name ) . '</a>'
-				);
+				$action = sprintf( __( 'A new post %1$s was published in %2$s', 'cbox-openlab-core' ), $post_link, $group_link );
 			} elseif ( 'comments' === $item_type ) {
 				/* translators: 1. Post link, 2. Group link */
-				$action = sprintf( __( 'A new comment was posted on the post %1$s in %2$s', 'cbox-openlab-core' ), '<a href="' . esc_url( $item['permalink'] ) . '">' . esc_html( $item['title'] ) . '</a>', '<a href="' . esc_url( $group_permalink ) . '">' . esc_html( $group_name ) . '</a>' );
+				$action = sprintf( __( 'A new comment was posted on the post %1$s in %2$s', 'cbox-openlab-core' ), $post_link, $group_link );
 			}
 
 			$item_date = strtotime( $item['date'] );
