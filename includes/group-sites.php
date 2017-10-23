@@ -915,11 +915,12 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 				'action' => $action,
 				'content' => $item['content'],
 				'component' => 'groups',
-				'type' => $type, 'primary_link' => $item['permalink'],
+				'type' => $type,
+				'primary_link' => $item['permalink'],
 				'user_id' => 0, // todo
 				'item_id' => bp_get_current_group_id(), // improve?
 				'recorded_time' => $recorded_time,
-				'hide_sitewide' => $hide_sitewide
+				'hide_sitewide' => $hide_sitewide,
 			);
 
 			remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
