@@ -1010,7 +1010,9 @@ function openlab_find_feed_urls( $url ) {
 			// Test the comment feed
 			if ( isset( $f['comments'] ) ) {
 				$maybe_comments_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['comments'] );
-				$maybe_comments_feed = wp_remote_get( $maybe_comments_feed_url );
+				$maybe_comments_feed = wp_remote_get( $maybe_comments_feed_url, array(
+					'redirection' => 2,
+				) );
 
 				if ( 200 == $maybe_comments_feed['response']['code'] ) {
 					$feed_urls['comments'] = $maybe_comments_feed_url;
