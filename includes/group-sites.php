@@ -561,9 +561,9 @@ function openlab_validate_groupblog_url() {
 		// @todo Support subdomains
 		$path = '';
 		if ( 'clone' == $_POST['new_or_old'] ) {
-			$path = $_POST['clone-destination-path'];
+			$path = wp_unslash( $_POST['clone-destination-path'] );
 		} else {
-			$path = $_POST['blog']['domain'];
+			$path = wp_unslash( $_POST['blog']['domain'] );
 		}
 
 		if ( empty( $path ) ) {
@@ -571,9 +571,10 @@ function openlab_validate_groupblog_url() {
 			bp_core_redirect( wp_guess_url() );
 		}
 
-		if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
-			bp_core_add_message( 'That site URL is already taken. Please try another.', 'error' );
-			bp_core_redirect( wp_guess_url() );
+		$validated = cboxol_validate_blogname( $path );
+		if ( ! $validated['validated'] ) {
+			bp_core_add_message( $validated['error'], 'error' );
+			bp_core_redirect( bp_get_requested_url() );
 		}
 	}
 }
@@ -613,13 +614,15 @@ function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
 	$slug = isset( $_POST['path'] ) ? wp_unslash( $_POST['path'] ) : '';
-	if ( get_id_from_blogname( $slug ) ) {
-		$retval = 'exists';
-	} else {
-		$retval = '';
-	}
+	$validated = cboxol_validate_blogname( $slug );
 
-	die( $retval );
+	if ( $validated['validated'] ) {
+		wp_send_json_success();
+	} else {
+		wp_send_json_error( array(
+			'error' => esc_html( $validated['error'] ),
+		) );
+	}
 }
 
 add_action( 'wp_ajax_openlab_validate_groupblog_url_handler', 'openlab_validate_groupblog_url_handler' );
@@ -1488,6 +1491,10 @@ function cboxol_group_is_hidden( $group_id = 0 ) {
 	}
 }
 
+function cboxol_blogname_contains_illegal_characters( $blogname ) {
+	return (bool) preg_match( '/[^a-z0-9\-_]+/', $blogname );
+}
+
 function cboxol_allow_extended_blogname_charset( $retval ) {
 	if ( empty( $retval['errors'] ) ) {
 		return $retval;
@@ -1499,12 +1506,12 @@ function cboxol_allow_extended_blogname_charset( $retval ) {
 	}
 
 	$chars_message = __( 'Site names can only contain lowercase letters (a-z) and numbers.' );
-	if ( ! in_array( $chars_message, $blogname_messages, true  ) ) {
+	if ( ! in_array( $chars_message, $blogname_messages, true ) ) {
 		return $retval;
 	}
 
 	// Allow hyphens and underscores.
-	if ( preg_match( '/[^a-z0-9\-_]+/', $retval['blogname'] ) ) {
+	if ( cboxol_blogname_contains_illegal_characters( $retval['blogname'] ) ) {
 		return $retval;
 	}
 
@@ -1519,3 +1526,76 @@ function cboxol_allow_extended_blogname_charset( $retval ) {
 	return $retval;
 }
 add_filter( 'wpmu_validate_blog_signup', 'cboxol_allow_extended_blogname_charset' );
+
+/**
+ * Validate a blogname.
+ *
+ * Checks for the following:
+ * - Existing sites with the same name.
+ * - That the blogname doesn't have illegal characters.
+ * - That the blogname is long enough to pass WP's built-in validation.
+ * - That the blogname is not illegal
+ *
+ * @param string $blogname Subdomain or path, depending on installation type.
+ * @return array
+ */
+function cboxol_validate_blogname( $blogname ) {
+	$error = null;
+
+	/**
+	 * Filters the minimum site name length required when validating a site signup.
+	 *
+	 * @since 4.8.0
+	 *
+	 * @param int $length The minimum site name length. Default 4.
+	 */
+	$minimum_site_name_length = apply_filters( 'minimum_site_name_length', 4 );
+
+	if ( cboxol_blogname_contains_illegal_characters( $blogname ) ) {
+		$error = __( 'URLs can contain only alphanumeric characters, hyphens, and underscores.', 'cbox-openlab-core' );
+	} elseif ( get_id_from_blogname( $blogname ) ) {
+		$error = __( 'That site URL is already taken. Please try another.', 'cbox-openlab-core' );
+	} elseif ( cboxol_blogname_is_illegal( $blogname ) ) {
+		$error = __( 'That URL is not allowed', 'cbox-openlab-core' );
+	} elseif ( strlen( $blogname ) < $minimum_site_name_length ) {
+		/* translators: %s: minimum site name length */
+		$error = sprintf( _n( 'Site name must be at least %s character.', 'Site name must be at least %s characters.', $minimum_site_name_length, 'cbox-openlab-core' ), number_format_i18n( $minimum_site_name_length ) );
+	}
+
+	$retval = array(
+		'validated' => true,
+	);
+
+	if ( $error ) {
+		$retval['validated'] = false;
+		$retval['error'] = $error;
+	}
+
+	return $retval;
+}
+
+/**
+ * Check whether a blogname is "illegal".
+ *
+ * This is a function that WordPress ought to provide but does not.
+ *
+ * @param string $blogname
+ * @return bool
+ */
+function cboxol_blogname_is_illegal( $blogname ) {
+	$illegal_names = get_site_option( 'illegal_names' );
+	if ( $illegal_names == false ) {
+		$illegal_names = array( 'www', 'web', 'root', 'admin', 'main', 'invite', 'administrator' );
+		add_site_option( 'illegal_names', $illegal_names );
+	}
+
+	/*
+	 * On sub dir installs, some names are so illegal, only a filter can
+	 * spring them from jail.
+	 */
+	if ( ! is_subdomain_install() ) {
+		$illegal_names = array_merge( $illegal_names, get_subdirectory_reserved_names() );
+	}
+
+	return in_array( $blogname, $illegal_names, true );
+}
