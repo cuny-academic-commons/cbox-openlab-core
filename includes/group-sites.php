@@ -964,11 +964,13 @@ function openlab_validate_url( $url ) {
  */
 function openlab_find_feed_urls( $url ) {
 
+	$url = trailingslashit( $url );
+
 	// Supported formats
 	$formats = array(
 		'wordpress' => array(
-			'posts' => '{{URL}}feed',
-			'comments' => '{{URL}}/comments/feed',
+			'posts' => '{{URL}}feed/',
+			'comments' => '{{URL}}comments/feed/',
 		),
 		'blogger' => array(
 			'posts' => '{{URL}}feeds/posts/default?alt=rss',
