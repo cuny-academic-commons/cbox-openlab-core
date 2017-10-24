@@ -121,6 +121,11 @@
 			$('.academic-unit-notice').remove();
 		} else {
 			$('.cboxol-academic-unit-selector').closest('.panel-body').prepend('<div id="message" class="bp-template-notice error academic-unit-notice"><p>' + CBOXOLAcademicTypes.requiredError + '</p></div>');
+
+			var aurOffset = $( '#panel-academic-units' ).offset();
+			if ( aurOffset ) {
+				window.scrollTo( 0, aurOffset.top - 50 );
+			}
 		}
 
 		return validated;
