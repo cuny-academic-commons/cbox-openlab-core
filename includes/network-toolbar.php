@@ -111,12 +111,15 @@ function openlab_get_logo_html( $link = true ) {
  * Includs sitewide logo and sitewide search
  */
 function openlab_sitewide_header( $location = 'header' ) {
+	$logo_url = openlab_get_logo_url();
 	?>
 
 	<div class="header-mobile-wrapper visible-xs">
 		<div class="container-fluid">
 			<div class="navbar-header clearfix">
-				<header class="menu-title pull-left"><a href="<?php echo bp_get_root_domain(); ?>" title="<?php _ex( 'Home', 'Home page banner link title', 'buddypress' ); ?>"><?php bp_site_name(); ?></a></header>
+				<header class="menu-title pull-left">
+					<a href="<?php echo bp_get_root_domain(); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'cbox-openlab-core' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="sr-only"><?php bp_site_name(); ?></span></a>
+				</header>
 				<div class="pull-right search">
 					<div class="search-trigger-wrapper">
 						<button  class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'cbox-openlab-core' ); ?></span></button>
