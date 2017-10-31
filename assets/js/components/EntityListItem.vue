@@ -6,10 +6,10 @@
 			</div>
 
 			<div class="cboxol-entity-header-actions">
-				<a href="" v-on:click="onDeleteClick" v-if="canBeDeleted">
+				<a href="" v-on:click="onDeleteClick" v-if="canBeDeleted && typeSupportsDeletion">
 					<span>{{ strings.delete }}</span>
 				</a>
-				<span v-if="canBeDeleted"> | </span>
+				<span v-if="canBeDeleted && typeSupportsDeletion"> | </span>
 				<a class="cboxol-entity-edit" href="" v-on:click="onAccordionClick">
 					<span v-if="isCollapsed">{{ strings.edit }}</span>
 					<span v-else>{{ strings.editing }}</span>
@@ -264,6 +264,10 @@
 				const templateSite = this.getEntityProp( 'templateSite' )
 				return templateSite.adminUrl
 			},
+
+			typeSupportsDeletion() {
+				return 'groupType' !== this.entityType
+			}
 		},
 
 		methods: {
