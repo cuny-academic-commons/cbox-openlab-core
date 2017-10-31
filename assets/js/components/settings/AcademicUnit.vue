@@ -206,7 +206,6 @@
 				.then( function( data ) {
 					unit.addNewIsLoading = false
 					unit.isEditing = false
-					unit.academicUnit = data
 
 					unit.$store.commit( 'orderEntities', {
 						itemsKey: 'academicUnits',
