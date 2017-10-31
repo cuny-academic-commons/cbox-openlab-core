@@ -609,22 +609,11 @@ function openlab_is_my_portfolio() {
 
 /**
  * On portfolio group deletion, also do the following:
- *  - Mark blog as deleted
  *  - Delete user metadata regarding portfolio affiliation
  */
 function openlab_delete_portfolio( $group_id ) {
 	if ( !cboxol_is_portfolio( $group_id ) ) {
 		return;
-	}
-
-	// This'll only find internal blogs, of course
-	$site_id = openlab_get_site_id_by_group_id( $group_id );
-
-	if ( $site_id ) {
-		if ( !function_exists( 'wpmu_delete_blog' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/ms.php' );
-		}
-		wpmu_delete_blog( $site_id );
 	}
 
 	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
