@@ -11,6 +11,7 @@
 		</ul>
 
 		<AddNewEntityLink
+			v-if="supportsAdding"
 			:entityType="entityType"
 			:text="addNewText"
 		/>
@@ -35,6 +36,9 @@
 			},
 			entityNames() {
 				return this.$store.state[ this.namesKey ]
+			},
+			supportsAdding() {
+				return 'groupType' !== this.entityType
 			}
 		},
 
