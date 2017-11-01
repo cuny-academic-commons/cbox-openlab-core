@@ -70,6 +70,7 @@ function cboxol_academic_units_main_admin_page() {
 			'parent' => '',
 			'type' => $academic_unit_type->get_slug(),
 			'slug' => $unit_slug,
+			'isEditing' => false,
 		);
 	}
 

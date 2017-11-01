@@ -84,6 +84,20 @@
 				return this.strings.selectUnit.replace( '%s', this.academicUnit.name )
 			},
 
+			isEditing: {
+				get() {
+					return this.$store.state.academicUnits[ this.slug ].isEditing
+				},
+				set( value ) {
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'isEditing',
+						slug: this.slug,
+						value
+					} )
+				}
+			},
+
 			parentName() {
 				const parentSlug = this.academicUnit.parent
 				let name = ''
@@ -116,7 +130,6 @@
 
 		data() {
 			return {
-				isEditing: false,
 				unitName: '',
 				unitOrder: '',
 				unitParent: ''
@@ -161,7 +174,18 @@
 
 			onEditClick( event ) {
 				event.preventDefault()
+
+				let unitName
+				for ( unitName in this.$store.state.academicUnits ) {
+					this.$store.commit( 'setEntityProperty', {
+						itemsKey: 'academicUnits',
+						property: 'isEditing',
+						slug: unitName,
+						value: false
+					} )
+				}
 				this.isEditing = ! this.isEditing
+				this.setUpFormData()
 			},
 
 			onSaveClick( event ) {
