@@ -107,7 +107,7 @@
 			</div>
 
 			<!-- durrrrr -->
-			<div v-if="'group' === objectType && 'itemType' === entityType" class="cboxol-entity-content-section item-type-template">
+			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.template }}</h3>
 
 				<p>{{ strings.templateSiteDescription }}</p>
