@@ -146,6 +146,7 @@ class Install {
 					'section_code' => __( 'Section Code', 'cbox-openlab-core' ),
 					'group_site' => __( 'Course Site', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Course Site', 'cbox-openlab-core' ),
+					'group_profile' => __( 'Course Profile', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -182,6 +183,7 @@ class Install {
 					'visit_portfolio_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
 					'group_site' => __( 'Portfolio Site', 'cbox-openlab-core' ),
+					'group_profile' => __( 'Portfolio Profile', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -210,6 +212,7 @@ class Install {
 					'my_groups' => __( 'My Clubs', 'cbox-openlab-core' ),
 					'group_site' => __( 'Club Site', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Club Site', 'cbox-openlab-core' ),
+					'group_profile' => __( 'Club Profile', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -238,6 +241,7 @@ class Install {
 					'my_groups' => __( 'My Projects', 'cbox-openlab-core' ),
 					'group_site' => __( 'Project Site', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Project Site', 'cbox-openlab-core' ),
+					'group_profile' => __( 'Project Profile', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,

@@ -115,6 +115,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'section_code',
 				'group_site',
 				'visit_group_site',
+				'group_profile',
 			),
 			'portfolio' => array(
 				'singular',
@@ -125,6 +126,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'visit_portfolio_site',
 				'group_site',
 				'visit_group_site',
+				'group_profile',
 			),
 			'default' => array(
 				'singular',
@@ -132,6 +134,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'my_groups',
 				'group_site',
 				'visit_group_site',
+				'group_profile',
 			),
 		);
 
@@ -209,6 +212,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'create_item',
 				'label' => __( 'Create Item', 'cbox-openlab-core' ),
 				'description' => __( 'The text used for "Create" links.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'group_profile' => array(
+				'slug' => 'group_profile',
+				'label' => __( 'Group Profile', 'cbox-openlab-core' ),
+				'description' => __( 'Used to create a Profile link in the nav menu of a group site.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'group_site' => array(
