@@ -327,8 +327,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 		if ( 'random' === $key ) {
 			shuffle( $portfolios );
 		} else {
-			usort( $portfolios, create_function( '$a, $b', '
-				$key = "' . $key . '";
+			usort( $portfolios, function( $a, $b ) use ( $key ) {
 				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
 				$cmp = strcasecmp( $values[0], $values[1] );
 
@@ -340,7 +339,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 					$retval = 0;
 				}
 				return $retval;
-			' ) );
+			} );
 		}
 
 		groups_update_groupmeta( $group_id, $cache_key, $portfolios );
