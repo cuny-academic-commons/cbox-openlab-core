@@ -192,6 +192,9 @@ const store = new Vuex.Store({
 					order_b = state[ itemsKey ][ b ].settings.Order.data
 				}
 
+				order_a = parseInt( order_a )
+				order_b = parseInt( order_b )
+
 				if ( order_a == order_b ) {
 					return 0
 				}
