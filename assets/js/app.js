@@ -178,6 +178,10 @@ const store = new Vuex.Store({
 			let newEntityNames = state[ namesKey ]
 
 			newEntityNames.sort( function( a, b ) {
+				if ( '_new' === a.substr( 0, 4 ) ) {
+					return -1
+				}
+
 				let order_a
 				if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
 					order_a = state[ itemsKey ][ a ].order
@@ -196,7 +200,7 @@ const store = new Vuex.Store({
 				order_b = parseInt( order_b )
 
 				if ( order_a == order_b ) {
-					return 0
+					return state[ itemsKey ][ a ].name > state[ itemsKey ][ b ].name
 				}
 
 				return order_a > order_b

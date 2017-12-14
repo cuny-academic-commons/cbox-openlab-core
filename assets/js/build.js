@@ -208,6 +208,10 @@ var store = new _vuex2.default.Store({
 			var newEntityNames = state[namesKey];
 
 			newEntityNames.sort(function (a, b) {
+				if ('_new' === a.substr(0, 4)) {
+					return -1;
+				}
+
 				var order_a = void 0;
 				if (state[itemsKey][a].hasOwnProperty('order')) {
 					order_a = state[itemsKey][a].order;
@@ -226,7 +230,7 @@ var store = new _vuex2.default.Store({
 				order_b = parseInt(order_b);
 
 				if (order_a == order_b) {
-					return 0;
+					return state[itemsKey][a].name > state[itemsKey][b].name;
 				}
 
 				return order_a > order_b;
