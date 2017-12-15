@@ -1600,6 +1600,7 @@ function cboxol_add_links_to_nav_menu( $items ) {
 			$profile_item->title = $group_type->get_label( 'group_profile' );
 			$profile_item->slug = 'group-profile-link';
 			$profile_item->url = bp_get_group_permalink( $group );
+			$profile_item->classes = array();
 
 			$new_items[] = $profile_item;
 		}
@@ -1621,6 +1622,7 @@ function cboxol_add_links_to_nav_menu( $items ) {
 		$home_link->url = trailingslashit( site_url() );
 		$home_link->slug = 'home';
 		$home_link->ID = 'home';
+		$home_link->classes = array();
 		$new_items[] = $home_link;
 	}
 
