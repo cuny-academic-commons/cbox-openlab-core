@@ -122,3 +122,44 @@ function cboxol_is_brand_page( $page_type, $post_id = null ) {
 
 	return $brand_pages[ $page_type ]['id'] === $post_id;
 }
+
+/**
+ * Default avatar.
+ *
+ * @return type
+ */
+function cboxol_default_avatar( $size = 'full' ) {
+	$size_suffix = 'full' === $size ? '-full' : '-thumb';
+	return CBOXOL_PLUGIN_URL . 'assets/img/default-avatar' . $size_suffix . '.png';
+}
+
+add_filter( 'bp_core_avatar_full', function( $full ) {
+	return cboxol_default_avatar( 'full' );
+} );
+add_filter( 'bp_core_avatar_thumb', function( $thumb ) {
+	return cboxol_default_avatar( 'thumb' );
+} );
+
+/**
+ * Force default avatar instead of wavatar.
+ *
+ * @param string $url
+ * @param type   $params
+ * @return string
+ */
+function cboxol_default_get_group_avatar( $url, $params ) {
+	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
+		$url = cboxol_default_avatar( 'full' );
+	}
+
+	return $url;
+}
+add_filter( 'bp_core_fetch_avatar_url', 'cboxol_default_get_group_avatar', 10, 2 );
+
+function cboxol_default_group_avatar_img( $html ) {
+	$bp_default = buddypress()->plugin_url . 'bp-core/images/mystery-group.png';
+	$ol_default = cboxol_default_avatar( 'full' );
+	return str_replace( $bp_default, $ol_default, $html );
+}
+add_filter( 'bp_core_fetch_avatar', 'cboxol_default_group_avatar_img' );
+
