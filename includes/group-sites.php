@@ -1588,7 +1588,7 @@ function cboxol_add_links_to_nav_menu( $items ) {
 
 	$new_items = array();
 
-	// Add Group Profile link.
+	// Add Group Home link.
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 	if ( $group_id ) {
 		$group_type = cboxol_get_group_group_type( $group_id );
@@ -1597,10 +1597,10 @@ function cboxol_add_links_to_nav_menu( $items ) {
 			$post_args = new stdClass;
 			$profile_item = new WP_Post( $post_args );
 			$profile_item->ID = 'group-profile-link';
-			$profile_item->title = $group_type->get_label( 'group_home' );
+			$profile_item->title = '[ ' . $group_type->get_label( 'group_home' ) . ' ]';
 			$profile_item->slug = 'group-profile-link';
 			$profile_item->url = bp_get_group_permalink( $group );
-			$profile_item->classes = array();
+			$profile_item->classes = array( 'group-profile-link' );
 
 			$new_items[] = $profile_item;
 		}
