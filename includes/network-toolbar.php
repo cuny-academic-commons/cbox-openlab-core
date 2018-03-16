@@ -39,6 +39,15 @@ function openlab_get_color_scheme() {
 	return $color_scheme;
 }
 
+/**
+ * Gets the URL of the default CBOX-OL logo, for display in the toolbar.
+ *
+ * @return string
+ */
+function cboxol_get_default_logo_url() {
+	return CBOXOL_PLUGIN_URL . 'assets/img/cboxol-logo-horizontal-185.png';
+}
+
 function openlab_get_logo_url() {
 	$url = '';
 
@@ -48,8 +57,10 @@ function openlab_get_logo_url() {
 		$switched = true;
 	}
 
+	// This is the default logo, shipped with the plugin.
+	$image = array( cboxol_get_default_logo_url() );
+
 	$custom_logo_id = get_theme_mod( 'openlab_logo' );
-	$image = '';
 	if ( $custom_logo_id ) {
 		$image = wp_get_attachment_image_src( $custom_logo_id, 'full', false );
 	}
@@ -74,27 +85,21 @@ function openlab_get_logo_html( $link = true ) {
 
 	$custom_logo_id = get_theme_mod( 'openlab_logo' );
 
-	$atts = '';
 	if ( $custom_logo_id ) {
-		$atts = 'rel="home" itemprop="url"';
 		$logo_html = wp_get_attachment_image( $custom_logo_id, 'full', false, array(
 			'class'    => 'custom-logo',
 			'itemprop' => 'logo',
 		) );
-	}
-
-	// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
-	elseif ( is_customize_preview() ) {
-		$atts = 'style="display:none;';
-		$logo_html = '<img class="custom-logo"/>';
 	} else {
-		$logo_html = esc_html( get_option( 'blogname' ) );
+		$logo_html = sprintf(
+			'<img src="%s" class="custom-logo default-cboxol-logo" alt="CBOX-OL Logo" />',
+			esc_url( cboxol_get_default_logo_url() )
+		);
 	}
 
 	if ( $link ) {
-		$logo_html = sprintf( '<a href="%1$s" class="custom-logo-link" %2$s>%3$s</a>',
+		$logo_html = sprintf( '<a href="%1$s" class="custom-logo-link" rel="home" itemprop="url">%2$s</a>',
 			esc_url( home_url( '/' ) ),
-			$atts,
 			$logo_html
 		);
 	}
