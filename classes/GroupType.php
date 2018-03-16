@@ -122,7 +122,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'status_private_open_site',
 				'status_private_private_site',
 				'visit_group_site',
-				'group_profile',
+				'group_home',
 			),
 			'portfolio' => array(
 				'singular',
@@ -140,7 +140,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'status_private_open_site',
 				'status_private_private_site',
 				'visit_group_site',
-				'group_profile',
+				'group_home',
 			),
 			'default' => array(
 				'singular',
@@ -155,7 +155,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'status_private_open_site',
 				'status_private_private_site',
 				'visit_group_site',
-				'group_profile',
+				'group_home',
 			),
 		);
 
@@ -235,10 +235,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'description' => __( 'The text used for "Create" links.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
-			'group_profile' => array(
-				'slug' => 'group_profile',
-				'label' => __( 'Group Profile', 'cbox-openlab-core' ),
-				'description' => __( 'Used to create a Profile link in the nav menu of a group site.', 'cbox-openlab-core' ),
+			'group_home' => array(
+				'slug' => 'group_home',
+				'label' => __( 'Group Home', 'cbox-openlab-core' ),
+				'description' => __( 'Used to create a Home link in a group\'s nav menus.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'group_site' => array(

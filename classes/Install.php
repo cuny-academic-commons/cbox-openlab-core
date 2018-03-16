@@ -153,7 +153,7 @@ class Install {
 					'status_private_open_site' => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
 					'status_private_private_site' => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Course Site', 'cbox-openlab-core' ),
-					'group_profile' => __( 'Course Profile', 'cbox-openlab-core' ),
+					'group_home' => __( 'Course Home', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -197,7 +197,7 @@ class Install {
 					'visit_portfolio_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
 					'group_site' => __( 'Portfolio Site', 'cbox-openlab-core' ),
-					'group_profile' => __( 'Portfolio Profile', 'cbox-openlab-core' ),
+					'group_home' => __( 'Portfolio Home', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -233,7 +233,7 @@ class Install {
 					'status_private_open_site' => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
 					'status_private_private_site' => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Club Site', 'cbox-openlab-core' ),
-					'group_profile' => __( 'Club Profile', 'cbox-openlab-core' ),
+					'group_home' => __( 'Club Home', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -269,7 +269,7 @@ class Install {
 					'status_private_open_site' => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
 					'status_private_private_site' => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
 					'visit_group_site' => __( 'Visit Project Site', 'cbox-openlab-core' ),
-					'group_profile' => __( 'Project Profile', 'cbox-openlab-core' ),
+					'group_home' => __( 'Project Home', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
