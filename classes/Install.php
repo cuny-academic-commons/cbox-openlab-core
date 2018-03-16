@@ -141,6 +141,7 @@ class Install {
 					'plural' => __( 'Courses', 'cbox-openlab-core' ),
 					'create_clone_item' => __( 'Create/Clone Course', 'cbox-openlab-core' ),
 					'create_item_help_text' => __( 'Set up the name, URL, avatar, and other settings and permissions for your course. These settings affect the course home, discussion, docs, and files.', 'cbox-openlab-core' ),
+					'clone_help_text' => __( 'Note: Cloning copies the course home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Courses', 'cbox-openlab-core' ),
 					'course_code' => __( 'Course Code', 'cbox-openlab-core' ),
 					'course_information' => __( 'Course Information', 'cbox-openlab-core' ),

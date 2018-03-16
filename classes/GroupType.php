@@ -110,6 +110,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'plural',
 				'create_clone_item',
 				'create_item_help_text',
+				'clone_help_text',
 				'my_groups',
 				'course_information',
 				'course_information_description',
@@ -258,6 +259,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'create_item_help_text',
 				'label' => __( 'Creation Explanatory Text', 'cbox-openlab-core' ),
 				'description' => __( 'Displayed near the top of the creation screen.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'clone_help_text' => array(
+				'slug' => 'clone_help_text',
+				'label' => __( 'Clone Help Text', 'cbox-openlab-core' ),
+				'description' => __( 'Used to clarify the cloning process during creation.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'group_home' => array(
