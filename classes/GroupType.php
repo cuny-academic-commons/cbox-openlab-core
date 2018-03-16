@@ -108,6 +108,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 			'course' => array(
 				'singular',
 				'plural',
+				'create_clone_item',
 				'my_groups',
 				'course_information',
 				'course_information_description',
@@ -128,6 +129,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'singular',
 				'plural',
 				'create_item',
+				'create_clone_item',
 				'my_portfolio',
 				'my_portfolio_site',
 				'visit_portfolio_site',
@@ -145,6 +147,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 			'default' => array(
 				'singular',
 				'plural',
+				'create_clone_item',
 				'my_groups',
 				'group_site',
 				'status_open',
@@ -209,6 +212,13 @@ class GroupType extends ItemTypeBase implements ItemType {
 		return $dummy;
 	}
 
+	/**
+	 * Reminder on how to add a new label type:
+	 * 1. Add entry here
+	 * 2. Add slug to each group type above
+	 * 3. Add default values to classes/Install
+	 * 4. Run wp cboxol reset
+	 */
 	public function get_label_types() {
 		return array(
 			'course_code' => array(
@@ -233,6 +243,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'create_item',
 				'label' => __( 'Create Item', 'cbox-openlab-core' ),
 				'description' => __( 'The text used for "Create" links.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'create_clone_item' => array(
+				'slug' => 'create_clone_item',
+				'label' => __( 'Create/Clone Item', 'cbox-openlab-core' ),
+				'description' => __( 'The text used for "Create/Clone" links.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'group_home' => array(

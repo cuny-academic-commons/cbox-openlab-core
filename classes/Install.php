@@ -139,6 +139,7 @@ class Install {
 				'labels' => array(
 					'singular' => __( 'Course', 'cbox-openlab-core' ),
 					'plural' => __( 'Courses', 'cbox-openlab-core' ),
+					'create_clone_item' => __( 'Create/Clone Course', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Courses', 'cbox-openlab-core' ),
 					'course_code' => __( 'Course Code', 'cbox-openlab-core' ),
 					'course_information' => __( 'Course Information', 'cbox-openlab-core' ),
@@ -184,6 +185,7 @@ class Install {
 				'labels' => array(
 					'singular' => __( 'Portfolio', 'cbox-openlab-core' ),
 					'plural' => __( 'Portfolios', 'cbox-openlab-core' ),
+					'create_clone_item' => __( 'Create Portfolio', 'cbox-openlab-core' ),
 					'create_item' => __( 'Create Portfolio', 'cbox-openlab-core' ),
 					'my_portfolio' => __( 'My Portfolio', 'cbox-openlab-core' ),
 					'my_portfolio_site' => __( 'My Portfolio Site', 'cbox-openlab-core' ),
@@ -223,6 +225,7 @@ class Install {
 				'labels' => array(
 					'singular' => __( 'Club', 'cbox-openlab-core' ),
 					'plural' => __( 'Clubs', 'cbox-openlab-core' ),
+					'create_clone_item' => __( 'Create Club', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Clubs', 'cbox-openlab-core' ),
 					'group_site' => __( 'Club Site', 'cbox-openlab-core' ),
 					'status_open' => __( 'This Club is OPEN.', 'cbox-openlab-core' ),
@@ -259,6 +262,7 @@ class Install {
 				'labels' => array(
 					'singular' => __( 'Project', 'cbox-openlab-core' ),
 					'plural' => __( 'Projects', 'cbox-openlab-core' ),
+					'create_clone_item' => __( 'Create Project', 'cbox-openlab-core' ),
 					'my_groups' => __( 'My Projects', 'cbox-openlab-core' ),
 					'group_site' => __( 'Project Site', 'cbox-openlab-core' ),
 					'status_open' => __( 'This Project is OPEN.', 'cbox-openlab-core' ),
