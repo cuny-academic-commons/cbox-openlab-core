@@ -7,15 +7,15 @@ function openlab_color_schemes() {
 	return array(
 		'red' => array(
 			'label' => __( 'Red', 'openlab-theme' ),
-			'icon_color' => '#c32e10',
+			'icon_color' => '#a9280e',
 		),
 		'blue' => array(
 			'label' => __( 'Blue', 'openlab-theme' ),
-			'icon_color' => '#3170a4',
+			'icon_color' => '#1d5f7b',
 		),
 		'green' => array(
 			'label' => __( 'Green', 'openlab-theme' ),
-			'icon_color' => '#88b956',
+			'icon_color' => '#b6d498',
 		),
 	);
 }
