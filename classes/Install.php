@@ -169,6 +169,7 @@ class Install {
 					'status_private_open_site' => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
 					'status_private_private_site' => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
 					'site_help_text' => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'cbox-openlab-core' ),
+					'site_address_help_text' => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),,
 					'visit_group_site' => __( 'Visit Course Site', 'cbox-openlab-core' ),
 					'group_home' => __( 'Course Home', 'cbox-openlab-core' ),
 				),
