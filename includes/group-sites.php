@@ -135,54 +135,6 @@ function cboxol_save_group_extras( $group ) {
 		groups_update_groupmeta( $group->id, 'wds_group_project_type', $_POST['group_project_type'] );
 	}
 
-	// Site association. Non-portfolios have the option of not having associated sites (thus the
-	// set-up-site-toggle value).
-	$group_type = cboxol_get_group_group_type( $group->id );
-	if ( isset( $_POST['set-up-site-toggle'] ) || ( ! is_wp_error( $group_type ) && $group_type->get_requires_site() ) ) {
-		if ( isset( $_POST['new_or_old'] ) && 'new' == $_POST['new_or_old'] ) {
-
-			// Create a new site
-			cboxol_copy_blog_page( $group->id );
-		} elseif ( isset( $_POST['new_or_old'] ) && 'old' == $_POST['new_or_old'] && isset( $_POST['groupblog-blogid'] ) ) {
-
-			// Associate an existing site
-			cboxol_set_group_site_id( $group->id, (int) $_POST['groupblog-blogid'] );
-		} elseif ( isset( $_POST['new_or_old'] ) && 'external' == $_POST['new_or_old'] && isset( $_POST['external-site-url'] ) ) {
-
-			// External site
-			// Some validation
-			$url = openlab_validate_url( $_POST['external-site-url'] );
-			groups_update_groupmeta( $group->id, 'external_site_url', $url );
-
-			if ( ! empty( $_POST['external-site-type'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_type', $_POST['external-site-type'] );
-			}
-
-			if ( ! empty( $_POST['external-posts-url'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-posts-url'] );
-			}
-
-			if ( ! empty( $_POST['external-comments-url'] ) ) {
-				groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-comments-url'] );
-			}
-		}
-
-		$group_type = cboxol_get_group_group_type( $group->id );
-		if ( ! is_wp_error( $group_type ) && $group_type->get_is_portfolio() ) {
-			openlab_associate_portfolio_group_with_user( $group->id, bp_loggedin_user_id() );
-		}
-	}
-
-	// Site privacy
-	if ( isset( $_POST['blog_public'] ) ) {
-		$blog_public = (float) $_POST['blog_public'];
-		$site_id = openlab_get_site_id_by_group_id( $group->id );
-
-		if ( $site_id ) {
-			update_blog_option( $site_id, 'blog_public', $blog_public );
-		}
-	}
-
 	// Portfolio list display
 	if ( isset( $_POST['group-portfolio-list-heading'] ) ) {
 		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
@@ -1308,7 +1260,7 @@ function cboxol_copy_blog_page( $group_id ) {
 	// @todo subdomain support
 	$src_id = intval( $_POST['source_blog'] );
 
-	$title = $_POST['group-name'];
+	$title = $group->name;
 
 	$msg = '';
 	if ( ! $src_id ) {
