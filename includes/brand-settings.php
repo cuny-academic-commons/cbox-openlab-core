@@ -50,7 +50,7 @@ function cboxol_get_brand_page_types() {
 			'settings_page_description' => __( 'Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
 		),
 		'terms-of-use' => array(
-			'settings_page_title' => __( 'Contact Page', 'cbox-openlab-core' ),
+			'settings_page_title' => __( 'Terms of Use', 'cbox-openlab-core' ),
 			'settings_page_description' => __( 'Blanditiis quia autem culpa voluptate. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
 			'parent' => 'about',
 		),
