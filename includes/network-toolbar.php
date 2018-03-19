@@ -404,8 +404,8 @@ class OpenLab_Admin_Bar {
 	}
 
 	function remove_bp_admin_bar_styles( $styles ) {
-
-		return array();
+		unset( $styles['bp-admin-bar'] );
+		return $styles;
 	}
 
 		/**
