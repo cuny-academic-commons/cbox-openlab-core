@@ -637,16 +637,25 @@ class Install {
 			CBox_Widget_Setter::set_widget( array(
 				'id_base'    => 'openlab-whats-happening',
 				'sidebar_id' => 'home-sidebar',
+				'settings'   => array(
+					'title' => __( 'What\'s Happening?', 'openlab-theme' ),
+				),
 			) );
 
 			CBox_Widget_Setter::set_widget( array(
 				'id_base'    => 'openlab-whos-online',
 				'sidebar_id' => 'home-sidebar',
+				'settings'   => array(
+					'title' => __( 'Who\'s Online?', 'openlab-theme' ),
+				),
 			) );
 
 			CBox_Widget_Setter::set_widget( array(
 				'id_base'    => 'openlab-new-members',
 				'sidebar_id' => 'home-sidebar',
+				'settings'   => array(
+					'title' => __( 'New Members', 'openlab-theme' ),
+				),
 			) );
 		}
 
