@@ -195,3 +195,27 @@ function cboxol_maybe_install() {
 // Hack - disable BuddyPress Docs attachments.
 add_filter( 'bp_docs_enable_attachments', '__return_false' );
 
+/**
+ * Force all BP components to be enabled.
+ */
+function cboxol_force_bp_components( $components ) {
+	$core_components = array(
+		'xprofile',
+		'settings',
+		'friends',
+		'messages',
+		'activity',
+		'notifications',
+		'groups',
+		'blogs',
+		'members',
+	);
+
+	foreach ( $core_components as $component ) {
+		$components[ $component ] = 1;
+	}
+
+	return $components;
+}
+add_action( 'bp_active_components', 'cboxol_force_bp_components' );
+add_action( 'pre_update_option_bp-active-components', 'cboxol_force_bp_components' );
