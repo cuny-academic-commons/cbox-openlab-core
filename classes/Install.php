@@ -25,6 +25,7 @@ class Install {
 		$this->install_default_widgets();
 		$this->install_default_nav_menus();
 		$this->install_default_slides();
+		$this->install_default_footer();
 	}
 
 	public function upgrade() { }
@@ -881,5 +882,23 @@ class Install {
 
 			set_post_thumbnail( $slide_id, $attachment_id );
 		}
+	}
+
+	protected function install_default_footer() {
+		$left_heading = __( 'Header Number One', 'cbox-openlab-core' );
+		$left_content = '<div class="col-md-4"><img src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" style="width:100%" /></div>
+
+<div class="col-md-20">
+<p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+</div>';
+
+		set_theme_mod( 'openlab_footer_left_heading', $left_heading );
+		set_theme_mod( 'openlab_footer_left_content', $left_content );
+
+		$middle_heading = __( 'Header Number Two', 'cbox-openlab-core' );
+		$middle_content = '<p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>';
+
+		set_theme_mod( 'openlab_footer_middle_heading', $middle_heading );
+		set_theme_mod( 'openlab_footer_middle_content', $middle_content );
 	}
 }
