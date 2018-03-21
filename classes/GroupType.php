@@ -144,6 +144,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'site_feed_check_help_text',
 				'visit_group_site',
 				'group_home',
+				'settings_help_text_discussion',
+				'settings_help_text_calendar',
+				'settings_help_text_calendar_members',
+				'settings_help_text_calendar_admins',
+				'settings_help_text_relatedlinks',
+				'settings_help_text_portfoliolist',
 			),
 			'portfolio' => array(
 				'singular',
@@ -182,6 +188,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'site_feed_check_help_text',
 				'visit_group_site',
 				'group_home',
+				'settings_help_text_relatedlinks',
 			),
 			'default' => array(
 				'singular',
@@ -217,6 +224,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'site_feed_check_help_text',
 				'visit_group_site',
 				'group_home',
+				'settings_help_text_discussion',
+				'settings_help_text_calendar',
+				'settings_help_text_calendar_members',
+				'settings_help_text_calendar_admins',
+				'settings_help_text_relatedlinks',
+				'settings_help_text_portfoliolist',
 			),
 		);
 
@@ -529,6 +542,42 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'visit_portfolio_site',
 				'label' => _x( 'Visit Portfolio Site', 'Group Type label', 'cbox-openlab-core' ),
 				'description' => __( 'Used as the link to another user\'s portfolio site.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'settings_help_text_discussion' => array(
+				'slug' => 'settings_help_text_discussion',
+				'label' => __( 'Settings Help Text - Discussion', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the Discussion Settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'settings_help_text_calendar' => array(
+				'slug' => 'settings_help_text_calendar',
+				'label' => __( 'Settings Help Text - Calendar', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the Calendar Settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'settings_help_text_calendar_members' => array(
+				'slug' => 'settings_help_text_calendar_members',
+				'label' => __( 'Settings Help Text - Calendar, Members Only', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the "Members Only" option on the Calendar Settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'settings_help_text_calendar_admins' => array(
+				'slug' => 'settings_help_text_calendar_admins',
+				'label' => __( 'Settings Help Text - Calendar, Admins Only', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the "Admins and Mods Only" option on the Calendar Settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'settings_help_text_relatedlinks' => array(
+				'slug' => 'settings_help_text_relatedlinks',
+				'label' => __( 'Settings Help Text - Related Links', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the Related Links List Settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'settings_help_text_portfoliolist' => array(
+				'slug' => 'settings_help_text_portfoliolist',
+				'label' => __( 'Settings Help Text - Portfolio List', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the Portfolio List Settings panel.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);
