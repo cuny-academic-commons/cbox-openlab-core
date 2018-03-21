@@ -1739,6 +1739,10 @@ function openlab_wrap_adminbar_bottom() {
 add_action( 'wp_after_admin_bar_render','openlab_wrap_adminbar_bottom' );
 
 function openlab_network_footer() {
+	if ( function_exists( 'openlab_site_footer' ) ) {
+		return;
+	}
+
 	$footer = get_site_transient( 'cboxol_network_footer' );
 
 	if ( ! $footer ) {
