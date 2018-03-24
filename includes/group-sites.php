@@ -521,7 +521,6 @@ function openlab_validate_groupblog_url() {
 		( isset( $_POST['set-up-site-toggle'] ) || $group_type_requires_site )
 	) {
 		// Which field we check depends on whether this is a clone
-		// @todo Support subdomains
 		$path = '';
 		if ( 'clone' == $_POST['new_or_old'] ) {
 			$path = wp_unslash( $_POST['clone-destination-path'] );
@@ -1268,7 +1267,6 @@ function cboxol_copy_blog_page( $group_id ) {
 		return $validate;
 	}
 
-	// @todo subdomain support
 	$src_id = intval( $_POST['source_blog'] );
 
 	$title = $group->name;
