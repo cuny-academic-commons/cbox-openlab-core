@@ -1738,6 +1738,11 @@ function openlab_wrap_adminbar_bottom() {
 
 add_action( 'wp_after_admin_bar_render','openlab_wrap_adminbar_bottom' );
 
+/**
+ * Fetch the network footer.
+ *
+ * Built on the main site, with markup stashed in a transient.
+ */
 function openlab_network_footer() {
 	if ( function_exists( 'openlab_site_footer' ) ) {
 		return;
