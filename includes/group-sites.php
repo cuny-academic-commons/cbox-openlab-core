@@ -459,6 +459,15 @@ add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
 ////////////////////////
 ///  MISCELLANEOUS   ///
 ////////////////////////
+
+/**
+ * Get the base for building subdomain URLs.
+ */
+function cboxol_get_subdomain_base() {
+	$current_network = get_network();
+	return preg_replace( '|^www\.|', '', $current_network->domain );
+}
+
 /**
  * Catch 'unlink-site' requests, process, and send back
  */
