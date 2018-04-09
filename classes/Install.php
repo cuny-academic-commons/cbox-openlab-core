@@ -785,6 +785,20 @@ class Install {
 			);
 		}
 
+		// Calendar.
+		if ( function_exists( 'eo_get_event_fullcalendar' ) ) {
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title' => __( 'Calendar', 'cbox-openlab-core' ),
+					'menu-item-classes' => 'sitewide-calendar',
+					'menu-item-url' => trailingslashit( bp_get_root_domain() ) . 'calendar/',
+					'menu-item-status' => 'publish',
+				)
+			);
+		}
+
 		if ( isset( $brand_pages['help'] ) ) {
 			wp_update_nav_menu_item(
 				$menu_id,
