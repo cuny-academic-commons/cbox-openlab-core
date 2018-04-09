@@ -152,6 +152,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_portfoliolist',
 				'invite_members_to_group',
 				'invite_community_members_to_group',
+				'search_for_members_to_invite_to_group',
 			),
 			'portfolio' => array(
 				'singular',
@@ -193,6 +194,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_relatedlinks',
 				'invite_members_to_group',
 				'invite_community_members_to_group',
+				'search_for_members_to_invite_to_group',
 			),
 			'default' => array(
 				'singular',
@@ -236,6 +238,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_portfoliolist',
 				'invite_members_to_group',
 				'invite_community_members_to_group',
+				'search_for_members_to_invite_to_group',
 			),
 		);
 
@@ -596,6 +599,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'invite_community_members_to_group',
 				'label' => __( 'Invite Community Members To Group', 'cbox-openlab-core' ),
 				'description' => __( 'Used as a header on group creation/settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'search_for_members_to_invite_to_group' => array(
+				'slug' => 'search_for_members_to_invite_to_group',
+				'label' => __( 'Search for Community Members to Invite to Group', 'cbox-openlab-core' ),
+				'description' => __( 'Used as help text when inviting community members to a group.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);

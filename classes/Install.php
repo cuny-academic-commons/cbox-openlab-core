@@ -184,6 +184,7 @@ class Install {
 					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'cbox-openlab-core' ),
 					'invite_members_to_group' => __( 'Invite Members to Course', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -251,6 +252,7 @@ class Install {
 					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'cbox-openlab-core' ),
 					'invite_members_to_group' => __( 'Invite Members to Portfolio', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Portfolio', 'cbox-openlab-core' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -315,6 +317,7 @@ class Install {
 					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'cbox-openlab-core' ),
 					'invite_members_to_group' => __( 'Invite Members to Club', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Club', 'cbox-openlab-core' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -379,6 +382,7 @@ class Install {
 					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'cbox-openlab-core' ),
 					'invite_members_to_group' => __( 'Invite Members to Project', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Project', 'cbox-openlab-core' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
