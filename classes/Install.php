@@ -631,8 +631,15 @@ class Install {
 	}
 
 	protected function install_default_settings() {
+		$brand_pages = cboxol_get_brand_pages();
+
 		update_site_option( 'cboxol_registration_form_settings', array(
-			'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'cbox-openlab-core' ),
+			'confirmationText' => sprintf(
+				/* translators: 1: TOS URL, 2: TOS page title */
+				__( 'By clicking "Complete Sign Up", you are agreeing to the <a href="%1$s">%2$s</a>.', 'cbox-openlab-core' ),
+				esc_url( $brand_pages['terms-of-use']['preview_url'] ),
+				esc_html( $brand_pages['terms-of-use']['title'] )
+			),
 		) );
 	}
 
