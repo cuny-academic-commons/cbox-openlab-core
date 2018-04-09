@@ -150,6 +150,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_calendar_admins',
 				'settings_help_text_relatedlinks',
 				'settings_help_text_portfoliolist',
+				'invite_members_to_group',
 			),
 			'portfolio' => array(
 				'singular',
@@ -189,6 +190,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'visit_group_site',
 				'group_home',
 				'settings_help_text_relatedlinks',
+				'invite_members_to_group',
 			),
 			'default' => array(
 				'singular',
@@ -230,6 +232,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_calendar_admins',
 				'settings_help_text_relatedlinks',
 				'settings_help_text_portfoliolist',
+				'invite_members_to_group',
 			),
 		);
 
@@ -578,6 +581,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'settings_help_text_portfoliolist',
 				'label' => __( 'Settings Help Text - Portfolio List', 'cbox-openlab-core' ),
 				'description' => __( 'Help text for the Portfolio List Settings panel.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'invite_members_to_group' => array(
+				'slug' => 'invite_members_to_group',
+				'label' => __( 'Invite Members To Group', 'cbox-openlab-core' ),
+				'description' => __( 'Used in group invitation navigation.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);

@@ -182,6 +182,7 @@ class Install {
 					'settings_help_text_calendar_admins' => __( 'Only administrators and moderators may connect events to this course.', 'cbox-openlab-core' ),
 					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your course home page.', 'cbox-openlab-core' ),
 					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group' => __( 'Invite Members to Course', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -247,6 +248,7 @@ class Install {
 					'group_site' => __( 'Portfolio Site', 'cbox-openlab-core' ),
 					'group_home' => __( 'Portfolio Home', 'cbox-openlab-core' ),
 					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group' => __( 'Invite Members to Portfolio', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -309,6 +311,7 @@ class Install {
 					'settings_help_text_calendar_admins' => __( 'Only administrators and moderators may connect events to this club.', 'cbox-openlab-core' ),
 					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your club home page.', 'cbox-openlab-core' ),
 					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group' => __( 'Invite Members to Club', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -371,6 +374,7 @@ class Install {
 					'settings_help_text_calendar_admins' => __( 'Only administrators and moderators may connect events to this project.', 'cbox-openlab-core' ),
 					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your project home page.', 'cbox-openlab-core' ),
 					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group' => __( 'Invite Members to Project', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
