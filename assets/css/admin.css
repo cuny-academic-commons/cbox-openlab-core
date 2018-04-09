@@ -188,6 +188,10 @@ a .action-arrow {
 	margin-top: 36px;
 }
 
+.form-customization-section input[type="text"] {
+	width: 100%;
+}
+
 .email-domains-domain {
 	width: 40%;
 }

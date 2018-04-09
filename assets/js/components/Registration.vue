@@ -56,6 +56,31 @@
 				</template>
 			</div>
 		</div>
+
+		<div class="registration-section form-customization-section">
+			<h2>{{ strings.formCustomization }}</h2>
+
+			<p>{{ strings.formCustomizationLegend }}</p>
+
+			<table class="form-table">
+				<tr class="confirmation-text">
+					<th>{{ strings.confirmationText }}</th>
+					<td>
+						<input
+							class="confirmation-text-entry"
+							type="text"
+							v-model="confirmationText"
+						/>
+						<p class="description">{{ strings.confirmationTextLegend }}</p>
+					</td>
+				</tr>
+			</table>
+
+			<button
+				class="button-primary"
+				v-on:click="onSaveClick"
+			>{{ strings.formCustomizationSave }}</button>
+		</div>
 	</div>
 </template>
 
@@ -74,6 +99,7 @@
 			NewSignupCode,
 			SignupCodeRow
 		},
+
 		computed: {
 			emailDomains() {
 				return this.$store.state.emailDomains
@@ -95,8 +121,47 @@
 			}
 		},
 
+		data() {
+			return {
+				confirmationText: ''
+			}
+		},
+
+		methods: {
+			onSaveClick( e ) {
+				// To avoid scope issues in the callback.
+				let nsc = this
+
+				this.isLoading = true
+
+				const payload = {
+					settings: {
+						confirmationText: this.confirmationText
+					}
+				}
+
+				nsc.$store.dispatch( 'submitRegistrationFormSettings', payload )
+					.then( nsc.checkStatus )
+					.then( nsc.parseJSON )
+					.then( function( data ) {
+						nsc.isLoading = false
+						return;
+						nsc.$store.commit( 'setSignupCode', { key: data.wpPostId, signupCode: data } )
+						nsc.code = ''
+						nsc.group = { name: '', slug: '' }
+						nsc.memberTypeSlug = ''
+					}, function( data ) {
+						nsc.isLoading = false
+					} )
+			}
+		},
+
 		mixins: [
 			i18nTools
-		]
+		],
+
+		mounted() {
+			this.confirmationText = this.$store.state.registrationFormSettings.confirmationText
+		}
 	}
 </script>

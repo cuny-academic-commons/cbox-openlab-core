@@ -36,6 +36,7 @@ var store = new _vuex2.default.Store({
 		isLoading: {},
 		memberTypes: [],
 		objectType: '',
+		registrationFormSettings: {},
 		signupCodes: {},
 		strings: CBOXOLStrings.strings,
 		subapp: '',
@@ -138,6 +139,19 @@ var store = new _vuex2.default.Store({
 					'X-WP-Nonce': CBOXOLStrings.nonce
 				},
 				body: JSON.stringify(body)
+			});
+		},
+		submitRegistrationFormSettings: function submitRegistrationFormSettings(commit, payload) {
+			var endpoint = CBOXOLStrings.endpointBase + 'registration-form-settings/';
+
+			return (0, _isomorphicFetch2.default)(endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				},
+				body: JSON.stringify(payload)
 			});
 		},
 		submitSignupCode: function submitSignupCode(commit, payload) {
@@ -1357,6 +1371,7 @@ exports.default = {
 		NewSignupCode: _NewSignupCode2.default,
 		SignupCodeRow: _SignupCodeRow2.default
 	},
+
 	computed: {
 		emailDomains: function emailDomains() {
 			return this.$store.state.emailDomains;
@@ -1378,13 +1393,49 @@ exports.default = {
 		}
 	},
 
-	mixins: [_i18nTools2.default]
+	data: function data() {
+		return {
+			confirmationText: ''
+		};
+	},
+
+
+	methods: {
+		onSaveClick: function onSaveClick(e) {
+			var nsc = this;
+
+			this.isLoading = true;
+
+			var payload = {
+				settings: {
+					confirmationText: this.confirmationText
+				}
+			};
+
+			nsc.$store.dispatch('submitRegistrationFormSettings', payload).then(nsc.checkStatus).then(nsc.parseJSON).then(function (data) {
+				nsc.isLoading = false;
+				return;
+				nsc.$store.commit('setSignupCode', { key: data.wpPostId, signupCode: data });
+				nsc.code = '';
+				nsc.group = { name: '', slug: '' };
+				nsc.memberTypeSlug = '';
+			}, function (data) {
+				nsc.isLoading = false;
+			});
+		}
+	},
+
+	mixins: [_i18nTools2.default],
+
+	mounted: function mounted() {
+		this.confirmationText = this.$store.state.registrationFormSettings.confirmationText;
+	}
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('NewEmailDomain'),_vm._v(" "),_c('div',{staticClass:"email-domains"},[(_vm.hasEmailDomains)?[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])]:[_vm._v("\n\t\t\t\t"+_vm._s(_vm.strings.noEmailDomains)+"\n\t\t\t")]],2)],1),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))]),_vm._v(" "),_c('NewSignupCode'),_vm._v(" "),_c('div',{staticClass:"signup-codes"},[(_vm.hasSignupCodes)?[_c('table',{staticClass:"cboxol-item-table signup-codes-table"},[_c('thead',[_c('th',{staticClass:"signup-domains-code"},[_vm._v(_vm._s(_vm.strings.code))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-member-type"},[_vm._v(_vm._s(_vm.strings.memberType))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-group"},[_vm._v(_vm._s(_vm.strings.group))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.signupCodes),function(signupCode,wpPostId){return _c("signupCodeRow",{tag:"div",attrs:{"wpPostId":wpPostId}})}))])]:[_vm._v("\n\t\t\t\t"+_vm._s(_vm.strings.noSignupCodes)+"\n\t\t\t")]],2)],1)])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelist))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.emailDomainWhitelistLegend))]),_vm._v(" "),_c('NewEmailDomain'),_vm._v(" "),_c('div',{staticClass:"email-domains"},[(_vm.hasEmailDomains)?[_c('table',{staticClass:"cboxol-item-table email-domains-table"},[_c('thead',[_c('th',{staticClass:"email-domains-domain"},[_vm._v(_vm._s(_vm.strings.domain))]),_vm._v(" "),_c('th',{staticClass:"email-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.emailDomains),function(emailDomain,index){return _c("emailDomainRow",{tag:"div",attrs:{"domainKey":index}})}))])]:[_vm._v("\n\t\t\t\t"+_vm._s(_vm.strings.noEmailDomains)+"\n\t\t\t")]],2)],1),_vm._v(" "),_c('div',{staticClass:"registration-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.signUpCodes))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.signUpCodesLegend))]),_vm._v(" "),_c('NewSignupCode'),_vm._v(" "),_c('div',{staticClass:"signup-codes"},[(_vm.hasSignupCodes)?[_c('table',{staticClass:"cboxol-item-table signup-codes-table"},[_c('thead',[_c('th',{staticClass:"signup-domains-code"},[_vm._v(_vm._s(_vm.strings.code))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-member-type"},[_vm._v(_vm._s(_vm.strings.memberType))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-group"},[_vm._v(_vm._s(_vm.strings.group))]),_vm._v(" "),_c('th',{staticClass:"signup-domains-action"},[_vm._v(_vm._s(_vm.strings.action))])]),_vm._v(" "),_c('tbody',_vm._l((_vm.signupCodes),function(signupCode,wpPostId){return _c("signupCodeRow",{tag:"div",attrs:{"wpPostId":wpPostId}})}))])]:[_vm._v("\n\t\t\t\t"+_vm._s(_vm.strings.noSignupCodes)+"\n\t\t\t")]],2)],1),_vm._v(" "),_c('div',{staticClass:"registration-section form-customization-section"},[_c('h2',[_vm._v(_vm._s(_vm.strings.formCustomization))]),_vm._v(" "),_c('p',[_vm._v(_vm._s(_vm.strings.formCustomizationLegend))]),_vm._v(" "),_c('table',{staticClass:"form-table"},[_c('tr',{staticClass:"confirmation-text"},[_c('th',[_vm._v(_vm._s(_vm.strings.confirmationText))]),_vm._v(" "),_c('td',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.confirmationText),expression:"confirmationText"}],staticClass:"confirmation-text-entry",attrs:{"type":"text"},domProps:{"value":(_vm.confirmationText)},on:{"input":function($event){if($event.target.composing){ return; }_vm.confirmationText=$event.target.value}}}),_vm._v(" "),_c('p',{staticClass:"description"},[_vm._v(_vm._s(_vm.strings.confirmationTextLegend))])])])]),_vm._v(" "),_c('button',{staticClass:"button-primary",on:{"click":_vm.onSaveClick}},[_vm._v(_vm._s(_vm.strings.formCustomizationSave))])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

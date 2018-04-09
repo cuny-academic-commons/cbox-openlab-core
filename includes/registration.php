@@ -58,11 +58,14 @@ function cboxol_registration_admin_page() {
 	$dummy = new \CBOX\OL\SignupCode();
 	$signup_code_data[0] = $dummy->get_for_endpoint();
 
+	$registration_form_settings = cboxol_get_registration_form_settings();
+
 	$app_config = array(
 		'subapp' => 'Registration',
 		'emailDomains' => $domains,
 		'memberTypes' => $member_types,
 		'signupCodes' => $signup_code_data,
+		'registrationFormSettings' => $registration_form_settings,
 	);
 
 	?>
@@ -446,4 +449,15 @@ function cboxol_registration_validate_signup_code() {
 	} else {
 		wp_send_json_success();
 	}
+}
+
+/**
+ * Get registration form settings.
+ */
+function cboxol_get_registration_form_settings() {
+	$registration_form_settings = get_site_option( 'cboxol_registration_form_settings', array() );
+	$registration_form_settings = array_merge( array(
+		'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'cbox-openlab-core' ),
+	), $registration_form_settings );
+	return $registration_form_settings;
 }

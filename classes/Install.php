@@ -21,6 +21,7 @@ class Install {
 		$this->install_default_group_categories();
 		$this->install_default_academic_types();
 		$this->install_default_brand_pages();
+		$this->install_default_settings();
 
 		$this->install_default_widgets();
 		$this->install_default_nav_menus();
@@ -627,6 +628,12 @@ class Install {
 		}
 
 		update_site_option( 'cboxol_brand_page_ids', $page_ids );
+	}
+
+	protected function install_default_settings() {
+		update_site_option( 'cboxol_registration_form_settings', array(
+			'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'cbox-openlab-core' ),
+		) );
 	}
 
 	protected function install_default_widgets() {

@@ -20,6 +20,7 @@ const store = new Vuex.Store({
 		isLoading: {},
 		memberTypes: [],
 		objectType: '',
+		registrationFormSettings: {},
 		signupCodes: {},
 		strings: CBOXOLStrings.strings,
 		subapp: '',
@@ -117,6 +118,21 @@ const store = new Vuex.Store({
 				body: JSON.stringify( body )
 			} )
 		},
+
+		submitRegistrationFormSettings ( commit, payload ) {
+			let endpoint = CBOXOLStrings.endpointBase + 'registration-form-settings/'
+
+			return fetch( endpoint, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce': CBOXOLStrings.nonce
+				},
+				body: JSON.stringify( payload )
+			} )
+		},
+
 		submitSignupCode ( commit, payload ) {
 			const { wpPostId } = payload
 

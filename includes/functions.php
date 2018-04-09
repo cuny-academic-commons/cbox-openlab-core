@@ -20,6 +20,9 @@ function openlab_rest_api_init() {
 	$signup_codes_endpoint = new \CBOX\OL\API\SignupCodes();
 	$signup_codes_endpoint->register_routes();
 
+	$registration_form_settings_endpoint = new \CBOX\OL\API\RegistrationFormSettings();
+	$registration_form_settings_endpoint->register_routes();
+
 	$group_categories_endpoint = new \CBOX\OL\API\GroupCategories();
 	$group_categories_endpoint->register_routes();
 
