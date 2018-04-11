@@ -464,10 +464,6 @@ HTML;
 	function openlab_menu_items( $parent ) {
 		global $wp_admin_bar;
 
-		$locations = get_nav_menu_locations();
-		$main_menu_id = $locations['main'];
-		$menu_items = wp_get_nav_menu_items( $main_menu_id, array( 'update_post_term_cache' => false ) );
-
 		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id' => 'home-' . $parent,
@@ -477,6 +473,8 @@ HTML;
 				'class' => 'mobile-no-hover',
 			),
 		) );
+
+		$menu_items = openlab_network_nav_items();
 
 		foreach ( $menu_items as $menu_item ) {
 			$wp_admin_bar->add_node( array(
@@ -1724,3 +1722,22 @@ function openlab_network_footer() {
 	echo $footer;
 }
 add_action( 'wp_footer', 'openlab_network_footer' );
+
+/**
+ * Fetch the network nav items.
+ *
+ * Built on the main site, with objects stashed in a transient.
+ */
+function openlab_network_nav_items() {
+	$items = get_site_transient( 'cboxol_network_nav_items' );
+
+	if ( ! $items && bp_is_root_blog() ) {
+		$locations = get_nav_menu_locations();
+		$main_menu_id = $locations['main'];
+		$items = wp_get_nav_menu_items( $main_menu_id, array( 'update_post_term_cache' => false ) );
+
+		set_site_transient( 'cboxol_network_nav_items', $items );
+	}
+
+	return $items;
+}
