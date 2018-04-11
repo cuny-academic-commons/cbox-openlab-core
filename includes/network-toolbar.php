@@ -464,7 +464,9 @@ HTML;
 	function openlab_menu_items( $parent ) {
 		global $wp_admin_bar;
 
-		$brand_pages = cboxol_get_brand_pages();
+		$locations = get_nav_menu_locations();
+		$main_menu_id = $locations['main'];
+		$menu_items = wp_get_nav_menu_items( $main_menu_id, array( 'update_post_term_cache' => false ) );
 
 		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
@@ -476,50 +478,15 @@ HTML;
 			),
 		) );
 
-		if ( isset( $brand_pages['about'] ) ) {
+		foreach ( $menu_items as $menu_item ) {
 			$wp_admin_bar->add_node( array(
 				'parent' => $parent,
-				'id'     => 'about-' . $parent,
-				'title'  => esc_html( $brand_pages['about']['title'] ),
-				'href'   => esc_url( $brand_pages['about']['preview_url'] ),
-					'meta' => array(
-						'class' => 'mobile-no-hover',
-					),
-			) );
-		}
-
-		$wp_admin_bar->add_node( array(
-			'parent' => $parent,
-			'id'     => 'people-' . $parent,
-			'title'  => bp_get_directory_title( 'members' ),
-			'href'   => bp_get_members_directory_permalink(),
-			'meta' => array(
-				'class' => 'mobile-no-hover',
-			),
-		) );
-
-		$group_types = cboxol_get_group_types();
-		foreach ( $group_types as $group_type ) {
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => esc_attr( $group_type->get_slug() . '-' . $parent ),
-				'title'  => esc_html( $group_type->get_label( 'plural' ) ),
-				'href'   => bp_get_group_type_directory_permalink( $group_type->get_slug() ),
+				'id' => $menu_item->post_name . '-' . $parent,
+				'title' => esc_html( $menu_item->post_title ),
+				'href' => esc_url( $menu_item->url ),
 				'meta' => array(
 					'class' => 'mobile-no-hover',
 				),
-			) );
-		}
-
-		if ( isset( $brand_pages['help'] ) ) {
-			$wp_admin_bar->add_node( array(
-				'parent' => $parent,
-				'id'     => 'help-' . $parent,
-				'title'  => esc_html( $brand_pages['help']['title'] ),
-				'href'   => esc_url( $brand_pages['help']['preview_url'] ),
-					'meta' => array(
-						'class' => 'mobile-no-hover',
-					),
 			) );
 		}
 	}
