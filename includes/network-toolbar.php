@@ -1720,8 +1720,11 @@ function openlab_network_footer() {
 	}
 
 	echo $footer;
+
+	echo preg_replace( '/id="openlab-footer" class="([^"]+)"/', 'id="openlab-footer" class="oplb-bs placeholder" aria-hidden="true" tabindex="-1"', $footer );
+
 }
-add_action( 'wp_footer', 'openlab_network_footer' );
+add_action( 'wp_footer', 'openlab_network_footer', 5 );
 
 /**
  * Fetch the network nav items.
