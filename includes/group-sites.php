@@ -1618,3 +1618,37 @@ function cboxol_add_links_to_nav_menu( $items ) {
 	return $items;
 }
 add_filter( 'wp_nav_menu_objects', 'cboxol_add_links_to_nav_menu' );
+
+/**
+ * Load theme-specific fixes.
+ */
+function cboxol_load_theme_specific_fixes() {
+	$template = get_template();
+
+	/**
+	 * Allow plugins to disable theme-specific fixes.
+	 *
+	 * @param string $template Theme template.
+	 */
+	if ( ! apply_filters( 'cboxol_allow_theme_specific_fixes', true, $template ) ) {
+		return;
+	}
+
+	$css = $js = null;
+
+	switch ( $template ) {
+		case 'twentyfifteen' :
+			$css = CBOXOL_PLUGIN_URL . "assets/css/themes/{$template}.css";
+			$js  = CBOXOL_PLUGIN_URL . "assets/js/themes/{$template}.js";
+		break;
+	}
+
+	if ( $css ) {
+		wp_enqueue_style( "cboxol-{$template}-fixes", $css );
+	}
+
+	if ( $js ) {
+		wp_enqueue_script( "cboxol-{$template}-fixes", $js, array(), false, true );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'cboxol_load_theme_specific_fixes' );
