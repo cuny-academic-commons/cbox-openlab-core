@@ -518,9 +518,7 @@ function openlab_portfolio_list_group_display() {
 	?>
 
 	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
-		<h2 class="sidebar-header">
-			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
-		</h2>
+		<h3 class="sidebar-header"><?php echo esc_html( openlab_portfolio_list_group_heading() ) ?></h3>
 
                 <div class="sidebar-block">
 

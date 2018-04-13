@@ -89,9 +89,7 @@ function openlab_related_links_list_group_display() {
 
 	<div id="group-related-links-sidebar-widget" class="sidebar-widget">
 		<?php if ( $heading ) : ?>
-			<h2 class="sidebar-header">
-				<?php echo esc_html( $heading ) ?>
-			</h2>
+			<h3 class="sidebar-header"><?php echo esc_html( $heading ) ?></h3>
 		<?php endif ?>
 
 		<div class="sidebar-block">
