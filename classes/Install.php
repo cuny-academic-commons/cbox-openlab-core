@@ -926,7 +926,7 @@ class Install {
 
 	protected function install_default_footer() {
 		$left_heading = __( 'Header Number One', 'cbox-openlab-core' );
-		$left_content = '<div class="col-md-4"><img src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" style="width:100%" /></div>
+		$left_content = '<div class="col-md-4"><img src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" alt="' . esc_attr__( 'CBOX-OL Logo', 'cbox-openlab-core' ) . '" style="width:100%" /></div>
 
 <div class="col-md-20">
 <p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
