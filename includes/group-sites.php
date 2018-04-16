@@ -482,6 +482,102 @@ add_action( 'delete_comment', 'openlab_group_blog_remove_comment_activity' );
 add_action( 'trash_comment', 'openlab_group_blog_remove_comment_activity' );
 add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
 
+/**
+ * Overrides BP's default behavior, which hardcodes blog_public = 0 checks.
+ *
+ * Can be refactored after https://buddypress.trac.wordpress.org/ticket/4831#comment:10
+ */
+function cboxol_blogs_post_pre_publish( $return = true, $blog_id = 0, $post_id = 0, $user_id = 0 ) {
+	$bp = buddypress();
+
+	// If blog is not trackable, do not record the activity.
+	if ( ! bp_blogs_is_blog_trackable( $blog_id, $user_id ) ) {
+		return false;
+	}
+
+	/*
+	 * Stop infinite loops with WordPress MU Sitewide Tags.
+	 * That plugin changed the way its settings were stored at some point. Thus the dual check.
+	 */
+	$sitewide_tags_blog_settings = bp_core_get_root_option( 'sitewide_tags_blog' );
+	if ( ! empty( $sitewide_tags_blog_settings ) ) {
+		$st_options = maybe_unserialize( $sitewide_tags_blog_settings );
+		$tags_blog_id = isset( $st_options['tags_blog_id'] ) ? $st_options['tags_blog_id'] : 0;
+	} else {
+		$tags_blog_id = bp_core_get_root_option( 'sitewide_tags_blog' );
+		$tags_blog_id = intval( $tags_blog_id );
+	}
+
+	/**
+	 * Filters whether or not BuddyPress should block sitewide tags activity.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param bool $value Current status of the sitewide tags activity.
+	 */
+	if ( (int) $blog_id == $tags_blog_id && apply_filters( 'bp_blogs_block_sitewide_tags_activity', true ) ) {
+		return false;
+	}
+
+	return $return;
+}
+remove_filter( 'bp_activity_post_pre_publish', 'bp_blogs_post_pre_publish', 10, 4 );
+remove_filter( 'bp_activity_post_pre_comment', 'bp_blogs_post_pre_publish', 10, 4 );
+add_filter( 'bp_activity_post_pre_publish', 'cboxol_blogs_post_pre_publish', 10, 4 );
+add_filter( 'bp_activity_post_pre_comment', 'cboxol_blogs_post_pre_publish', 10, 4 );
+
+/**
+ * Ensure that 0 blog_public is bypassed by BP when registering post type activity support.
+ *
+ * Can be refactored after https://buddypress.trac.wordpress.org/ticket/4831#comment:10
+ */
+add_action( 'bp_setup_globals', function() {
+
+	/**
+	 * Filters the post types to track for the Blogs component.
+	 *
+	 * @since 1.5.0
+	 * @deprecated 2.3.0
+	 *
+	 * @param array $value Array of post types to track.
+	 */
+	$post_types = apply_filters( 'bp_blogs_record_post_post_types', array( 'post' ) );
+
+	foreach ( $post_types as $post_type ) {
+		if ( ! post_type_supports( $post_type, 'buddypress-activity' ) ) {
+			add_post_type_support( $post_type, 'buddypress-activity' );
+		}
+	}
+}, 100 );
+
+/**
+ * Ensure that hide_sitewide is set conservatively for groupblog post items.
+ *
+ * Always choose the more private of the two settings: group + blog_public.
+ */
+function cboxol_set_groupblog_activity_hide_sitewide( $activity ) {
+	if ( 'new_blog_post' !== $activity->type ) {
+		return;
+	}
+
+	if ( $activity->hide_sitewide ) {
+		return;
+	}
+
+	$group = groups_get_group( $activity->item_id );
+	if ( 'public' !== $group->status ) {
+		$activity->hide_sitewide = true;
+		return;
+	}
+
+	$site_id = get_groupblog_blog_id( $activity->item_id );
+	$blog_public = (int) get_blog_option( $site_id, 'blog_public' );
+	if ( 1 !== $blog_public ) {
+		$activity->hide_sitewide = true;
+	}
+}
+add_action( 'bp_activity_before_save', 'cboxol_set_groupblog_activity_hide_sitewide' );
+
 ////////////////////////
 ///  MISCELLANEOUS   ///
 ////////////////////////
