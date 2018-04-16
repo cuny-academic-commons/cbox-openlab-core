@@ -174,6 +174,8 @@ HTML;
 	$nonce = wp_create_nonce( 'bp_search_form' );
 
 	$sr_text = esc_html__( 'Search by People or Group Type', 'cbox-openlab-core' );
+	$sr_text_which = esc_html__( 'Select the Item Type to Search', 'cbox-openlab-core' );
+	$sr_text_button = esc_html__( 'Submit', 'cbox-openlab-core' );
 	$search_placeholder = esc_attr__( 'Search', 'cbox-openlab-core' );
 
 	$options = array(
@@ -195,12 +197,15 @@ HTML;
     <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
         <div class="sr-only">{$sr_text}</div>
+		<label for="search-terms-{$mode}-{$location}" clas="screen-reader-text">{$sr_text}</label>
         <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="{$search_placeholder}" />
+
+		<label for="search-which-{$mode}-{$location}" class="screen-reader-text">{$sr_text_which}</label>
         <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
 			{$options_html}
         </select>
 
-        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><i class="fa fa-search"></i></button>
+        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit">{$sr_text_button}<i class="fa fa-search"></i></button>
         <input type="hidden" id="_bp_search_nonce_{$mode }_{$location}" name="_bp_search_nonce" value="{$nonce}" />
         </div>
     </form><!-- #search-form -->
