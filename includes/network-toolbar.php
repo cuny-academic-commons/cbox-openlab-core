@@ -89,11 +89,13 @@ function openlab_get_logo_html( $link = true ) {
 		$logo_html = wp_get_attachment_image( $custom_logo_id, 'full', false, array(
 			'class'    => 'custom-logo',
 			'itemprop' => 'logo',
+			'alt'      => __( 'Site Logo', 'cbox-openlab-core' ),
 		) );
 	} else {
 		$logo_html = sprintf(
-			'<img src="%s" class="custom-logo default-cboxol-logo" alt="CBOX-OL Logo" />',
-			esc_url( cboxol_get_default_logo_url() )
+			'<img src="%s" class="custom-logo default-cboxol-logo" alt="%s" />',
+			esc_url( cboxol_get_default_logo_url() ),
+			esc_html__( 'CBOX-OL Logo', 'cbox-openlab-core' )
 		);
 	}
 
