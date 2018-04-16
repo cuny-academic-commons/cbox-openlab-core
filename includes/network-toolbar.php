@@ -1303,7 +1303,7 @@ HTML;
 
 			$wp_admin_bar->add_menu(array(
 				'id' => 'dashboard-link',
-				'title' => $title,'<span class="sr-only">Home</span>',
+				'title' => $title . '<span class="sr-only">' . esc_html__( 'Home', 'cbox-openlab-core' ) . '</span>',
 				'href' => $href,
 				'meta' => array(
 					'title' => _x( 'Dashboard', 'admin bar menu group label' ),
