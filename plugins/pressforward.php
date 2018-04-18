@@ -6,7 +6,6 @@
 /*
  * @todo list:
  * - Check PF minimum-role code and maybe get a better way to do it.
- * - Check why GES isn't being triggered on oldev
  * - Check why the get_users_of_blog() query is running amok on oldev - maybe switch to group member query
  */
 add_action( 'admin_enqueue_scripts', function() {
