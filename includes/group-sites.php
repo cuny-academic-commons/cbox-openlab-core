@@ -570,7 +570,7 @@ function cboxol_set_groupblog_activity_hide_sitewide( $activity ) {
 		return;
 	}
 
-	$site_id = get_groupblog_blog_id( $activity->item_id );
+	$site_id = openlab_get_site_id_by_group_id( $activity->item_id );
 	$blog_public = (int) get_blog_option( $site_id, 'blog_public' );
 	if ( 1 !== $blog_public ) {
 		$activity->hide_sitewide = true;
