@@ -54,7 +54,7 @@ function cboxol_init() {
 	}
 
 	if ( function_exists( 'bbpress' ) ) {
-		require CBOXOL_PLUGIN_DIR . 'includes/bbpress.php';
+		require CBOXOL_PLUGIN_DIR . 'plugins/bbpress.php';
 	}
 
 	// Must wait until WP is set up.
