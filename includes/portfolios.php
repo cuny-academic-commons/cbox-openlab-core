@@ -438,6 +438,10 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 
 	$group_type = cboxol_get_group_group_type( $group_id );
 
+	if ( is_wp_error( $group_type ) ) {
+		return false;
+	}
+
 	// Portfolio groups never have the list enabled
 	if ( $group_type->get_is_portfolio() ) {
 		return false;
