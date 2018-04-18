@@ -180,6 +180,7 @@ function pfbp_generate_activity_item_for_comment( $comment_id, $comment ) {
 	groups_record_activity( array(
 		'action'            => $action,
 		'type'              => 'new_pf_feed_item_comment',
+		'content'           => $comment->comment_content,
 		'item_id'           => $site_group_id,
 		'secondary_item_id' => $comment->comment_ID,
 		'user_id'           => $comment->user_id,
