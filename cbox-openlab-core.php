@@ -57,6 +57,10 @@ function cboxol_init() {
 		require CBOXOL_PLUGIN_DIR . 'plugins/bbpress.php';
 	}
 
+	if ( function_exists( 'pressforward' ) ) {
+		require CBOXOL_PLUGIN_DIR . 'plugins/pressforward.php';
+	}
+
 	// Must wait until WP is set up.
 	add_action( 'init', 'cboxol_maybe_install' );
 }
