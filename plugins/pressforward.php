@@ -6,7 +6,6 @@
 /*
  * @todo list:
  * - Check PF minimum-role code and maybe get a better way to do it.
- * - Check why the get_users_of_blog() query is running amok on oldev - maybe switch to group member query
  */
 add_action( 'admin_enqueue_scripts', function() {
 	$min = bp_core_get_minified_asset_suffix();
@@ -38,12 +37,21 @@ add_action( 'admin_enqueue_scripts', function() {
 		}
 	}
 
+	// BP will try to force blog_id=0, so we must override via filter.
+	$filter = function( $args ) {
+		$args['blog_id'] = get_current_blog_id();
+		return $args;
+	};
+
+	add_filter( 'bp_wp_user_query_args', $filter );
+
 	$user_query = new BP_User_Query(
 		array(
-			'blog_id' => get_current_blog_id(),
 			'role__in' => $roles_to_match,
 		)
 	);
+
+	remove_filter( 'bp_wp_user_query_args', $filter );
 
 	$users = array();
 	foreach ( $user_query->results as $user ) {
