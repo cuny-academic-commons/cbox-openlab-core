@@ -28,6 +28,17 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
+		__( 'Member Settings', 'cbox-openlab-core' ),
+		__( 'Member Settings', 'cbox-openlab-core' ),
+		'manage_network_options',
+		cboxol_admin_slug( 'member-settings' ),
+		'cboxol_member_settings_admin_page',
+		'',
+		2
+	);
+
+	add_submenu_page(
+		cboxol_admin_slug(),
 		__( 'Group Settings', 'cbox-openlab-core' ),
 		__( 'Group Settings', 'cbox-openlab-core' ),
 		'manage_network_options',
@@ -39,11 +50,11 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
-		__( 'Member Settings', 'cbox-openlab-core' ),
-		__( 'Member Settings', 'cbox-openlab-core' ),
+		__( 'Academic Units', 'cbox-openlab-core' ),
+		__( 'Academic Units', 'cbox-openlab-core' ),
 		'manage_network_options',
-		cboxol_admin_slug( 'member-settings' ),
-		'cboxol_member_settings_admin_page',
+		cboxol_admin_slug( 'academic-units' ),
+		'cboxol_academic_units_admin_page',
 		'',
 		2
 	);
@@ -66,17 +77,6 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'communication-settings' ),
 		'cboxol_communication_settings_admin_page',
-		'',
-		2
-	);
-
-	add_submenu_page(
-		cboxol_admin_slug(),
-		__( 'Academic Units', 'cbox-openlab-core' ),
-		__( 'Academic Units', 'cbox-openlab-core' ),
-		'manage_network_options',
-		cboxol_admin_slug( 'academic-units' ),
-		'cboxol_academic_units_admin_page',
 		'',
 		2
 	);
