@@ -80,6 +80,13 @@ add_action( 'admin_enqueue_scripts', function() {
 } );
 
 /**
+ * Sets the default comment permissions.
+ */
+add_filter( 'default_option_pf_feature_comments_access', function() {
+	return pf_get_defining_capability_by_role( 'contributor' );
+} );
+
+/**
  * Turn @-mentions into links in PF comment content.
  */
 function pfbp_add_mention_links_to_comment_text( $text, $comment ) {
