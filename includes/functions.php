@@ -179,6 +179,14 @@ function cboxol_maybe_install() {
 		return;
 	}
 
+	if ( ! bp_is_active( 'groups' ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'openlab_core_setup' ) ) {
+		return;
+	}
+
 	$ver = get_site_option( 'cboxol_ver' );
 
 	if ( ! $ver ) {

@@ -25,22 +25,24 @@ function cboxol_init() {
 
 	require CBOXOL_PLUGIN_DIR . 'includes/functions.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/member-types.php';
-	require CBOXOL_PLUGIN_DIR . 'includes/group-types.php';
-	require CBOXOL_PLUGIN_DIR . 'includes/group-sites.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/group-categories.php';
+
+	if ( function_exists( 'buddypress' ) && bp_is_active( 'groups' ) ) {
+		if ( ! class_exists( 'Bp_Customizable_Group_Categories' ) ) {
+			require CBOXOL_PLUGIN_DIR . 'lib/bp-customizable-group-categories/bp-customizable-group-categories.php';
+			$bpcgc_plugin = new Bp_Customizable_Group_Categories();
+			$bpcgc_plugin->run();
+		}
+		require CBOXOL_PLUGIN_DIR . 'includes/group-types.php';
+		require CBOXOL_PLUGIN_DIR . 'includes/group-sites.php';
+	}
+
 	require CBOXOL_PLUGIN_DIR . 'includes/brand-settings.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/academic-units.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/related-links.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/registration.php';
-	require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/communication-settings.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/profile-fields.php';
-
-	require CBOXOL_PLUGIN_DIR . 'includes/group-categories.php';
-	if ( ! class_exists( 'Bp_Customizable_Group_Categories' ) ) {
-		require CBOXOL_PLUGIN_DIR . 'lib/bp-customizable-group-categories/bp-customizable-group-categories.php';
-		$bpcgc_plugin = new Bp_Customizable_Group_Categories();
-		$bpcgc_plugin->run();
-	}
 
 	// @todo Better loading for these libraries.
 	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';
@@ -61,7 +63,13 @@ function cboxol_init() {
 		require CBOXOL_PLUGIN_DIR . 'plugins/pressforward.php';
 	}
 
+	$ver = get_site_option( 'cboxol_ver' );
+	if ( ! empty( $ver ) ) {
+		require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
+	}
+
 	// Must wait until WP is set up.
-	add_action( 'init', 'cboxol_maybe_install' );
+	remove_action( 'after_switch_theme', '_wp_sidebars_changed' );
+	add_action( 'after_switch_theme', 'cboxol_maybe_install', 200 );
 }
 add_action( 'plugins_loaded', 'cboxol_init' );
