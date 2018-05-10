@@ -69,6 +69,7 @@ function cboxol_init() {
 	}
 
 	// Must wait until WP is set up.
-	add_action( 'bp_init', 'cboxol_maybe_install' );
+	remove_action( 'after_switch_theme', '_wp_sidebars_changed' );
+	add_action( 'after_switch_theme', 'cboxol_maybe_install', 200 );
 }
 add_action( 'plugins_loaded', 'cboxol_init' );
