@@ -1736,6 +1736,7 @@ function cboxol_load_theme_specific_fixes() {
 		// JS only.
 		case 'twentyfifteen' :
 			$js = CBOXOL_PLUGIN_URL . "assets/js/themes/{$template}.js";
+			$css = CBOXOL_PLUGIN_URL . "assets/css/themes/{$template}.css";
 		break;
 	}
 
