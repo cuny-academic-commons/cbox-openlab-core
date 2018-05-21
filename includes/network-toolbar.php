@@ -1667,6 +1667,7 @@ function cac_adminbar_enqueue_scripts() {
 	wp_enqueue_script( 'openlab-theme-fixes-js' );
 }
 add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
+add_action( 'admin_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );
 
 /**
  * Moved login form so that is injected via a localized variable

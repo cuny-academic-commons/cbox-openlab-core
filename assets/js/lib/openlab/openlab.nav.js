@@ -412,12 +412,21 @@ OpenLab.nav = (function ($) {
 (function ($) {
 
     var windowWidth = $(window).width();
+		var $adminmenuwrap = $('#adminmenuwrap');
 
     $(document).ready(function () {
 
         OpenLab.nav.init();
 
     });
+
+		$(document).on('scroll.unpin-menu',function() {
+			setTimeout(function(){
+				if ( 'relative' === $adminmenuwrap.css('position') ) {
+					$adminmenuwrap.css('top',0);
+				}
+			},1);
+		} );
 
     $(window).on('resize', function (e) {
 
