@@ -155,6 +155,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'search_for_members_to_invite_to_group',
 				'group_contact',
 				'group_contact_help_text',
+				'group_discussion',
 			),
 			'portfolio' => array(
 				'singular',
@@ -199,6 +200,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'search_for_members_to_invite_to_group',
 				'group_contact',
 				'group_contact_help_text',
+				'group_discussion',
 			),
 			'default' => array(
 				'singular',
@@ -245,6 +247,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'search_for_members_to_invite_to_group',
 				'group_contact',
 				'group_contact_help_text',
+				'group_discussion',
 			),
 		);
 
@@ -623,6 +626,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'group_contact_help_text',
 				'label' => __( 'Group Contact Help Text', 'cbox-openlab-core' ),
 				'description' => __( 'Help text for the Group Contact feature.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'group_discussion' => array(
+				'slug' => 'group_discussion',
+				'label' => __( 'Group Discussion', 'cbox-openlab-core' ),
+				'description' => __( 'Used for forum navigation.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);

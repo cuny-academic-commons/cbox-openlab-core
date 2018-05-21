@@ -188,6 +188,7 @@ class Install {
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
 					'group_contact' => __( 'Course Contact', 'cbox-openlab-core' ),
 					'group_contact_help_text' => __( 'By default, you are the Course Contact. You may add or remove Course Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion' => __( 'Course Discussion', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -258,6 +259,7 @@ class Install {
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'cbox-openlab-core' ),
 					'group_contact' => __( 'Porfolio Contact', 'cbox-openlab-core' ),
 					'group_contact_help_text' => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion' => __( 'Portfolio Discussion', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -325,6 +327,7 @@ class Install {
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'cbox-openlab-core' ),
 					'group_contact' => __( 'Club Contact', 'cbox-openlab-core' ),
 					'group_contact_help_text' => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion' => __( 'Club Discussion', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -392,6 +395,7 @@ class Install {
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'cbox-openlab-core' ),
 					'group_contact' => __( 'Project Contact', 'cbox-openlab-core' ),
 					'group_contact_help_text' => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion' => __( 'Project Discussion', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
