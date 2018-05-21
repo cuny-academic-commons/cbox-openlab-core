@@ -153,6 +153,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'invite_members_to_group',
 				'invite_community_members_to_group',
 				'search_for_members_to_invite_to_group',
+				'group_contact',
+				'group_contact_help_text',
 			),
 			'portfolio' => array(
 				'singular',
@@ -195,6 +197,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'invite_members_to_group',
 				'invite_community_members_to_group',
 				'search_for_members_to_invite_to_group',
+				'group_contact',
+				'group_contact_help_text',
 			),
 			'default' => array(
 				'singular',
@@ -239,6 +243,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'invite_members_to_group',
 				'invite_community_members_to_group',
 				'search_for_members_to_invite_to_group',
+				'group_contact',
+				'group_contact_help_text',
 			),
 		);
 
@@ -605,6 +611,18 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug' => 'search_for_members_to_invite_to_group',
 				'label' => __( 'Search for Community Members to Invite to Group', 'cbox-openlab-core' ),
 				'description' => __( 'Used as help text when inviting community members to a group.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'group_contact' => array(
+				'slug' => 'group_contact',
+				'label' => __( 'Group Contact', 'cbox-openlab-core' ),
+				'description' => __( 'The label for the Group Contact feature.', 'cbox-openlab-core' ),
+				'value' => '',
+			),
+			'group_contact_help_text' => array(
+				'slug' => 'group_contact_help_text',
+				'label' => __( 'Group Contact Help Text', 'cbox-openlab-core' ),
+				'description' => __( 'Help text for the Group Contact feature.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);

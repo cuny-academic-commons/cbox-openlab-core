@@ -186,6 +186,8 @@ class Install {
 					'invite_members_to_group' => __( 'Invite Members to Course', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
+					'group_contact' => __( 'Course Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text' => __( 'By default, you are the Course Contact. You may add or remove Course Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => true,
@@ -254,6 +256,8 @@ class Install {
 					'invite_members_to_group' => __( 'Invite Members to Portfolio', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Portfolio', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'cbox-openlab-core' ),
+					'group_contact' => __( 'Porfolio Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text' => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -319,6 +323,8 @@ class Install {
 					'invite_members_to_group' => __( 'Invite Members to Club', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Club', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'cbox-openlab-core' ),
+					'group_contact' => __( 'Club Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text' => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
@@ -384,6 +390,8 @@ class Install {
 					'invite_members_to_group' => __( 'Invite Members to Project', 'cbox-openlab-core' ),
 					'invite_community_members_to_group' => __( 'Invite Community Members to Project', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'cbox-openlab-core' ),
+					'group_contact' => __( 'Project Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text' => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
 				),
 
 				'can_be_cloned' => false,
