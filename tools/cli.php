@@ -74,6 +74,8 @@ class CBOXOL_Command extends WP_CLI_Command {
 			wp_delete_post( $brand_page['id'], true );
 		}
 
+		update_option( 'theme_switched', 'twentysixteen' );
+
 		// Perform theme resets as well.
 		$this->reset_theme();
 	}
