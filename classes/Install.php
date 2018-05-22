@@ -938,7 +938,7 @@ class Install {
 
 	protected function install_default_footer() {
 		$left_heading = __( 'Header Number One', 'cbox-openlab-core' );
-		$left_content = '<div class="col-md-4"><img src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" alt="' . esc_attr__( 'CBOX-OL Logo', 'cbox-openlab-core' ) . '" style="width:100%" /></div>
+		$left_content = '<div class="col-md-4"><img class="cboxol-footer-image" src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" alt="' . esc_attr__( 'CBOX-OL Logo', 'cbox-openlab-core' ) . '" /></div>
 
 <div class="col-md-20">
 <p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
@@ -948,7 +948,7 @@ class Install {
 		set_theme_mod( 'openlab_footer_left_content', $left_content );
 
 		$middle_heading = __( 'Header Number Two', 'cbox-openlab-core' );
-		$middle_content = '<p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>';
+		$middle_content = '<div class="col-md-12"><p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p></div>';
 
 		set_theme_mod( 'openlab_footer_middle_heading', $middle_heading );
 		set_theme_mod( 'openlab_footer_middle_content', $middle_content );
