@@ -37,6 +37,10 @@
 					v-model="name"
 					v-bind:autofocus="! name"
 				>
+
+				<div v-if="showGroupTypeDesignedMessage" class="cboxol-entity-designed-for-gloss">
+					{{ entityData.isCourse ? strings.thisGroupTypeIsDesignedForCourses : strings.thisGroupTypeIsDesignedForPortfolios }}
+				</div>
 			</div>
 
 			<div v-if="supportsParent" class="cboxol-entity-content-section">
@@ -237,6 +241,10 @@
 				} else {
 					return this.strings.saved
 				}
+			},
+
+			showGroupTypeDesignedMessage() {
+				return ( this.entityData.hasOwnProperty('isCourse') && this.entityData.isCourse ) || ( this.entityData.hasOwnProperty('isPortfolio') && this.entityData.isPortfolio )
 			},
 
 			supportsAssociatedWithMemberTypes() {

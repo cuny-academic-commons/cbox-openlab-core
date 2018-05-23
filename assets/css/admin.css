@@ -35,6 +35,11 @@ h3.cboxol-admin-content-header {
 	padding: 0px 20px;
 }
 
+.cboxol-entity-designed-for-gloss {
+	font-style: italic;
+	margin-top: .5em;
+}
+
 /** Tables */
 
 .cboxol-item-table {

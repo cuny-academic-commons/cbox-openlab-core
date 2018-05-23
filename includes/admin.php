@@ -158,6 +158,8 @@ function cboxol_register_assets() {
 			'templateDashboardLink' => _x( 'Dashboard', 'template site dashboard link', 'cbox-openlab-core' ),
 			'templateSiteDescription' => __( 'When a group of this type creates a site, default settings and data will be copied from the group type\'s template site. Use the links below to view and configure the template site.', 'cbox-openlab-core' ),
 			'templateViewLink' => _x( 'View Template', 'template site view link', 'cbox-openlab-core' ),
+			'thisGroupTypeIsDesignedForCourses' => __( 'Note: This Group Type is designed for Courses.', 'cbox-openlab-core' ),
+			'thisGroupTypeIsDesignedForPortfolios' => __( 'Note: This Group Type is designed for Portfolios.', 'cbox-openlab-core' ),
 			'update' => __( 'Update', 'cbox-openlab-core' ),
 			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
 		),
