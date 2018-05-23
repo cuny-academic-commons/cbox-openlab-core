@@ -948,7 +948,7 @@ class Install {
 		set_theme_mod( 'openlab_footer_left_content', $left_content );
 
 		$middle_heading = __( 'Header Number Two', 'cbox-openlab-core' );
-		$middle_content = '<div class="col-md-12"><p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p></div>';
+		$middle_content = '<div class="cboxol-footer-middle-para"><p>Nam tristique scelerisque sem, ac auctor ipsum eleifend et. Praesent purus lectus, convallis vitae varius et, auctor ac lectus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p></div>';
 
 		set_theme_mod( 'openlab_footer_middle_heading', $middle_heading );
 		set_theme_mod( 'openlab_footer_middle_content', $middle_content );
