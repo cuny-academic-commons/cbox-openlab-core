@@ -125,7 +125,7 @@ function openlab_sitewide_header( $location = 'header' ) {
 		<div class="container-fluid">
 			<div class="navbar-header clearfix">
 				<header class="menu-title pull-left">
-					<a href="<?php echo bp_get_root_domain(); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'cbox-openlab-core' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="sr-only"><?php bp_site_name(); ?></span></a>
+					<a href="<?php echo bp_get_root_domain(); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'cbox-openlab-core' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
 				</header>
 				<div class="pull-right search">
 					<div class="search-trigger-wrapper">
@@ -198,8 +198,7 @@ HTML;
     <div class="search-form-wrapper search-mode-{$mode} search-form-location-{$location}">
     <form action="{$form_action}" method="post" id="search-form-{$mode}-{$location}" class="form-inline">
         <div class="form-group">
-        <div class="sr-only">{$sr_text}</div>
-		<label for="search-terms-{$mode}-{$location}" clas="screen-reader-text">{$sr_text}</label>
+		<label for="search-terms-{$mode}-{$location}" class="screen-reader-text">{$sr_text}</label>
         <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="{$search_placeholder}" />
 
 		<label for="search-which-{$mode}-{$location}" class="screen-reader-text">{$sr_text_which}</label>
@@ -207,7 +206,7 @@ HTML;
 			{$options_html}
         </select>
 
-        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit">{$sr_text_button}<i class="fa fa-search"></i></button>
+        <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><span class="screen-reader-text">{$sr_text_button}</span><i class="fa fa-search"></i></button>
         <input type="hidden" id="_bp_search_nonce_{$mode }_{$location}" name="_bp_search_nonce" value="{$nonce}" />
         </div>
     </form><!-- #search-form -->
