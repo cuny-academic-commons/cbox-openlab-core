@@ -28,7 +28,7 @@ class CBOXOL_Command extends WP_CLI_Command {
 
 			$template_site_id = $group_type->get_template_site_id();
 			if ( $template_site_id ) {
-				wpmu_delete_blog( $template_site_id );
+				wpmu_delete_blog( $template_site_id, true );
 			}
 		}
 
