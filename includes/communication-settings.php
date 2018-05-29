@@ -10,14 +10,14 @@ function cboxol_communication_admin_page_email() {
 				'post_type' => 'bp-email',
 				'page' => 'bp-emails-customizer-redirect',
 			), $url_base . 'edit.php' ),
-			'description' => 'Id omnis perspiciatis porro non. Qui quia facere ipsa a repellat qui occaecati. Recusandae quia mollitia sed quaerat repellat corporis. Quos quo autem delectus sed. Similique sit aut nostrum rerum aut. Exercitationem enim voluptatibus non possimus sint. Et quis quibusdam quaerat explicabo. At voluptas voluptatem autem accusantium ut laborum rerum veniam.',
+			'description' => __( 'Customize the visual design of emails that will be sent to community members.', 'cbox-openlab-core' ),
 		),
 		array(
 			'title' => __( 'Email Templates', 'cbox-openlab-core' ),
 			'url' => add_query_arg( array(
 				'post_type' => 'bp-email',
 			), $url_base . 'edit.php' ),
-			'description' => 'Id omnis perspiciatis porro non. Qui quia facere ipsa a repellat qui occaecati. Recusandae quia mollitia sed quaerat repellat corporis. Quos quo autem delectus sed. Similique sit aut nostrum rerum aut. Exercitationem enim voluptatibus non possimus sint. Et quis quibusdam quaerat explicabo. At voluptas voluptatem autem accusantium ut laborum rerum veniam.',
+			'description' => __( 'Manage the content that’s included in emails sent automatically to members based on triggers (e.g. a welcome email sent to new members of a group).', 'cbox-openlab-core' ),
 		),
 	);
 
@@ -33,14 +33,13 @@ function cboxol_communication_admin_page_email() {
 			'url' => add_query_arg( array(
 				'page' => 'ass_admin_options',
 			), $ges_base ),
-			'description' => 'Id omnis perspiciatis porro non. Qui quia facere ipsa a repellat qui occaecati. Recusandae quia mollitia sed quaerat repellat corporis. Quos quo autem delectus sed. Similique sit aut nostrum rerum aut. Exercitationem enim voluptatibus non possimus sint. Et quis quibusdam quaerat explicabo. At voluptas voluptatem autem accusantium ut laborum rerum veniam.',
+			'description' => __( 'Update settings related to Daily Digests & Weekly Summaries of group activities in your community; toggle global unsubscribe links; modify group admin abilities related to email subscription settings; and establish spam prevention guidelines.', 'cbox-openlab-core' ),
 		);
 	}
 
 	?>
 	<div class="cboxol-admin-content">
-		<p>Id omnis perspiciatis porro non. Qui quia facere ipsa a repellat qui occaecati. Recusandae quia mollitia sed quaerat repellat corporis. Quos quo autem delectus sed. Similique sit aut nostrum rerum aut. Exercitationem enim voluptatibus non possimus sint. Et quis quibusdam quaerat explicabo. At voluptas voluptatem autem accusantium ut laborum rerum veniam.
-		</p>
+		<p><?php esc_html_e( 'Members of your community can be sent various notifications via email. Manage all settings related to emails here.', 'cbox-openlab-core' ); ?></p>
 
 		<?php cboxol_communication_settings_markup( $settings ); ?>
 	</div>
@@ -60,14 +59,13 @@ function cboxol_communication_admin_page_invitations() {
 			'url' => add_query_arg( array(
 				'page' => 'invite-anyone',
 			), $base ),
-			'description' => 'Id omnis perspiciatis porro non. Qui quia facere ipsa a repellat qui occaecati. Recusandae quia mollitia sed quaerat repellat corporis. Quos quo autem delectus sed. Similique sit aut nostrum rerum aut. Exercitationem enim voluptatibus non possimus sint. Et quis quibusdam quaerat explicabo. At voluptas voluptatem autem accusantium ut laborum rerum veniam.',
+			'description' => __( 'Manage the invite email content template, control which members-types are able to send various kinds of invitations, control address book integration, view sent invitations and related statistics.', 'cbox-openlab-core' ),
 		),
 	);
 
 	?>
 	<div class="cboxol-admin-content">
-		<p>Id omnis perspiciatis porro non. Qui quia facere ipsa a repellat qui occaecati. Recusandae quia mollitia sed quaerat repellat corporis. Quos quo autem delectus sed. Similique sit aut nostrum rerum aut. Exercitationem enim voluptatibus non possimus sint. Et quis quibusdam quaerat explicabo. At voluptas voluptatem autem accusantium ut laborum rerum veniam.
-		</p>
+		<p><?php esc_html_e( 'Invite Anyone allows community members to invite non-members to your community and its groups via email.', 'cbox-openlab-core' ); ?></p>
 
 		<?php cboxol_communication_settings_markup( $settings ); ?>
 	</div>
