@@ -1526,11 +1526,12 @@ HTML;
 		global $wpdb;
 
 		$root_blog_id = bp_get_root_blog_id();
+		$ver          = cboxol_get_asset_version();
 
 		// getting the theme folder for the main site
 		$main_site_theme = get_blog_option( $root_blog_id, 'template' );
 
-		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all' );
+		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), $ver, 'all' );
 		wp_enqueue_style( 'google-open-sans' );
 
 		$openlab_theme_link = get_site_url( $root_blog_id, 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
@@ -1538,12 +1539,12 @@ HTML;
 
 		// making sure dashicons fire up for front end
 		if ( ! is_admin() ) {
-			wp_register_style( 'dashicons', home_url() . '/wp-includes/css/dashicons.min.css' );
+			wp_register_style( 'dashicons', home_url() . '/wp-includes/css/dashicons.min.css', array(), $ver );
 			wp_enqueue_style( 'dashicons' );
 		}
 
 		// registering font-awesome here so it can be used on the admin bar and on the main site
-		wp_register_style( 'font-awesome', $openlab_theme_link, array(), '20130604', 'all' );
+		wp_register_style( 'font-awesome', $openlab_theme_link, array(), $ver, 'all' );
 		wp_enqueue_style( 'font-awesome' );
 		//custom admin bar styles
 
@@ -1555,8 +1556,8 @@ HTML;
 		$openlab_toolbar_url = content_url( '/themes/openlab-theme/css/color-schemes/toolbar-' . $color_scheme . '.css' );
 		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
-		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), '1.6.9.4' );
+		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), $ver );
+		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), $ver );
 	}
 
 	function adminbar_special_body_class( $classes ) {
@@ -1643,26 +1644,28 @@ function openlab_admin_bar_counts( $count, $pull_right = ' pull-right' ) {
 }
 
 function cac_adminbar_enqueue_scripts() {
-	wp_enqueue_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/search.js', array( 'jquery' ) );
-	wp_register_script( 'smoothscroll-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array( 'jquery' ), '', true );
+	$ver = cboxol_get_asset_version();
+
+	wp_enqueue_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/search.js', array( 'jquery' ), $ver );
+	wp_register_script( 'smoothscroll-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'smoothscroll-js' );
-	wp_register_script( 'select-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/select2/select2.min.js', array( 'jquery' ), '', true );
+	wp_register_script( 'select-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/select2/select2.min.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'select-js' );
-	wp_register_script( 'hyphenator-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/hyphenator/hyphenator.js', array( 'jquery' ) );
+	wp_register_script( 'hyphenator-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/hyphenator/hyphenator.js', array( 'jquery' ), $ver );
 	wp_enqueue_script( 'hyphenator-js' );
-	wp_register_script( 'succinct-mod-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/succint/jQuery.succinct.mod.js', array( 'jquery' ) );
+	wp_register_script( 'succinct-mod-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/succint/jQuery.succinct.mod.js', array( 'jquery' ), $ver );
 	wp_enqueue_script( 'succinct-mod-js' );
-	wp_register_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.search.js', array( 'jquery' ), '1.6.8.6', true );
+	wp_register_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.search.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-search-js' );
-	wp_register_script( 'openlab-truncation-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.truncation.js', array( 'jquery' ) );
+	wp_register_script( 'openlab-truncation-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.truncation.js', array( 'jquery' ), $ver );
 	wp_enqueue_script( 'openlab-truncation-js' );
-	wp_register_script( 'openlab-nav-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.nav.js', array( 'jquery' ), '1.6.8.7', true );
+	wp_register_script( 'openlab-nav-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.nav.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-nav-js' );
 	wp_localize_script( 'openlab-nav-js', 'utilityVars', array(
 		'loginForm' => openlab_get_loginform(),
 	) );
 
-	wp_register_script( 'openlab-theme-fixes-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.theme.fixes.js', array( 'jquery', 'twentyfourteen-script' ), '', true );
+	wp_register_script( 'openlab-theme-fixes-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.theme.fixes.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-theme-fixes-js' );
 }
 add_action( 'wp_enqueue_scripts', 'cac_adminbar_enqueue_scripts' );

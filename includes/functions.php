@@ -5,6 +5,15 @@
  */
 
 /**
+ * Gets a version string for use in asset enqueuing.
+ *
+ * @return string
+ */
+function cboxol_get_asset_version() {
+	return apply_filters( 'cboxol_get_asset_version', CBOXOL_ASSET_VER );
+}
+
+/**
  * Init REST endpoints.
  */
 function openlab_rest_api_init() {

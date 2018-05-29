@@ -1056,7 +1056,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6e83156a", __vue__options__)
+    hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":27,"../mixins/EntityTools.js":28,"../mixins/i18nTools.js":30,"./OnOffSwitch.vue":11,"./TypeLabel.vue":16,"./settings/AcademicUnits.vue":20,"./settings/AssociatedGroupTypeCheckboxes.vue":21,"./settings/AssociatedTypeDropdowns.vue":23,"./settings/MayChangeMemberTypeTo.vue":24,"./settings/MayCreateCourses.vue":25,"./settings/Order.vue":26,"vue":75,"vue-hot-reload-api":74}],8:[function(require,module,exports){

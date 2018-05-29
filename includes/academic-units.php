@@ -500,7 +500,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 
 	$academic_unit_types = cboxol_get_academic_unit_types( $unit_type_args );
 
-	wp_enqueue_script( 'cboxol-academic-types', CBOXOL_PLUGIN_URL . '/assets/js/academic-units.js', array( 'jquery' ), false, true );
+	wp_enqueue_script( 'cboxol-academic-types', CBOXOL_PLUGIN_URL . '/assets/js/academic-units.js', array( 'jquery' ), cboxol_get_asset_version(), true );
 
 	$member_type_unit_types = $group_type_unit_types = array();
 	foreach ( $academic_unit_types as $academic_unit_type ) {

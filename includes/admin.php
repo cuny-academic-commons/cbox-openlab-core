@@ -87,7 +87,7 @@ function cboxol_register_assets() {
 		'cbox-ol-app',
 		CBOXOL_PLUGIN_URL . 'assets/js/build.js',
 		array(),
-		123, // @todo
+		cboxol_get_asset_version(),
 		true
 	);
 
@@ -165,7 +165,7 @@ function cboxol_register_assets() {
 		),
 	) );
 
-	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css' );
+	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css', array(), cboxol_get_asset_version() );
 	// @todo More specific.
 	wp_enqueue_style( 'cbox-ol-admin' );
 }

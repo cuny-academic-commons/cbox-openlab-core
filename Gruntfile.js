@@ -3,6 +3,9 @@ module.exports = function( grunt ) {
 	'use strict';
 	var banner = '/**\n * <%= pkg.homepage %>\n * Copyright (c) <%= grunt.template.today("yyyy") %>\n * This file is generated automatically. Do not edit.\n */\n';
 	// Project configuration
+
+	var timestamp = new Date().getTime();
+
 	grunt.initConfig( {
 
 		pkg: grunt.file.readJSON( 'package.json' ),
@@ -54,13 +57,23 @@ module.exports = function( grunt ) {
                     nospawn: true
                 }
             },
+		},
+		setPHPConstant: {
+			version: {
+				constant: 'CBOXOL_ASSET_VER',
+				value: '<%= pkg.version %>-' + timestamp,
+				file: 'cbox-openlab-core.php'
+			}
 		}
 	} );
 
 	grunt.loadNpmTasks( 'grunt-wp-i18n' );
     grunt.loadNpmTasks( 'grunt-contrib-less' );
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
+    grunt.loadNpmTasks('grunt-php-set-constant');
+
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
+//	grunt.registerTask( 'setPHPConstant' );
 
 	grunt.util.linefeed = '\n';
 

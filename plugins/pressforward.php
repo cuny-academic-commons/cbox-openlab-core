@@ -18,8 +18,10 @@ add_action( 'admin_enqueue_scripts', function() {
 		wp_style_add_data( 'bp-mentions-css', 'suffix', $min );
 	}
 
-	wp_enqueue_script( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/js/pf-bp.js', array( 'bp-mentions' ) );
-	wp_enqueue_style( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/css/pf-bp.css' );
+	$ver = cboxol_get_asset_version();
+
+	wp_enqueue_script( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/js/pf-bp.js', array( 'bp-mentions' ), $ver );
+	wp_enqueue_style( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/css/pf-bp.css', array(), $ver );
 
 	// @todo Should some roles be excluded/included? PF doesn't make it easy to get its internal setting for this, and I don't know how to translate "minmium" setting into something user-queryable
 	//$minimum_role = get_option( 'pf_menu_group_access', pressforward()->menu->user_interface->pf_get_defining_capability_by_role( 'contributor' ) );

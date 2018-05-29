@@ -1740,12 +1740,14 @@ function cboxol_load_theme_specific_fixes() {
 		break;
 	}
 
+	$ver = cboxol_get_asset_version();
+
 	if ( $css ) {
-		wp_enqueue_style( "cboxol-{$template}-fixes", $css );
+		wp_enqueue_style( "cboxol-{$template}-fixes", $css, array(), $ver );
 	}
 
 	if ( $js ) {
-		wp_enqueue_script( "cboxol-{$template}-fixes", $js, array(), false, true );
+		wp_enqueue_script( "cboxol-{$template}-fixes", $js, array(), $ver, true );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'cboxol_load_theme_specific_fixes' );
