@@ -137,6 +137,27 @@ class Install {
 				'name' => __( 'Courses', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 1,
+				'site_settings' => array(
+					'theme' => 'twentysixteen',
+					'pages' => array(
+						'syllabus' => array(
+							'title'   => __( 'Syllabus', 'cbox-openlab-core' ),
+							'content' => __( 'This is a default syllabus page. Enter your syllabus here, or delete this page if you don\'t wish to use it.', 'cbox-openlab-core' ),
+							'order'   => 0,
+						),
+						'assignments' => array(
+							'title'   => __( 'Assignments', 'cbox-openlab-core' ),
+							'content' => __( 'This is a default assignments page. Enter your assignments here, or delete this page if you don\'t wish to use it.', 'cbox-openlab-core' ),
+							'order'   => 1,
+						),
+						'sample-assignment' => array(
+							'title'   => __( 'Sample Assignment', 'cbox-openlab-core' ),
+							'content' => '',
+							'order'   => 0,
+							'parent'  => 'assignments',
+						),
+					),
+				),
 
 				'labels' => array(
 					'singular' => __( 'Course', 'cbox-openlab-core' ),
@@ -215,6 +236,38 @@ class Install {
 				'name' => __( 'Portfolios', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 2,
+				'site_settings' => array(
+					'theme' => 'twentysixteen',
+					'pages' => array(
+						'about-me' => array(
+							'title'   => __( 'About Me', 'cbox-openlab-core' ),
+							'content' => __( 'This is a good place to introduce yourself and explain what visitors will find on this site.', 'cbox-openlab-core' ),
+							'order'   => 0,
+						),
+						'academics' => array(
+							'title'   => __( 'Academics', 'cbox-openlab-core' ),
+							'content' => __( 'On this page, give an overview of your academic goals. Then edit the sub-section page Sample Course or create additional sub-section pages with a selection of your best academic work.', 'cbox-openlab-core' ),
+							'order'   => 1,
+						),
+						'sample-assignment' => array(
+							'title'   => __( 'Sample Course', 'cbox-openlab-core' ),
+							'content' => '',
+							'order'   => 0,
+							'parent'  => 'academics',
+						),
+						'career' => array(
+							'title'   => __( 'Career', 'cbox-openlab-core' ),
+							'content' => __( 'This is a good place to describe your professional goals and give an overview of your career experience. Then edit the sub-section page Resume or create additional sub-section pages to develop the career section of your portfolio.', 'cbox-openlab-core' ),
+							'order'   => 2,
+						),
+						'resume' => array(
+							'title'   => __( 'Resume', 'cbox-openlab-core' ),
+							'content' => '',
+							'order'   => 0,
+							'parent'  => 'career',
+						),
+					),
+				),
 
 				'labels' => array(
 					'singular' => __( 'Portfolio', 'cbox-openlab-core' ),
@@ -281,6 +334,9 @@ class Install {
 				'name' => __( 'Clubs', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 3,
+				'site_settings' => array(
+					'theme' => 'twentysixteen',
+				),
 
 				'labels' => array(
 					'singular' => __( 'Club', 'cbox-openlab-core' ),
@@ -349,6 +405,9 @@ class Install {
 				'name' => __( 'Projects', 'cbox-openlab-core' ),
 				'is_enabled' => true,
 				'order' => 4,
+				'site_settings' => array(
+					'theme' => 'twentysixteen',
+				),
 
 				'labels' => array(
 					'singular' => __( 'Project', 'cbox-openlab-core' ),
@@ -454,7 +513,7 @@ class Install {
 
 			$type->save();
 
-			$type->create_template_site();
+			$type->create_template_site( $type_data['site_settings'] );
 		}
 
 		cboxol_grouptypes_register_group_types();

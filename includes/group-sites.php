@@ -490,8 +490,8 @@ add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
 function cboxol_blogs_post_pre_publish( $return = true, $blog_id = 0, $post_id = 0, $user_id = 0 ) {
 	$bp = buddypress();
 
-	// If blog is not trackable, do not record the activity.
-	if ( ! bp_blogs_is_blog_trackable( $blog_id, $user_id ) ) {
+	// If blog is not trackable, or we are installing, do not record the activity.
+	if ( ! function_exists( 'bp_blogs_is_blog_trackable' ) || ! bp_blogs_is_blog_trackable( $blog_id, $user_id ) ) {
 		return false;
 	}
 

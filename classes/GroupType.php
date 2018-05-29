@@ -645,7 +645,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$this->data['template_site_id'] = (int) $template_site_id;
 	}
 
-	public function create_template_site() {
+	public function create_template_site( $settings ) {
 		$current_network = get_network();
 
 		// Use timestamp as a hash to ensure uniqueness.
@@ -669,6 +669,91 @@ class GroupType extends ItemTypeBase implements ItemType {
 		if ( ! $site_id ) {
 			return;
 		}
+
+		switch_to_blog( $site_id );
+
+		if ( ! empty( $settings['theme'] ) ) {
+			switch_theme( $settings['theme'] );
+		}
+
+		// Update text of default post.
+		wp_update_post( array(
+			'ID'           => 1,
+			'post_content' => __( 'Welcome! This is your first post. Edit or delete it, then start blogging!', 'cbox-openlab-core' ),
+		) );
+
+		// Create pages. Ensure that children come after parents.
+		$created_page_ids = array();
+		if ( ! empty( $settings['pages'] ) ) {
+			$created_page_ids = array_fill_keys( array_keys( $settings['pages'] ), 0 );
+
+			foreach ( $settings['pages'] as $page_slug => $page ) {
+				$post_parent = 0;
+				if ( ! empty( $page['parent'] ) ) {
+					$parent_slug = $page['parent'];
+					$post_parent = $created_page_ids[ $parent_slug ];
+				}
+
+				$page_id = wp_insert_post( array(
+					'post_type'    => 'page',
+					'post_content' => $page['content'],
+					'post_title'   => $page['title'],
+					'menu_order'   => $page['order'],
+					'post_parent'  => $post_parent,
+					'post_status'  => 'publish',
+				) );
+
+				if ( $page_id && ! is_wp_error( $page_id ) ) {
+					$created_page_ids[ $page_slug ] = $page_id;
+				}
+			}
+		}
+
+		$menu_name = wp_slash( __( 'Main Menu', 'cbox-openlab-core' ) );
+		$menu_id = wp_create_nav_menu( $menu_name );
+
+		$nav_menu_ids = array();
+
+		// In the absence of created pages, put a menu in place with 'Sample Page'.
+		if ( ! $created_page_ids ) {
+			$sample_page = get_page_by_path( __( 'sample-page' ) );
+			if ( $sample_page ) {
+				$created_page_ids = array(
+					'sample-page' => $sample_page->ID,
+				);
+			}
+		}
+
+		foreach ( $created_page_ids as $page_slug => $created_page_id ) {
+			$page = get_post( $created_page_id );
+
+			$parent_nav_item_id = 0;
+			if ( ! empty( $page->post_parent ) && isset( $nav_menu_ids[ $page->post_parent ] ) ) {
+				$parent_nav_item_id = $nav_menu_ids[ $page->post_parent ];
+			}
+
+			$nav_menu_item_id = wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-object-id' => $created_page_id,
+					'menu-item-object'    => 'page',
+					'menu-item-parent-id' => $parent_nav_item_id,
+					'menu-item-type'      => 'post_type',
+					'menu-item-classes'   => $page->post_name,
+					'menu-item-url'       => get_permalink( $page ),
+					'menu-item-status'    => 'publish',
+				)
+			);
+
+			$nav_menu_ids[ $created_page_id ] = $nav_menu_item_id;
+		}
+
+		$locations = get_theme_mod( 'nav_menu_locations' );
+		$locations['primary'] = $menu_id;
+		set_theme_mod( 'nav_menu_locations', $locations );
+
+		restore_current_blog();
 
 		update_post_meta( $this->get_wp_post_id(), 'cboxol_group_type_template_site_id', $site_id );
 		$this->set_template_site_id( $site_id );
