@@ -88,7 +88,11 @@
 
 			newUnitName: {
 				get() {
-					return this.$store.state.academicUnits[ this.newUnitSlug ].name
+					if ( this.$store.state.academicUnits.hasOwnProperty( this.newUnitSlug ) ) {
+						return this.$store.state.academicUnits[ this.newUnitSlug ].name
+					} else {
+						return ''
+					}
 				},
 				set( value ) {
 					this.$store.commit( 'setEntityProperty', {
@@ -101,7 +105,8 @@
 			},
 
 			typeSupportsParent() {
-				return this.academicUnitType.parent.length > 0
+				const parent = this.academicUnitType.parent
+				return undefined !== parent && parent.length > 0
 			},
 
 			unitsOfType() {
