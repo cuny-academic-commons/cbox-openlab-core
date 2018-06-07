@@ -161,11 +161,11 @@ const store = new Vuex.Store({
 		},
 
 		addNewEntity ( state, payload ) {
-			const { itemsKey, namesKey } = payload
+			const { itemsKey, namesKey, defaultBaseKey } = payload
 
 			// Get unique key.
+			const baseKey = defaultBaseKey ? defaultBaseKey : '_new'
 			let isAvailable = false
-			let baseKey = '_new'
 			let key = baseKey
 			let incr = 1
 
@@ -177,6 +177,17 @@ const store = new Vuex.Store({
 					isAvailable = true
 				}
 			} while ( ! isAvailable )
+
+			// New Academic Unit Types need to have corresponding key in academicUnits.
+			if ( 'academicUnitTypes' === itemsKey ) {
+				// This is a colossal mess.
+				const unitTypeKey = '_new-' + key
+
+				let typeDummy = JSON.parse( JSON.stringify( state.dummy ) )
+				typeDummy.slug = unitTypeKey
+				typeDummy.isCollapsed = false
+				state.academicUnits[ unitTypeKey ] = typeDummy
+			}
 
 			// Clone dummy data to that key.
 			let dummy = JSON.parse( JSON.stringify( state.dummy ) )
@@ -252,6 +263,14 @@ const store = new Vuex.Store({
 			}
 
 			delete state[ itemsKey ][ slug ]
+		},
+
+		removeAcademicUnits ( state, payload ) {
+			const { academicUnitType } = payload
+			let allUnits = Object.assign( {}, state.academicUnits )
+			delete allUnits[ academicUnitType ]
+
+			state.academicUnits = allUnits
 		},
 
 		setEmailDomain( state, payload ) {

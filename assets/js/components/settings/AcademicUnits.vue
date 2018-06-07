@@ -77,10 +77,6 @@
 		},
 
 		computed: {
-			academicUnitType() {
-				return this.$store.state.academicUnitTypes[ this.academicUnitTypeSlug ]
-			},
-
 			// Used as a key in the store.
 			newUnitSlug() {
 				return '_new-' + this.academicUnitTypeSlug
@@ -101,7 +97,7 @@
 			},
 
 			typeSupportsParent() {
-				return this.academicUnitType.parent.length > 0
+				return this.academicUnitType.hasOwnProperty( 'parent' ) && this.academicUnitType.parent.length > 0
 			},
 
 			unitsOfType() {
@@ -132,6 +128,10 @@
 		},
 
 		methods: {
+			academicUnitType() {
+				return this.$store.state.academicUnitTypes[ this.academicUnitTypeSlug ]
+			},
+
 			onAddNewSubmit: function() {
 				let unit = this
 				unit.addNewIsLoading = true
