@@ -187,13 +187,12 @@ var store = new _vuex2.default.Store({
 		},
 		addNewEntity: function addNewEntity(state, payload) {
 			var itemsKey = payload.itemsKey,
-			    namesKey = payload.namesKey,
-			    defaultBaseKey = payload.defaultBaseKey;
+			    namesKey = payload.namesKey;
 
 			// Get unique key.
 
-			var baseKey = defaultBaseKey ? defaultBaseKey : '_new';
 			var isAvailable = false;
+			var baseKey = '_new';
 			var key = baseKey;
 			var incr = 1;
 
@@ -205,17 +204,6 @@ var store = new _vuex2.default.Store({
 					isAvailable = true;
 				}
 			} while (!isAvailable);
-
-			// New Academic Unit Types need to have corresponding key in academicUnits.
-			if ('academicUnitTypes' === itemsKey) {
-				// This is a colossal mess.
-				var unitTypeKey = '_new-' + key;
-
-				var typeDummy = JSON.parse(JSON.stringify(state.dummy));
-				typeDummy.slug = unitTypeKey;
-				typeDummy.isCollapsed = false;
-				state.academicUnits[unitTypeKey] = typeDummy;
-			}
 
 			// Clone dummy data to that key.
 			var dummy = JSON.parse(JSON.stringify(state.dummy));
@@ -294,14 +282,6 @@ var store = new _vuex2.default.Store({
 			}
 
 			delete state[itemsKey][slug];
-		},
-		removeAcademicUnits: function removeAcademicUnits(state, payload) {
-			var academicUnitType = payload.academicUnitType;
-
-			var allUnits = Object.assign({}, state.academicUnits);
-			delete allUnits[academicUnitType];
-
-			state.academicUnits = allUnits;
 		},
 		setEmailDomain: function setEmailDomain(state, payload) {
 			var key = payload.key,
@@ -1047,20 +1027,6 @@ exports.default = {
 				itemType.isModified = false;
 
 				itemType.setEntityProp('id', data.id);
-				itemType.setEntityProp('slug', data.slug);
-
-				if ('academicUnitType' === itemType.entityType) {
-					itemType.$store.commit('removeAcademicUnits', {
-						academicUnitType: itemType.slug
-					});
-
-					itemType.$store.commit('addNewEntity', {
-						itemsKey: 'academicUnits',
-						namesKey: 'academicUnitNames',
-						defaultBaseKey: data.slug
-					});
-				}
-
 				itemType.$store.commit('orderEntities', {
 					itemsKey: itemType.itemsKey,
 					namesKey: itemType.namesKey
@@ -2151,6 +2117,9 @@ exports.default = {
 	},
 
 	computed: {
+		academicUnitType: function academicUnitType() {
+			return this.$store.state.academicUnitTypes[this.academicUnitTypeSlug];
+		},
 		newUnitSlug: function newUnitSlug() {
 			return '_new-' + this.academicUnitTypeSlug;
 		},
@@ -2171,7 +2140,7 @@ exports.default = {
 		},
 
 		typeSupportsParent: function typeSupportsParent() {
-			return this.academicUnitType.hasOwnProperty('parent') && this.academicUnitType.parent.length > 0;
+			return this.academicUnitType.parent.length > 0;
 		},
 		unitsOfType: function unitsOfType() {
 			var units = [];
@@ -2202,11 +2171,6 @@ exports.default = {
 
 
 	methods: {
-		academicUnitType: function academicUnitType() {
-			return this.$store.state.academicUnitTypes[this.academicUnitTypeSlug];
-		},
-
-
 		onAddNewSubmit: function onAddNewSubmit() {
 			var unit = this;
 			unit.addNewIsLoading = true;

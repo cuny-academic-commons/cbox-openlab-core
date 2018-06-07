@@ -353,21 +353,6 @@
 						itemType.isModified = false
 
 						itemType.setEntityProp( 'id', data.id )
-						itemType.setEntityProp( 'slug', data.slug )
-
-						// Academic unit type must have academicUnits slot renamed
-						if ( 'academicUnitType' === itemType.entityType ) {
-							itemType.$store.commit( 'removeAcademicUnits', {
-								academicUnitType: itemType.slug,
-							} )
-
-							itemType.$store.commit( 'addNewEntity', {
-								itemsKey: 'academicUnits',
-								namesKey: 'academicUnitNames',
-								defaultBaseKey: data.slug
-							} )
-						}
-
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
 							namesKey: itemType.namesKey
