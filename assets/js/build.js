@@ -1024,6 +1024,12 @@ exports.default = {
 				itemsKey: itemType.itemsKey,
 				slug: itemType.slug
 			}).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
+				if ('_new' === itemType.slug.substr(0, 4) && 'academicUnitType' === itemType.entityType) {
+					window.onbeforeunload = null;
+					window.location.reload();
+					return;
+				}
+
 				itemType.isModified = false;
 
 				itemType.setEntityProp('id', data.id);
@@ -2127,7 +2133,11 @@ exports.default = {
 
 		newUnitName: {
 			get: function get() {
-				return this.$store.state.academicUnits[this.newUnitSlug].name;
+				if (this.$store.state.academicUnits.hasOwnProperty(this.newUnitSlug)) {
+					return this.$store.state.academicUnits[this.newUnitSlug].name;
+				} else {
+					return '';
+				}
 			},
 			set: function set(value) {
 				this.$store.commit('setEntityProperty', {
@@ -2140,7 +2150,8 @@ exports.default = {
 		},
 
 		typeSupportsParent: function typeSupportsParent() {
-			return this.academicUnitType.parent.length > 0;
+			var parent = this.academicUnitType.parent;
+			return undefined !== parent && parent.length > 0;
 		},
 		unitsOfType: function unitsOfType() {
 			var units = [];
