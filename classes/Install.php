@@ -648,23 +648,33 @@ class Install {
 	}
 
 	protected function install_default_brand_pages() {
+		/* translators: link to Dashboard > Pages > About */
+		$admin_text = '<p>' . sprintf(
+			esc_html__( 'If you are the administrator, visit %s to modify this text.', 'cbox-openlab-core' ),
+			sprintf(
+				'<a href="%s">%s</a>',
+				esc_attr( admin_url( 'edit.php?post_type=page' ) ),
+				esc_html__( 'Dashboard > Pages', 'cbox-openlab-core' )
+			)
+		) . '</p>';
+
 		$brand_page_types = cboxol_get_brand_page_types();
 		$pages = array(
 			'about' => array(
 				'post_title' => __( 'About', 'cbox-openlab-core' ),
-				'post_content' => __( '<p>This page can contain an introduction to your site, institution, or organization.</p><p>This text can be edited in the Pages area of the dashboard</p>.', 'cbox-openlab-core' ),
+				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
 			'help' => array(
 				'post_title' => __( 'Help', 'cbox-openlab-core' ),
-				'post_content' => __( 'This is the content of your Help page.', 'cbox-openlab-core' ),
+				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
 			'terms-of-use' => array(
 				'post_title' => __( 'Terms of Use', 'cbox-openlab-core' ),
-				'post_content' => __( 'This is the content of your Terms of Use page.', 'cbox-openlab-core' ),
+				'post_content' => '<p>' . __( 'This page can contain the Terms of Service for your site. Terms of Service are the rules that a visitor or member must abide by while using your site.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
 			'contact-us' => array(
 				'post_title' => __( 'Contact Us', 'cbox-openlab-core' ),
-				'post_content' => __( 'This is the content of your Contact Us page.', 'cbox-openlab-core' ),
+				'post_content' => '<p>' . __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, want to provide feedback, or need help.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
 		);
 
