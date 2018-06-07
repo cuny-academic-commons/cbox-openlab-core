@@ -59,7 +59,7 @@ function cboxol_communication_admin_page_invitations() {
 			'url' => add_query_arg( array(
 				'page' => 'invite-anyone',
 			), $base ),
-			'description' => __( 'Manage the invite email content template, control which members-types are able to send various kinds of invitations, control address book integration, view sent invitations and related statistics.', 'cbox-openlab-core' ),
+			'description' => __( 'Manage the invite email content template, control which member types are able to send various kinds of invitations, control address book integration, view sent invitations and related statistics.', 'cbox-openlab-core' ),
 		),
 	);
 
