@@ -44,6 +44,16 @@ class AcademicUnitTypes extends WP_REST_Controller {
 		$data = $params['typeData'];
 		$academic_unit_type = new AcademicUnitType();
 
+		// Labels will be empty - Programming is cool.
+		$data['labels'] = array(
+			'plural'   => array(
+				'value' => $data['name'],
+			),
+			'singular' => array(
+				'value' => $data['name'],
+			),
+		);
+
 		return $this->create_update_helper( $academic_unit_type, $data );
 	}
 
