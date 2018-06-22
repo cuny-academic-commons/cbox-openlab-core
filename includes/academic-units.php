@@ -719,7 +719,7 @@ function cboxol_academic_units_process_change_for_group( $group ) {
 	}
 
 	// Admins only.
-	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
+	if ( ! current_user_can( 'bp_moderate' ) && ! groups_is_user_admin( bp_loggedin_user_id(), $group->id ) ) {
 		return;
 	}
 
