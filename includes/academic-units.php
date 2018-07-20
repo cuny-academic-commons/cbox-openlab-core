@@ -580,13 +580,14 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 				</div>
 			</fieldset>
 
-			<?php wp_nonce_field( 'cboxol-academic-unit-selector', 'cboxol-academic-unit-selector-nonce', false ); ?>
-
 		</div>
 		<?php
 	}
 
 	?>
+
+	<?php wp_nonce_field( 'cboxol-academic-unit-selector', 'cboxol-academic-unit-selector-nonce', false ); ?>
+
 	</div>
 	<?php
 
