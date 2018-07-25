@@ -460,3 +460,35 @@ OpenLab.nav = (function ($) {
     });
 
 })(jQuery);
+
+jQuery(document).ready(function ($) {
+		getCurrentScroll();
+
+		//go to top functionality
+		$('#go-to-top').on('click', function (e) {
+				e.preventDefault();
+
+				var offsetHeight = $('#wpadminbar').height() + $('.navbar').height();
+
+				$.smoothScroll({
+						offset: -offsetHeight
+				});
+
+		});
+
+});
+jQuery(window).scroll(function ($) {
+		getCurrentScroll();
+});
+
+function getCurrentScroll() {
+		//go to top button functionality
+		var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+		if (currentScroll > 250) {
+				jQuery('#go-to-top').css('display', 'block');
+		} else {
+				jQuery('#go-to-top').css('display', 'none');
+		}
+
+}
