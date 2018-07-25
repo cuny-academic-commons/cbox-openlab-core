@@ -256,20 +256,20 @@ OpenLab.truncation = (function ($) {
 
     });
 
-    $(window).on('resize', function (e) {
-        
-        clearTimeout(truncationResizeTimer);
-        truncationResizeTimer = setTimeout(function () {
-            
-            if ($('.truncate-on-the-fly').length) {
+	$(window).on('resize', function (e) {
 
-                $('.trucate-obfuscate').css('opacity', 0);
-                OpenLab.truncation.truncateOnTheFly(false);
-            }
+		clearTimeout(truncationResizeTimer);
+		truncationResizeTimer = setTimeout(function () {
 
-        }, 250);
+		if ($('.truncate-on-the-fly').length) {
 
-    });
+			$('.trucate-obfuscate').css('opacity', 0);
+			OpenLab.truncation.truncateOnTheFly(false);
+		}
+
+		}, 250);
+
+	});
 
     $(document).on('truncate-obfuscate-removed', function (e, thisElem) {
 
