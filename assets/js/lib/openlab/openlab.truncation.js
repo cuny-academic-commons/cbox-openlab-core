@@ -250,6 +250,8 @@ OpenLab.truncation = (function ($) {
 })(jQuery, OpenLab);
 
 (function ($) {
+	var dwidth = $(window).width();
+
     $(document).ready(function () {
 
         OpenLab.truncation.init();
@@ -257,6 +259,13 @@ OpenLab.truncation = (function ($) {
     });
 
 	$(window).on('resize', function (e) {
+		// Mobile browsers fire 'resize' too frequently, so we check to see whether this is a real resize.
+		var wwidth = $(window).width();
+		if ( dwidth == wwidth ) {
+			return;
+		}
+
+		dwidth = wwidth;
 
 		clearTimeout(truncationResizeTimer);
 		truncationResizeTimer = setTimeout(function () {
