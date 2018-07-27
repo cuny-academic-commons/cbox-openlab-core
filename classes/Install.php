@@ -117,7 +117,7 @@ class Install {
 
 				$type_ids = array();
 				foreach ( $selectable_types as $st ) {
-					$type_ids = $st->get_wp_post_id();
+					$type_ids[] = $st->get_wp_post_id();
 				}
 
 				if ( ! $type_ids ) {
