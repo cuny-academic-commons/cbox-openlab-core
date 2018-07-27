@@ -2468,7 +2468,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"cboxol-item-type-setting"},[_c('fieldset',[_c('div',{staticClass:"cboxol-setting-label"},[_c('legend',[_vm._v(_vm._s(_vm.strings.mayChangeMemberTypeToLegend))])]),_vm._v(" "),_c('div',{staticClass:"cboxol-setting-content"},[_c('ul',{staticClass:"cboxol-item-type-setting-checkbox-list"},_vm._l((_vm.allTypes),function(type){return _c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.selectableTypes),expression:"selectableTypes"}],attrs:{"type":"checkbox","id":_vm.slug + '-may-change-member-type-to-' + type.slug},domProps:{"value":type.id,"checked":Array.isArray(_vm.selectableTypes)?_vm._i(_vm.selectableTypes,type.id)>-1:(_vm.selectableTypes)},on:{"__c":function($event){var $$a=_vm.selectableTypes,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=type.id,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.selectableTypes=$$a.concat($$v))}else{$$i>-1&&(_vm.selectableTypes=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.selectableTypes=$$c}}}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.slug + '-may-change-member-type-to-' + type.slug}},[_vm._v(_vm._s(type.name))])])}))])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"cboxol-item-type-setting"},[_c('fieldset',[_c('div',{staticClass:"cboxol-setting-label"},[_c('legend',[_vm._v(_vm._s(_vm.strings.mayChangeMemberTypeToLegend))])]),_vm._v(" "),_c('div',{staticClass:"cboxol-setting-content"},[_c('ul',{staticClass:"cboxol-item-type-setting-checkbox-list"},_vm._l((_vm.allTypes),function(type){return _c('li',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.selectableTypes),expression:"selectableTypes"}],attrs:{"type":"checkbox","id":_vm.slug + '-may-change-member-type-to-' + type.slug},domProps:{"value":type.slug,"checked":Array.isArray(_vm.selectableTypes)?_vm._i(_vm.selectableTypes,type.slug)>-1:(_vm.selectableTypes)},on:{"__c":function($event){var $$a=_vm.selectableTypes,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=type.slug,$$i=_vm._i($$a,$$v);if($$c){$$i<0&&(_vm.selectableTypes=$$a.concat($$v))}else{$$i>-1&&(_vm.selectableTypes=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.selectableTypes=$$c}}}}),_vm._v(" "),_c('label',{attrs:{"for":_vm.slug + '-may-change-member-type-to-' + type.slug}},[_vm._v(_vm._s(type.name))])])}))])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -2477,7 +2477,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ae10b222", __vue__options__)
   } else {
-    hotAPI.reload("data-v-ae10b222", __vue__options__)
+    hotAPI.rerender("data-v-ae10b222", __vue__options__)
   }
 })()}
 },{"../../mixins/EntityTools.js":28,"../../mixins/i18nTools.js":30,"vue":75,"vue-hot-reload-api":74}],25:[function(require,module,exports){

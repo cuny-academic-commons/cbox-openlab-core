@@ -10,7 +10,7 @@
 					<li v-for="type in allTypes">
 						<input
 							type="checkbox"
-							v-bind:value="type.id"
+							v-bind:value="type.slug"
 							v-bind:id="slug + '-may-change-member-type-to-' + type.slug"
 							v-model="selectableTypes"
 							>
@@ -53,7 +53,7 @@
 			},
 
 			strings() {
-				return this.$store.state.strings	
+				return this.$store.state.strings
 			}
 		},
 
