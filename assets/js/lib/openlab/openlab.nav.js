@@ -422,9 +422,7 @@ OpenLab.nav = (function ($) {
 
 		$(document).on('scroll.unpin-menu',function() {
 			setTimeout(function(){
-				if ( 'relative' === $adminmenuwrap.css('position') ) {
-					$adminmenuwrap.css('top',0);
-				}
+				$adminmenuwrap.css('top',0);
 			},1);
 		} );
 
