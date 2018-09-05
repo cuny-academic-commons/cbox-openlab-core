@@ -59,8 +59,13 @@ module.exports = function( grunt ) {
             },
 		},
 		setPHPConstant: {
-			version: {
+			assetVersion: {
 				constant: 'CBOXOL_ASSET_VER',
+				value: '<%= pkg.version %>-' + timestamp,
+				file: 'cbox-openlab-core.php'
+			},
+			pluginVersion: {
+				constant: 'CBOXOL_PLUGIN_VER',
 				value: '<%= pkg.version %>-' + timestamp,
 				file: 'cbox-openlab-core.php'
 			}
