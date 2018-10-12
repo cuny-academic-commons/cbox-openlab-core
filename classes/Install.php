@@ -1062,13 +1062,14 @@ class Install {
 	protected function install_default_slides() {
 		$slides = array(
 			array(
-				'title'   => __( 'Your Second Sample Slide', 'openlab-theme' ),
-				'content' => 'Ex consequatur ipsam iusto id impedit nesciunt. Velit perspiciatis laborum et culpa rem earum. Beatae fugit perspiciatis dolorum. Incidunt voluptate officia cupiditate ipsum. Officiis eius quo incidunt voluptatem vitae deleniti aut. Non dolorem iste qui voluptates id ratione unde accusantium.',
+				'title'   => __( 'Share Information Here', 'openlab-theme' ),
+				'content' => __( 'Site administrators can customize the slider area with images and text to welcome new members, highlight features, share important announcements, publicize events, and more.', 'cbox-openlab-core' ),
 				'image'   => get_template_directory() . '/images/default-slide-1.jpeg',
 			),
 			array(
-				'title'   => __( 'Your First Sample Slide', 'openlab-theme' ),
-				'content' => 'Ipsam et voluptas sed qui vel voluptatem quam. Qui pariatur occaecati consequatur quibusdam reiciendis aut asperiores nam. Esse et et id amet et quis. Beatae quaerat a ea expedita blanditiis quia. Doloremque ad nemo culpa. Quia at qui et.',
+				'title'   => __( 'Welcome to CBOX OpenLab!', 'openlab-theme' ),
+				/* translators: link to CBOX OpenLab documentation */
+				'content' => sprintf( __( 'Read our <a href="%s">documentation</a> to learn more about how you can use CBOX OpenLab to create a commons for open learning.', 'cbox-openlab-core' ), 'http://commonsinabox.org/cbox-openlab-overview' ),
 				'image'   => get_template_directory() . '/images/default-slide-2.jpeg',
 			),
 		);
