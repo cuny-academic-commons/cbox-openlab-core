@@ -1,10 +1,23 @@
 <?php
+/**
+ * Installation class.
+ *
+ * @package CBOXOpenLabCore
+ */
 
 namespace CBOX\OL;
 
 use \CBox_Widget_Setter;
 
+/**
+ * Installation class.
+ */
 class Install {
+	/**
+	 * Instance getter.
+	 *
+	 * @since 1.1.0
+	 */
 	public static function get_instance() {
 		static $instance;
 
@@ -15,6 +28,11 @@ class Install {
 		return $instance;
 	}
 
+	/**
+	 * Installation routine.
+	 *
+	 * @since 1.1.0
+	 */
 	public function install() {
 		// If safe mode isn't on, then let's set the execution time to unlimited.
 		if ( ! ini_get( 'safe_mode' ) ) {
@@ -34,8 +52,18 @@ class Install {
 		$this->install_default_footer();
 	}
 
+	/**
+	 * Upgrade routine.
+	 *
+	 * @since 1.1.0
+	 */
 	public function upgrade() { }
 
+	/**
+	 * Install. default member types.
+	 *
+	 * @since 1.1.0
+	 */
 	public function install_default_member_types() {
 		$types_data = array(
 			'faculty' => array(
@@ -138,6 +166,11 @@ class Install {
 		}
 	}
 
+	/**
+	 * Install default group types.
+	 *
+	 * @since 1.1.0
+	 */
 	public function install_default_group_types() {
 		$types_data = array(
 			'course'    => array(
@@ -223,7 +256,7 @@ class Install {
 				'directory_filters'                => array( 'term' ),
 				'enable_portfolio_list_by_default' => true,
 				'enable_site_by_default'           => true,
-				'is_course'                        => true, // for "Can create course" member type field
+				'is_course'                        => true, // for "Can create course" member type field.
 				'is_portfolio'                     => false,
 
 				'requires_site'                    => false,
@@ -528,6 +561,11 @@ class Install {
 		cboxol_grouptypes_register_group_types();
 	}
 
+	/**
+	 * Install default group categories.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_group_categories() {
 		$cats = array(
 			'academic'   => array(
@@ -569,6 +607,11 @@ class Install {
 		}
 	}
 
+	/**
+	 * Install academic unit types.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_academic_types() {
 		$types = array(
 			'schools'     => array(
@@ -680,6 +723,11 @@ class Install {
 		}
 	}
 
+	/**
+	 * Installs default brand pages.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_brand_pages() {
 		$admin_text = '<p>' . sprintf(
 			/* translators: link to Dashboard > Pages > About */
@@ -744,6 +792,11 @@ class Install {
 		update_site_option( 'cboxol_brand_page_ids', $page_ids );
 	}
 
+	/**
+	 * Installs default brand settings.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_settings() {
 		$brand_pages = cboxol_get_brand_pages();
 
@@ -759,6 +812,11 @@ class Install {
 		);
 	}
 
+	/**
+	 * Installs default widgets.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_widgets() {
 		openlab_register_sidebars();
 
@@ -868,6 +926,11 @@ class Install {
 		}
 	}
 
+	/**
+	 * Installs default nav menus.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_nav_menus() {
 		// Main Menu.
 		$menu_name = wp_slash( __( 'Main Menu', 'cbox-openlab-core' ) );
@@ -990,6 +1053,11 @@ class Install {
 		}
 	}
 
+	/**
+	 * Installs default brand slides.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_slides() {
 		$slides = array(
 			array(
@@ -1004,7 +1072,7 @@ class Install {
 			),
 		);
 
-		// only need these if performing outside of admin environment
+		// Only need these if performing outside of admin environment.
 		if ( ! function_exists( 'media_sideload_image' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/media.php' );
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -1057,6 +1125,11 @@ class Install {
 		}
 	}
 
+	/**
+	 * Installs default footer.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function install_default_footer() {
 		$left_heading = __( 'Header Number One', 'cbox-openlab-core' );
 		$left_content = '<div class="col-md-4"><img class="cboxol-footer-image" src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" alt="' . esc_attr__( 'CBOX-OL Logo', 'cbox-openlab-core' ) . '" /></div>
