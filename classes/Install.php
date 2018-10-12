@@ -39,58 +39,60 @@ class Install {
 	public function install_default_member_types() {
 		$types_data = array(
 			'faculty' => array(
-				'name' => __( 'Faculty', 'cbox-openlab-core' ),
-				'labels' => array(
+				'name'               => __( 'Faculty', 'cbox-openlab-core' ),
+				'labels'             => array(
 					'singular' => __( 'Faculty', 'cbox-openlab-core' ),
-					'plural' => __( 'Faculty', 'cbox-openlab-core' ),
+					'plural'   => __( 'Faculty', 'cbox-openlab-core' ),
 				),
 				'can_create_courses' => true,
-				'selectable_types' => array(),
-				'is_enabled' => true,
-				'order' => 1,
+				'selectable_types'   => array(),
+				'is_enabled'         => true,
+				'order'              => 1,
 			),
-			'staff' => array(
-				'name' => __( 'Staff', 'cbox-openlab-core' ),
-				'labels' => array(
+			'staff'   => array(
+				'name'               => __( 'Staff', 'cbox-openlab-core' ),
+				'labels'             => array(
 					'singular' => __( 'Staff', 'cbox-openlab-core' ),
-					'plural' => __( 'Staff', 'cbox-openlab-core' ),
+					'plural'   => __( 'Staff', 'cbox-openlab-core' ),
 				),
 				'can_create_courses' => false,
-				'selectable_types' => array(),
-				'is_enabled' => true,
-				'order' => 2,
+				'selectable_types'   => array(),
+				'is_enabled'         => true,
+				'order'              => 2,
 			),
 			'student' => array(
-				'name' => __( 'Students', 'cbox-openlab-core' ),
-				'labels' => array(
+				'name'               => __( 'Students', 'cbox-openlab-core' ),
+				'labels'             => array(
 					'singular' => __( 'Student', 'cbox-openlab-core' ),
-					'plural' => __( 'Students', 'cbox-openlab-core' ),
+					'plural'   => __( 'Students', 'cbox-openlab-core' ),
 				),
 				'can_create_courses' => false,
-				'selectable_types' => array( 'student', 'alumni' ),
-				'is_enabled' => true,
-				'order' => 3,
+				'selectable_types'   => array( 'student', 'alumni' ),
+				'is_enabled'         => true,
+				'order'              => 3,
 			),
-			'alumni' => array(
-				'name' => __( 'Alumni', 'cbox-openlab-core' ),
-				'labels' => array(
+			'alumni'  => array(
+				'name'               => __( 'Alumni', 'cbox-openlab-core' ),
+				'labels'             => array(
 					'singular' => __( 'Alumni', 'cbox-openlab-core' ),
-					'plural' => __( 'Alumni', 'cbox-openlab-core' ),
+					'plural'   => __( 'Alumni', 'cbox-openlab-core' ),
 				),
 				'can_create_courses' => false,
-				'selectable_types' => array( 'student', 'alumni' ),
-				'is_enabled' => true,
-				'order' => 4,
+				'selectable_types'   => array( 'student', 'alumni' ),
+				'is_enabled'         => true,
+				'order'              => 4,
 			),
 		);
 
 		foreach ( $types_data as $type_slug => $type_data ) {
 			// Don't overwrite existing item.
-			$existing = get_posts( array(
-				'post_type' => 'cboxol_member_type',
-				'post_status' => array( 'publish', 'draft' ),
-				'name' => $type_slug,
-			) );
+			$existing = get_posts(
+				array(
+					'post_type'   => 'cboxol_member_type',
+					'post_status' => array( 'publish', 'draft' ),
+					'name'        => $type_slug,
+				)
+			);
 
 			if ( $existing ) {
 				continue;
@@ -138,19 +140,19 @@ class Install {
 
 	public function install_default_group_types() {
 		$types_data = array(
-			'course' => array(
-				'name' => __( 'Courses', 'cbox-openlab-core' ),
-				'is_enabled' => true,
-				'order' => 1,
-				'site_settings' => array(
+			'course'    => array(
+				'name'                             => __( 'Courses', 'cbox-openlab-core' ),
+				'is_enabled'                       => true,
+				'order'                            => 1,
+				'site_settings'                    => array(
 					'theme' => 'twentysixteen',
 					'pages' => array(
-						'syllabus' => array(
+						'syllabus'          => array(
 							'title'   => __( 'Syllabus', 'cbox-openlab-core' ),
 							'content' => __( 'This is a default syllabus page. Enter your syllabus here, or delete this page if you don\'t wish to use it.', 'cbox-openlab-core' ),
 							'order'   => 0,
 						),
-						'assignments' => array(
+						'assignments'       => array(
 							'title'   => __( 'Assignments', 'cbox-openlab-core' ),
 							'content' => __( 'This is a default assignments page. Enter your assignments here, or delete this page if you don\'t wish to use it.', 'cbox-openlab-core' ),
 							'order'   => 1,
@@ -164,72 +166,72 @@ class Install {
 					),
 				),
 
-				'labels' => array(
-					'singular' => __( 'Course', 'cbox-openlab-core' ),
-					'plural' => __( 'Courses', 'cbox-openlab-core' ),
-					'create_clone_item' => __( 'Create/Clone Course', 'cbox-openlab-core' ),
-					'item_creation' => __( 'Course Creation', 'cbox-openlab-core' ),
-					'create_item_help_text' => __( 'Set up the name, URL, avatar, and other settings and permissions for your course. These settings affect the course home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'clone_help_text' => __( 'Note: Cloning copies the course home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'cbox-openlab-core' ),
-					'name_help_text' => __( 'Please choose your course name carefully. A clear name will make it easier for others to find your course. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
-					'avatar_help_text' => __( 'Upload an image to use as an avatar for this course. The image will be shown on the course home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide' => __( 'Can\'t decide? You can upload a photo once the course is created.', 'cbox-openlab-core' ),
-					'url_help_text' => __( 'Choose a unique URL that will be the home for your course.', 'cbox-openlab-core' ),
-					'privacy_help_text' => __( 'These settings affect how others view your course.', 'cbox-openlab-core' ),
-					'privacy_help_text_new' => __( 'You may change these settings later in the course settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content' => __( 'Course and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory' => __( 'Course will be listed in the "Courses" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership' => __( 'Any community member may join this course.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content' => __( 'Course content and activity will only be visible to members of the course.', 'cbox-openlab-core' ),
+				'labels'                           => array(
+					'singular'                             => __( 'Course', 'cbox-openlab-core' ),
+					'plural'                               => __( 'Courses', 'cbox-openlab-core' ),
+					'create_clone_item'                    => __( 'Create/Clone Course', 'cbox-openlab-core' ),
+					'item_creation'                        => __( 'Course Creation', 'cbox-openlab-core' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your course. These settings affect the course home, discussion, docs, and files.', 'cbox-openlab-core' ),
+					'clone_help_text'                      => __( 'Note: Cloning copies the course home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'cbox-openlab-core' ),
+					'name_help_text'                       => __( 'Please choose your course name carefully. A clear name will make it easier for others to find your course. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this course. The image will be shown on the course home page, and in search results.', 'cbox-openlab-core' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the course is created.', 'cbox-openlab-core' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your course.', 'cbox-openlab-core' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your course.', 'cbox-openlab-core' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the course settings.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_content'     => __( 'Course and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_directory'   => __( 'Course will be listed in the "Courses" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this course.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_content'    => __( 'Course content and activity will only be visible to members of the course.', 'cbox-openlab-core' ),
 					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this course.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory' => __( 'Course will NOT be listed in the "Courses" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_directory'  => __( 'Course will NOT be listed in the "Courses" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
 					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this course.', 'cbox-openlab-core' ),
-					'group_details' => __( 'Course Details', 'cbox-openlab-core' ),
-					'my_groups' => __( 'My Courses', 'cbox-openlab-core' ),
-					'course_code' => __( 'Course Code', 'cbox-openlab-core' ),
-					'course_information' => __( 'Course Information', 'cbox-openlab-core' ),
-					'course_information_description' => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'cbox-openlab-core' ),
-					'section_code' => __( 'Section Code', 'cbox-openlab-core' ),
-					'group_site' => __( 'Course Site', 'cbox-openlab-core' ),
-					'status_open' => __( 'This Course is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site' => __( 'This Course is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site' => __( 'This Course is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private' => __( 'This Course is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site' => __( 'This Course is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site' => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site' => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'site_help_text' => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'cbox-openlab-core' ),
-					'site_address_help_text' => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text' => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the course page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'visit_group_site' => __( 'Visit Course Site', 'cbox-openlab-core' ),
-					'group_home' => __( 'Course Home', 'cbox-openlab-core' ),
-					'settings_help_text_discussion' => __( 'These settings enable or disable the discussion forum on your course home page.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar' => __( 'These settings determine who can create an event for your course calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_members' => __( 'Any course member may connect events to this course.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_admins' => __( 'Only administrators and moderators may connect events to this course.', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your course home page.', 'cbox-openlab-core' ),
-					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group' => __( 'Invite Members to Course', 'cbox-openlab-core' ),
-					'invite_community_members_to_group' => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
+					'group_details'                        => __( 'Course Details', 'cbox-openlab-core' ),
+					'my_groups'                            => __( 'My Courses', 'cbox-openlab-core' ),
+					'course_code'                          => __( 'Course Code', 'cbox-openlab-core' ),
+					'course_information'                   => __( 'Course Information', 'cbox-openlab-core' ),
+					'course_information_description'       => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'cbox-openlab-core' ),
+					'section_code'                         => __( 'Section Code', 'cbox-openlab-core' ),
+					'group_site'                           => __( 'Course Site', 'cbox-openlab-core' ),
+					'status_open'                          => __( 'This Course is OPEN.', 'cbox-openlab-core' ),
+					'status_open_community_site'           => __( 'This Course is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_open_private_site'             => __( 'This Course is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private'                       => __( 'This Course is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private_community_site'        => __( 'This Course is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_private_open_site'             => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
+					'status_private_private_site'          => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
+					'site_help_text'                       => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'cbox-openlab-core' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the course page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
+					'visit_group_site'                     => __( 'Visit Course Site', 'cbox-openlab-core' ),
+					'group_home'                           => __( 'Course Home', 'cbox-openlab-core' ),
+					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your course home page.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your course calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar_members'  => __( 'Any course member may connect events to this course.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this course.', 'cbox-openlab-core' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your course home page.', 'cbox-openlab-core' ),
+					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group'              => __( 'Invite Members to Course', 'cbox-openlab-core' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
-					'group_contact' => __( 'Course Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text' => __( 'By default, you are the Course Contact. You may add or remove Course Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion' => __( 'Course Discussion', 'cbox-openlab-core' ),
+					'group_contact'                        => __( 'Course Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text'              => __( 'By default, you are the Course Contact. You may add or remove Course Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion'                     => __( 'Course Discussion', 'cbox-openlab-core' ),
 				),
 
-				'can_be_cloned' => true,
-				'directory_filters' => array( 'term' ),
+				'can_be_cloned'                    => true,
+				'directory_filters'                => array( 'term' ),
 				'enable_portfolio_list_by_default' => true,
-				'enable_site_by_default' => true,
-				'is_course' => true, // for "Can create course" member type field
-				'is_portfolio' => false,
+				'enable_site_by_default'           => true,
+				'is_course'                        => true, // for "Can create course" member type field
+				'is_portfolio'                     => false,
 
-				'requires_site' => false,
-				'supports_additional_faculty' => true,
-				'supports_course_information' => true,
-				'supports_group_contact' => false,
-				'supports_mol_link' => true,
-				'supports_profile_column' => true,
+				'requires_site'                    => false,
+				'supports_additional_faculty'      => true,
+				'supports_course_information'      => true,
+				'supports_group_contact'           => false,
+				'supports_mol_link'                => true,
+				'supports_profile_column'          => true,
 			),
 
 			/*
@@ -238,18 +240,18 @@ class Install {
 			 * is_portfolio checks will be used as a proxy.
 			 */
 			'portfolio' => array(
-				'name' => __( 'Portfolios', 'cbox-openlab-core' ),
-				'is_enabled' => true,
-				'order' => 2,
-				'site_settings' => array(
+				'name'                             => __( 'Portfolios', 'cbox-openlab-core' ),
+				'is_enabled'                       => true,
+				'order'                            => 2,
+				'site_settings'                    => array(
 					'theme' => 'twentysixteen',
 					'pages' => array(
-						'about-me' => array(
+						'about-me'          => array(
 							'title'   => __( 'About Me', 'cbox-openlab-core' ),
 							'content' => __( 'This is a good place to introduce yourself and explain what visitors will find on this site.', 'cbox-openlab-core' ),
 							'order'   => 0,
 						),
-						'academics' => array(
+						'academics'         => array(
 							'title'   => __( 'Academics', 'cbox-openlab-core' ),
 							'content' => __( 'On this page, give an overview of your academic goals. Then edit the sub-section page Sample Course or create additional sub-section pages with a selection of your best academic work.', 'cbox-openlab-core' ),
 							'order'   => 1,
@@ -260,12 +262,12 @@ class Install {
 							'order'   => 0,
 							'parent'  => 'academics',
 						),
-						'career' => array(
+						'career'            => array(
 							'title'   => __( 'Career', 'cbox-openlab-core' ),
 							'content' => __( 'This is a good place to describe your professional goals and give an overview of your career experience. Then edit the sub-section page Resume or create additional sub-section pages to develop the career section of your portfolio.', 'cbox-openlab-core' ),
 							'order'   => 2,
 						),
-						'resume' => array(
+						'resume'            => array(
 							'title'   => __( 'Resume', 'cbox-openlab-core' ),
 							'content' => '',
 							'order'   => 0,
@@ -274,217 +276,219 @@ class Install {
 					),
 				),
 
-				'labels' => array(
-					'singular' => __( 'Portfolio', 'cbox-openlab-core' ),
-					'plural' => __( 'Portfolios', 'cbox-openlab-core' ),
-					'create_clone_item' => __( 'Create Portfolio', 'cbox-openlab-core' ),
-					'item_creation' => __( 'Portfolio Creation', 'cbox-openlab-core' ),
-					'create_item_help_text' => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'name_help_text' => __( 'The suggested Portfolio Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.', 'cbox-openlab-core' ),
-					'avatar_help_text' => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide' => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'cbox-openlab-core' ),
-					'url_help_text' => __( 'Choose a unique URL that will be the home for your portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text' => __( 'These settings affect how others view your portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_new' => __( 'You may change these settings later in the portfolio settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content' => __( 'Portfolio and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory' => __( 'Portfolio will be listed in the "Portfolios" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership' => __( 'Any community member may join this portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content' => __( 'Portfolio content and activity will only be visible to members of the portfolio.', 'cbox-openlab-core' ),
+				'labels'                           => array(
+					'singular'                             => __( 'Portfolio', 'cbox-openlab-core' ),
+					'plural'                               => __( 'Portfolios', 'cbox-openlab-core' ),
+					'create_clone_item'                    => __( 'Create Portfolio', 'cbox-openlab-core' ),
+					'item_creation'                        => __( 'Portfolio Creation', 'cbox-openlab-core' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'cbox-openlab-core' ),
+					'name_help_text'                       => __( 'The suggested Portfolio Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.', 'cbox-openlab-core' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'cbox-openlab-core' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'cbox-openlab-core' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your portfolio.', 'cbox-openlab-core' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your portfolio.', 'cbox-openlab-core' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the portfolio settings.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_content'     => __( 'Portfolio and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_directory'   => __( 'Portfolio will be listed in the "Portfolios" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this portfolio.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_content'    => __( 'Portfolio content and activity will only be visible to members of the portfolio.', 'cbox-openlab-core' ),
 					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory' => __( 'Portfolio will NOT be listed in the "Portfolios" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_directory'  => __( 'Portfolio will NOT be listed in the "Portfolios" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
 					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this portfolio.', 'cbox-openlab-core' ),
-					'create_item' => __( 'Create Portfolio', 'cbox-openlab-core' ),
-					'group_details' => __( 'Portfolio Details', 'cbox-openlab-core' ),
-					'my_portfolio' => __( 'My Portfolio', 'cbox-openlab-core' ),
-					'my_portfolio_site' => __( 'My Portfolio Site', 'cbox-openlab-core' ),
-					'status_open' => __( 'This Portfolio is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site' => __( 'This Portfolio is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site' => __( 'This Portfolio is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private' => __( 'This Portfolio is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site' => __( 'This Portfolio is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site' => __( 'This Portfolio is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site' => __( 'This Portfolio is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'visit_portfolio_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
-					'visit_group_site' => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
-					'site_help_text' => __( 'Each portfolio is associated with a WordPress site. The site is where portfolio owners display their work and accomplishments.', 'cbox-openlab-core' ),
-					'site_address_help_text' => __( 'Take a moment to consider an address for the site associated with your portfolio. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text' => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the portfolio page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'group_site' => __( 'Portfolio Site', 'cbox-openlab-core' ),
-					'group_home' => __( 'Portfolio Home', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group' => __( 'Invite Members to Portfolio', 'cbox-openlab-core' ),
-					'invite_community_members_to_group' => __( 'Invite Community Members to Portfolio', 'cbox-openlab-core' ),
+					'create_item'                          => __( 'Create Portfolio', 'cbox-openlab-core' ),
+					'group_details'                        => __( 'Portfolio Details', 'cbox-openlab-core' ),
+					'my_portfolio'                         => __( 'My Portfolio', 'cbox-openlab-core' ),
+					'my_portfolio_site'                    => __( 'My Portfolio Site', 'cbox-openlab-core' ),
+					'status_open'                          => __( 'This Portfolio is OPEN.', 'cbox-openlab-core' ),
+					'status_open_community_site'           => __( 'This Portfolio is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_open_private_site'             => __( 'This Portfolio is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private'                       => __( 'This Portfolio is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private_community_site'        => __( 'This Portfolio is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_private_open_site'             => __( 'This Portfolio is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
+					'status_private_private_site'          => __( 'This Portfolio is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
+					'visit_portfolio_site'                 => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
+					'visit_group_site'                     => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
+					'site_help_text'                       => __( 'Each portfolio is associated with a WordPress site. The site is where portfolio owners display their work and accomplishments.', 'cbox-openlab-core' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your portfolio. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the portfolio page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
+					'group_site'                           => __( 'Portfolio Site', 'cbox-openlab-core' ),
+					'group_home'                           => __( 'Portfolio Home', 'cbox-openlab-core' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group'              => __( 'Invite Members to Portfolio', 'cbox-openlab-core' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Portfolio', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'cbox-openlab-core' ),
-					'group_contact' => __( 'Porfolio Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text' => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion' => __( 'Portfolio Discussion', 'cbox-openlab-core' ),
+					'group_contact'                        => __( 'Porfolio Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text'              => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion'                     => __( 'Portfolio Discussion', 'cbox-openlab-core' ),
 				),
 
-				'can_be_cloned' => false,
-				'directory_filters' => array( 'member_type' ),
+				'can_be_cloned'                    => false,
+				'directory_filters'                => array( 'member_type' ),
 				'enable_portfolio_list_by_default' => false,
-				'enable_site_by_default' => true,
-				'is_course' => false,
-				'is_portfolio' => true,
+				'enable_site_by_default'           => true,
+				'is_course'                        => false,
+				'is_portfolio'                     => true,
 
-				'requires_site' => true,
-				'supports_additional_faculty' => false,
-				'supports_course_information' => false,
-				'supports_group_contact' => false,
-				'supports_mol_link' => false,
-				'supports_profile_column' => false,
+				'requires_site'                    => true,
+				'supports_additional_faculty'      => false,
+				'supports_course_information'      => false,
+				'supports_group_contact'           => false,
+				'supports_mol_link'                => false,
+				'supports_profile_column'          => false,
 			),
 
-			'club' => array(
-				'name' => __( 'Clubs', 'cbox-openlab-core' ),
-				'is_enabled' => true,
-				'order' => 3,
-				'site_settings' => array(
+			'club'      => array(
+				'name'                             => __( 'Clubs', 'cbox-openlab-core' ),
+				'is_enabled'                       => true,
+				'order'                            => 3,
+				'site_settings'                    => array(
 					'theme' => 'twentysixteen',
 				),
 
-				'labels' => array(
-					'singular' => __( 'Club', 'cbox-openlab-core' ),
-					'plural' => __( 'Clubs', 'cbox-openlab-core' ),
-					'create_clone_item' => __( 'Create Club', 'cbox-openlab-core' ),
-					'item_creation' => __( 'Club Creation', 'cbox-openlab-core' ),
-					'create_item_help_text' => __( 'Set up the name, URL, avatar, and other settings and permissions for your club. These settings affect the club home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'name_help_text' => __( 'Please choose your club name carefully. A clear name will make it easier for others to find your club. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
-					'avatar_help_text' => __( 'Upload an image to use as an avatar for this club. The image will be shown on the club home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide' => __( 'Can\'t decide? You can upload a photo once the club is created.', 'cbox-openlab-core' ),
-					'url_help_text' => __( 'Choose a unique URL that will be the home for your club.', 'cbox-openlab-core' ),
-					'privacy_help_text' => __( 'These settings affect how others view your club.', 'cbox-openlab-core' ),
-					'privacy_help_text_new' => __( 'You may change these settings later in the club settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content' => __( 'Club and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory' => __( 'Club will be listed in the "Clubs" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership' => __( 'Any community member may join this club.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content' => __( 'Club content and activity will only be visible to members of the club.', 'cbox-openlab-core' ),
+				'labels'                           => array(
+					'singular'                             => __( 'Club', 'cbox-openlab-core' ),
+					'plural'                               => __( 'Clubs', 'cbox-openlab-core' ),
+					'create_clone_item'                    => __( 'Create Club', 'cbox-openlab-core' ),
+					'item_creation'                        => __( 'Club Creation', 'cbox-openlab-core' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your club. These settings affect the club home, discussion, docs, and files.', 'cbox-openlab-core' ),
+					'name_help_text'                       => __( 'Please choose your club name carefully. A clear name will make it easier for others to find your club. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this club. The image will be shown on the club home page, and in search results.', 'cbox-openlab-core' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the club is created.', 'cbox-openlab-core' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your club.', 'cbox-openlab-core' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your club.', 'cbox-openlab-core' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the club settings.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_content'     => __( 'Club and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_directory'   => __( 'Club will be listed in the "Clubs" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this club.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_content'    => __( 'Club content and activity will only be visible to members of the club.', 'cbox-openlab-core' ),
 					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this club.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory' => __( 'Club will NOT be listed in the "Clubs" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_directory'  => __( 'Club will NOT be listed in the "Clubs" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
 					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this club.', 'cbox-openlab-core' ),
-					'group_details' => __( 'Club Details', 'cbox-openlab-core' ),
-					'my_groups' => __( 'My Clubs', 'cbox-openlab-core' ),
-					'group_site' => __( 'Club Site', 'cbox-openlab-core' ),
-					'status_open' => __( 'This Club is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site' => __( 'This Club is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site' => __( 'This Club is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private' => __( 'This Club is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site' => __( 'This Club is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site' => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site' => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'site_help_text' => __( 'Each club can also have an optional associated site. This is a WordPress site that all members of your club can access and contribute to.', 'cbox-openlab-core' ),
-					'site_address_help_text' => __( 'Take a moment to consider an address for the site associated with your club. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text' => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the club page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'visit_group_site' => __( 'Visit Club Site', 'cbox-openlab-core' ),
-					'group_home' => __( 'Club Home', 'cbox-openlab-core' ),
-					'settings_help_text_discussion' => __( 'These settings enable or disable the discussion forum on your club home page.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar' => __( 'These settings determine who can create an event for your club calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_members' => __( 'Any club member may connect events to this club.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_admins' => __( 'Only administrators and moderators may connect events to this club.', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your club home page.', 'cbox-openlab-core' ),
-					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group' => __( 'Invite Members to Club', 'cbox-openlab-core' ),
-					'invite_community_members_to_group' => __( 'Invite Community Members to Club', 'cbox-openlab-core' ),
+					'group_details'                        => __( 'Club Details', 'cbox-openlab-core' ),
+					'my_groups'                            => __( 'My Clubs', 'cbox-openlab-core' ),
+					'group_site'                           => __( 'Club Site', 'cbox-openlab-core' ),
+					'status_open'                          => __( 'This Club is OPEN.', 'cbox-openlab-core' ),
+					'status_open_community_site'           => __( 'This Club is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_open_private_site'             => __( 'This Club is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private'                       => __( 'This Club is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private_community_site'        => __( 'This Club is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_private_open_site'             => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
+					'status_private_private_site'          => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
+					'site_help_text'                       => __( 'Each club can also have an optional associated site. This is a WordPress site that all members of your club can access and contribute to.', 'cbox-openlab-core' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your club. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the club page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
+					'visit_group_site'                     => __( 'Visit Club Site', 'cbox-openlab-core' ),
+					'group_home'                           => __( 'Club Home', 'cbox-openlab-core' ),
+					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your club home page.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your club calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar_members'  => __( 'Any club member may connect events to this club.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this club.', 'cbox-openlab-core' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your club home page.', 'cbox-openlab-core' ),
+					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group'              => __( 'Invite Members to Club', 'cbox-openlab-core' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Club', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'cbox-openlab-core' ),
-					'group_contact' => __( 'Club Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text' => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion' => __( 'Club Discussion', 'cbox-openlab-core' ),
+					'group_contact'                        => __( 'Club Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text'              => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion'                     => __( 'Club Discussion', 'cbox-openlab-core' ),
 				),
 
-				'can_be_cloned' => false,
-				'directory_filters' => array( 'category' ),
+				'can_be_cloned'                    => false,
+				'directory_filters'                => array( 'category' ),
 				'enable_portfolio_list_by_default' => false,
-				'enable_site_by_default' => false,
-				'is_course' => false,
-				'is_portfolio' => false,
+				'enable_site_by_default'           => false,
+				'is_course'                        => false,
+				'is_portfolio'                     => false,
 
-				'requires_site' => false,
-				'supports_additional_faculty' => false,
-				'supports_course_information' => false,
-				'supports_group_contact' => true,
-				'supports_mol_link' => true,
-				'supports_profile_column' => true,
+				'requires_site'                    => false,
+				'supports_additional_faculty'      => false,
+				'supports_course_information'      => false,
+				'supports_group_contact'           => true,
+				'supports_mol_link'                => true,
+				'supports_profile_column'          => true,
 			),
 
-			'project' => array(
-				'name' => __( 'Projects', 'cbox-openlab-core' ),
-				'is_enabled' => true,
-				'order' => 4,
-				'site_settings' => array(
+			'project'   => array(
+				'name'                             => __( 'Projects', 'cbox-openlab-core' ),
+				'is_enabled'                       => true,
+				'order'                            => 4,
+				'site_settings'                    => array(
 					'theme' => 'twentysixteen',
 				),
 
-				'labels' => array(
-					'singular' => __( 'Project', 'cbox-openlab-core' ),
-					'plural' => __( 'Projects', 'cbox-openlab-core' ),
-					'create_clone_item' => __( 'Create Project', 'cbox-openlab-core' ),
-					'item_creation' => __( 'Project Creation', 'cbox-openlab-core' ),
-					'create_item_help_text' => __( 'Set up the name, URL, avatar, and other settings and permissions for your project. These settings affect the project home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'name_help_text' => __( 'Please choose your project name carefully. A clear name will make it easier for others to find your project. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
-					'avatar_help_text' => __( 'Upload an image to use as an avatar for this project. The image will be shown on the project home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide' => __( 'Can\'t decide? You can upload a photo once the project is created.', 'cbox-openlab-core' ),
-					'url_help_text' => __( 'Choose a unique URL that will be the home for your project.', 'cbox-openlab-core' ),
-					'privacy_help_text' => __( 'These settings affect how others view your project.', 'cbox-openlab-core' ),
-					'privacy_help_text_new' => __( 'You may change these settings later in the project settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content' => __( 'Project and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory' => __( 'Project will be listed in the "Projects" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership' => __( 'Any community member may join this project.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content' => __( 'Project content and activity will only be visible to members of the project.', 'cbox-openlab-core' ),
+				'labels'                           => array(
+					'singular'                             => __( 'Project', 'cbox-openlab-core' ),
+					'plural'                               => __( 'Projects', 'cbox-openlab-core' ),
+					'create_clone_item'                    => __( 'Create Project', 'cbox-openlab-core' ),
+					'item_creation'                        => __( 'Project Creation', 'cbox-openlab-core' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your project. These settings affect the project home, discussion, docs, and files.', 'cbox-openlab-core' ),
+					'name_help_text'                       => __( 'Please choose your project name carefully. A clear name will make it easier for others to find your project. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this project. The image will be shown on the project home page, and in search results.', 'cbox-openlab-core' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the project is created.', 'cbox-openlab-core' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your project.', 'cbox-openlab-core' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your project.', 'cbox-openlab-core' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the project settings.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_content'     => __( 'Project and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_directory'   => __( 'Project will be listed in the "Projects" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this project.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_content'    => __( 'Project content and activity will only be visible to members of the project.', 'cbox-openlab-core' ),
 					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this project.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory' => __( 'Project will NOT be listed in the "Projects" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
+					'privacy_help_text_private_directory'  => __( 'Project will NOT be listed in the "Projects" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
 					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this project.', 'cbox-openlab-core' ),
-					'group_details' => __( 'Project Details', 'cbox-openlab-core' ),
-					'my_groups' => __( 'My Projects', 'cbox-openlab-core' ),
-					'group_site' => __( 'Project Site', 'cbox-openlab-core' ),
-					'status_open' => __( 'This Project is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site' => __( 'This Project is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site' => __( 'This Project is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private' => __( 'This Project is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site' => __( 'This Project is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site' => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site' => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'site_help_text' => __( 'Each project can also have an optional associated site. This is a WordPress site that all members of your project can access and contribute to.', 'cbox-openlab-core' ),
-					'site_address_help_text' => __( 'Take a moment to consider an address for the site associated with your project. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text' => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the project page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'visit_group_site' => __( 'Visit Project Site', 'cbox-openlab-core' ),
-					'group_home' => __( 'Project Home', 'cbox-openlab-core' ),
-					'settings_help_text_discussion' => __( 'These settings enable or disable the discussion forum on your project home page.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar' => __( 'These settings determine who can create an event for your project calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_members' => __( 'Any project member may connect events to this project.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_admins' => __( 'Only administrators and moderators may connect events to this project.', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks' => __( 'These settings enable or disable the related links list display on your project home page.', 'cbox-openlab-core' ),
-					'settings_help_text_portfoliolist' => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group' => __( 'Invite Members to Project', 'cbox-openlab-core' ),
-					'invite_community_members_to_group' => __( 'Invite Community Members to Project', 'cbox-openlab-core' ),
+					'group_details'                        => __( 'Project Details', 'cbox-openlab-core' ),
+					'my_groups'                            => __( 'My Projects', 'cbox-openlab-core' ),
+					'group_site'                           => __( 'Project Site', 'cbox-openlab-core' ),
+					'status_open'                          => __( 'This Project is OPEN.', 'cbox-openlab-core' ),
+					'status_open_community_site'           => __( 'This Project is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_open_private_site'             => __( 'This Project is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private'                       => __( 'This Project is PRIVATE.', 'cbox-openlab-core' ),
+					'status_private_community_site'        => __( 'This Project is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
+					'status_private_open_site'             => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
+					'status_private_private_site'          => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
+					'site_help_text'                       => __( 'Each project can also have an optional associated site. This is a WordPress site that all members of your project can access and contribute to.', 'cbox-openlab-core' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your project. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the project page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
+					'visit_group_site'                     => __( 'Visit Project Site', 'cbox-openlab-core' ),
+					'group_home'                           => __( 'Project Home', 'cbox-openlab-core' ),
+					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your project home page.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your project calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar_members'  => __( 'Any project member may connect events to this project.', 'cbox-openlab-core' ),
+					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this project.', 'cbox-openlab-core' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your project home page.', 'cbox-openlab-core' ),
+					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'cbox-openlab-core' ),
+					'invite_members_to_group'              => __( 'Invite Members to Project', 'cbox-openlab-core' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Project', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'cbox-openlab-core' ),
-					'group_contact' => __( 'Project Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text' => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion' => __( 'Project Discussion', 'cbox-openlab-core' ),
+					'group_contact'                        => __( 'Project Contact', 'cbox-openlab-core' ),
+					'group_contact_help_text'              => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_discussion'                     => __( 'Project Discussion', 'cbox-openlab-core' ),
 				),
 
-				'can_be_cloned' => false,
-				'directory_filters' => array( 'category' ),
+				'can_be_cloned'                    => false,
+				'directory_filters'                => array( 'category' ),
 				'enable_portfolio_list_by_default' => false,
-				'enable_site_by_default' => false,
-				'is_course' => false,
-				'is_portfolio' => false,
+				'enable_site_by_default'           => false,
+				'is_course'                        => false,
+				'is_portfolio'                     => false,
 
-				'requires_site' => false,
-				'supports_additional_faculty' => false,
-				'supports_course_information' => false,
-				'supports_group_contact' => true,
-				'supports_mol_link' => true,
-				'supports_profile_column' => true,
+				'requires_site'                    => false,
+				'supports_additional_faculty'      => false,
+				'supports_course_information'      => false,
+				'supports_group_contact'           => true,
+				'supports_mol_link'                => true,
+				'supports_profile_column'          => true,
 			),
 		);
 
 		foreach ( $types_data as $type_slug => $type_data ) {
 			// Don't overwrite existing item.
-			$existing = get_posts( array(
-				'post_type' => 'cboxol_group_type',
-				'post_status' => array( 'publish', 'draft' ),
-				'name' => $type_slug,
-			) );
+			$existing = get_posts(
+				array(
+					'post_type'   => 'cboxol_group_type',
+					'post_status' => array( 'publish', 'draft' ),
+					'name'        => $type_slug,
+				)
+			);
 
 			if ( $existing ) {
 				continue;
@@ -526,32 +530,32 @@ class Install {
 
 	protected function install_default_group_categories() {
 		$cats = array(
-			'academic' => array(
-				'name' => __( 'Academic', 'cbox-openlab-core' ),
+			'academic'   => array(
+				'name'  => __( 'Academic', 'cbox-openlab-core' ),
 				'types' => array( 'club' ),
 			),
 			'coursework' => array(
-				'name' => __( 'Coursework', 'cbox-openlab-core' ),
+				'name'  => __( 'Coursework', 'cbox-openlab-core' ),
 				'types' => array( 'project' ),
 			),
-			'faculty' => array(
-				'name' => __( 'Faculty', 'cbox-openlab-core' ),
+			'faculty'    => array(
+				'name'  => __( 'Faculty', 'cbox-openlab-core' ),
 				'types' => array( 'project', 'club' ),
 			),
-			'research' => array(
-				'name' => __( 'Research', 'cbox-openlab-core' ),
+			'research'   => array(
+				'name'  => __( 'Research', 'cbox-openlab-core' ),
 				'types' => array( 'project' ),
 			),
-			'resource' => array(
-				'name' => __( 'Resource', 'cbox-openlab-core' ),
+			'resource'   => array(
+				'name'  => __( 'Resource', 'cbox-openlab-core' ),
 				'types' => array( 'project' ),
 			),
-			'staff' => array(
-				'name' => __( 'Staff', 'cbox-openlab-core' ),
+			'staff'      => array(
+				'name'  => __( 'Staff', 'cbox-openlab-core' ),
 				'types' => array( 'project', 'club' ),
 			),
-			'student' => array(
-				'name' => __( 'Student', 'cbox-openlab-core' ),
+			'student'    => array(
+				'name'  => __( 'Student', 'cbox-openlab-core' ),
 				'types' => array( 'project', 'club' ),
 			),
 		);
@@ -567,45 +571,45 @@ class Install {
 
 	protected function install_default_academic_types() {
 		$types = array(
-			'schools' => array(
-				'name' => __( 'Schools', 'cbox-openlab-core' ),
-				'labels' => array(
+			'schools'     => array(
+				'name'         => __( 'Schools', 'cbox-openlab-core' ),
+				'labels'       => array(
 					'singular' => __( 'School', 'cbox-openlab-core' ),
-					'plural' => __( 'Schools', 'cbox-openlab-core' ),
+					'plural'   => __( 'Schools', 'cbox-openlab-core' ),
 				),
-				'parent' => '',
-				'order' => 1,
+				'parent'       => '',
+				'order'        => 1,
 				'member_types' => array(
 					'student' => 'optional',
 					'faculty' => 'required',
-					'staff' => '',
-					'alumni' => '',
+					'staff'   => '',
+					'alumni'  => '',
 				),
-				'group_types' => array(
-					'course' => 'required',
-					'project' => 'optional',
-					'club' => '',
+				'group_types'  => array(
+					'course'     => 'required',
+					'project'    => 'optional',
+					'club'       => '',
 					'portfolios' => '',
 				),
 			),
 			'departments' => array(
-				'name' => __( 'Departments', 'cbox-openlab-core' ),
-				'labels' => array(
+				'name'         => __( 'Departments', 'cbox-openlab-core' ),
+				'labels'       => array(
 					'singular' => __( 'Department', 'cbox-openlab-core' ),
-					'plural' => __( 'Departments', 'cbox-openlab-core' ),
+					'plural'   => __( 'Departments', 'cbox-openlab-core' ),
 				),
-				'parent' => 'schools',
-				'order' => 2,
+				'parent'       => 'schools',
+				'order'        => 2,
 				'member_types' => array(
 					'student' => 'optional',
 					'faculty' => 'required',
-					'staff' => '',
-					'alumni' => '',
+					'staff'   => '',
+					'alumni'  => '',
 				),
-				'group_types' => array(
-					'course' => 'required',
-					'project' => 'optional',
-					'club' => '',
+				'group_types'  => array(
+					'course'     => 'required',
+					'project'    => 'optional',
+					'club'       => '',
 					'portfolios' => '',
 				),
 			),
@@ -613,11 +617,13 @@ class Install {
 
 		foreach ( $types as $type_slug => $type_data ) {
 			// Don't overwrite existing item.
-			$existing = get_posts( array(
-				'post_type' => 'cboxol_acad_unit_type',
-				'post_status' => array( 'publish', 'draft' ),
-				'name' => $type_slug,
-			) );
+			$existing = get_posts(
+				array(
+					'post_type'   => 'cboxol_acad_unit_type',
+					'post_status' => array( 'publish', 'draft' ),
+					'name'        => $type_slug,
+				)
+			);
 
 			if ( $existing ) {
 				continue;
@@ -640,24 +646,26 @@ class Install {
 
 		$units = array(
 			'arts-and-sciences' => array(
-				'type' => 'schools',
-				'name' => __( 'Arts and Sciences', 'cbox-openlab-core' ),
+				'type'   => 'schools',
+				'name'   => __( 'Arts and Sciences', 'cbox-openlab-core' ),
 				'parent' => '',
 			),
-			'english' => array(
-				'type' => 'departments',
-				'name' => __( 'English', 'cbox-openlab-core' ),
+			'english'           => array(
+				'type'   => 'departments',
+				'name'   => __( 'English', 'cbox-openlab-core' ),
 				'parent' => 'arts-and-sciences',
 			),
 		);
 
 		foreach ( $units as $unit_slug => $unit_data ) {
 			// Don't overwrite existing item.
-			$existing = get_posts( array(
-				'post_type' => 'cboxol_acad_unit',
-				'post_status' => array( 'publish', 'draft' ),
-				'name' => $type_slug,
-			) );
+			$existing = get_posts(
+				array(
+					'post_type'   => 'cboxol_acad_unit',
+					'post_status' => array( 'publish', 'draft' ),
+					'name'        => $type_slug,
+				)
+			);
 
 			if ( $existing ) {
 				continue;
@@ -673,8 +681,8 @@ class Install {
 	}
 
 	protected function install_default_brand_pages() {
-		/* translators: link to Dashboard > Pages > About */
 		$admin_text = '<p>' . sprintf(
+			/* translators: link to Dashboard > Pages > About */
 			esc_html__( 'If you are the administrator, visit %s to modify this text.', 'cbox-openlab-core' ),
 			sprintf(
 				'<a href="%s">%s</a>',
@@ -684,21 +692,21 @@ class Install {
 		) . '</p>';
 
 		$brand_page_types = cboxol_get_brand_page_types();
-		$pages = array(
-			'about' => array(
-				'post_title' => __( 'About', 'cbox-openlab-core' ),
+		$pages            = array(
+			'about'        => array(
+				'post_title'   => __( 'About', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
-			'help' => array(
-				'post_title' => __( 'Help', 'cbox-openlab-core' ),
+			'help'         => array(
+				'post_title'   => __( 'Help', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
 			'terms-of-use' => array(
-				'post_title' => __( 'Terms of Use', 'cbox-openlab-core' ),
+				'post_title'   => __( 'Terms of Use', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This page can contain the Terms of Service for your site. Terms of Service are the rules that a visitor or member must abide by while using your site.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
-			'contact-us' => array(
-				'post_title' => __( 'Contact Us', 'cbox-openlab-core' ),
+			'contact-us'   => array(
+				'post_title'   => __( 'Contact Us', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, want to provide feedback, or need help.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
 		);
@@ -712,11 +720,11 @@ class Install {
 			$page = $pages[ $brand_page_type_name ];
 
 			$page_args = array(
-				'post_type' => 'page',
-				'post_title' => $page['post_title'],
+				'post_type'    => 'page',
+				'post_title'   => $page['post_title'],
 				'post_content' => $page['post_content'],
-				'post_name' => $brand_page_type_name,
-				'post_status' => 'publish',
+				'post_name'    => $brand_page_type_name,
+				'post_status'  => 'publish',
 			);
 
 			if ( isset( $brand_page_type_info['parent'] ) ) {
@@ -739,14 +747,16 @@ class Install {
 	protected function install_default_settings() {
 		$brand_pages = cboxol_get_brand_pages();
 
-		update_site_option( 'cboxol_registration_form_settings', array(
-			'confirmationText' => sprintf(
-				/* translators: 1: TOS URL, 2: TOS page title */
-				__( 'By clicking "Complete Sign Up", you are agreeing to the <a href="%1$s">%2$s</a>.', 'cbox-openlab-core' ),
-				esc_url( $brand_pages['terms-of-use']['preview_url'] ),
-				esc_html( $brand_pages['terms-of-use']['title'] )
-			),
-		) );
+		update_site_option(
+			'cboxol_registration_form_settings', array(
+				'confirmationText' => sprintf(
+					/* translators: 1: TOS URL, 2: TOS page title */
+					__( 'By clicking "Complete Sign Up", you are agreeing to the <a href="%1$s">%2$s</a>.', 'cbox-openlab-core' ),
+					esc_url( $brand_pages['terms-of-use']['preview_url'] ),
+					esc_html( $brand_pages['terms-of-use']['title'] )
+				),
+			)
+		);
 	}
 
 	protected function install_default_widgets() {
@@ -758,95 +768,110 @@ class Install {
 		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'home-main' ) ) {
 			$group_types = cboxol_get_group_types();
 			foreach ( $group_types as $group_type ) {
-				$result = CBox_Widget_Setter::set_widget( array(
-					'id_base'    => 'openlab_group_type',
-					'sidebar_id' => 'home-main',
-					'settings'   => array(
-						'title' => $group_type->get_label( 'plural' ),
-						'group_type' => $group_type->get_slug(),
-					),
-				) );
+				$result = CBox_Widget_Setter::set_widget(
+					array(
+						'id_base'    => 'openlab_group_type',
+						'sidebar_id' => 'home-main',
+						'settings'   => array(
+							'title'      => $group_type->get_label( 'plural' ),
+							'group_type' => $group_type->get_slug(),
+						),
+					)
+				);
 			}
 		}
 
 		// Home sidebar.
 		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'home-sidebar' ) ) {
-			CBox_Widget_Setter::set_widget( array(
-				'id_base'    => 'cac_featured_content_widget',
-				'sidebar_id' => 'home-sidebar',
-				'settings'   => array(
-					'crop_length' => 300,
-					'custom_description' => __( 'Use this space to highlight content from around your network.', 'openlab-theme' ),
-					'display_images' => true,
-					'featured_content_type' => 'resource',
-					'featured_resource_title' => __( 'Featured Item', 'openlab-theme' ),
-					'featured_resource_link' => home_url(),
-					'image_url' => bp_core_avatar_default(),
-					'image_height' => 50,
-					'image_width' => 50,
-					'read_more' => '',
-					'title' => __( 'In The Spotlight', 'openlab-theme' ),
-					'title_element' => 'h2',
-				),
-			) );
+			CBox_Widget_Setter::set_widget(
+				array(
+					'id_base'    => 'cac_featured_content_widget',
+					'sidebar_id' => 'home-sidebar',
+					'settings'   => array(
+						'crop_length'             => 300,
+						'custom_description'      => __( 'Use this space to highlight content from around your network.', 'openlab-theme' ),
+						'display_images'          => true,
+						'featured_content_type'   => 'resource',
+						'featured_resource_title' => __( 'Featured Item', 'openlab-theme' ),
+						'featured_resource_link'  => home_url(),
+						'image_url'               => bp_core_avatar_default(),
+						'image_height'            => 50,
+						'image_width'             => 50,
+						'read_more'               => '',
+						'title'                   => __( 'In The Spotlight', 'openlab-theme' ),
+						'title_element'           => 'h2',
+					),
+				)
+			);
 
-			CBox_Widget_Setter::set_widget( array(
-				'id_base'    => 'openlab-whats-happening',
-				'sidebar_id' => 'home-sidebar',
-				'settings'   => array(
-					'title' => __( 'What\'s Happening?', 'openlab-theme' ),
-				),
-			) );
+			CBox_Widget_Setter::set_widget(
+				array(
+					'id_base'    => 'openlab-whats-happening',
+					'sidebar_id' => 'home-sidebar',
+					'settings'   => array(
+						'title' => __( 'What\'s Happening?', 'openlab-theme' ),
+					),
+				)
+			);
 
-			CBox_Widget_Setter::set_widget( array(
-				'id_base'    => 'openlab-whos-online',
-				'sidebar_id' => 'home-sidebar',
-				'settings'   => array(
-					'title' => __( 'Who\'s Online?', 'openlab-theme' ),
-				),
-			) );
+			CBox_Widget_Setter::set_widget(
+				array(
+					'id_base'    => 'openlab-whos-online',
+					'sidebar_id' => 'home-sidebar',
+					'settings'   => array(
+						'title' => __( 'Who\'s Online?', 'openlab-theme' ),
+					),
+				)
+			);
 
-			CBox_Widget_Setter::set_widget( array(
-				'id_base'    => 'openlab-new-members',
-				'sidebar_id' => 'home-sidebar',
-				'settings'   => array(
-					'title' => __( 'New Members', 'openlab-theme' ),
-				),
-			) );
+			CBox_Widget_Setter::set_widget(
+				array(
+					'id_base'    => 'openlab-new-members',
+					'sidebar_id' => 'home-sidebar',
+					'settings'   => array(
+						'title' => __( 'New Members', 'openlab-theme' ),
+					),
+				)
+			);
 		}
 
 		// Footer sidebar.
 		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'footer' ) ) {
 			$welcome_text = __( 'The footer areas can be used to display general information about your site, such as contact information and links to terms of service.', 'openlab-theme' );
 
-			CBox_Widget_Setter::set_widget( array(
-				'id_base'    => 'text',
-				'sidebar_id' => 'footer',
-				'settings'   => array(
-					'title' => __( 'Footer area 1', 'openlab-theme' ),
-					'text'  => $welcome_text,
-					'filter' => false,
-				),
-			) );
+			CBox_Widget_Setter::set_widget(
+				array(
+					'id_base'    => 'text',
+					'sidebar_id' => 'footer',
+					'settings'   => array(
+						'title'  => __( 'Footer area 1', 'openlab-theme' ),
+						'text'   => $welcome_text,
+						'filter' => false,
+					),
+				)
+			);
 
+			/* translators: link to Customizer */
 			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme' ), get_admin_url( cbox_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
 
-			CBox_Widget_Setter::set_widget( array(
-				'id_base'    => 'text',
-				'sidebar_id' => 'footer',
-				'settings'   => array(
-					'title' => __( 'Footer area 2', 'openlab-theme' ),
-					'text'  => $welcome_text,
-					'filter' => false,
-				),
-			) );
+			CBox_Widget_Setter::set_widget(
+				array(
+					'id_base'    => 'text',
+					'sidebar_id' => 'footer',
+					'settings'   => array(
+						'title'  => __( 'Footer area 2', 'openlab-theme' ),
+						'text'   => $welcome_text,
+						'filter' => false,
+					),
+				)
+			);
 		}
 	}
 
 	protected function install_default_nav_menus() {
 		// Main Menu.
 		$menu_name = wp_slash( __( 'Main Menu', 'cbox-openlab-core' ) );
-		$menu_id = wp_create_nav_menu( $menu_name );
+		$menu_id   = wp_create_nav_menu( $menu_name );
 
 		if ( is_wp_error( $menu_id ) ) {
 			return;
@@ -858,10 +883,10 @@ class Install {
 				$menu_id,
 				0,
 				array(
-					'menu-item-title' => $brand_pages['about']['title'],
+					'menu-item-title'   => $brand_pages['about']['title'],
 					'menu-item-classes' => 'about',
-					'menu-item-url' => $brand_pages['about']['preview_url'],
-					'menu-item-status' => 'publish',
+					'menu-item-url'     => $brand_pages['about']['preview_url'],
+					'menu-item-status'  => 'publish',
 				)
 			);
 		}
@@ -870,10 +895,10 @@ class Install {
 			$menu_id,
 			0,
 			array(
-				'menu-item-title' => bp_get_directory_title( 'members' ),
+				'menu-item-title'   => bp_get_directory_title( 'members' ),
 				'menu-item-classes' => 'home',
-				'menu-item-url' => bp_get_members_directory_permalink(),
-				'menu-item-status' => 'publish',
+				'menu-item-url'     => bp_get_members_directory_permalink(),
+				'menu-item-status'  => 'publish',
 			)
 		);
 
@@ -883,10 +908,10 @@ class Install {
 				$menu_id,
 				0,
 				array(
-					'menu-item-title' => $group_type->get_label( 'plural' ),
+					'menu-item-title'   => $group_type->get_label( 'plural' ),
 					'menu-item-classes' => 'group-type ' . $group_type->get_slug(),
-					'menu-item-url' => bp_get_group_type_directory_permalink( $group_type->get_slug() ),
-					'menu-item-status' => 'publish',
+					'menu-item-url'     => bp_get_group_type_directory_permalink( $group_type->get_slug() ),
+					'menu-item-status'  => 'publish',
 				)
 			);
 		}
@@ -897,10 +922,10 @@ class Install {
 				$menu_id,
 				0,
 				array(
-					'menu-item-title' => __( 'Calendar', 'cbox-openlab-core' ),
+					'menu-item-title'   => __( 'Calendar', 'cbox-openlab-core' ),
 					'menu-item-classes' => 'sitewide-calendar',
-					'menu-item-url' => trailingslashit( bp_get_root_domain() ) . 'calendar/',
-					'menu-item-status' => 'publish',
+					'menu-item-url'     => trailingslashit( bp_get_root_domain() ) . 'calendar/',
+					'menu-item-status'  => 'publish',
 				)
 			);
 		}
@@ -910,22 +935,22 @@ class Install {
 				$menu_id,
 				0,
 				array(
-					'menu-item-title' => $brand_pages['help']['title'],
+					'menu-item-title'   => $brand_pages['help']['title'],
 					'menu-item-classes' => 'help',
-					'menu-item-url' => $brand_pages['help']['preview_url'],
-					'menu-item-status' => 'publish',
+					'menu-item-url'     => $brand_pages['help']['preview_url'],
+					'menu-item-status'  => 'publish',
 				)
 			);
 		}
 
-		$locations = get_theme_mod( 'nav_menu_locations' );
+		$locations         = get_theme_mod( 'nav_menu_locations' );
 		$locations['main'] = $menu_id;
 		set_theme_mod( 'nav_menu_locations', $locations );
 
 		// About Menu.
 		if ( isset( $brand_pages['about'] ) ) {
 			$menu_name = wp_slash( __( 'About Menu', 'cbox-openlab-core' ) );
-			$menu_id = wp_create_nav_menu( $menu_name );
+			$menu_id   = wp_create_nav_menu( $menu_name );
 
 			if ( is_wp_error( $menu_id ) ) {
 				return;
@@ -935,10 +960,10 @@ class Install {
 				$menu_id,
 				0,
 				array(
-					'menu-item-title' => $brand_pages['about']['title'],
+					'menu-item-title'   => $brand_pages['about']['title'],
 					'menu-item-classes' => 'about',
-					'menu-item-url' => $brand_pages['about']['preview_url'],
-					'menu-item-status' => 'publish',
+					'menu-item-url'     => $brand_pages['about']['preview_url'],
+					'menu-item-status'  => 'publish',
 				)
 			);
 
@@ -951,15 +976,15 @@ class Install {
 					$menu_id,
 					0,
 					array(
-						'menu-item-title' => $brand_page['title'],
+						'menu-item-title'   => $brand_page['title'],
 						'menu-item-classes' => 'about ' . $brand_page_name,
-						'menu-item-url' => $brand_page['preview_url'],
-						'menu-item-status' => 'publish',
+						'menu-item-url'     => $brand_page['preview_url'],
+						'menu-item-status'  => 'publish',
 					)
 				);
 			}
 
-			$locations = get_theme_mod( 'nav_menu_locations' );
+			$locations              = get_theme_mod( 'nav_menu_locations' );
 			$locations['aboutmenu'] = $menu_id;
 			set_theme_mod( 'nav_menu_locations', $locations );
 		}
@@ -968,14 +993,14 @@ class Install {
 	protected function install_default_slides() {
 		$slides = array(
 			array(
-				'title' => __( 'Your Second Sample Slide', 'openlab-theme' ),
+				'title'   => __( 'Your Second Sample Slide', 'openlab-theme' ),
 				'content' => 'Ex consequatur ipsam iusto id impedit nesciunt. Velit perspiciatis laborum et culpa rem earum. Beatae fugit perspiciatis dolorum. Incidunt voluptate officia cupiditate ipsum. Officiis eius quo incidunt voluptatem vitae deleniti aut. Non dolorem iste qui voluptates id ratione unde accusantium.',
-				'image' => get_template_directory() . '/images/default-slide-1.jpeg',
+				'image'   => get_template_directory() . '/images/default-slide-1.jpeg',
 			),
 			array(
-				'title' => __( 'Your First Sample Slide', 'openlab-theme' ),
+				'title'   => __( 'Your First Sample Slide', 'openlab-theme' ),
 				'content' => 'Ipsam et voluptas sed qui vel voluptatem quam. Qui pariatur occaecati consequatur quibusdam reiciendis aut asperiores nam. Esse et et id amet et quis. Beatae quaerat a ea expedita blanditiis quia. Doloremque ad nemo culpa. Quia at qui et.',
-				'image' => get_template_directory() . '/images/default-slide-2.jpeg',
+				'image'   => get_template_directory() . '/images/default-slide-2.jpeg',
 			),
 		);
 
@@ -987,12 +1012,14 @@ class Install {
 		}
 
 		foreach ( $slides as $slide ) {
-			$slide_id = wp_insert_post( array(
-				'post_type' => 'slider',
-				'post_status' => 'publish',
-				'post_title' => $slide['title'],
-				'post_content' => $slide['content'],
-			) );
+			$slide_id = wp_insert_post(
+				array(
+					'post_type'    => 'slider',
+					'post_status'  => 'publish',
+					'post_title'   => $slide['title'],
+					'post_content' => $slide['content'],
+				)
+			);
 
 			$file_path = $slide['image'];
 
@@ -1001,10 +1028,10 @@ class Install {
 			copy( $file_path, $tmpfname );
 
 			$file = array(
-				'error' => null,
+				'error'    => null,
 				'tmp_name' => $tmpfname,
-				'size' => filesize( $file_path ),
-				'name' => basename( $file_path ),
+				'size'     => filesize( $file_path ),
+				'name'     => basename( $file_path ),
 			);
 
 			$overrides = array(
@@ -1016,14 +1043,14 @@ class Install {
 
 			$attachment = array(
 				'post_mime_type' => $sideloaded['type'],
-				'post_title' => basename( $tmpfname ),
-				'post_content' => '',
-				'post_status' => 'inherit',
-				'post_parent' => $slide_id,
+				'post_title'     => basename( $tmpfname ),
+				'post_content'   => '',
+				'post_status'    => 'inherit',
+				'post_parent'    => $slide_id,
 			);
 
 			$attachment_id = wp_insert_attachment( $attachment, $sideloaded['file'] );
-			$attach_data = wp_generate_attachment_metadata( $attachment_id, $sideloaded );
+			$attach_data   = wp_generate_attachment_metadata( $attachment_id, $sideloaded );
 			wp_update_attachment_metadata( $attachment_id, $attach_data );
 
 			set_post_thumbnail( $slide_id, $attachment_id );
