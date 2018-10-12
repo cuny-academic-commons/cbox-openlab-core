@@ -66,6 +66,17 @@ class Install {
 	 */
 	public function install_default_member_types() {
 		$types_data = array(
+			'student' => array(
+				'name'               => __( 'Students', 'cbox-openlab-core' ),
+				'labels'             => array(
+					'singular' => __( 'Student', 'cbox-openlab-core' ),
+					'plural'   => __( 'Students', 'cbox-openlab-core' ),
+				),
+				'can_create_courses' => false,
+				'selectable_types'   => array( 'student', 'alumni' ),
+				'is_enabled'         => true,
+				'order'              => 1,
+			),
 			'faculty' => array(
 				'name'               => __( 'Faculty', 'cbox-openlab-core' ),
 				'labels'             => array(
@@ -75,7 +86,7 @@ class Install {
 				'can_create_courses' => true,
 				'selectable_types'   => array(),
 				'is_enabled'         => true,
-				'order'              => 1,
+				'order'              => 2,
 			),
 			'staff'   => array(
 				'name'               => __( 'Staff', 'cbox-openlab-core' ),
@@ -85,17 +96,6 @@ class Install {
 				),
 				'can_create_courses' => false,
 				'selectable_types'   => array(),
-				'is_enabled'         => true,
-				'order'              => 2,
-			),
-			'student' => array(
-				'name'               => __( 'Students', 'cbox-openlab-core' ),
-				'labels'             => array(
-					'singular' => __( 'Student', 'cbox-openlab-core' ),
-					'plural'   => __( 'Students', 'cbox-openlab-core' ),
-				),
-				'can_create_courses' => false,
-				'selectable_types'   => array( 'student', 'alumni' ),
 				'is_enabled'         => true,
 				'order'              => 3,
 			),
