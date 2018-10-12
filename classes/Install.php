@@ -526,13 +526,33 @@ class Install {
 
 	protected function install_default_group_categories() {
 		$cats = array(
+			'academic' => array(
+				'name' => __( 'Academic', 'cbox-openlab-core' ),
+				'types' => array( 'club' ),
+			),
 			'coursework' => array(
 				'name' => __( 'Coursework', 'cbox-openlab-core' ),
-				'types' => array( 'course', 'portfolio' ),
+				'types' => array( 'project' ),
+			),
+			'faculty' => array(
+				'name' => __( 'Faculty', 'cbox-openlab-core' ),
+				'types' => array( 'project', 'club' ),
 			),
 			'research' => array(
 				'name' => __( 'Research', 'cbox-openlab-core' ),
-				'types' => array( 'portfolio', 'project' ),
+				'types' => array( 'project' ),
+			),
+			'resource' => array(
+				'name' => __( 'Resource', 'cbox-openlab-core' ),
+				'types' => array( 'project' ),
+			),
+			'staff' => array(
+				'name' => __( 'Staff', 'cbox-openlab-core' ),
+				'types' => array( 'project', 'club' ),
+			),
+			'student' => array(
+				'name' => __( 'Student', 'cbox-openlab-core' ),
+				'types' => array( 'project', 'club' ),
 			),
 		);
 
