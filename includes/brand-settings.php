@@ -43,7 +43,7 @@ function cboxol_get_brand_page_types() {
 	return array(
 		'about' => array(
 			'settings_page_title' => __( 'About Page', 'cbox-openlab-core' ),
-			'settings_page_description' => __( 'This page can contain an introduction to your site, institution, and/or organization. Consequuntur ipsum pariatur accusamus porro incidunt ut sint non. Eius alias rem expedita iste. Esse dignissimos fugiat veniam pariatur voluptatibus.', 'cbox-openlab-core' ),
+			'settings_page_description' => __( 'This page can contain an introduction to your site, institution, and/or organization.', 'cbox-openlab-core' ),
 		),
 		'help' => array(
 			'settings_page_title' => __( 'Help Page', 'cbox-openlab-core' ),
