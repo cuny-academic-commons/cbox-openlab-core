@@ -48,7 +48,7 @@ class SignupCodes extends WP_REST_Controller {
 		$signup_code = $this->create_edit_helper( $signup_code, $params );
 
 		if ( ! $signup_code->get_wp_post_id() ) {
-			return new WP_Error( 'signup_code_save_failure', __( 'Could not create signup code.', 'cbox-openlab-core' ) );
+			return new WP_Error( 'signup_code_save_failure', __( 'Could not create signup code.', 'commons-in-a-box' ) );
 		}
 
 		$response = rest_ensure_response( $signup_code->get_for_endpoint() );

@@ -3,7 +3,7 @@
  * Plugin Name:     CBOX-OpenLab Core
  * Plugin URI:      http://commonsinabox.org
  * Description:     Core functionality for CBOX-OpenLab
- * Text Domain:     cbox-openlab-core
+ * Text Domain:     commons-in-a-box
  * Domain Path:     /languages
  * Version:         1.1.0-beta1
  * Network:         true

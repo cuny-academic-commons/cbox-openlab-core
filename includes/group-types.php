@@ -82,7 +82,7 @@ function cboxol_grouptypes_admin_page() {
 
 	<div class="cboxol-admin-content">
 		<?php /* @todo */ ?>
-		<p><?php esc_html_e( 'Group Types allow your site\'s groups to be categorized in various ways. Each group type gets its own directory, and groups of different types may differ in functionality and appearance.', 'cbox-openlab-core' ); ?></p>
+		<p><?php esc_html_e( 'Group Types allow your site\'s groups to be categorized in various ways. Each group type gets its own directory, and groups of different types may differ in functionality and appearance.', 'commons-in-a-box' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
@@ -100,16 +100,16 @@ function cboxol_grouptypes_admin_page() {
 function cboxol_grouptypes_register_post_type() {
 	register_post_type( 'cboxol_group_type', array(
 		'labels' => array(
-			'name' => _x( 'Group Types', 'Post type general name', 'cbox-openlab-core' ),
-			'singular_name' => _x( 'Group Type', 'Post type singular name', 'cbox-openlab-core' ),
-			'add_new_item' => __( 'Add New Group Type', 'cbox-openlab-core' ),
-			'new_item' => __( 'New Group Type', 'cbox-openlab-core' ),
-			'edit_item' => __( 'Edit Group Type', 'cbox-openlab-core' ),
-			'view_item' => __( 'View Group Type', 'cbox-openlab-core' ),
-			'all_item' => __( 'All Group Types', 'cbox-openlab-core' ),
-			'search_items' => __( 'Search Group Types', 'cbox-openlab-core' ),
-			'not_found' => __( 'No group types found.', 'cbox-openlab-core' ),
-			'not_found_in_trash' => __( 'No group types found in Trash.', 'cbox-openlab-core' ),
+			'name' => _x( 'Group Types', 'Post type general name', 'commons-in-a-box' ),
+			'singular_name' => _x( 'Group Type', 'Post type singular name', 'commons-in-a-box' ),
+			'add_new_item' => __( 'Add New Group Type', 'commons-in-a-box' ),
+			'new_item' => __( 'New Group Type', 'commons-in-a-box' ),
+			'edit_item' => __( 'Edit Group Type', 'commons-in-a-box' ),
+			'view_item' => __( 'View Group Type', 'commons-in-a-box' ),
+			'all_item' => __( 'All Group Types', 'commons-in-a-box' ),
+			'search_items' => __( 'Search Group Types', 'commons-in-a-box' ),
+			'not_found' => __( 'No group types found.', 'commons-in-a-box' ),
+			'not_found_in_trash' => __( 'No group types found in Trash.', 'commons-in-a-box' ),
 		),
 		'public' => false,
 		'publicly_queryable' => false,
@@ -152,7 +152,7 @@ function cboxol_get_group_type( $slug ) {
 		return $types[ $slug ];
 	}
 
-	return new WP_Error( 'no_group_type_found', __( 'No group type found by that slug.', 'cbox-openlab-core' ), $slug );;
+	return new WP_Error( 'no_group_type_found', __( 'No group type found by that slug.', 'commons-in-a-box' ), $slug );;
 }
 
 /**
@@ -234,7 +234,7 @@ function cboxol_get_group_types( $args = array() ) {
 function cboxol_get_group_group_type( $group_id ) {
 	$type = bp_groups_get_group_type( $group_id );
 	if ( ! $type ) {
-		return new WP_Error( 'no_group_type', __( 'This group does not have a type.', 'cbox-openlab-core' ), $group_id );
+		return new WP_Error( 'no_group_type', __( 'This group does not have a type.', 'commons-in-a-box' ), $group_id );
 	}
 
 	return cboxol_get_group_type( $type );
@@ -261,7 +261,7 @@ function cboxol_get_edited_group_group_type() {
 	}
 
 	if ( ! $group_type ) {
-		return new WP_Error( 'no_group_type', __( 'No group type found.', 'cbox-openlab-core' ) );
+		return new WP_Error( 'no_group_type', __( 'No group type found.', 'commons-in-a-box' ) );
 	}
 
 	return $group_type;

@@ -15,7 +15,7 @@ add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_member_type', 
 function cboxol_registration_register_post_type() {
 	register_post_type( 'cboxol_signup_code', array(
 		'labels' => array(
-			'name' => _x( 'Signup Codes', 'Post type general name', 'cbox-openlab-core' ),
+			'name' => _x( 'Signup Codes', 'Post type general name', 'commons-in-a-box' ),
 		),
 		'public' => false,
 		'publicly_queryable' => false,
@@ -71,7 +71,7 @@ function cboxol_registration_admin_page() {
 	?>
 
 	<div class="cboxol-admin-content">
-		<p><?php esc_html_e( 'Registration management allows you to control who can create accounts and what types of accounts different types of users can create.', 'cbox-openlab-core' ); ?></p>
+		<p><?php esc_html_e( 'Registration management allows you to control who can create accounts and what types of accounts different types of users can create.', 'commons-in-a-box' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
@@ -202,7 +202,7 @@ function cboxol_get_signup_code( $code ) {
 		}
 	}
 
-	return new WP_Error( 'no_signup_code_found', __( 'No signup code found.', 'cbox-openlab-core' ), $code );
+	return new WP_Error( 'no_signup_code_found', __( 'No signup code found.', 'commons-in-a-box' ), $code );
 }
 
 /**
@@ -296,24 +296,24 @@ function cboxol_registration_validate_email() {
 	);
 
 	if ( ! isset( $_POST['email'] ) ) {
-		$retval['message'] = __( 'No email provided.', 'cbox-openlab-core' );
+		$retval['message'] = __( 'No email provided.', 'commons-in-a-box' );
 		wp_send_json_error( $retval );
 	}
 
 	$email = wp_unslash( $_POST['email'] );
 
 	if ( ! is_email( $email ) ) {
-		$retval['message'] = __( 'Please enter a valid email address.', 'cbox-openlab-core' );
+		$retval['message'] = __( 'Please enter a valid email address.', 'commons-in-a-box' );
 		wp_send_json_error( $retval );
 	}
 
 	if ( ! cboxol_wildcard_email_domain_check( $email ) ) {
-		$retval['message'] = __( 'Sorry, that email address is not allowed!', 'cbox-openlab-core' );
+		$retval['message'] = __( 'Sorry, that email address is not allowed!', 'commons-in-a-box' );
 		wp_send_json_error( $retval );
 	}
 
 	if ( email_exists( $email ) ) {
-		$retval['message'] = __( 'Sorry, that email address is already used!', 'cbox-openlab-core' );
+		$retval['message'] = __( 'Sorry, that email address is already used!', 'commons-in-a-box' );
 		wp_send_json_error( $retval );
 	}
 
@@ -457,7 +457,7 @@ function cboxol_registration_validate_signup_code() {
 function cboxol_get_registration_form_settings() {
 	$registration_form_settings = get_site_option( 'cboxol_registration_form_settings', array() );
 	$registration_form_settings = array_merge( array(
-		'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'cbox-openlab-core' ),
+		'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'commons-in-a-box' ),
 	), $registration_form_settings );
 	return $registration_form_settings;
 }

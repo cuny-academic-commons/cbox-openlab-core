@@ -21,7 +21,7 @@ add_action( 'groups_group_after_save', 'cboxol_academic_units_process_change_for
 function cboxol_academic_units_register_post_types() {
 	register_post_type( 'cboxol_acadunit_type', array(
 		'labels' => array(
-			'name' => _x( 'Academic Unit Types', 'Post type general name', 'cbox-openlab-core' ),
+			'name' => _x( 'Academic Unit Types', 'Post type general name', 'commons-in-a-box' ),
 		),
 		'public' => false,
 		'publicly_queryable' => false,
@@ -31,7 +31,7 @@ function cboxol_academic_units_register_post_types() {
 
 	register_post_type( 'cboxol_acadunit', array(
 		'labels' => array(
-			'name' => _x( 'Academic Units', 'Post type general name', 'cbox-openlab-core' ),
+			'name' => _x( 'Academic Units', 'Post type general name', 'commons-in-a-box' ),
 		),
 		'public' => false,
 		'publicly_queryable' => false,
@@ -114,9 +114,9 @@ function cboxol_academic_units_main_admin_page() {
 
 	?>
 	<div class="cboxol-admin-content">
-		<p><?php esc_html_e( 'Academic Units allow your members to identify themselves and their groups with the appropriate divisions within your institution. Create the top-level unit types that best describe how your institution is organized - for example, Departments that are located within Divisions - and then define the specific units within each type. Members will then be able to associate themselves with these units when editing their profiles or when administering their groups.', 'cbox-openlab-core' ); ?></p>
+		<p><?php esc_html_e( 'Academic Units allow your members to identify themselves and their groups with the appropriate divisions within your institution. Create the top-level unit types that best describe how your institution is organized - for example, Departments that are located within Divisions - and then define the specific units within each type. Members will then be able to associate themselves with these units when editing their profiles or when administering their groups.', 'commons-in-a-box' ); ?></p>
 
-		<p><?php esc_html_e( 'Please choose whether this academic unit should be a required or optional choice, or not an available choice for any of the following member types.', 'cbox-openlab-core' ); ?></p>
+		<p><?php esc_html_e( 'Please choose whether this academic unit should be a required or optional choice, or not an available choice for any of the following member types.', 'commons-in-a-box' ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
@@ -194,7 +194,7 @@ function cboxol_get_academic_unit_type( $slug ) {
 		}
 	}
 
-	return new WP_Error( 'no_academic_unit_type_found', __( 'No academic unit type found.', 'cbox-openlab-core' ) );
+	return new WP_Error( 'no_academic_unit_type_found', __( 'No academic unit type found.', 'commons-in-a-box' ) );
 }
 
 /**
@@ -262,7 +262,7 @@ function cboxol_get_academic_unit( $slug ) {
 		}
 	}
 
-	return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found.', 'cbox-openlab-core' ) );
+	return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found.', 'commons-in-a-box' ) );
 }
 
 function cboxol_get_academic_unit_map() {
@@ -532,8 +532,8 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 		'groupType' => $r['group_type'],
 		'typesByMemberType' => $member_type_unit_types,
 		'typesByGroupType' => $group_type_unit_types,
-		'requiredError' => esc_html__( 'Please make sure you fill in all required fields before saving.', 'cbox-openlab-core' ),
-		'requiredLabel' => esc_html__( '(required)', 'cbox-openlab-core' ),
+		'requiredError' => esc_html__( 'Please make sure you fill in all required fields before saving.', 'commons-in-a-box' ),
+		'requiredLabel' => esc_html__( '(required)', 'commons-in-a-box' ),
 	) );
 
 	ob_start();
