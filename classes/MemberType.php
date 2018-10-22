@@ -180,14 +180,14 @@ class MemberType extends ItemTypeBase implements ItemType {
 		return array(
 			'singular' => array(
 				'slug' => 'singular',
-				'label' => _x( 'Singular', 'Member Type singular label', 'commons-in-a-box' ),
-				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'commons-in-a-box' ),
+				'label' => _x( 'Singular', 'Member Type singular label', 'cbox-openlab-core' ),
+				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'plural' => array(
 				'slug' => 'plural',
-				'label' => _x( 'Plural', 'Member Type plural label', 'commons-in-a-box' ),
-				'description' => __( 'Used in directory titles.', 'commons-in-a-box' ),
+				'label' => _x( 'Plural', 'Member Type plural label', 'cbox-openlab-core' ),
+				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);
@@ -212,11 +212,11 @@ class MemberType extends ItemTypeBase implements ItemType {
 		}
 
 		if ( ! $the_code ) {
-			return new WP_Error( 'signup_code_not_found', __( 'Signup code is incorrect.', 'commons-in-a-box' ), $code );
+			return new WP_Error( 'signup_code_not_found', __( 'Signup code is incorrect.', 'cbox-openlab-core' ), $code );
 		}
 
 		if ( $the_code->get_member_type()->get_slug() !== $this->get_slug() ) {
-			return new WP_Error( 'signup_code_does_not_match', __( 'Signup code is incorrect.', 'commons-in-a-box' ), $code );
+			return new WP_Error( 'signup_code_does_not_match', __( 'Signup code is incorrect.', 'cbox-openlab-core' ), $code );
 		}
 
 		return true;

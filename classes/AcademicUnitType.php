@@ -373,14 +373,14 @@ class AcademicUnitType {
 		return array(
 			'plural' => array(
 				'slug' => 'plural',
-				'label' => _x( 'Plural', 'Academic Unit Type plural label', 'commons-in-a-box' ),
-				'description' => __( 'Used in directory titles.', 'commons-in-a-box' ),
+				'label' => _x( 'Plural', 'Academic Unit Type plural label', 'cbox-openlab-core' ),
+				'description' => __( 'Used in directory titles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 			'singular' => array(
 				'slug' => 'singular',
-				'label' => _x( 'Singular', 'Academic Unit Type singular label', 'commons-in-a-box' ),
-				'description' => __( 'Used on group and member profiles.', 'commons-in-a-box' ),
+				'label' => _x( 'Singular', 'Academic Unit Type singular label', 'cbox-openlab-core' ),
+				'description' => __( 'Used on group and member profiles.', 'cbox-openlab-core' ),
 				'value' => '',
 			),
 		);

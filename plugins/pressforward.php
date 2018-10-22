@@ -110,7 +110,7 @@ function pfbp_register_activity_actions() {
 	bp_activity_set_action(
 		buddypress()->groups->id,
 		'new_pf_feed_item_comment',
-		__( 'Posted a comment on a PressForward feed item.', 'commons-in-a-box' ),
+		__( 'Posted a comment on a PressForward feed item.', 'cbox-openlab-core' ),
 		'pfbp_format_activity_item_new_pf_feed_item_comment',
 		__( 'PressForward Comments', 'buddypress' ),
 		array( 'activity', 'member', 'member_groups' )
@@ -149,7 +149,7 @@ function pfbp_format_activity_item_new_pf_feed_item_comment( $action, $activity 
 
 	$post_link = sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), esc_html( $post_title ) );
 
-	$action = sprintf( __( '%1$s posted a comment on the feed item %2$s on the site %3$s', 'commons-in-a-box' ), $user_link, $post_link, $site_link );
+	$action = sprintf( __( '%1$s posted a comment on the feed item %2$s on the site %3$s', 'cbox-openlab-core' ), $user_link, $post_link, $site_link );
 
 	/**
 	 * Filters the 'new_pf_feed_item_comment' activity actions.
@@ -192,7 +192,7 @@ function pfbp_generate_activity_item_for_comment( $comment_id, $comment ) {
 	$post_url = admin_url( 'admin.php?page=pf-menu' ) . '#modal-' . get_post_meta( $post->ID, 'item_id', true );
 	$post_link = sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), esc_html( $post->post_title ) );
 
-	$action = sprintf( __( '%1$s posted a comment on the feed item %2$s on the site %3$s', 'commons-in-a-box' ), $user_link, $post_link, $site_link );
+	$action = sprintf( __( '%1$s posted a comment on the feed item %2$s on the site %3$s', 'cbox-openlab-core' ), $user_link, $post_link, $site_link );
 
 	groups_record_activity( array(
 		'action'            => $action,

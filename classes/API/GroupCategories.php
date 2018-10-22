@@ -66,7 +66,7 @@ class GroupCategories extends WP_REST_Controller {
 		$term_id = $params['id'];
 		$term = get_term( $term_id, 'bp_group_categories' );
 		if ( ! $term ) {
-			return new WP_Error( 'no_term_found', __( 'No term found by that ID.', 'commons-in-a-box' ) );
+			return new WP_Error( 'no_term_found', __( 'No term found by that ID.', 'cbox-openlab-core' ) );
 		}
 
 		$data = $params['typeData'];

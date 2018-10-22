@@ -6,15 +6,15 @@
 function openlab_color_schemes() {
 	return array(
 		'red' => array(
-			'label' => __( 'Red', 'commons-in-a-box' ),
+			'label' => __( 'Red', 'openlab-theme' ),
 			'icon_color' => '#a9280e',
 		),
 		'blue' => array(
-			'label' => __( 'Blue', 'commons-in-a-box' ),
+			'label' => __( 'Blue', 'openlab-theme' ),
 			'icon_color' => '#1d5f7b',
 		),
 		'green' => array(
-			'label' => __( 'Green', 'commons-in-a-box' ),
+			'label' => __( 'Green', 'openlab-theme' ),
 			'icon_color' => '#b6d498',
 		),
 	);
@@ -89,13 +89,13 @@ function openlab_get_logo_html( $link = true ) {
 		$logo_html = wp_get_attachment_image( $custom_logo_id, 'full', false, array(
 			'class'    => 'custom-logo',
 			'itemprop' => 'logo',
-			'alt'      => __( 'Site Logo', 'commons-in-a-box' ),
+			'alt'      => __( 'Site Logo', 'cbox-openlab-core' ),
 		) );
 	} else {
 		$logo_html = sprintf(
 			'<img src="%s" class="custom-logo default-cboxol-logo" alt="%s" />',
 			esc_url( cboxol_get_default_logo_url() ),
-			esc_html__( 'CBOX-OL Logo', 'commons-in-a-box' )
+			esc_html__( 'CBOX-OL Logo', 'cbox-openlab-core' )
 		);
 	}
 
@@ -125,11 +125,11 @@ function openlab_sitewide_header( $location = 'header' ) {
 		<div class="container-fluid">
 			<div class="navbar-header clearfix">
 				<header class="menu-title pull-left">
-					<a href="<?php echo bp_get_root_domain(); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'commons-in-a-box' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
+					<a href="<?php echo bp_get_root_domain(); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'cbox-openlab-core' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
 				</header>
 				<div class="pull-right search">
 					<div class="search-trigger-wrapper">
-						<button  class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'commons-in-a-box' ); ?></span></button>
+						<button  class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo $location ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'cbox-openlab-core' ); ?></span></button>
 					</div>
 				</div>
 			</div>
@@ -161,7 +161,7 @@ add_action( 'in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites
 function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location ) {
 	$mobile_mup = '';
 
-	$button_sr_text = esc_html__( 'Open Search', 'commons-in-a-box' );
+	$button_sr_text = esc_html__( 'Open Search', 'cbox-openlab-core' );
 
 	if ( $mode == 'desktop' ) :
 
@@ -175,13 +175,13 @@ HTML;
 	$form_action = trailingslashit( bp_get_root_domain() );
 	$nonce = wp_create_nonce( 'bp_search_form' );
 
-	$sr_text = esc_html__( 'Search by People or Group Type', 'commons-in-a-box' );
-	$sr_text_which = esc_html__( 'Select the Item Type to Search', 'commons-in-a-box' );
-	$sr_text_button = esc_html__( 'Submit', 'commons-in-a-box' );
-	$search_placeholder = esc_attr__( 'Search', 'commons-in-a-box' );
+	$sr_text = esc_html__( 'Search by People or Group Type', 'cbox-openlab-core' );
+	$sr_text_which = esc_html__( 'Select the Item Type to Search', 'cbox-openlab-core' );
+	$sr_text_button = esc_html__( 'Submit', 'cbox-openlab-core' );
+	$search_placeholder = esc_attr__( 'Search', 'cbox-openlab-core' );
 
 	$options = array(
-		'<option value="members">' . esc_html__( 'People', 'commons-in-a-box' ) . '</option>',
+		'<option value="members">' . esc_html__( 'People', 'cbox-openlab-core' ) . '</option>',
 	);
 
 	foreach ( cboxol_get_group_types() as $group_type ) {
@@ -473,7 +473,7 @@ HTML;
 		$wp_admin_bar->add_node( array(
 			'parent' => $parent,
 			'id' => 'home-' . $parent,
-			'title' => esc_html__( 'Home', 'commons-in-a-box' ),
+			'title' => esc_html__( 'Home', 'cbox-openlab-core' ),
 			'href' => bp_get_root_domain(),
 			'meta' => array(
 				'class' => 'mobile-no-hover',
@@ -550,7 +550,7 @@ HTML;
 
 		$wp_admin_bar->add_node( array(
 			'id'    => 'my-openlab',
-			'title' => esc_html__( 'My Profile', 'commons-in-a-box' ) . ' <span class="fa fa-caret-down" aria-hidden="true"></span>',
+			'title' => esc_html__( 'My Profile', 'cbox-openlab-core' ) . ' <span class="fa fa-caret-down" aria-hidden="true"></span>',
 			'href'  => bp_loggedin_user_domain(),
 				'meta'  => array(
 					'class' => 'admin-bar-menu',
@@ -1302,7 +1302,7 @@ HTML;
 
 			$wp_admin_bar->add_menu(array(
 				'id' => 'dashboard-link',
-				'title' => $title . '<span class="sr-only">' . esc_html__( 'Home', 'commons-in-a-box' ) . '</span>',
+				'title' => $title . '<span class="sr-only">' . esc_html__( 'Home', 'cbox-openlab-core' ) . '</span>',
 				'href' => $href,
 				'meta' => array(
 					'title' => _x( 'Dashboard', 'admin bar menu group label' ),
@@ -1473,7 +1473,7 @@ HTML;
 		// Change the title of the signup node
 		// Move them both to top-secondary, to appear at the right
 		if ( $signup ) {
-			$signup->title = __( 'Sign Up', 'commons-in-a-box' );
+			$signup->title = __( 'Sign Up', 'cbox-openlab-core' );
 			$signup->parent = 'top-secondary';
 			$wp_admin_bar->add_node( (array) $signup );
 		}

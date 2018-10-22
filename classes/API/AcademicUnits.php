@@ -65,7 +65,7 @@ class AcademicUnits extends WP_REST_Controller {
 
 		$post = get_post( $id );
 		if ( ! $post || 'cboxol_acadunit' !== $post->post_type ) {
-			return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found', 'commons-in-a-box' ) );
+			return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found', 'cbox-openlab-core' ) );
 		}
 
 		$academic_unit = AcademicUnit::get_instance_from_wp_post( $post );
@@ -99,10 +99,10 @@ class AcademicUnits extends WP_REST_Controller {
 		$deleted = wp_delete_post( $params['id'] );
 
 		if ( $deleted ) {
-			$data = __( 'OK', 'commons-in-a-box' );
+			$data = __( 'OK', 'cbox-openlab-core' );
 			$status = 200;
 		} else {
-			$data = __( 'Cannot delete academic unit.', 'commons-in-a-box' );
+			$data = __( 'Cannot delete academic unit.', 'cbox-openlab-core' );
 			$status = 403;
 		}
 

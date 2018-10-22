@@ -980,10 +980,10 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 
 			if ( 'posts' === $item_type ) {
 				/* translators: 1. Post link, 2. Group link */
-				$action = sprintf( __( 'A new post %1$s was published in %2$s', 'commons-in-a-box' ), $post_link, $group_link );
+				$action = sprintf( __( 'A new post %1$s was published in %2$s', 'cbox-openlab-core' ), $post_link, $group_link );
 			} elseif ( 'comments' === $item_type ) {
 				/* translators: 1. Post link, 2. Group link */
-				$action = sprintf( __( 'A new comment was posted on the post %1$s in %2$s', 'commons-in-a-box' ), $post_link, $group_link );
+				$action = sprintf( __( 'A new comment was posted on the post %1$s in %2$s', 'cbox-openlab-core' ), $post_link, $group_link );
 			}
 
 			$item_date = strtotime( $item['date'] );
@@ -1334,8 +1334,8 @@ function openlab_cloned_course_notice() {
 		}
 	</style>
 	<div class="updated fade ol-cloned-message">
-		<p><span><?php printf( __( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="%1$s">Posts</a> and <a href="%2$s">Pages</a>. Custom menus will need to be reactivated via <a href="%3$s">Appearance > Menus</a>', 'commons-in-a-box' ), esc_url( $posts_url ), esc_url( $pages_url ), esc_url( $menus_url ) ); ?>.</span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'commons-in-a-box' ); ?></a>
+		<p><span><?php printf( __( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="%1$s">Posts</a> and <a href="%2$s">Pages</a>. Custom menus will need to be reactivated via <a href="%3$s">Appearance > Menus</a>', 'cbox-openlab-core' ), esc_url( $posts_url ), esc_url( $pages_url ), esc_url( $menus_url ) ); ?>.</span>
+		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'cbox-openlab-core' ); ?></a>
 		</p>
 	</div>
 	<?php
@@ -1608,14 +1608,14 @@ function cboxol_validate_blogname( $blogname ) {
 	$minimum_site_name_length = apply_filters( 'minimum_site_name_length', 4 );
 
 	if ( cboxol_blogname_contains_illegal_characters( $blogname ) ) {
-		$error = __( 'URLs can contain only alphanumeric characters, hyphens, and underscores.', 'commons-in-a-box' );
+		$error = __( 'URLs can contain only alphanumeric characters, hyphens, and underscores.', 'cbox-openlab-core' );
 	} elseif ( get_id_from_blogname( $blogname ) ) {
-		$error = __( 'That site URL is already taken. Please try another.', 'commons-in-a-box' );
+		$error = __( 'That site URL is already taken. Please try another.', 'cbox-openlab-core' );
 	} elseif ( cboxol_blogname_is_illegal( $blogname ) ) {
-		$error = __( 'That URL is not allowed', 'commons-in-a-box' );
+		$error = __( 'That URL is not allowed', 'cbox-openlab-core' );
 	} elseif ( strlen( $blogname ) < $minimum_site_name_length ) {
 		/* translators: %s: minimum site name length */
-		$error = sprintf( _n( 'Site name must be at least %s character.', 'Site name must be at least %s characters.', $minimum_site_name_length, 'commons-in-a-box' ), number_format_i18n( $minimum_site_name_length ) );
+		$error = sprintf( _n( 'Site name must be at least %s character.', 'Site name must be at least %s characters.', $minimum_site_name_length, 'cbox-openlab-core' ), number_format_i18n( $minimum_site_name_length ) );
 	}
 
 	$retval = array(

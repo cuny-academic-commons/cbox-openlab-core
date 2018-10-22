@@ -103,18 +103,18 @@ class ItemTypes extends WP_REST_Controller {
 
 		$wp_post = get_post( $params['id'] );
 		if ( ! $wp_post ) {
-			return new WP_Error( 'no_item_type_found', __( 'No item type found by that ID.', 'commons-in-a-box' ) );
+			return new WP_Error( 'no_item_type_found', __( 'No item type found by that ID.', 'cbox-openlab-core' ) );
 		}
 
 		$class = $this->get_class_for_object_type( $wp_post->post_type );
 		$type = $class::get_instance_from_wp_post( $wp_post );
 
 		if ( ! $type->get_can_be_deleted() ) {
-			$data = __( 'Type cannot be deleted', 'commons-in-a-box' );
+			$data = __( 'Type cannot be deleted', 'cbox-openlab-core' );
 			$status = 403;
 		} else {
 			wp_delete_post( $params['id'] );
-			$data = __( 'OK', 'commons-in-a-box' );
+			$data = __( 'OK', 'cbox-openlab-core' );
 			$status = 200;
 		}
 

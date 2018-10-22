@@ -12,16 +12,16 @@ add_action( 'xprofile_updated_profile', 'cboxol_membertypes_process_change' );
 function cboxol_membertypes_register_post_type() {
 	register_post_type( 'cboxol_member_type', array(
 		'labels' => array(
-			'name' => _x( 'Member Types', 'Post type general name', 'commons-in-a-box' ),
-			'singular_name' => _x( 'Member Type', 'Post type singular name', 'commons-in-a-box' ),
-			'add_new_item' => __( 'Add New Member Type', 'commons-in-a-box' ),
-			'new_item' => __( 'New Member Type', 'commons-in-a-box' ),
-			'edit_item' => __( 'Edit Member Type', 'commons-in-a-box' ),
-			'view_item' => __( 'View Member Type', 'commons-in-a-box' ),
-			'all_item' => __( 'All Member Types', 'commons-in-a-box' ),
-			'search_items' => __( 'Search Member Types', 'commons-in-a-box' ),
-			'not_found' => __( 'No member types found.', 'commons-in-a-box' ),
-			'not_found_in_trash' => __( 'No member types found in Trash.', 'commons-in-a-box' ),
+			'name' => _x( 'Member Types', 'Post type general name', 'cbox-openlab-core' ),
+			'singular_name' => _x( 'Member Type', 'Post type singular name', 'cbox-openlab-core' ),
+			'add_new_item' => __( 'Add New Member Type', 'cbox-openlab-core' ),
+			'new_item' => __( 'New Member Type', 'cbox-openlab-core' ),
+			'edit_item' => __( 'Edit Member Type', 'cbox-openlab-core' ),
+			'view_item' => __( 'View Member Type', 'cbox-openlab-core' ),
+			'all_item' => __( 'All Member Types', 'cbox-openlab-core' ),
+			'search_items' => __( 'Search Member Types', 'cbox-openlab-core' ),
+			'not_found' => __( 'No member types found.', 'cbox-openlab-core' ),
+			'not_found_in_trash' => __( 'No member types found in Trash.', 'cbox-openlab-core' ),
 		),
 		'public' => false,
 		'publicly_queryable' => false,
@@ -65,7 +65,7 @@ function cboxol_get_member_type( $slug ) {
 		}
 	}
 
-	return new WP_Error( 'no_member_type_found', __( 'No member type exists for this slug.', 'commons-in-a-box' ), $slug );
+	return new WP_Error( 'no_member_type_found', __( 'No member type exists for this slug.', 'cbox-openlab-core' ), $slug );
 }
 
 /**
@@ -160,7 +160,7 @@ function cboxol_membertypes_admin_page() {
 	?>
 
 	<div class="cboxol-admin-content">
-		<p><?php printf( __( 'Member Types are used to organize your site’s users. Members are able to choose their own Member Type according to the rules that you configure on this page, as well as in <a href="%s">Registration settings</a>.', 'commons-in-a-box' ), esc_url( $registration_url ) ); ?></p>
+		<p><?php printf( __( 'Member Types are used to organize your site’s users. Members are able to choose their own Member Type according to the rules that you configure on this page, as well as in <a href="%s">Registration settings</a>.', 'cbox-openlab-core' ), esc_url( $registration_url ) ); ?></p>
 
 		<script type="text/javascript">
 			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
@@ -181,7 +181,7 @@ function cboxol_membertypes_admin_page() {
 function cboxol_get_user_member_type( $user_id ) {
 	$type = bp_get_member_type( $user_id );
 	if ( ! $type ) {
-		return new WP_Error( 'no_member_type', __( 'This user does not have a member type.', 'commons-in-a-box' ), $user_id );
+		return new WP_Error( 'no_member_type', __( 'This user does not have a member type.', 'cbox-openlab-core' ), $user_id );
 	}
 
 	return cboxol_get_member_type( $type );
