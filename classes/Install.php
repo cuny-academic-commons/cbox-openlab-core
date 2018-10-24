@@ -1149,7 +1149,7 @@ class Install {
 		$middle_heading = __( 'Customize this footer', 'cbox-openlab-core' );
 
 		/* translators: link to CBOX OpenLab Brand Settings admin page */
-		$middle_text    = sprintf( __( 'You can customize the contents of this footer to meet the needs of your community: see the <a href="%s">Brand Settings documentation</a> for details.', 'cbox-openlab-core' ), esc_url( admin_url( 'admin.php?page=cbox-ol-brand-settings' ) ) );
+		$middle_text    = sprintf( __( 'You can customize the contents of this footer to meet the needs of your community: see the <a href="%s">Brand Settings documentation</a> for details.', 'cbox-openlab-core' ), esc_url( 'http://commonsinabox.org/visual/' ) );
 		$middle_content = '<div class="cboxol-footer-middle-para"><p>' . $middle_text . '</p></div>';
 
 		set_theme_mod( 'openlab_footer_middle_heading', $middle_heading );
