@@ -76,7 +76,7 @@ function cboxol_get_brand_pages() {
 
 	$page_ids = get_site_option( 'cboxol_brand_page_ids' );
 
-	$main_site_id = cbox_get_main_site_id();
+	$main_site_id = cboxol_get_main_site_id();
 	$switched = false;
 	if ( get_current_blog_id() !== $main_site_id ) {
 		switch_to_blog( $main_site_id );

@@ -1,7 +1,7 @@
 <?php
 
 function cboxol_communication_admin_page_email() {
-	$url_base = get_admin_url( cbox_get_main_site_id() );
+	$url_base = get_admin_url( cboxol_get_main_site_id() );
 
 	$settings = array(
 		array(
@@ -50,7 +50,7 @@ function cboxol_communication_admin_page_invitations() {
 	if ( bp_core_do_network_admin() ) {
 		$base = network_admin_url( 'settings.php' );
 	} else {
-		$base = get_admin_url( cbox_get_main_site_id(), 'options-general.php' );
+		$base = get_admin_url( cboxol_get_main_site_id(), 'options-general.php' );
 	}
 
 	$settings = array(

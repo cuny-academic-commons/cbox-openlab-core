@@ -911,7 +911,7 @@ class Install {
 			);
 
 			/* translators: link to Customizer */
-			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme' ), get_admin_url( cbox_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
+			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme' ), get_admin_url( cboxol_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
 
 			CBox_Widget_Setter::set_widget(
 				array(

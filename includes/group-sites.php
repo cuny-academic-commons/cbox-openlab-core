@@ -1663,7 +1663,7 @@ function cboxol_blogname_is_illegal( $blogname ) {
  * @return array
  */
 function cboxol_add_links_to_nav_menu( $items ) {
-	if ( get_current_blog_id() === cbox_get_main_site_id() ) {
+	if ( get_current_blog_id() === cboxol_get_main_site_id() ) {
 		return $items;
 	}
 

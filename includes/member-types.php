@@ -101,7 +101,7 @@ function cboxol_get_member_types( $args = array() ) {
 	);
 
 	$switched = false;
-	$main_site_id = cbox_get_main_site_id();
+	$main_site_id = cboxol_get_main_site_id();
 	if ( get_current_blog_id() !== $main_site_id ) {
 		switch_to_blog( $main_site_id );
 		$switched = true;

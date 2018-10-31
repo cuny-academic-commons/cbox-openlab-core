@@ -239,3 +239,16 @@ function cboxol_force_bp_components( $components ) {
 }
 add_action( 'bp_active_components', 'cboxol_force_bp_components' );
 add_action( 'pre_update_option_bp-active-components', 'cboxol_force_bp_components' );
+
+/**
+ * Wrapper for cbox_get_main_site_id().
+ *
+ * @since 1.1.1
+ */
+function cboxol_get_main_site_id() {
+	if ( function_exists( 'cbox_get_main_site_id' ) ) {
+		return cbox_get_main_site_id();
+	} else {
+		return (int) get_current_site()->blog_id;
+	}
+}
