@@ -35,9 +35,11 @@ class Install {
 	 */
 	public function install() {
 		// If safe mode isn't on, then let's set the execution time to unlimited.
+		// phpcs:disable
 		if ( ! ini_get( 'safe_mode' ) ) {
 			set_time_limit( 0 );
 		}
+		// phpcs:enable
 
 		$this->install_default_member_types();
 		$this->install_default_group_types();
