@@ -1393,7 +1393,7 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$msg = '';
 	if ( ! $src_id ) {
-		$msg = __( 'Select a source blog.' );
+		$msg = __( 'Select a source blog.', 'cbox-openlab-core' );
 	}
 
 	if ( $msg ) {
@@ -1412,11 +1412,16 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	cboxol_set_group_site_id( $group_id, $id );
 
-	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s" ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
+	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", 'cbox-openlab-core' ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
 
-	wp_mail( get_site_option( 'admin_email' ), sprintf( __( '[%s] New Blog Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
+	wp_mail(
+		get_site_option( 'admin_email' ),
+		sprintf( __( '[%s] New Blog Created', 'cbox-openlab-core' ), $current_site->site_name ),
+		$content_mail,
+		'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>'
+	);
 
-	$msg = __( 'Site Created' );
+	$msg = __( 'Site Created', 'cbox-openlab-core' );
 	// now copy
 	$blogtables = $wpdb->base_prefix . $src_id . '_';
 	$newtables = $wpdb->base_prefix . $new_id . '_';
