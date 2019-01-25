@@ -1525,8 +1525,8 @@ function cboxol_copy_blog_page( $group_id ) {
 							maybe_unserialize( $o->option_value ),
 							function( $v ) use ( $source_site_url, $source_site_upload_dir, $dest_site_url, $dest_site_upload_dir ) {
 								return str_replace(
-									[ $source_site_url, $source_site_upload_dir ],
-									[ $dest_site_url, $dest_site_upload_dir ],
+									array( $source_site_url, $source_site_upload_dir ),
+									array( $dest_site_url, $dest_site_upload_dir ),
 									$v
 								);
 							}
