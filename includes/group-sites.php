@@ -1514,7 +1514,7 @@ function cboxol_copy_blog_page( $group_id ) {
 				}
 
 				restore_current_blog();
-				$msg = __( 'Blog Copied' );
+				$msg = __( 'Blog Copied', 'cbox-openlab-core' );
 			}
 		}
 	}
