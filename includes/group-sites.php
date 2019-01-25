@@ -1483,8 +1483,11 @@ function cboxol_copy_blog_page( $group_id ) {
 				}
 			}
 
+			$source_site_upload_dir = $upload_dir['basedir'];
+			$dest_site_upload_dir   = str_replace( $src_id, $new_id, $source_site_upload_dir );
+
 			// Copy uploaded files.
-			cboxol_copyr( str_replace( $new_id, $src_id, $upload_dir['basedir'] ), $upload_dir['basedir'] );
+			cboxol_copyr( $source_site_upload_dir, $dest_site_upload_dir );
 
 			// update options
 			$skip_options = array(
@@ -1512,9 +1515,23 @@ function cboxol_copy_blog_page( $group_id ) {
 			if ( $options ) {
 				switch_to_blog( $new_id );
 
+				$source_site_url = get_blog_option( $src_id, 'home' );
+				$dest_site_url   = get_blog_option( $new_id, 'home' );
+
 				foreach ( $options as $o ) {
 					if ( ! in_array( $o->option_name, $skip_options ) && substr( $o->option_name, 0, 6 ) != '_trans' ) {
-						update_option( $o->option_name, maybe_unserialize( $o->option_value ) );
+						$value = maybe_unserialize( $o->option_value );
+						$value = map_deep(
+							maybe_unserialize( $o->option_value ),
+							function( $v ) use ( $source_site_url, $source_site_upload_dir, $dest_site_url, $dest_site_upload_dir ) {
+								return str_replace(
+									[ $source_site_url, $source_site_upload_dir ],
+									[ $dest_site_url, $dest_site_upload_dir ],
+									$v
+								);
+							}
+						);
+						update_option( $o->option_name, $value );
 					}
 				}
 
