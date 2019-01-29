@@ -11,8 +11,8 @@
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'CBOXOL_PLUGIN_VER', '1.1.0-1548793076502' );
-define( 'CBOXOL_ASSET_VER', '1.1.0-1548793076502' );
+define( 'CBOXOL_PLUGIN_VER', '1.1.1-beta-1548793234312' );
+define( 'CBOXOL_ASSET_VER', '1.1.1-beta-1548793234312' );
 
 // @todo Organize this in a meaningful way.
 function cboxol_init() {
