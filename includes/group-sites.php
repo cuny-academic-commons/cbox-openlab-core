@@ -64,7 +64,7 @@ function cboxol_set_group_site_id( $group_id, $site_id ) {
  * Get site type based on the group type.
  *
  * @param int $site_id
- * @return string
+ * @return string $group_type
  */
 function cboxol_get_group_site_type( $site_id ) {
 	$group_id = cboxol_get_group_site_id( $site_id );
@@ -73,7 +73,12 @@ function cboxol_get_group_site_type( $site_id ) {
 		return '';
 	}
 
-	return openlab_get_group_type( $group_id );
+	$group_type = cboxol_get_group_group_type( $group_id );
+	if ( is_wp_error( $group_type ) ) {
+		return '';
+	}
+
+	return $group_type;
 }
 
 /**
