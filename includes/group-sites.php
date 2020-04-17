@@ -6,7 +6,8 @@
 /**
  * Utility function for fetching the group id for a blog.
  *
- * @todo Add caching.
+ * @param int $blog_id
+ * @param int $group_id
  */
 function openlab_get_group_id_by_blog_id( $blog_id ) {
 	global $wpdb, $bp;
@@ -15,10 +16,27 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 		return 0;
 	}
 
-	$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id' AND meta_value = %d", $blog_id ) );
+	$group_id = wp_cache_get( $blog_id, 'site_group_ids' );
+
+	if ( false === $group_id ) {
+		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id' AND meta_value = %d", $blog_id ) );
+
+		wp_cache_set( $blog_id, (int) $group_id, 'site_group_ids' );
+	}
 
 	return (int) $group_id;
 }
+
+/**
+ * Busts cache when group site ID is changed.
+ *
+ * @param int $group_id
+ * @param int $site_id
+ */
+function cboxol_bust_site_group_id_cache( $group_id, $site_id ) {
+	wp_cache_delete( $site_id, 'site_group_ids' );
+}
+add_action( 'cboxol_set_group_site_id', 'cboxol_bust_site_group_id_cache', 10, 2 );
 
 /**
  * Utility function for fetching the site id for a group
@@ -67,7 +85,7 @@ function cboxol_set_group_site_id( $group_id, $site_id ) {
  * @return string $group_type
  */
 function cboxol_get_group_site_type( $site_id ) {
-	$group_id = cboxol_get_group_site_id( $site_id );
+	$group_id = openlab_get_group_id_by_blog_id( $site_id );
 
 	if ( ! $group_id ) {
 		return '';
