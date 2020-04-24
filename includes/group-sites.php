@@ -281,7 +281,7 @@ function openlab_add_user_to_groupblog_on_promotion( $group_id, $user_id, $statu
 add_action( 'groups_promote_member', 'openlab_add_user_to_groupblog_on_promotion', 10, 3 );
 
 /**
- * Modify group site membership on demotion.
+ * Modify group site membership on hooks that take group_id + user_id.
  *
  * @param int $group_id ID of the group.
  * @param int $user_id  ID of the user.
@@ -291,6 +291,7 @@ function openlab_add_user_to_groupblog_on_demotion( $group_id, $user_id ) {
 	openlab_add_user_to_groupblog( $group_id, $user_id, $role );
 }
 add_action( 'groups_demote_member', 'openlab_add_user_to_groupblog_on_demotion', 10, 2 );
+add_action( 'groups_unban_member', 'openlab_add_user_to_groupblog_on_demotion', 10, 2 );
 
 /**
  * Join a user to a groupblog when joining the group
