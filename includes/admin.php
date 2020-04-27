@@ -33,7 +33,6 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'member-settings' ),
 		'cboxol_member_settings_admin_page',
-		'',
 		2
 	);
 
@@ -44,8 +43,7 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'group-settings' ),
 		'cboxol_group_settings_admin_page',
-		'',
-		2
+		3
 	);
 
 	add_submenu_page(
@@ -55,8 +53,7 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'academic-units' ),
 		'cboxol_academic_units_admin_page',
-		'',
-		2
+		4
 	);
 
 	add_submenu_page(
@@ -66,8 +63,7 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'brand-settings' ),
 		'cboxol_brand_settings_admin_page',
-		'',
-		2
+		5
 	);
 
 	add_submenu_page(
@@ -77,8 +73,7 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'communication-settings' ),
 		'cboxol_communication_settings_admin_page',
-		'',
-		2
+		6
 	);
 }
 
