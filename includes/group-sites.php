@@ -1914,3 +1914,51 @@ function cboxol_render_nav_menu_meta_box() {
 	</div>
 	<?php
 }
+
+/**
+ * Set CBOX OpenLab item nav for the customizer.
+ *
+ * @param array $item_types Navigation menu item types.
+ * @return array
+ */
+function cboxol_add_customizer_nav_menu_item_types( $item_types = [] ) {
+	$item_types[] = [
+		'title'      => __( 'CBOX OpenLab', 'cbox-openlab-core' ),
+		'type'       => 'cboxol_nav',
+		'object'     => 'cboxol_nav',
+	];
+
+	return $item_types;
+}
+add_filter( 'customize_nav_menu_available_item_types', 'cboxol_add_customizer_nav_menu_item_types' );
+
+/**
+ * Populate CBOX OpenLab nav menu items for the customizer.
+ *
+ * @param array $items The array of menu items.
+ * @param string $type The object type.
+ * @return array $items
+ */
+function cboxol_customizer_nav_menu_items( $items = [], $type = '' ) {
+	if ( $type !== 'cboxol_nav' ) {
+		return $items;
+	}
+
+	$cboxol_items = cboxol_get_nav_menu_items();
+
+	foreach ( $cboxol_items as $cboxol_item ) {
+		$items[] = [
+			'id'         => 'group-profile-link',
+			'title'      => html_entity_decode( $cboxol_item->title, ENT_QUOTES, get_bloginfo( 'charset' ) ),
+			'type'       => $cboxol_item->type,
+			'url'        => esc_url_raw( $cboxol_item->url ),
+			'classes'    => 'group-profile-link',
+			'type_label' => _x( 'Custom Link', 'customizer menu type label', 'cbox-openlab-core' ),
+			'object'     => $cboxol_item->object,
+			'object_id'  => $cboxol_item->object_id,
+		];
+	}
+
+	return $items;
+}
+add_filter( 'customize_nav_menu_available_items', 'cboxol_customizer_nav_menu_items', 10, 2 );
