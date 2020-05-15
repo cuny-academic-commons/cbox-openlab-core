@@ -1820,3 +1820,97 @@ function cboxol_load_theme_specific_fixes() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'cboxol_load_theme_specific_fixes' );
+
+/**
+ * Generate array of nav menu items.
+ *
+ * @return array $items
+ */
+function cboxol_get_nav_menu_items() {
+	$items = [];
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return $items;
+	}
+
+	$group = groups_get_group( $group_id );
+	if ( ! $group->is_visible ) {
+		return $items;
+	}
+
+	$group_type = cboxol_get_group_group_type( $group_id );
+	if ( ! is_wp_error( $group_type ) ) {
+		$items[] = (object) [
+			'ID'               => 'group-profile-link',
+			'db_id'            => 0,
+			'object_id'        => $group_id,
+			'object'           => 'custom',
+			'title'            => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
+			'url'              => bp_get_group_permalink( $group ),
+			'slug'             => 'group-profile-link',
+			'type'             => 'custom',
+			'classes'          => [ 'group-profile-link' ],
+			'menu_item_parent' => 0,
+			'attr_title'       => '',
+			'target'           => '',
+			'xfn'              => ''
+		];
+	}
+
+	return $items;
+}
+
+/**
+ * Register meta box for CBOX OpenLab nav menu.
+ *
+ * @return void
+ */
+function cboxol_wp_nav_menu_meta_box() {
+	$is_group_site = (bool) openlab_get_group_id_by_blog_id( get_current_blog_id() );
+
+	// Only add meta box panel to group sites.
+	if ( ! $is_group_site ) {
+		return;
+	}
+
+	add_meta_box(
+		'add-buddypress-nav-menu',
+		__( 'CBOX OpenLab', 'cbox-openlab-core' ),
+		'cboxol_render_nav_menu_meta_box',
+		'nav-menus',
+		'side',
+		'default'
+	);
+}
+add_action( 'load-nav-menus.php', 'cboxol_wp_nav_menu_meta_box' );
+
+/**
+ * Render CBOX OpenLab meta box panel on Appearance > Menus.
+ *
+ * @return void
+ */
+function cboxol_render_nav_menu_meta_box() {
+	global $nav_menu_selected_id;
+
+	$walker = new Walker_Nav_Menu_Checklist();
+	$args   = [ 'walker' => $walker ];
+	$items  = cboxol_get_nav_menu_items();
+
+	?>
+	<div id="cboxol-menu" class="posttypediv">
+		<div id="tabs-panel-cboxol-all" class="tabs-panel tabs-panel-active">
+			<ul id="cboxol-menu-checklist" class="categorychecklist form-no-clear">
+				<?php echo walk_nav_menu_tree( array_map( 'wp_setup_nav_menu_item', $items ), 0, (object) $args ); ?>
+			</ul>
+		</div>
+
+		<p class="button-controls wp-clearfix">
+			<span class="add-to-menu">
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'cbox-openlab-core' ); ?>" name="add-custom-menu-item" id="submit-cboxol-menu" />
+				<span class="spinner"></span>
+			</span>
+		</p>
+	</div>
+	<?php
+}
