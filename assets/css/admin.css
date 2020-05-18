@@ -129,6 +129,11 @@ a.cboxol-entity-edit-arrow:after {
 	content: "\25BC";
 }
 
+.signup-code-actions a,
+.email-domains-actions a {
+	color: #00547A;
+}
+
 a .action-arrow {
 	color: #999;
 	margin-left: 8px;

@@ -1061,7 +1061,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6e83156a", __vue__options__)
+    hotAPI.reload("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":27,"../mixins/EntityTools.js":28,"../mixins/i18nTools.js":30,"./OnOffSwitch.vue":11,"./TypeLabel.vue":16,"./settings/AcademicUnits.vue":20,"./settings/AssociatedGroupTypeCheckboxes.vue":21,"./settings/AssociatedTypeDropdowns.vue":23,"./settings/MayChangeMemberTypeTo.vue":24,"./settings/MayCreateCourses.vue":25,"./settings/Order.vue":26,"vue":77,"vue-hot-reload-api":76}],8:[function(require,module,exports){
@@ -1280,7 +1280,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6cb62e3e", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-6cb62e3e", __vue__options__)
+    hotAPI.reload("data-v-6cb62e3e", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":27,"../mixins/SignupCodeTools.js":29,"../mixins/i18nTools.js":30,"./SignupCodeGroupSelector.vue":13,"./SignupCodeMemberTypeSelector.vue":14,"vue":77,"vue-hot-reload-api":76}],11:[function(require,module,exports){
@@ -1456,7 +1456,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-91028d20", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-91028d20", __vue__options__)
+    hotAPI.reload("data-v-91028d20", __vue__options__)
   }
 })()}
 },{"../mixins/i18nTools.js":30,"./EmailDomainRow.vue":5,"./NewEmailDomain.vue":9,"./NewSignupCode.vue":10,"./SignupCodeRow.vue":15,"babel-runtime/core-js/object/keys":32,"vue":77,"vue-hot-reload-api":76}],13:[function(require,module,exports){
@@ -1522,7 +1522,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-066c031c", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-066c031c", __vue__options__)
+    hotAPI.reload("data-v-066c031c", __vue__options__)
   }
 })()}
 },{"../mixins/i18nTools.js":30,"vue":77,"vue-hot-reload-api":76,"vue2-autocomplete-js":78,"vueify/lib/insert-css":79}],14:[function(require,module,exports){
@@ -1574,7 +1574,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-3308b42f", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3308b42f", __vue__options__)
+    hotAPI.reload("data-v-3308b42f", __vue__options__)
   }
 })()}
 },{"../mixins/i18nTools.js":30,"vue":77,"vue-hot-reload-api":76}],15:[function(require,module,exports){
@@ -1683,7 +1683,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-609e0dce", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-609e0dce", __vue__options__)
+    hotAPI.reload("data-v-609e0dce", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":27,"../mixins/SignupCodeTools.js":29,"../mixins/i18nTools.js":30,"./SignupCodeGroupSelector.vue":13,"./SignupCodeMemberTypeSelector.vue":14,"vue":77,"vue-hot-reload-api":76}],16:[function(require,module,exports){
