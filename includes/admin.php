@@ -133,6 +133,7 @@ function cboxol_register_assets() {
 			'noSignupCodes' => __( 'Currently, users may select any Member Type when creating or editing their accounts. To restrict access to a Member Type, create a corresponding Signup Code below.', 'cbox-openlab-core' ),
 			'noUnitsOfType' => __( 'There are no units of this type.', 'cbox-openlab-core' ),
 			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
+			'onOffSwitchLabel' => __( 'On/off toggle', 'cbox-openlab-core' ),
 			'optional' => __( 'Optional', 'cbox-openlab-core' ),
 			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
 			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),

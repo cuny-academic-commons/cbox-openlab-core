@@ -14,7 +14,7 @@
 					<span v-if="isCollapsed">{{ strings.edit }}</span>
 					<span v-else>{{ strings.editing }}</span>
 				</a>
-				<a class="cboxol-entity-edit-arrow" href="" v-on:click="onAccordionClick"></a>
+				<a class="cboxol-entity-edit-arrow" href="" v-on:click="onAccordionClick"><span class="screen-reader-text">{{ strings.edit }}</span></a>
 			</div>
 		</div>
 

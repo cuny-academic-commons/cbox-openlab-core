@@ -9,6 +9,7 @@
 			v-model="isEnabled"
 		>
         <label class="onoffswitch-label" v-bind:for="uniqueId">
+			<span class="screen-reader-text">{{ strings.onOffSwitchLabel }}</span>
             <span class="onoffswitch-inner"></span>
             <span class="onoffswitch-switch"></span>
         </label>
@@ -17,6 +18,7 @@
 
 <script>
 	import EntityTools from '../mixins/EntityTools.js'
+	import i18nTools from '../mixins/i18nTools.js'
 
 	export default {
 		data() {
@@ -37,7 +39,8 @@
 		},
 
 		mixins: [
-			EntityTools
+			EntityTools,
+			i18nTools
 		],
 
 		props: [
