@@ -249,8 +249,8 @@ class Install {
 					'invite_members_to_group'              => __( 'Invite Members to Course', 'cbox-openlab-core' ),
 					'invite_community_members_to_group'    => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
-					'group_contact'                        => __( 'Course Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text'              => __( 'By default, you are the Course Contact. You may add or remove Course Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
+					'group_contact'                        => __( 'Associated Faculty', 'cbox-openlab-core' ),
+					'group_contact_help_text'              => __( 'By default, you are the sole faculty member associated with this Course. You may add or remove faculty once your Course has more members.', 'cbox-openlab-core' ),
 					'group_discussion'                     => __( 'Course Discussion', 'cbox-openlab-core' ),
 				),
 
@@ -262,9 +262,7 @@ class Install {
 				'is_portfolio'                     => false,
 
 				'requires_site'                    => false,
-				'supports_additional_faculty'      => true,
 				'supports_course_information'      => true,
-				'supports_group_contact'           => false,
 				'supports_mol_link'                => true,
 				'supports_profile_column'          => true,
 			),
@@ -333,9 +331,7 @@ class Install {
 				'is_portfolio'                     => false,
 
 				'requires_site'                    => false,
-				'supports_additional_faculty'      => false,
 				'supports_course_information'      => false,
-				'supports_group_contact'           => true,
 				'supports_mol_link'                => true,
 				'supports_profile_column'          => true,
 			),
@@ -404,9 +400,7 @@ class Install {
 				'is_portfolio'                     => false,
 
 				'requires_site'                    => false,
-				'supports_additional_faculty'      => false,
 				'supports_course_information'      => false,
-				'supports_group_contact'           => true,
 				'supports_mol_link'                => true,
 				'supports_profile_column'          => true,
 			),
@@ -507,9 +501,7 @@ class Install {
 				'is_portfolio'                     => true,
 
 				'requires_site'                    => true,
-				'supports_additional_faculty'      => false,
 				'supports_course_information'      => false,
-				'supports_group_contact'           => false,
 				'supports_mol_link'                => false,
 				'supports_profile_column'          => false,
 			),
@@ -547,8 +539,6 @@ class Install {
 			$type->set_is_course( $type_data['is_course'] );
 			$type->set_is_portfolio( $type_data['is_portfolio'] );
 			$type->set_requires_site( $type_data['requires_site'] );
-			$type->set_supports_group_contact( $type_data['supports_group_contact'] );
-			$type->set_supports_additional_faculty( $type_data['supports_additional_faculty'] );
 			$type->set_supports_course_information( $type_data['supports_course_information'] );
 			$type->set_supports_mol_link( $type_data['supports_mol_link'] );
 			$type->set_supports_profile_column( $type_data['supports_profile_column'] );
