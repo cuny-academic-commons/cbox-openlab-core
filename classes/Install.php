@@ -249,7 +249,7 @@ class Install {
 					'invite_members_to_group'              => __( 'Invite Members to Course', 'cbox-openlab-core' ),
 					'invite_community_members_to_group'    => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
-					'group_contact'                        => __( 'Associated Faculty', 'cbox-openlab-core' ),
+					'group_contact'                        => __( 'Faculty', 'cbox-openlab-core' ),
 					'group_contact_help_text'              => __( 'By default, you are the sole faculty member associated with this Course. You may add or remove faculty once your Course has more members.', 'cbox-openlab-core' ),
 					'group_discussion'                     => __( 'Course Discussion', 'cbox-openlab-core' ),
 				),
