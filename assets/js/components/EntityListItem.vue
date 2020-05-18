@@ -79,11 +79,13 @@
 
 			<!-- durrrrr -->
 			<div v-if="'groupCategory' === entityType" class="cboxol-entity-content-section associated-group-types">
-				<h3 class="cboxol-entity-content-section-header">{{ strings.associatedWithGroupTypes }}</h3>
-				<AssociatedGroupTypeCheckboxes
-					:entityType="entityType"
-					:slug="slug"
-				/>
+				<fieldset>
+					<h3 class="cboxol-entity-content-section-header"><legend>{{ strings.associatedWithGroupTypes }}</legend></h3>
+					<AssociatedGroupTypeCheckboxes
+						:entityType="entityType"
+						:slug="slug"
+					/>
+				</fieldset>
 			</div>
 
 			<div class="cboxol-entity-content-section item-type-settings" v-if="showSettings">

@@ -1,12 +1,15 @@
 <template>
 	<ul>
 		<li v-for="allGroupType in allGroupTypes">
-			<label v-bind:for="'associated-group-' + allGroupType.slug">
-				<input
-					type="checkbox"
-					v-model="entityGroupTypes"
-					:value="allGroupType.slug"
-				/> {{ allGroupType.name }}
+			<input
+				type="checkbox"
+				v-model="entityGroupTypes"
+				:id="idBase + allGroupType.slug"
+				:value="allGroupType.slug"
+			/>
+
+			<label :for="idBase + allGroupType.slug">
+				 {{ allGroupType.name }}
 			</label>
 		</li>
 	</ul>
@@ -28,6 +31,10 @@
 				set( value ) {
 					this.setEntityProp( 'groupTypes', value )
 				}
+			},
+
+			idBase() {
+				return 'associated-group-' + this.slug + '-'
 			}
 		},
 
