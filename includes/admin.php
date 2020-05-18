@@ -148,6 +148,7 @@ function cboxol_register_assets() {
 			'selectGroup' => __( 'Select Group', 'cbox-openlab-core' ),
 			'selectMemberType' => __( 'Select Member Type', 'cbox-openlab-core' ),
 			'selectUnit' => _x( 'Select Unit: %s', 'checkbox screen reader text', 'cbox-openlab-core' ),
+			'signUpCode' => __( 'Signup Code', 'cbox-openlab-core' ),
 			'signUpCodes' => __( 'Sign Up Codes', 'cbox-openlab-core' ),
 			'signUpCodesLegend' => __( 'Registration codes let you restrict access to specific member account types (e.g faculty, staff, student). Each code can be associated with a group, so that users registering with the code will automatically be added to the group when their registration is complete. These account codes do not allow users to bypass the Email Domain Whitelist above.', 'cbox-openlab-core' ),
 			'template' => _x( 'Template', 'subheader for template site settings section', 'cbox-openlab-core' ),

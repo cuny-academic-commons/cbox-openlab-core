@@ -1,15 +1,23 @@
 <template>
+	<span>
+		<label
+			class="screen-reader-text"
+			for="signup-code-group"
+		>{{ strings.selectGroup }}</label>
+
 		<autocomplete
 			anchor="value"
 			class="new-item-field"
 			:custom-params="autocompleteParams"
 			debounce="1000"
 			:initValue="initValue"
+			id="signup-code-group"
 			label="label"
 			:on-select="onGroupSelect"
 			:placeholder="placeholder"
 			:url="endpoint"
 		/>
+	</span>
 </template>
 
 <script>

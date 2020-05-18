@@ -6,12 +6,18 @@
 			</template>
 
 			<template v-if="isEditing">
-				<input
-					class="new-item-field"
-					id="add-signup-code-input"
-					v-bind:disabled="isLoading"
-					v-model="code"
-				>
+				<span>
+					<label
+						for="add-signup-code-input"
+						class="screen-reader-text"
+					>{{ strings.signUpCode }}</label>
+					<input
+						class="new-item-field"
+						id="add-signup-code-input"
+						v-bind:disabled="isLoading"
+						v-model="code"
+					>
+				</span>
 			</template>
 		</td>
 

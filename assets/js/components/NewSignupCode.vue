@@ -1,5 +1,10 @@
 <template>
 	<div class="add-signup-code">
+		<label
+			class="screen-reader-text"
+			for="add-signup-code-input"
+		>{{ strings.signUpCode }}</label>
+
 		<input
 			class="new-item-field"
 			id="add-signup-code-input"

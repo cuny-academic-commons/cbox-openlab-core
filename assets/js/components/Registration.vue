@@ -64,10 +64,11 @@
 
 			<table class="form-table">
 				<tr class="confirmation-text">
-					<th>{{ strings.confirmationText }}</th>
+					<th><label for="confirmation-text-entry">{{ strings.confirmationText }}</label></th>
 					<td>
 						<input
 							class="confirmation-text-entry"
+							id="confirmation-text-entry"
 							type="text"
 							v-model="confirmationText"
 						/>
