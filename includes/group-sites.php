@@ -213,13 +213,7 @@ add_action( 'groups_group_after_save', 'cboxol_save_group_extras', 20 );
  * @return string
  */
 function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role = null ) {
-	$blog_role = null;
-	$blog_id = openlab_get_site_id_by_group_id( $group_id );
-	if ( ! $blog_id ) {
-		return $blog_role;
-	}
-
-	$blog_public = get_blog_option( $blog_id, 'blog_public' );
+	$role_settings = openlab_get_group_member_role_settings( $group_id );
 
 	if ( null === $group_role ) {
 		if ( groups_is_user_admin( $user_id, $group_id ) ) {
@@ -231,22 +225,31 @@ function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role 
 		}
 	}
 
-	if ( '-3' == $blog_public ) {
-		if ( 'admin' === $group_role ) {
-			$blog_role = 'administrator';
-		}
+	return isset( $role_settings[ $group_role ] ) ? $role_settings[ $group_role ] : 'author';
+}
+
+/**
+ * Gets the member role settings for a group.
+ */
+function openlab_get_group_member_role_settings( $group_id ) {
+	$defaults = [
+		'admin'  => 'administrator',
+		'mod'    => 'editor',
+		'member' => 'author',
+	];
+
+	$raw_settings = groups_get_groupmeta( $group_id, 'member_site_roles' );
+
+	if ( ! $raw_settings ) {
+		$settings = $defaults;
 	} else {
-		if ( 'admin' === $group_role ) {
-			$blog_role = 'administrator';
-		} elseif ( 'mod' === $group_role ) {
-			$blog_role = 'editor';
-		} else {
-			// Default role is lower for portfolios
-			$blog_role = cboxol_is_portfolio( $group_id ) ? 'subscriber' : 'author';
+		$settings = [];
+		foreach ( $defaults as $group_role => $site_role ) {
+			$settings[ $group_role ] = isset( $raw_settings[ $group_role ] ) ? $raw_settings[ $group_role ] : $site_role;
 		}
 	}
 
-	return $blog_role;
+	return $settings;
 }
 
 /**
