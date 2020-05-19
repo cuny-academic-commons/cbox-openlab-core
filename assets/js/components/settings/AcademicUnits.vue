@@ -11,16 +11,16 @@
 				v-model="newUnitName"
 			>
 
-			<fieldset v-if="typeSupportsParent" class="new-academic-unit-parent">
-				<legend>{{ strings.parent }}</legend>
-
+			<div class="new-academic-unit-parent">
+				<label :for="academicUnitTypeSlug + '-new-parent'">{{ strings.parent }}</label>
 				<AcademicUnitParentSelector
 					:academicUnitTypeSlug="academicUnitType.parent"
+					:fieldId="academicUnitTypeSlug + '-new-parent'"
 					:thisUnitSlug="newUnitSlug"
 				/>
 
 				<p class="add-new-academic-unit-field-description">{{ strings.academicUnitParentLegend }}</p>
-			</fieldset>
+			</div>
 
 			<button
 				class="button button-primary"

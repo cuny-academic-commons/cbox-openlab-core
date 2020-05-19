@@ -257,6 +257,10 @@ a .action-arrow {
 	margin-bottom: .5rem;
 }
 
+.new-academic-unit-parent label {
+	display: block;
+}
+
 .academic-unit-list {
 	margin-left: 220px;
 }
