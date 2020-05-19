@@ -291,7 +291,7 @@ function cboxol_admin_tabs( $parent_page, $active_tab = '' ) {
 		$tabs_html .= '<a href="' . esc_url( $tab_data['href'] ) . '" class="' . esc_attr( $tab_class ) . '">' . esc_html( $tab_data['label'] ) . '</a>';
 	}
 
-	echo '<h2 class="nav-tab-wrapper">' . $tabs_html . '</h2>';
+	echo '<div class="nav-tab-wrapper">' . $tabs_html . '</div>';
 }
 
 /**
