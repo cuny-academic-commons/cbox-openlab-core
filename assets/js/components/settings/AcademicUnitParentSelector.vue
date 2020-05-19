@@ -1,5 +1,9 @@
 <template>
-	<select class="academic-unit-parent-selector" v-model="parentSlug">
+	<select
+		class="academic-unit-parent-selector"
+		:id="fieldId"
+		v-model="parentSlug"
+	>
 		<option value="">- {{ strings.none }} -</option>
 		<option v-for="unit in unitsOfType"
 			v-bind:value="unit.slug"
@@ -68,6 +72,9 @@
 		props: {
 			academicUnitTypeSlug: {
 				required: true
+			},
+			fieldId: {
+				type: String
 			},
 			thisUnitSlug: {
 				required: true

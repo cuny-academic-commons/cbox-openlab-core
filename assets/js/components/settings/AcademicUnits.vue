@@ -52,7 +52,10 @@
 
 				<tbody>
 					<template v-if="unitsOfType.length > 0" v-for="unitSlug in unitsOfType">
-						<AcademicUnit :slug="unitSlug" />
+						<AcademicUnit
+							:academicUnitTypeSlug="academicUnitTypeSlug"
+							:slug="unitSlug"
+						/>
 					</template>
 
 					<tr v-if="unitsOfType.length === 0">

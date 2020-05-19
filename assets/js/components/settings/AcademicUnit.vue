@@ -8,21 +8,22 @@
 
 				<div class="academic-unit-edit-field-set">
 					<div class="academic-unit-edit-field">
-						<label :v-for="academicUnit.type + '-' + slug + '-name'">{{ strings.name }}</label>
-						<input :v-id="academicUnit.type + '-' + slug + '-name'" v-model="unitName" />
+						<label :for="academicUnitTypeSlug + '-' + academicUnit.type + '-' + slug + '-name'">{{ strings.name }}</label>
+						<input :id="academicUnitTypeSlug + '-' + academicUnit.type + '-' + slug + '-name'" v-model="unitName" />
 					</div>
 
 					<div class="academic-unit-edit-field">
-						<label :v-for="academicUnit.type + '-' + slug + '-order'">{{ strings.orderLegend }}</label>
-						<input :v-id="academicUnit.type + '-' + slug + '-order'" v-model="unitOrder" />
+						<label :for="academicUnitTypeSlug + '-' + academicUnit.type + '-' + slug + '-order'">{{ strings.orderLegend }}</label>
+						<input :id="academicUnitTypeSlug + '-' + academicUnit.type + '-' + slug + '-order'" v-model="unitOrder" />
 					</div>
 				</div>
 
 				<div class="academic-unit-edit-field-set">
 					<div class="academic-unit-edit-field" v-if="typeSupportsParent">
-						<label :v-for="academicUnit.type + '-' + slug + '-parent'">{{ strings.parent }}</label>
+						<label :for="academicUnitTypeSlug + '-' + academicUnit.type + '-' + slug + '-parent'">{{ strings.parent }}</label>
 						<AcademicUnitParentSelector
 							:academicUnitTypeSlug="typeParent"
+							:fieldId="academicUnitTypeSlug + '-' + academicUnit.type + '-' + slug + '-parent'"
 							:thisUnitSlug="academicUnit.slug"
 						/>
 					</div>
@@ -42,8 +43,8 @@
 
 		<template v-else>
 			<th scope="row" class="check-column">
-				<label class="screen-reader-text" :v-for="academicUnit.type + '-' + slug + '-cb'">{{ checkboxLabel }}</label>
-				<input type="checkbox" :v-id="academicUnit.type + '-' + slug + '-cb'" :value="academicUnit.id" />
+				<label class="screen-reader-text" :for="academicUnit.type + '-' + slug + '-cb'">{{ checkboxLabel }}</label>
+				<input type="checkbox" :id="academicUnit.type + '-' + slug + '-cb'" :value="academicUnit.id" />
 			</th>
 
 			<td class="name column-name has-row-actions column-primary">
@@ -250,6 +251,10 @@
 		],
 
 		props: {
+			academicUnitTypeSlug: {
+				type: String,
+			},
+
 			slug: {
 				type: String,
 				required: true

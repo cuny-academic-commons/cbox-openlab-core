@@ -1,11 +1,12 @@
 <template>
 	<ul class="associated-type-dropdowns">
 		<li v-for="type in allTypes">
-			<label v-bind:for="associatedType + '-' + type.value">{{ type.label }}</label>
+			<label v-bind:for="idBase + type.value">{{ type.label }}</label>
 			<AssociatedTypeDropdown
 				:associatedType="associatedType"
 				:associatedTypeSlug="type.value"
 				:entityType="entityType"
+				:fieldId="idBase + type.value"
 				:slug="slug"
 			/>
 		</li>
@@ -23,6 +24,10 @@
 		computed: {
 			allTypes() {
 				return this.$store.state[ this.associatedType ]
+			},
+
+			idBase() {
+				return 'associated-item-type-' + this.slug + '-' + this.associatedType + '-' + this.entityType + '-'
 			}
 		},
 

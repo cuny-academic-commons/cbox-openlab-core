@@ -1,5 +1,8 @@
 <template>
-	<select :name="associatedObjectType + '-' + itemType + '-'" v-model="settingValue">
+	<select
+		:id="fieldId"
+		:name="fieldId" v-model="settingValue"
+	>
 		<option value=""> -- </option>
 		<option value="optional">{{ strings.optional }}</option>
 		<option value="required">{{ strings.required }}</option>
@@ -44,6 +47,7 @@
 			'associatedType',
 			'associatedTypeSlug',
 			'entityType',
+			'fieldId',
 			'slug'
 		]
 	}
