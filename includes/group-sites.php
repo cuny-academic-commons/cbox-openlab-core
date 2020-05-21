@@ -1495,7 +1495,7 @@ function cboxol_copy_blog_page( $group_id ) {
 				}
 			}
 		}
-		//					var_dump( $create );
+
 		if ( $data ) {
 			switch_to_blog( $src_id );
 			$src_url = get_option( 'siteurl' );
@@ -1576,6 +1576,37 @@ function cboxol_copy_blog_page( $group_id ) {
 						);
 						update_option( $o->option_name, $value );
 					}
+				}
+
+				// Updated custom nav menu items
+				$locations = get_theme_mod( 'nav_menu_locations' );
+				$menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
+				$nav_items = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
+
+				if ( $menu_id && ! empty( $nav_items ) ) {
+					$group_type = cboxol_get_group_group_type( $group_id );
+
+					// Update Group Profile URL.
+					wp_update_nav_menu_item(
+						$menu_id,
+						$nav_items['group'],
+						array(
+							'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
+							'menu-item-url'      => bp_get_group_permalink( $group ),
+							'menu-item-position' => 1,
+						)
+					);
+
+					// Update home URL.
+					wp_update_nav_menu_item(
+						$menu_id,
+						$nav_items['home'],
+						array(
+							'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
+							'menu-item-url'      => home_url( '/' ),
+							'menu-item-position' => 1,
+						)
+					);
 				}
 
 				restore_current_blog();
@@ -1727,8 +1758,13 @@ function cboxol_blogname_is_illegal( $blogname ) {
  * @param array $items Menu items.
  * @return array
  */
-function cboxol_add_links_to_nav_menu( $items ) {
+function cboxol_add_links_to_nav_menu( $items, $args ) {
 	if ( get_current_blog_id() === cboxol_get_main_site_id() ) {
+		return $items;
+	}
+
+	// Skip if we have real nav menu items.
+	if ( get_term_meta( $args->menu->term_id, 'cboxol_custom_menus', true ) ) {
 		return $items;
 	}
 
@@ -1782,7 +1818,7 @@ function cboxol_add_links_to_nav_menu( $items ) {
 
 	return $items;
 }
-add_filter( 'wp_nav_menu_objects', 'cboxol_add_links_to_nav_menu' );
+add_filter( 'wp_nav_menu_objects', 'cboxol_add_links_to_nav_menu', 10, 2 );
 
 /**
  * Load theme-specific fixes.
