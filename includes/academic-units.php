@@ -460,20 +460,21 @@ function cboxol_get_tax_query_for_academic_units( array $args ) {
 		return false;
 	}
 
+	$tax_query = [ 'relation' => 'AND' ];
+
 	$term_slugs = array();
 	foreach ( $r['units'] as $unit ) {
 		$unit_obj = cboxol_get_academic_unit( $unit );
 		if ( is_wp_error( $unit_obj ) ) {
 			continue;
 		}
-		$term_slugs[] = 'acad_unit_' . $unit_obj->get_wp_post_id();
-	}
 
-	$tax_query = array(
-		'taxonomy' => $taxonomy,
-		'terms' => $term_slugs,
-		'field' => 'slug',
-	);
+		$tax_query[] = array(
+			'taxonomy' => $taxonomy,
+			'terms'    => 'acad_unit_' . $unit_obj->get_wp_post_id(),
+			'field'    => 'slug',
+		);
+	}
 
 	return $tax_query;
 }
@@ -769,7 +770,7 @@ function cboxol_academic_units_process_change_for_group( $group ) {
 function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 	global $wpdb;
 
-	$academic_units = array();
+	$academic_units = [];
 	foreach ( $_GET as $get_key => $get_value ) {
 		if ( 'academic-unit-' !== substr( $get_key, 0, 14 ) ) {
 			continue;
@@ -780,16 +781,10 @@ function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 		}
 
 		if ( 'all' === $get_value ) {
-			$type_slug = substr( $get_key, 14 );
-			$units_of_type = cboxol_get_academic_units( array(
-				'type' => $type_slug,
-			) );
-			foreach ( $units_of_type as $unit_of_type ) {
-				$academic_units[] = $unit_of_type->get_slug();
-			}
-		} else {
-			$academic_units[] = urldecode( wp_unslash( $get_value ) );
+			continue;
 		}
+
+		$academic_units[] = urldecode( wp_unslash( $get_value ) );
 	}
 
 	$academic_units = array_filter( $academic_units );
@@ -805,16 +800,19 @@ function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 		}
 	}, $academic_units );
 
-	// Convert to IN.
-	$term_ids = get_terms( array(
-		'taxonomy' => 'cboxol_group_in_acadunit',
-		'orderby' => 'none',
-		'hide_empty' => false,
-		'slug' => $term_slugs,
-		'fields' => 'ids',
-	) );
+	// 'AND' logic requires that we query separately and then do an intersect.
+	$object_ids = null;
+	foreach ( $term_slugs as $term_slug ) {
+		$term            = get_term_by( 'slug', $term_slug, 'cboxol_group_in_acadunit' );
+		$term_object_ids = get_objects_in_term( $term->term_id, 'cboxol_group_in_acadunit' );
 
-	$object_ids = get_objects_in_term( $term_ids, 'cboxol_group_in_acadunit' );
+		if ( null === $object_ids ) {
+			$object_ids = $term_object_ids;
+		} else {
+			$object_ids = array_intersect( $object_ids, $term_object_ids );
+		}
+	}
+
 	if ( ! $object_ids ) {
 		$object_ids = array( 0 );
 	}
@@ -824,6 +822,7 @@ function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 	} else {
 		$sql .= ' AND g.id IN (' . implode( ',', array_map( 'intval', $object_ids ) ) . ')';
 	}
+
 	return $sql;
 }
 add_filter( 'bp_groups_get_paged_groups_sql', 'cboxol_shim_tax_query_for_bp_groups', 10, 3 );
