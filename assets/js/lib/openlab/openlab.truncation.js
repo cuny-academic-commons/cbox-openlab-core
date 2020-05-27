@@ -69,7 +69,7 @@ OpenLab.truncation = (function ($) {
 
                 if (thisElem.data('link')) {
 
-                    var omissionText = 'See More';
+                    var omissionText = OpenLabTruncationStrings.seeMore;
 
                     //for screen reader only append
                     //provides screen reader with addtional information in-link

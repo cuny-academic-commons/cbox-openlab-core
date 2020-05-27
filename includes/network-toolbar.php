@@ -1657,8 +1657,17 @@ function cac_adminbar_enqueue_scripts() {
 	wp_enqueue_script( 'succinct-mod-js' );
 	wp_register_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.search.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-search-js' );
+
 	wp_register_script( 'openlab-truncation-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.truncation.js', array( 'jquery' ), $ver );
 	wp_enqueue_script( 'openlab-truncation-js' );
+	wp_localize_script(
+		'openlab-truncation-js',
+		'OpenLabTruncationStrings',
+		[
+			'seeMore' => __( 'See More', 'cbox-openlab-core' ),
+		]
+	);
+
 	wp_register_script( 'openlab-nav-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.nav.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-nav-js' );
 	wp_localize_script( 'openlab-nav-js', 'utilityVars', array(
