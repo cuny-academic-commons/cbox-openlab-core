@@ -1911,7 +1911,7 @@ function cboxol_wp_nav_menu_meta_box() {
 	}
 
 	add_meta_box(
-		'add-buddypress-nav-menu',
+		'cboxol-nav-menu-box',
 		__( 'CBOX OpenLab', 'cbox-openlab-core' ),
 		'cboxol_render_nav_menu_meta_box',
 		'nav-menus',
