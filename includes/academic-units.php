@@ -803,7 +803,11 @@ function cboxol_shim_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 	// 'AND' logic requires that we query separately and then do an intersect.
 	$object_ids = null;
 	foreach ( $term_slugs as $term_slug ) {
-		$term            = get_term_by( 'slug', $term_slug, 'cboxol_group_in_acadunit' );
+		$term = get_term_by( 'slug', $term_slug, 'cboxol_group_in_acadunit' );
+		if ( ! $term ) {
+			continue;
+		}
+
 		$term_object_ids = get_objects_in_term( $term->term_id, 'cboxol_group_in_acadunit' );
 
 		if ( null === $object_ids ) {
