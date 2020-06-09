@@ -41,6 +41,7 @@ class Install {
 		$this->install_default_group_categories();
 		$this->install_default_academic_types();
 		$this->install_default_brand_pages();
+		$this->install_default_search();
 		$this->install_default_settings();
 
 		$this->install_default_widgets();
@@ -728,21 +729,28 @@ class Install {
 
 		$brand_page_types = cboxol_get_brand_page_types();
 		$pages            = array(
-			'about'        => array(
+			'about'          => array(
 				'post_title'   => __( 'About', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
-			'help'         => array(
+			'help'           => array(
 				'post_title'   => __( 'Help', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
-			'terms-of-use' => array(
+			'terms-of-use'   => array(
 				'post_title'   => __( 'Terms of Use', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This page can contain the Terms of Service for your site. Terms of Service are the rules that a visitor or member must abide by while using your site.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
 			),
-			'contact-us'   => array(
+			'contact-us'     => array(
 				'post_title'   => __( 'Contact Us', 'cbox-openlab-core' ),
 				'post_content' => '<p>' . __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, want to provide feedback, or need help.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
+			),
+			'search-results' => array(
+				'post_title'   => __( 'Search Results', 'cbox-openlab-core' ),
+				'post_content' => '',
+				'meta'         => [
+					'_wp_page_template' => 'search-results.php',
+				],
 			),
 		);
 
@@ -774,9 +782,34 @@ class Install {
 			if ( $page_id ) {
 				$page_ids[ $brand_page_type_name ] = $page_id;
 			}
+
+			if ( ! empty( $page['meta'] ) ) {
+				foreach ( $page['meta'] as $meta_key => $meta_value ) {
+					update_post_meta( $page_id, $meta_key, $meta_value );
+				}
+			}
 		}
 
 		update_site_option( 'cboxol_brand_page_ids', $page_ids );
+	}
+
+	/**
+	 * Installs default search setup.
+	 *
+	 * @since 1.2.0
+	 */
+	protected function install_default_search() {
+		$page_id = wp_insert_post(
+			[
+				'post_type'    => 'page',
+				'post_title'   => __( 'Search Results', 'cbox-openlab-core' ),
+				'post_content' => '',
+				'post_name'    => 'search-results',
+				'post_status'  => 'publish',
+			]
+		);
+
+		update_post_meta( $page_id, '_wp_page_template', 'search-results.php' );
 	}
 
 	/**

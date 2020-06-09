@@ -59,9 +59,20 @@ function cboxol_get_brand_page_types() {
 			'settings_page_description' => __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, comments, or need help.', 'cbox-openlab-core' ),
 			'parent' => 'about',
 		),
+		'search-results' => array(
+			'settings_page_title'       => __( 'Search Results', 'cbox-openlab-core' ),
+			'settings_page_description' => __( 'This placeholder page is used to display search results. This page\'s contents are generated dynamically, but you can edit the page title and slug.', 'cbox-openlab-core' ),
+		),
 	);
 }
 
+/**
+ * Gets 'brand' pages.
+ *
+ * @since 1.1.0
+ *
+ * @return array
+ */
 function cboxol_get_brand_pages() {
 	$brand_page_types = cboxol_get_brand_page_types();
 	$pages = array();
@@ -103,6 +114,24 @@ function cboxol_get_brand_pages() {
 }
 
 /**
+ * Gets info about a specific brand page.
+ *
+ * @since 1.2.0
+ *
+ * @param string $page Name of brand page.
+ * @return array Info about brand page.
+ */
+function cboxol_get_brand_page( $page ) {
+	$all_pages = cboxol_get_brand_pages();
+
+	if ( ! isset( $all_pages[ $page ] ) ) {
+		return null;
+	}
+
+	return $all_pages[ $page ];
+}
+
+/**
  * Determines whether a given post is a brand page of a specific type.
  *
  * @param string $page_type Type of page, eg 'about'.
@@ -115,12 +144,12 @@ function cboxol_is_brand_page( $page_type, $post_id = null ) {
 		$post_id = get_queried_object_id();
 	}
 
-	$brand_pages = cboxol_get_brand_pages();
-	if ( ! isset( $brand_pages[ $page_type ] ) ) {
+	$brand_page = cboxol_get_brand_page( $page_type );
+	if ( ! $brand_page ) {
 		return false;
 	}
 
-	return $brand_pages[ $page_type ]['id'] === $post_id;
+	return $brand_page['id'] === $post_id;
 }
 
 /**

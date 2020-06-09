@@ -175,8 +175,7 @@ HTML;
 	$form_action = trailingslashit( bp_get_root_domain() );
 	$nonce = wp_create_nonce( 'bp_search_form' );
 
-	$sr_text = esc_html__( 'Search by People or Group Type', 'cbox-openlab-core' );
-	$sr_text_which = esc_html__( 'Select the Item Type to Search', 'cbox-openlab-core' );
+	$sr_text = esc_html__( 'Search', 'cbox-openlab-core' );
 	$sr_text_button = esc_html__( 'Submit', 'cbox-openlab-core' );
 	$search_placeholder = esc_attr__( 'Search', 'cbox-openlab-core' );
 
@@ -201,11 +200,6 @@ HTML;
 		<label for="search-terms-{$mode}-{$location}" class="screen-reader-text">{$sr_text}</label>
         <input id="search-terms-{$mode}-{$location}" class="form-control search-terms search-terms-{$mode}" type="text" name="search" placeholder="{$search_placeholder}" />
 
-		<label for="search-which-{$mode}-{$location}" class="screen-reader-text">{$sr_text_which}</label>
-        <select id="search-which-{$mode}-{$location}" name="search-which" class="form-control search-which search-which-{$mode}">
-			{$options_html}
-        </select>
-
         <button class="btn btn-primary top-align search-submit" id="search-submit-{$mode}-{$location}" type="submit"><span class="screen-reader-text">{$sr_text_button}</span><i class="fa fa-search"></i></button>
         <input type="hidden" id="_bp_search_nonce_{$mode }_{$location}" name="_bp_search_nonce" value="{$nonce}" />
         </div>
@@ -220,25 +214,18 @@ HTML;
  * Catch and redirect searches.
  */
 function openlab_mu_search_override() {
-	global $bp;
-
-	if ( isset( $_POST['search'] ) && ! empty( $_POST['search-which'] ) ) {
+	if ( isset( $_POST['search'] ) ) {
 		$nonce = isset( $_POST['_bp_search_nonce'] ) ? $_POST['_bp_search_nonce'] : '';
 		if ( ! wp_verify_nonce( $nonce, 'bp_search_form' ) ) {
 			return;
 		}
 
-		$search_which = wp_unslash( $_POST['search-which'] );
 		$search = wp_unslash( $_POST['search'] );
 
-		$redirect = null;
-		if ( 'members' === $search_which ) {
-			$redirect = add_query_arg( 'search', $search, bp_get_members_directory_permalink() );
-		} else {
-			$group_type = cboxol_get_group_type( $search_which );
-			if ( ! is_wp_error( $group_type ) ) {
-				$redirect = add_query_arg( 'search', $search, bp_get_group_type_directory_permalink( $search_which ) );
-			}
+		$redirect   = null;
+		$search_url = get_home_url( bp_get_root_blog_id(), 'search' );
+		if ( ! is_wp_error( $group_type ) ) {
+			$redirect = add_query_arg( 'search', $search, $search_url );
 		}
 
 		if ( $redirect ) {
