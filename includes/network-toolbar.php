@@ -222,10 +222,10 @@ function openlab_mu_search_override() {
 
 		$search = wp_unslash( $_POST['search'] );
 
-		$redirect   = null;
-		$search_url = get_home_url( bp_get_root_blog_id(), 'search' );
-		if ( ! is_wp_error( $group_type ) ) {
-			$redirect = add_query_arg( 'search', $search, $search_url );
+		$redirect    = null;
+		$search_page = cboxol_get_brand_page( 'search-results' );
+		if ( $search_page ) {
+			$redirect = add_query_arg( 'search', $search, get_permalink( $search_page['id'] ) );
 		}
 
 		if ( $redirect ) {
