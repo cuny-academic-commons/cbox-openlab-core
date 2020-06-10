@@ -65,6 +65,7 @@ function openlab_user_has_portfolio( $user_id = 0 ) {
  * Echo a user's portfolio site URL
  */
 function openlab_user_portfolio_url( $user_id = 0 ) {
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo openlab_get_user_portfolio_url( $user_id );
 }
 	/**
@@ -84,6 +85,7 @@ function openlab_get_user_portfolio_url( $user_id = 0 ) {
  * Echo a user's portfolio profile URL
  */
 function openlab_user_portfolio_profile_url( $user_id = 0 ) {
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo openlab_get_user_portfolio_profile_url( $user_id );
 }
 	/**
@@ -184,7 +186,7 @@ function openlab_get_portfolio_label( $args = array() ) {
 			$label = 'an ' . $label;
 		}
 	} else {
-		$label = 'upper' == $r['case'] ? 'Portfolio' : 'portfolio';
+		$label = 'upper' === $r['case'] ? 'Portfolio' : 'portfolio';
 
 		if ( (bool) $r['leading_a'] ) {
 			$label = 'a ' . $label;
@@ -198,7 +200,8 @@ function openlab_get_portfolio_label( $args = array() ) {
  * Suggest a name for a portfolio, based on the user's FN + LN
  */
 function openlab_suggest_portfolio_name() {
-	return sprintf( __( "%s's Portfolio", 'cboxol-openlab-core', 'commons-in-a-box' ), bp_loggedin_user_fullname() );
+	/* translators: portfolio owner's display name */
+	return sprintf( __( "%s's Portfolio", 'commons-in-a-box' ), bp_loggedin_user_fullname() );
 }
 
 /**
@@ -216,6 +219,7 @@ function openlab_suggest_portfolio_path() {
 	// Ensure uniqueness.
 	$incr = 2;
 	$base = $slug;
+	// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 	while ( $foo = get_id_from_blogname( $slug ) ) {
 		$slug = $base . '-' . $incr;
 		$incr++;
@@ -234,8 +238,9 @@ function openlab_bp_get_new_group_name( $name ) {
 		return $name;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( cboxol_is_portfolio() || ( ! empty( $_GET['group_type'] ) && $portfolio_group_type->get_slug() === $_GET['group_type'] ) ) {
-		if ( '' == $name ) {
+		if ( '' === $name ) {
 			$name = openlab_suggest_portfolio_name();
 		}
 	}
@@ -257,7 +262,7 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 	$cache_key  = 'member_portfolios_' . $sort_by;
 	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
 
-	if ( '' == $portfolios ) {
+	if ( '' === $portfolios ) {
 		$portfolios    = array();
 		$group_members = new BP_Group_Member_Query(
 			array(
@@ -366,7 +371,8 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 function openlab_bust_group_portfolio_cache( $group_id = 0 ) {
 	global $wpdb, $bp;
 
-	$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$bp->groups->table_name_groupmeta} WHERE group_id = %d AND meta_key LIKE 'member_portfolios_%%'", $group_id ) );
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_key FROM {$bp->groups->table_name_groupmeta} WHERE group_id = %d AND meta_key LIKE %s", $group_id, '%' . $wpdb->esc_like( 'member_portfolios_' ) . '%' ) );
 	foreach ( $keys as $k ) {
 		groups_delete_groupmeta( $group_id, $k );
 	}
@@ -536,16 +542,15 @@ function openlab_portfolio_list_group_display() {
 			<?php echo esc_html( openlab_portfolio_list_group_heading() ); ?>
 		</h2>
 
-				<div class="sidebar-block">
+		<div class="sidebar-block">
+			<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
+				<?php foreach ( $portfolio_data as $pdata ) : ?>
+					<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'Faculty', 'Staff' ), true ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
+					<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ); ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ); ?></a></li>
+				<?php endforeach ?>
+			</ul>
 
-		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
-		<?php foreach ( $portfolio_data as $pdata ) : ?>
-			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'Faculty', 'Staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
-			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ); ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ); ?></a></li>
-		<?php endforeach ?>
-		</ul>
-
-				</div>
+		</div>
 	</div>
 
 	<?php
@@ -565,7 +570,7 @@ function openlab_redirect_to_student_portfolio_catcher() {
 	check_admin_referer( 'portfolio_goto', '_pnonce' );
 
 	$url = urldecode( $_GET['portfolio-goto'] );
-	wp_redirect( $url );
+	wp_safe_redirect( $url );
 }
 add_action( 'wp', 'openlab_redirect_to_student_portfolio_catcher' );
 
@@ -577,6 +582,7 @@ add_action( 'wp', 'openlab_redirect_to_student_portfolio_catcher' );
  * Echoes the URL for the portfolio creation page
  */
 function openlab_portfolio_creation_url() {
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo openlab_get_portfolio_creation_url();
 }
 	/**
@@ -594,7 +600,8 @@ function openlab_get_portfolio_creation_url() {
  * Remove BPGES settings from portfolio group admin and creation screens
  */
 function openlab_remove_bpges_settings_for_portfolios() {
-	if ( cboxol_is_portfolio() || ( bp_is_group_create() && isset( $_GET['group_type'] ) && 'portfolio' == $_GET['group_type'] ) ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( cboxol_is_portfolio() || ( bp_is_group_create() && isset( $_GET['group_type'] ) && 'portfolio' === $_GET['group_type'] ) ) {
 		remove_action( 'bp_after_group_settings_admin', 'ass_default_subscription_settings_form' );
 		remove_action( 'bp_after_group_settings_creation_step', 'ass_default_subscription_settings_form' );
 	}
@@ -617,7 +624,7 @@ function openlab_associate_portfolio_group_with_user( $group_id, $user_id ) {
  * Is this my portfolio?
  */
 function openlab_is_my_portfolio() {
-	return bp_is_group() && cboxol_is_portfolio() && is_user_logged_in() && openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) == bp_loggedin_user_id();
+	return bp_is_group() && cboxol_is_portfolio() && is_user_logged_in() && openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) === bp_loggedin_user_id();
 }
 
 /**
@@ -645,7 +652,8 @@ function openlab_delete_portfolio_redirect() {
  * Enforce one portfolio per person, by redirecting away from the portfolio creation page
  */
 function openlab_enforce_one_portfolio_per_person() {
-	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['group_type'] ) && 'portfolio' == $_GET['group_type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['group_type'] ) && 'portfolio' === $_GET['group_type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 		bp_core_add_message( sprintf( 'You already have %s', openlab_get_portfolio_label( 'leading_a=1' ) ), 'error' );
 		bp_core_redirect( bp_loggedin_user_domain() );
 	}
