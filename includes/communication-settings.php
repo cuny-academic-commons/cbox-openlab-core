@@ -5,18 +5,24 @@ function cboxol_communication_admin_page_email() {
 
 	$settings = array(
 		array(
-			'title' => __( 'Email Appearance', 'commons-in-a-box' ),
-			'url' => add_query_arg( array(
-				'post_type' => 'bp-email',
-				'page' => 'bp-emails-customizer-redirect',
-			), $url_base . 'edit.php' ),
+			'title'       => __( 'Email Appearance', 'commons-in-a-box' ),
+			'url'         => add_query_arg(
+				array(
+					'post_type' => 'bp-email',
+					'page'      => 'bp-emails-customizer-redirect',
+				),
+				$url_base . 'edit.php'
+			),
 			'description' => __( 'Customize the visual design of emails that will be sent to community members.', 'commons-in-a-box' ),
 		),
 		array(
-			'title' => __( 'Email Templates', 'commons-in-a-box' ),
-			'url' => add_query_arg( array(
-				'post_type' => 'bp-email',
-			), $url_base . 'edit.php' ),
+			'title'       => __( 'Email Templates', 'commons-in-a-box' ),
+			'url'         => add_query_arg(
+				array(
+					'post_type' => 'bp-email',
+				),
+				$url_base . 'edit.php'
+			),
 			'description' => __( 'Manage the content that’s included in emails sent automatically to members based on triggers (e.g. a welcome email sent to new members of a group).', 'commons-in-a-box' ),
 		),
 	);
@@ -29,10 +35,13 @@ function cboxol_communication_admin_page_email() {
 		}
 
 		$settings[] = array(
-			'title' => __( 'Group Email Options', 'commons-in-a-box' ),
-			'url' => add_query_arg( array(
-				'page' => 'ass_admin_options',
-			), $ges_base ),
+			'title'       => __( 'Group Email Options', 'commons-in-a-box' ),
+			'url'         => add_query_arg(
+				array(
+					'page' => 'ass_admin_options',
+				),
+				$ges_base
+			),
 			'description' => __( 'Update settings related to Daily Digests & Weekly Summaries of group activities in your community; toggle global unsubscribe links; modify group admin abilities related to email subscription settings; and establish spam prevention guidelines.', 'commons-in-a-box' ),
 		);
 	}
@@ -55,10 +64,13 @@ function cboxol_communication_admin_page_invitations() {
 
 	$settings = array(
 		array(
-			'title' => __( 'Invite Anyone', 'commons-in-a-box' ),
-			'url' => add_query_arg( array(
-				'page' => 'invite-anyone',
-			), $base ),
+			'title'       => __( 'Invite Anyone', 'commons-in-a-box' ),
+			'url'         => add_query_arg(
+				array(
+					'page' => 'invite-anyone',
+				),
+				$base
+			),
 			'description' => __( 'Manage the invite email content template, control which member types are able to send various kinds of invitations, control address book integration, view sent invitations and related statistics.', 'commons-in-a-box' ),
 		),
 	);

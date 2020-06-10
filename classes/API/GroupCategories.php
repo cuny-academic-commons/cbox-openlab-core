@@ -11,32 +11,40 @@ use \WP_REST_Response;
 
 class GroupCategories extends WP_REST_Controller {
 	public function register_routes() {
-		$version = '1';
+		$version   = '1';
 		$namespace = 'cboxol/v' . $version;
 
-		register_rest_route( $namespace, '/group-category', array(
+		register_rest_route(
+			$namespace,
+			'/group-category',
 			array(
-				'methods'         => WP_REST_Server::CREATABLE,
-				'callback'        => array( $this, 'create_item' ),
-				'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 
-		register_rest_route( $namespace, '/group-category/(?P<id>\d+)', array(
+		register_rest_route(
+			$namespace,
+			'/group-category/(?P<id>\d+)',
 			array(
-				'methods'         => WP_REST_Server::EDITABLE,
-				'callback'        => array( $this, 'edit_item' ),
-				'permission_callback' => array( $this, 'edit_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-			array(
-				'methods'         => WP_REST_Server::DELETABLE,
-				'callback'        => array( $this, 'delete_item' ),
-				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'edit_item' ),
+					'permission_callback' => array( $this, 'edit_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'delete_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 	}
 
 	public function create_item( $request ) {
@@ -55,7 +63,7 @@ class GroupCategories extends WP_REST_Controller {
 
 		$group_category->save();
 
-		$retval = $group_category->get_for_endpoint();
+		$retval   = $group_category->get_for_endpoint();
 		$response = rest_ensure_response( $retval );
 		return $response;
 	}
@@ -64,7 +72,7 @@ class GroupCategories extends WP_REST_Controller {
 		$params = $request->get_params();
 
 		$term_id = $params['id'];
-		$term = get_term( $term_id, 'bp_group_categories' );
+		$term    = get_term( $term_id, 'bp_group_categories' );
 		if ( ! $term ) {
 			return new WP_Error( 'no_term_found', __( 'No term found by that ID.', 'commons-in-a-box' ) );
 		}
@@ -79,13 +87,13 @@ class GroupCategories extends WP_REST_Controller {
 
 		$group_category->save();
 
-		$retval = $group_category->get_for_endpoint();
+		$retval   = $group_category->get_for_endpoint();
 		$response = rest_ensure_response( $retval );
 		return $response;
 	}
 
 	public function delete_item( $request ) {
-		$params = $request->get_params();
+		$params     = $request->get_params();
 		$wp_term_id = $params['id'];
 
 		$success = wp_delete_term( $wp_term_id, 'bp_group_categories' );

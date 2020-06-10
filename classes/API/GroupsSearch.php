@@ -9,27 +9,33 @@ use \WP_REST_Response;
 
 class GroupsSearch extends WP_REST_Controller {
 	public function register_routes() {
-		$version = '1';
+		$version   = '1';
 		$namespace = 'cboxol/v' . $version;
 
-		register_rest_route( $namespace, '/groups-search', array(
+		register_rest_route(
+			$namespace,
+			'/groups-search',
 			array(
-				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_items' ),
-				'permission_callback' => array( $this, 'get_items_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_items' ),
+					'permission_callback' => array( $this, 'get_items_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 	}
 
 	public function get_items( $request ) {
 		$params = $request->get_params();
-		$q = $params['q'];
+		$q      = $params['q'];
 
-		$found = groups_get_groups( array(
-			'max' => 5,
-			'search_terms' => $q,
-		) );
+		$found = groups_get_groups(
+			array(
+				'max'          => 5,
+				'search_terms' => $q,
+			)
+		);
 
 		$retval = array();
 		foreach ( $found['groups'] as $group ) {

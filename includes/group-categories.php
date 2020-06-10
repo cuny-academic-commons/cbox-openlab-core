@@ -14,20 +14,20 @@ function cboxol_groupcategories_admin_page() {
 		$cats_data[ $cat->get_slug() ] = $cat->get_for_endpoint();
 	}
 
-	$group_types = cboxol_get_group_types();
+	$group_types      = cboxol_get_group_types();
 	$group_types_data = array();
 	foreach ( $group_types as $group_type ) {
 		$group_types_data[ $group_type->get_slug() ] = $group_type->get_for_endpoint();
 	}
 
-	$dummy = \CBOX\OL\GroupCategory::get_dummy();
+	$dummy      = \CBOX\OL\GroupCategory::get_dummy();
 	$dummy_data = $dummy->get_for_endpoint();
 
 	$app_config = array(
-		'subapp' => 'GroupCategoriesUI',
+		'subapp'          => 'GroupCategoriesUI',
 		'groupCategories' => $cats_data,
-		'groupTypes' => $group_types_data,
-		'dummy' => $dummy_data,
+		'groupTypes'      => $group_types_data,
+		'dummy'           => $dummy_data,
 	);
 
 	?>
@@ -47,7 +47,7 @@ function cboxol_groupcategories_admin_page() {
 
 function cboxol_get_group_categories() {
 	$args = array(
-		'taxonomy' => 'bp_group_categories',
+		'taxonomy'   => 'bp_group_categories',
 		'hide_empty' => false,
 	);
 
@@ -55,21 +55,24 @@ function cboxol_get_group_categories() {
 
 	$cats = array();
 	foreach ( $terms as $term ) {
-		$cat = \CBOX\OL\GroupCategory::get_instance_from_wp_term( $term );
+		$cat                 = \CBOX\OL\GroupCategory::get_instance_from_wp_term( $term );
 		$cats[ $term->name ] = $cat;
 	}
 
 	// Not ideal, but accounts better for cases where no 'order' termmeta exists.
-	uasort( $cats, function( $a, $b ) {
-		$a_order = $a->get_order();
-		$b_order = $b->get_order();
+	uasort(
+		$cats,
+		function( $a, $b ) {
+			$a_order = $a->get_order();
+			$b_order = $b->get_order();
 
-		if ( $a_order === $b_order ) {
-			return 0;
+			if ( $a_order === $b_order ) {
+				return 0;
+			}
+
+			return $a_order > $b_order ? 1 : -1;
 		}
-
-		return $a_order > $b_order ? 1 : -1;
-	} );
+	);
 
 	return $cats;
 }

@@ -9,26 +9,34 @@ use \WP_REST_Response;
 
 class EmailDomains extends WP_REST_Controller {
 	public function register_routes() {
-		$version = '1';
+		$version   = '1';
 		$namespace = 'cboxol/v' . $version;
 
-		register_rest_route( $namespace, '/email-domain', array(
+		register_rest_route(
+			$namespace,
+			'/email-domain',
 			array(
-				'methods'         => WP_REST_Server::CREATABLE,
-				'callback'        => array( $this, 'create_item' ),
-				'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 
-		register_rest_route( $namespace, '/email-domain/(?P<domain>[^/]+)', array(
+		register_rest_route(
+			$namespace,
+			'/email-domain/(?P<domain>[^/]+)',
 			array(
-				'methods'         => WP_REST_Server::DELETABLE,
-				'callback'        => array( $this, 'delete_item' ),
-				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'delete_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 	}
 
 	public function create_item( $request ) {
@@ -36,7 +44,7 @@ class EmailDomains extends WP_REST_Controller {
 		$domain = $params['domain'];
 
 		$limited_email_domains = get_site_option( 'limited_email_domains' );
-		$old_led = $limited_email_domains;
+		$old_led               = $limited_email_domains;
 
 		if ( ! is_array( $limited_email_domains ) ) {
 			$limited_email_domains = explode( "\n", $limited_email_domains );
@@ -68,7 +76,7 @@ class EmailDomains extends WP_REST_Controller {
 		$domain = $params['domain'];
 
 		$limited_email_domains = get_site_option( 'limited_email_domains' );
-		$old_led = $limited_email_domains;
+		$old_led               = $limited_email_domains;
 
 		if ( ! is_array( $limited_email_domains ) ) {
 			$limited_email_domains = explode( "\n", $limited_email_domains );

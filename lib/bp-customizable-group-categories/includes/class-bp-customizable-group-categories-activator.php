@@ -22,55 +22,57 @@
  */
 class Bp_Customizable_Group_Categories_Activator {
 
-    /**
-     * Short Description. (use period)
-     *
-     * Long Description.
-     *
-     * @since    1.0.0
-     */
-    public static function activate() {
-        global $wpdb;
+	/**
+	 * Short Description. (use period)
+	 *
+	 * Long Description.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function activate() {
+		global $wpdb;
 
-        //first we make sure the db_version option matches what's stored in version.php
-        //on Dev Org, these values where mismatched
-        $check_db_version = get_option('db_version');
-        
-        require ABSPATH . WPINC . '/version.php';
-        
-        if($check_db_version !== $wp_db_version){
-            update_option('db_version', $wp_db_version);
-        }
-        
-        //next we clear the options values in object cache to make sure we have the latest values
-        $cache_delete = wp_cache_delete('alloptions', 'options');
-        $alloptions = wp_load_alloptions();
-        wp_cache_set('alloptions', $alloptions, 'options');
+		//first we make sure the db_version option matches what's stored in version.php
+		//on Dev Org, these values where mismatched
+		$check_db_version = get_option( 'db_version' );
 
-        $current_db_version = get_option('db_version');
+		require ABSPATH . WPINC . '/version.php';
 
-// Upgrade versions prior to 4.4.
-        if ($current_db_version < 34978) {
-// If compatible termmeta table is found, use it, but enforce a proper index and update collation.
-            if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->termmeta}'") && $wpdb->get_results("SHOW INDEX FROM {$wpdb->termmeta} WHERE Column_name = 'meta_key'")) {
+		if ( $check_db_version !== $wp_db_version ) {
+			update_option( 'db_version', $wp_db_version );
+		}
 
-                /** Load WordPress Administration Upgrade API */
-                require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		//next we clear the options values in object cache to make sure we have the latest values
+		$cache_delete = wp_cache_delete( 'alloptions', 'options' );
+		$alloptions   = wp_load_alloptions();
+		wp_cache_set( 'alloptions', $alloptions, 'options' );
 
-                $wpdb->query("ALTER TABLE $wpdb->termmeta DROP INDEX meta_key, ADD INDEX meta_key(meta_key(191))");
-                maybe_convert_table_to_utf8mb4($wpdb->termmeta);
-            } else {
+		$current_db_version = get_option( 'db_version' );
 
-                $max_index_length = 191;
+		// Upgrade versions prior to 4.4.
+		if ( $current_db_version < 34978 ) {
+			// If compatible termmeta table is found, use it, but enforce a proper index and update collation.
+			if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->termmeta}'" ) && $wpdb->get_results( "SHOW INDEX FROM {$wpdb->termmeta} WHERE Column_name = 'meta_key'" ) ) {
 
-                $charset_collate = '';
+				/** Load WordPress Administration Upgrade API */
+				require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-                if (!empty($wpdb->charset))
-                    $charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
-                if (!empty($wpdb->collate))
-                    $charset_collate .= " COLLATE $wpdb->collate";
+				$wpdb->query( "ALTER TABLE $wpdb->termmeta DROP INDEX meta_key, ADD INDEX meta_key(meta_key(191))" );
+				maybe_convert_table_to_utf8mb4( $wpdb->termmeta );
+			} else {
 
-                $sql = "CREATE TABLE {$wpdb->prefix}termmeta (
+				$max_index_length = 191;
+
+				$charset_collate = '';
+
+				if ( ! empty( $wpdb->charset ) ) {
+					$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+				}
+				if ( ! empty( $wpdb->collate ) ) {
+					$charset_collate .= " COLLATE $wpdb->collate";
+				}
+
+				$sql = "CREATE TABLE {$wpdb->prefix}termmeta (
   meta_id bigint(20) unsigned NOT NULL auto_increment,
   term_id bigint(20) unsigned NOT NULL default '0',
   meta_key varchar(255) default NULL,
@@ -80,9 +82,9 @@ class Bp_Customizable_Group_Categories_Activator {
   KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;";
 
-                $result = $wpdb->query($sql);
-            }
-        }
-    }
+				$result = $wpdb->query( $sql );
+			}
+		}
+	}
 
 }

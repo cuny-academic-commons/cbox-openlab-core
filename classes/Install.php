@@ -748,9 +748,9 @@ class Install {
 			'search-results' => array(
 				'post_title'   => __( 'Search Results', 'commons-in-a-box' ),
 				'post_content' => '',
-				'meta'         => [
+				'meta'         => array(
 					'_wp_page_template' => 'search-results.php',
-				],
+				),
 			),
 		);
 
@@ -800,13 +800,13 @@ class Install {
 	 */
 	protected function install_default_search() {
 		$page_id = wp_insert_post(
-			[
+			array(
 				'post_type'    => 'page',
 				'post_title'   => __( 'Search Results', 'commons-in-a-box' ),
 				'post_content' => '',
 				'post_name'    => 'search-results',
 				'post_status'  => 'publish',
-			]
+			)
 		);
 
 		update_post_meta( $page_id, '_wp_page_template', 'search-results.php' );
@@ -1096,9 +1096,9 @@ class Install {
 
 		// Only need these if performing outside of admin environment.
 		if ( ! function_exists( 'media_sideload_image' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/media.php' );
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
-			require_once( ABSPATH . 'wp-admin/includes/image.php' );
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
 
 		foreach ( $slides as $slide ) {

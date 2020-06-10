@@ -8,10 +8,10 @@ class MemberType extends ItemTypeBase implements ItemType {
 	protected $post_type = 'cboxol_member_type';
 
 	protected $defaults = array(
-		'can_create_courses' => false,
-		'can_be_deleted' => true,
+		'can_create_courses'   => false,
+		'can_be_deleted'       => true,
 		'requires_signup_code' => null,
-		'selectable_types' => array(),
+		'selectable_types'     => array(),
 	);
 
 	protected $boolean_props = array(
@@ -32,7 +32,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 		$list = '';
 
 		$selectable_types = $this->get_selectable_types();
-		$labels = array();
+		$labels           = array();
 		foreach ( $selectable_types as $selectable_type ) {
 			$selectable_type_obj = cboxol_get_member_type( $selectable_type );
 			if ( $selectable_type_obj ) {
@@ -82,7 +82,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 
 		// Can create courses.
 		$can_create_courses_db = get_post_meta( $post->ID, 'cboxol_member_type_can_create_courses', true );
-		$can_create_courses = 'yes' === $can_create_courses_db;
+		$can_create_courses    = 'yes' === $can_create_courses_db;
 		$type->set_can_create_courses( $can_create_courses );
 
 		// Selectable types ("Member may change Type to...").
@@ -94,41 +94,46 @@ class MemberType extends ItemTypeBase implements ItemType {
 
 	public function get_for_endpoint() {
 		// @todo This doesn't need to go in every one.
-		$types = cboxol_get_member_types( array(
-			'enabled' => null,
-		) );
+		$types = cboxol_get_member_types(
+			array(
+				'enabled' => null,
+			)
+		);
 
-		$all_types = array_map( function( $type ) {
-			return array(
-				'slug' => $type->get_slug(),
-				'name' => $type->get_name(),
-				'id' => $type->get_wp_post_id(),
-			);
-		}, $types );
+		$all_types = array_map(
+			function( $type ) {
+				return array(
+					'slug' => $type->get_slug(),
+					'name' => $type->get_name(),
+					'id'   => $type->get_wp_post_id(),
+				);
+			},
+			$types
+		);
 
 		$data = array(
-			'id' => $this->get_wp_post_id(),
-			'isCollapsed' => true,
-			'isEnabled' => $this->get_is_enabled(),
-			'isLoading' => false,
-			'isModified' => false,
+			'id'           => $this->get_wp_post_id(),
+			'isCollapsed'  => true,
+			'isEnabled'    => $this->get_is_enabled(),
+			'isLoading'    => false,
+			'isModified'   => false,
 			'canBeDeleted' => $this->get_can_be_deleted(),
-			'settings' => array(
+			'settings'     => array(
 				'MayChangeMemberTypeTo' => array(
 					'component' => 'MayChangeMemberTypeTo',
-					'data' => array(
+					'data'      => array(
 						'selectableTypes' => $this->get_selectable_types(),
-						'allTypes' => $all_types,
+						'allTypes'        => $all_types,
 					),
 				),
-				'Order' => array(
+				'Order'                 => array(
 					'component' => 'Order',
-					'data' => $this->get_order(),
+					'data'      => $this->get_order(),
 				),
 			),
-			'name' => $this->get_name(),
-			'slug' => $this->get_slug(),
-			'labels' => $this->get_labels(),
+			'name'         => $this->get_name(),
+			'slug'         => $this->get_slug(),
+			'labels'       => $this->get_labels(),
 		);
 
 		$course_group_type = cboxol_get_course_group_type();
@@ -136,8 +141,8 @@ class MemberType extends ItemTypeBase implements ItemType {
 			$data['settings'] = array(
 				'MayCreateCourses' => array(
 					'component' => 'MayCreateCourses',
-					'data' => $this->get_can_create_courses(),
-				)
+					'data'      => $this->get_can_create_courses(),
+				),
 			) + $data['settings'];
 		}
 
@@ -179,16 +184,16 @@ class MemberType extends ItemTypeBase implements ItemType {
 	public function get_label_types() {
 		return array(
 			'singular' => array(
-				'slug' => 'singular',
-				'label' => _x( 'Singular', 'Member Type singular label', 'commons-in-a-box' ),
+				'slug'        => 'singular',
+				'label'       => _x( 'Singular', 'Member Type singular label', 'commons-in-a-box' ),
 				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'commons-in-a-box' ),
-				'value' => '',
+				'value'       => '',
 			),
-			'plural' => array(
-				'slug' => 'plural',
-				'label' => _x( 'Plural', 'Member Type plural label', 'commons-in-a-box' ),
+			'plural'   => array(
+				'slug'        => 'plural',
+				'label'       => _x( 'Plural', 'Member Type plural label', 'commons-in-a-box' ),
 				'description' => __( 'Used in directory titles.', 'commons-in-a-box' ),
-				'value' => '',
+				'value'       => '',
 			),
 		);
 	}

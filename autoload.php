@@ -1,23 +1,25 @@
 <?php
 
-spl_autoload_register( function( $class ) {
-	$prefix = 'CBOX\\OL\\';
-	$base_dir = __DIR__ . '/classes/';
+spl_autoload_register(
+	function( $class ) {
+		$prefix   = 'CBOX\\OL\\';
+		$base_dir = __DIR__ . '/classes/';
 
-	// Does the class use the namespace prefix?
-	$len = strlen( $prefix );
-	if ( strncmp( $prefix, $class, $len ) !== 0 ) {
-		return;
+		// Does the class use the namespace prefix?
+		$len = strlen( $prefix );
+		if ( strncmp( $prefix, $class, $len ) !== 0 ) {
+			  return;
+		}
+
+		// Get the relative class name.
+		$relative_class = substr( $class, $len );
+
+		// Swap directory separators and namespace to create filename.
+		$file = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
+
+		// If the file exists, require it.
+		if ( file_exists( $file ) ) {
+			require $file;
+		}
 	}
-
-	// Get the relative class name.
-	$relative_class = substr( $class, $len );
-
-	// Swap directory separators and namespace to create filename.
-	$file = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
-
-	// If the file exists, require it.
-	if ( file_exists( $file ) ) {
-		require $file;
-	}
-} );
+);

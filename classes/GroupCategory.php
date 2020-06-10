@@ -5,10 +5,10 @@ namespace CBOX\OL;
 class GroupCategory {
 	protected $data = array(
 		'group_types' => array(),
-		'name' => null,
-		'order' => null,
-		'slug' => null,
-		'wp_term_id' => null,
+		'name'        => null,
+		'order'       => null,
+		'slug'        => null,
+		'wp_term_id'  => null,
 	);
 
 	/**
@@ -27,9 +27,13 @@ class GroupCategory {
 
 			$term_id = $created['term_id'];
 		} else {
-			$updated = wp_update_term( $term_id, 'bp_group_categories', array(
-				'name' => $this->get_name(),
-			) );
+			$updated = wp_update_term(
+				$term_id,
+				'bp_group_categories',
+				array(
+					'name' => $this->get_name(),
+				)
+			);
 
 			if ( is_wp_error( $updated ) ) {
 				return $updated;
@@ -40,7 +44,7 @@ class GroupCategory {
 		update_term_meta( $term->term_id, 'cboxol_order', $this->get_order() );
 
 		// Must delete existing group type associations first.
-		$meta = get_term_meta( $term->term_id );
+		$meta        = get_term_meta( $term->term_id );
 		$group_types = array();
 		foreach ( $meta as $meta_key => $_ ) {
 			if ( 0 === strpos( $meta_key, 'bpcgc_group_' ) ) {
@@ -59,22 +63,22 @@ class GroupCategory {
 
 	public function get_for_endpoint() {
 		$retval = array(
-			'groupTypes' => array(),
-			'name' => $this->get_name(),
-			'slug' => $this->get_slug(),
-			'settings' => array(
+			'groupTypes'   => array(),
+			'name'         => $this->get_name(),
+			'slug'         => $this->get_slug(),
+			'settings'     => array(
 				'Order' => array(
 					'component' => 'Order',
-					'data' => $this->get_order(),
+					'data'      => $this->get_order(),
 				),
 			),
-			'id' => $this->get_wp_term_id(),
+			'id'           => $this->get_wp_term_id(),
 
 			'canBeDeleted' => true,
-			'isCollapsed' => true,
-			'isEnabled' => true,
-			'isLoading' => false,
-			'isModified' => false,
+			'isCollapsed'  => true,
+			'isEnabled'    => true,
+			'isLoading'    => false,
+			'isModified'   => false,
 		);
 
 		$group_types = $this->get_group_types();

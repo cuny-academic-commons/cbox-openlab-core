@@ -36,13 +36,13 @@ function cboxol_get_portfolio_group_type() {
  * @return int
  */
 function openlab_get_user_portfolio_id( $user_id = 0 ) {
-	if ( !$user_id ) {
+	if ( ! $user_id ) {
 		$user_id = openlab_fallback_user();
 	}
 
 	// Extra fallback for the case of portfolios: get the user associated
 	// with the current group
-	if ( !$user_id ) {
+	if ( ! $user_id ) {
 		$user_id = openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() );
 	}
 
@@ -73,12 +73,12 @@ function openlab_user_portfolio_url( $user_id = 0 ) {
 	 * @param int $user_id Defaults to displayed user, then to current member loop user
 	 * @return string URL of the portfolio
 	 */
-	function openlab_get_user_portfolio_url( $user_id = 0 ) {
-		$group_id = openlab_get_user_portfolio_id( $user_id );
-		$site_url = openlab_get_group_site_url( $group_id );
+function openlab_get_user_portfolio_url( $user_id = 0 ) {
+	$group_id = openlab_get_user_portfolio_id( $user_id );
+	$site_url = openlab_get_group_site_url( $group_id );
 
-		return $site_url;
-	}
+	return $site_url;
+}
 
 /**
  * Echo a user's portfolio profile URL
@@ -92,11 +92,11 @@ function openlab_user_portfolio_profile_url( $user_id = 0 ) {
 	 * @param int $user_id
 	 * @return string
 	 */
-	function openlab_get_user_portfolio_profile_url( $user_id = 0 ) {
-		$group_id    = openlab_get_user_portfolio_id( $user_id );
-		$profile_obj = groups_get_group( array( 'group_id' => $group_id ) );
-		return bp_get_group_permalink( $profile_obj );
-	}
+function openlab_get_user_portfolio_profile_url( $user_id = 0 ) {
+	$group_id    = openlab_get_user_portfolio_id( $user_id );
+	$profile_obj = groups_get_group( array( 'group_id' => $group_id ) );
+	return bp_get_group_permalink( $profile_obj );
+}
 
 /**
  * Is a user's portfolio site local (vs external)?
@@ -148,51 +148,51 @@ function openlab_portfolio_label( $args = array() ) {
 	 *                 portfolio', as appropriate. Note that 'case' has no effect on the
 	 *                 article: it's always lowercase.
 	 */
-	function openlab_get_portfolio_label( $args = array() ) {
-		$default_user_id  = openlab_fallback_user();
-		$default_group_id = openlab_fallback_group();
+function openlab_get_portfolio_label( $args = array() ) {
+	$default_user_id  = openlab_fallback_user();
+	$default_group_id = openlab_fallback_group();
 
-		$defaults = array(
-			'user_id'      => $default_user_id,
-			'group_id'     => $default_group_id,
-			'user_type'    => '',
-			'case'         => 'lower',
-			'leading_a'    => false,
-		);
+	$defaults = array(
+		'user_id'   => $default_user_id,
+		'group_id'  => $default_group_id,
+		'user_type' => '',
+		'case'      => 'lower',
+		'leading_a' => false,
+	);
 
-		$r = wp_parse_args( $args, $defaults );
+	$r = wp_parse_args( $args, $defaults );
 
-		if ( empty( $r['user_id'] ) && !empty( $r['group_id'] ) ) {
-			$r['user_id'] = openlab_get_user_id_from_portfolio_group_id( $r['group_id'] );
-		}
-
-		if ( empty( $r['user_type'] ) ) {
-			$r['user_type'] = xprofile_get_field_data( 'Account Type', $r['user_id'] );
-		}
-
-		// Sanitize
-		if ( !in_array( strtolower( $r['user_type'] ), array( 'student', 'staff', 'faculty' ) ) ) {
-			$r['user_type'] = 'student';
-		}
-
-		$r['user_type'] = strtolower( $r['user_type'] );
-
-		if ( 'student' == $r['user_type'] ) {
-			$label = 'ePortfolio';
-
-			if ( (bool) $r['leading_a'] ) {
-				$label = 'an ' . $label;
-			}
-		} else {
-			$label = 'upper' == $r['case'] ? 'Portfolio' : 'portfolio';
-
-			if ( (bool) $r['leading_a'] ) {
-				$label = 'a ' . $label;
-			}
-		}
-
-		return $label;
+	if ( empty( $r['user_id'] ) && ! empty( $r['group_id'] ) ) {
+		$r['user_id'] = openlab_get_user_id_from_portfolio_group_id( $r['group_id'] );
 	}
+
+	if ( empty( $r['user_type'] ) ) {
+		$r['user_type'] = xprofile_get_field_data( 'Account Type', $r['user_id'] );
+	}
+
+	// Sanitize
+	if ( ! in_array( strtolower( $r['user_type'] ), array( 'student', 'staff', 'faculty' ) ) ) {
+		$r['user_type'] = 'student';
+	}
+
+	$r['user_type'] = strtolower( $r['user_type'] );
+
+	if ( 'student' == $r['user_type'] ) {
+		$label = 'ePortfolio';
+
+		if ( (bool) $r['leading_a'] ) {
+			$label = 'an ' . $label;
+		}
+	} else {
+		$label = 'upper' == $r['case'] ? 'Portfolio' : 'portfolio';
+
+		if ( (bool) $r['leading_a'] ) {
+			$label = 'a ' . $label;
+		}
+	}
+
+	return $label;
+}
 
 /**
  * Suggest a name for a portfolio, based on the user's FN + LN
@@ -211,7 +211,7 @@ function openlab_suggest_portfolio_path() {
 	}
 
 	$display_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
-	$slug = sanitize_title( $display_name . '-' . $portfolio_type->get_slug() );
+	$slug         = sanitize_title( $display_name . '-' . $portfolio_type->get_slug() );
 
 	// Ensure uniqueness.
 	$incr = 2;
@@ -254,22 +254,24 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 		$group_id = openlab_fallback_group();
 	}
 
-	$cache_key = 'member_portfolios_' . $sort_by;
+	$cache_key  = 'member_portfolios_' . $sort_by;
 	$portfolios = groups_get_groupmeta( $group_id, $cache_key );
 
 	if ( '' == $portfolios ) {
-		$portfolios = array();
-		$group_members = new BP_Group_Member_Query( array(
-			'group_id' => $group_id,
-			'per_page' => false,
-			'page' => false,
-			'group_role' => array( 'member', 'mod', 'admin', ),
-			'type' => 'alphabetical',
-		) );
+		$portfolios    = array();
+		$group_members = new BP_Group_Member_Query(
+			array(
+				'group_id'   => $group_id,
+				'per_page'   => false,
+				'page'       => false,
+				'group_role' => array( 'member', 'mod', 'admin' ),
+				'type'       => 'alphabetical',
+			)
+		);
 
 		foreach ( $group_members->results as $member ) {
-			$portfolio_id = openlab_get_user_portfolio_id( $member->ID );
-			$portfolio_group = groups_get_group( array( 'group_id' => $portfolio_id ) );
+			$portfolio_id      = openlab_get_user_portfolio_id( $member->ID );
+			$portfolio_group   = groups_get_group( array( 'group_id' => $portfolio_id ) );
 			$portfolio_blog_id = openlab_get_site_id_by_group_id( $portfolio_id );
 
 			if ( empty( $portfolio_id ) || empty( $portfolio_group ) ) {
@@ -281,8 +283,8 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 				continue;
 			}
 
-                        // If the portfolio_blog_id is empty, this may be an external portfolio.
-                        if ( empty( $portfolio_blog_id ) ) {
+						// If the portfolio_blog_id is empty, this may be an external portfolio.
+			if ( empty( $portfolio_blog_id ) ) {
 				$portfolio_url = openlab_get_external_site_url_by_group_id( $portfolio_id );
 
 				// No URL found? There's no portfolio to link to.
@@ -292,34 +294,34 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 
 				// Use the group title for the link text.
 				$portfolio_title = $portfolio_group->name;
-                        } else {
-				$portfolio_url = openlab_get_user_portfolio_url( $member->ID );
+			} else {
+				$portfolio_url   = openlab_get_user_portfolio_url( $member->ID );
 				$portfolio_title = get_blog_option( $portfolio_blog_id, 'blogname' );
 			}
 
-                        $portfolio = array(
-				'user_id' => $member->ID,
-				'user_display_name' => $member->display_name,
-				'user_type' => xprofile_get_field_data( 'Account Type', $member->ID ),
-				'portfolio_id' => $portfolio_id,
-				'portfolio_url' => $portfolio_url,
-				'portfolio_title' => $portfolio_title,
-			);
+						$portfolio = array(
+							'user_id'           => $member->ID,
+							'user_display_name' => $member->display_name,
+							'user_type'         => xprofile_get_field_data( 'Account Type', $member->ID ),
+							'portfolio_id'      => $portfolio_id,
+							'portfolio_url'     => $portfolio_url,
+							'portfolio_title'   => $portfolio_title,
+						);
 
-			$portfolios[] = $portfolio;
+						$portfolios[] = $portfolio;
 		}
 
 		switch ( $sort_by ) {
-			case 'display_name' :
+			case 'display_name':
 				$key = 'user_display_name';
 				break;
 
-			case 'random' :
+			case 'random':
 				$key = 'random';
 				break;
 
-			case 'title' :
-			default :
+			case 'title':
+			default:
 				$key = 'portfolio_title';
 				break;
 		}
@@ -327,19 +329,25 @@ function openlab_get_group_member_portfolios( $group_id = false, $sort_by = 'dis
 		if ( 'random' === $key ) {
 			shuffle( $portfolios );
 		} else {
-			usort( $portfolios, function( $a, $b ) use ( $key ) {
-				$values = array( 0 => $a[ $key ], 1 => $b[ $key ], );
-				$cmp = strcasecmp( $values[0], $values[1] );
+			usort(
+				$portfolios,
+				function( $a, $b ) use ( $key ) {
+					$values = array(
+						0 => $a[ $key ],
+						1 => $b[ $key ],
+					);
+					$cmp    = strcasecmp( $values[0], $values[1] );
 
-				if ( 0 > $cmp ) {
-					$retval = -1;
-				} else if ( 0 < $cmp ) {
-					$retval = 1;
-				} else {
-					$retval = 0;
+					if ( 0 > $cmp ) {
+						$retval = -1;
+					} elseif ( 0 < $cmp ) {
+						$retval = 1;
+					} else {
+						$retval = 0;
+					}
+					return $retval;
 				}
-				return $retval;
-			} );
+			);
 		}
 
 		groups_update_groupmeta( $group_id, $cache_key, $portfolios );
@@ -380,7 +388,7 @@ add_action( 'groups_member_after_save', 'openlab_bust_group_portfolios_cache_on_
  * Bust group portfolio cache when member leaves group
  */
 function openlab_bust_group_portfolios_cache_on_group_leave( $group_id ) {
-	openlab_bust_group_portfolio_cache($group_id);
+	openlab_bust_group_portfolio_cache( $group_id );
 }
 add_action( 'groups_uninvite_user', 'openlab_bust_group_portfolios_cache_on_group_leave' );
 
@@ -401,7 +409,7 @@ add_action( 'groups_removed_member', 'openlab_bust_group_portfolios_cache_on_gro
 function openlab_bust_group_portfolios_cache_on_self_remove( $group_id, $user_id ) {
 	openlab_bust_group_portfolio_cache( $group_id );
 }
-add_action( 'groups_leave_group','openlab_bust_group_portfolios_cache_on_self_remove', 10, 2 );
+add_action( 'groups_leave_group', 'openlab_bust_group_portfolios_cache_on_self_remove', 10, 2 );
 
 /**
  * Bust group portfolio cache when membership changes
@@ -413,7 +421,7 @@ function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
 
 	// Delete the portfolio cache for each group the user is a member of
 	// Don't regenerate - could be several groups. Let it happen on the fly
-	$user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
+	$user_id   = openlab_get_user_id_from_portfolio_group_id( $group_id );
 	$group_ids = groups_get_user_groups( $user_id );
 	foreach ( $group_ids['groups'] as $gid ) {
 		openlab_bust_group_portfolio_cache( $gid );
@@ -450,7 +458,7 @@ function openlab_portfolio_list_enabled_for_group( $group_id = 0 ) {
 	if ( $group_type->get_enable_portfolio_list_by_default() ) {
 		$enabled = 'no' !== groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
 
-	// Otherwise default to 'no'
+		// Otherwise default to 'no'
 	} else {
 		$enabled = 'yes' === groups_get_groupmeta( $group_id, 'portfolio_list_enabled' );
 	}
@@ -471,10 +479,12 @@ function openlab_swap_portfolio_widget_description() {
 			continue;
 		}
 
-		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-		$group_type = openlab_get_group_type_label( array(
-			'group_id' => $group_id,
-		) );
+		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$group_type = openlab_get_group_type_label(
+			array(
+				'group_id' => $group_id,
+			)
+		);
 
 		$w['description'] = sprintf( 'Display a list of the Portfolios belonging to the members of this %s.', $group_type );
 	}
@@ -523,19 +533,19 @@ function openlab_portfolio_list_group_display() {
 
 	<div id="group-member-portfolio-sidebar-widget" class="sidebar-widget">
 		<h2 class="sidebar-header">
-			<?php echo esc_html( openlab_portfolio_list_group_heading() ) ?>
+			<?php echo esc_html( openlab_portfolio_list_group_heading() ); ?>
 		</h2>
 
-                <div class="sidebar-block">
+				<div class="sidebar-block">
 
 		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
 		<?php foreach ( $portfolio_data as $pdata ) : ?>
 			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'Faculty', 'Staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
-			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ) ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ) ?></a></li>
+			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ); ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ); ?></a></li>
 		<?php endforeach ?>
 		</ul>
 
-                </div>
+				</div>
 	</div>
 
 	<?php
@@ -572,21 +582,21 @@ function openlab_portfolio_creation_url() {
 	/**
 	 * Returns the URL for the portfolio creation page
 	 */
-	function openlab_get_portfolio_creation_url() {
-		if ( ! bp_is_active( 'groups' ) ) {
-			return '';
-		}
-
-		return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?group_type=portfolio&new=true';
+function openlab_get_portfolio_creation_url() {
+	if ( ! bp_is_active( 'groups' ) ) {
+		return '';
 	}
+
+	return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?group_type=portfolio&new=true';
+}
 
 /**
  * Remove BPGES settings from portfolio group admin and creation screens
  */
 function openlab_remove_bpges_settings_for_portfolios() {
 	if ( cboxol_is_portfolio() || ( bp_is_group_create() && isset( $_GET['group_type'] ) && 'portfolio' == $_GET['group_type'] ) ) {
-		remove_action( 'bp_after_group_settings_admin' ,'ass_default_subscription_settings_form' );
-		remove_action( 'bp_after_group_settings_creation_step' ,'ass_default_subscription_settings_form' );
+		remove_action( 'bp_after_group_settings_admin', 'ass_default_subscription_settings_form' );
+		remove_action( 'bp_after_group_settings_creation_step', 'ass_default_subscription_settings_form' );
 	}
 }
 add_action( 'bp_actions', 'openlab_remove_bpges_settings_for_portfolios', 1 );
@@ -615,7 +625,7 @@ function openlab_is_my_portfolio() {
  *  - Delete user metadata regarding portfolio affiliation
  */
 function openlab_delete_portfolio( $group_id ) {
-	if ( !cboxol_is_portfolio( $group_id ) ) {
+	if ( ! cboxol_is_portfolio( $group_id ) ) {
 		return;
 	}
 

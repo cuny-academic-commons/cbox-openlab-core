@@ -13,15 +13,18 @@ add_action( 'bp_core_activated_user', 'cboxol_save_activated_user_member_type', 
  * Register post types related to registration.
  */
 function cboxol_registration_register_post_type() {
-	register_post_type( 'cboxol_signup_code', array(
-		'labels' => array(
-			'name' => _x( 'Signup Codes', 'Post type general name', 'commons-in-a-box' ),
-		),
-		'public' => false,
-		'publicly_queryable' => false,
-		'show_ui' => false,
-		'show_in_menu' => false,
-	) );
+	register_post_type(
+		'cboxol_signup_code',
+		array(
+			'labels'             => array(
+				'name' => _x( 'Signup Codes', 'Post type general name', 'commons-in-a-box' ),
+			),
+			'public'             => false,
+			'publicly_queryable' => false,
+			'show_ui'            => false,
+			'show_in_menu'       => false,
+		)
+	);
 }
 
 function cboxol_registration_admin_page() {
@@ -39,32 +42,32 @@ function cboxol_registration_admin_page() {
 
 	ksort( $domains );
 
-	$mtypes = cboxol_get_member_types();
+	$mtypes       = cboxol_get_member_types();
 	$member_types = array();
 	foreach ( $mtypes as $mtype ) {
-		$slug = $mtype->get_slug();
+		$slug                  = $mtype->get_slug();
 		$member_types[ $slug ] = array(
 			'value' => $slug,
 			'label' => $mtype->get_label( 'singular' ),
 		);
 	}
 
-	$signup_codes = cboxol_get_signup_codes();
+	$signup_codes     = cboxol_get_signup_codes();
 	$signup_code_data = array();
 	foreach ( $signup_codes as $signup_code ) {
 		$signup_code_data[ $signup_code->get_wp_post_id() ] = $signup_code->get_for_endpoint();
 	}
 
-	$dummy = new \CBOX\OL\SignupCode();
+	$dummy               = new \CBOX\OL\SignupCode();
 	$signup_code_data[0] = $dummy->get_for_endpoint();
 
 	$registration_form_settings = cboxol_get_registration_form_settings();
 
 	$app_config = array(
-		'subapp' => 'Registration',
-		'emailDomains' => $domains,
-		'memberTypes' => $member_types,
-		'signupCodes' => $signup_code_data,
+		'subapp'                   => 'Registration',
+		'emailDomains'             => $domains,
+		'memberTypes'              => $member_types,
+		'signupCodes'              => $signup_code_data,
 		'registrationFormSettings' => $registration_form_settings,
 	);
 
@@ -131,7 +134,7 @@ function cboxol_signup_email_filter( $result ) {
 	if ( $valid_email_domain_check ) {
 		// Rebuild the error object.
 		$error_codes = $result['errors']->get_error_codes();
-		$new_error = new WP_Error();
+		$new_error   = new WP_Error();
 		foreach ( $error_codes as $error_code ) {
 			$error_messages = $result['errors']->get_error_messages( $error_code );
 			foreach ( $error_messages as $error_message ) {
@@ -170,9 +173,9 @@ function cboxol_wildcard_email_domain_check( $user_email ) {
 			}
 
 			if ( false !== strpos( $limited_email_domain, '*' ) ) {
-				$limited_email_domain = str_replace( '.', '\.', $limited_email_domain );        // Escape your .s
-				$limited_email_domain = str_replace( '*', '[-_\.a-zA-Z0-9]+', $limited_email_domain );     // replace * with REGEX for 1+ occurrence of anything
-				$limited_email_domain = '/^' . $limited_email_domain . '/';   // bracket the email with the necessary pattern markings
+				$limited_email_domain     = str_replace( '.', '\.', $limited_email_domain );        // Escape your .s
+				$limited_email_domain     = str_replace( '*', '[-_\.a-zA-Z0-9]+', $limited_email_domain );     // replace * with REGEX for 1+ occurrence of anything
+				$limited_email_domain     = '/^' . $limited_email_domain . '/';   // bracket the email with the necessary pattern markings
 				$valid_email_domain_check = ( $valid_email_domain_check or preg_match( $limited_email_domain, $emaildomain ) );
 			} else {
 				$valid_email_domain_check = $limited_email_domain == $emaildomain;
@@ -212,19 +215,19 @@ function cboxol_get_signup_codes( $args = array() ) {
 	$r = array_merge( array(), $args );
 
 	$post_args = array(
-		'post_type' => 'cboxol_signup_code',
-		'post_status' => 'any',
+		'post_type'      => 'cboxol_signup_code',
+		'post_status'    => 'any',
 		'posts_per_page' => -1,
-		'orderby' => array(
+		'orderby'        => array(
 			'menu_order' => 'ASC',
-			'title' => 'ASC',
+			'title'      => 'ASC',
 		),
-		'fields' => 'ids',
+		'fields'         => 'ids',
 	);
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key = 'cboxol_signup_codes_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
-	$ids = wp_cache_get( $cache_key, 'cboxol_signup_codes' );
+	$cache_key    = 'cboxol_signup_codes_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$ids          = wp_cache_get( $cache_key, 'cboxol_signup_codes' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
 		_prime_post_caches( $ids );
@@ -277,7 +280,7 @@ function openlab_registration_errors_object() {
 
 		if ( ! empty( $error ) ) {
 			preg_match( '/bp_(field_[0-9]+)_errors/', $filter_name, $matches );
-			$field_name = $matches[1];
+			$field_name            = $matches[1];
 			$errors[ $field_name ] = $error;
 		}
 	}
@@ -335,7 +338,7 @@ function cboxol_validate_signup_member_type( $validate ) {
 		return $validate;
 	}
 
-	$error = null;
+	$error       = null;
 	$member_type = cboxol_get_member_type( $account_type );
 	if ( is_wp_error( $member_type ) ) {
 		$error = $member_type;
@@ -381,7 +384,7 @@ function cboxol_save_signup_member_type( $usermeta ) {
 		$account_type_signup_code = wp_unslash( $_POST['account-type-signup-code'] );
 	}
 
-	$usermeta['account_type'] = $account_type;
+	$usermeta['account_type']             = $account_type;
 	$usermeta['account_type_signup_code'] = $account_type_signup_code;
 
 	return $usermeta;
@@ -456,8 +459,11 @@ function cboxol_registration_validate_signup_code() {
  */
 function cboxol_get_registration_form_settings() {
 	$registration_form_settings = get_site_option( 'cboxol_registration_form_settings', array() );
-	$registration_form_settings = array_merge( array(
-		'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'commons-in-a-box' ),
-	), $registration_form_settings );
+	$registration_form_settings = array_merge(
+		array(
+			'confirmationText' => __( 'Click "Complete Sign Up" to continue.', 'commons-in-a-box' ),
+		),
+		$registration_form_settings
+	);
 	return $registration_form_settings;
 }

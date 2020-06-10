@@ -232,18 +232,18 @@ function openlab_get_blog_role_for_group_role( $group_id, $user_id, $group_role 
  * Gets the member role settings for a group.
  */
 function openlab_get_group_member_role_settings( $group_id ) {
-	$defaults = [
+	$defaults = array(
 		'admin'  => 'administrator',
 		'mod'    => 'editor',
 		'member' => 'author',
-	];
+	);
 
 	$raw_settings = groups_get_groupmeta( $group_id, 'member_site_roles' );
 
 	if ( ! $raw_settings ) {
 		$settings = $defaults;
 	} else {
-		$settings = [];
+		$settings = array();
 		foreach ( $defaults as $group_role => $site_role ) {
 			$settings[ $group_role ] = isset( $raw_settings[ $group_role ] ) ? $raw_settings[ $group_role ] : $site_role;
 		}
@@ -317,11 +317,13 @@ add_action( 'groups_accept_invite', 'openlab_add_user_to_groupblog_accept', 10, 
  * @param int $site_id  ID of the site.
  */
 function openlab_sync_group_site_membership( $group_id, $site_id ) {
-	$group_members = groups_get_group_members( array(
-		'group_id' => $group_id,
-		'exclude_admins_mods' => false,
-		'exclude' => array( get_current_user_id() ),
-	) );
+	$group_members = groups_get_group_members(
+		array(
+			'group_id'            => $group_id,
+			'exclude_admins_mods' => false,
+			'exclude'             => array( get_current_user_id() ),
+		)
+	);
 
 	foreach ( $group_members['members'] as $group_member ) {
 		openlab_add_user_to_groupblog( $group_id, $group_member->user_id );
@@ -365,11 +367,11 @@ function openlab_group_blog_activity( $activity ) {
 
 	if ( 'new_blog_post' == $activity->type ) {
 		$post_id = $activity->secondary_item_id;
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 	} elseif ( 'new_blog_comment' == $activity->type ) {
 		$comment = get_comment( $activity->secondary_item_id );
 		$post_id = $comment->comment_post_ID;
-		$post = get_post( $post_id );
+		$post    = get_post( $post_id );
 	}
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
@@ -381,21 +383,25 @@ function openlab_group_blog_activity( $activity ) {
 	$group = groups_get_group( array( 'group_id' => $group_id ) );
 
 	// Verify if we already have the modified activity for this blog post
-	$id = bp_activity_get_activity_id( array(
-		'user_id' => $activity->user_id,
-		'type' => $activity->type,
-		'item_id' => $group_id,
-		'secondary_item_id' => $activity->secondary_item_id,
-	) );
+	$id = bp_activity_get_activity_id(
+		array(
+			'user_id'           => $activity->user_id,
+			'type'              => $activity->type,
+			'item_id'           => $group_id,
+			'secondary_item_id' => $activity->secondary_item_id,
+		)
+	);
 
 	// if we don't have, verify if we have an original activity
 	if ( ! $id ) {
-		$id = bp_activity_get_activity_id( array(
-			'user_id' => $activity->user_id,
-			'type' => $activity->type,
-			'item_id' => $activity->item_id,
-			'secondary_item_id' => $activity->secondary_item_id,
-		) );
+		$id = bp_activity_get_activity_id(
+			array(
+				'user_id'           => $activity->user_id,
+				'type'              => $activity->type,
+				'item_id'           => $activity->item_id,
+				'secondary_item_id' => $activity->secondary_item_id,
+			)
+		);
 	}
 
 	// If we found an activity for this blog post, then overwrite it to
@@ -410,7 +416,10 @@ function openlab_group_blog_activity( $activity ) {
 	// Replace the necessary values to display in group activity stream
 	if ( 'new_blog_post' == $activity->type ) {
 		$activity->action = sprintf(
-			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ), bp_core_get_userlink( $activity->user_id ), '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ),
+			bp_core_get_userlink( $activity->user_id ),
+			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
+			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
 		$userlink = '';
@@ -420,11 +429,14 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-			__( '%1$s commented on %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ), $userlink, '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s commented on %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ),
+			$userlink,
+			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
+			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	}
 
-	$activity->item_id = (int) $group_id;
+	$activity->item_id   = (int) $group_id;
 	$activity->component = 'groups';
 
 	$public = get_blog_option( $blog_id, 'blog_public' );
@@ -440,9 +452,12 @@ function openlab_group_blog_activity( $activity ) {
 
 	// prevent infinite loops, but let this function run on later activities ( for unit tests )
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	add_action( 'bp_activity_after_save', function() {
-		add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	} );
+	add_action(
+		'bp_activity_after_save',
+		function() {
+			add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
+		}
+	);
 
 	return $activity;
 }
@@ -479,12 +494,14 @@ function openlab_group_blog_remove_activity( $post_id, $blog_id = 0, $user_id = 
 
 	if ( $group_id ) {
 		// Delete activity stream item
-		bp_blogs_delete_activity( array(
-			'item_id' => $group_id,
-			'secondary_item_id' => $post_id,
-			'component' => 'groups',
-			'type' => 'new_blog_comment',
-		) );
+		bp_blogs_delete_activity(
+			array(
+				'item_id'           => $group_id,
+				'secondary_item_id' => $post_id,
+				'component'         => 'groups',
+				'type'              => 'new_blog_comment',
+			)
+		);
 	}
 }
 add_action( 'delete_post', 'openlab_group_blog_remove_activity' );
@@ -507,18 +524,20 @@ function openlab_group_blog_remove_comment_activity( $comment_id ) {
 	}
 
 	$comment_id = (int) $comment_id;
-	$blog_id = (int) $wpdb->blogid;
+	$blog_id    = (int) $wpdb->blogid;
 
 	$group_id = openlab_get_group_id_by_blog_id( $blog_id );
 
 	if ( $group_id ) {
 		// Delete activity stream item
-		bp_blogs_delete_activity( array(
-			'item_id' => $group_id,
-			'secondary_item_id' => $post_id,
-			'component' => 'groups',
-			'type' => 'new_blog_comment',
-		) );
+		bp_blogs_delete_activity(
+			array(
+				'item_id'           => $group_id,
+				'secondary_item_id' => $post_id,
+				'component'         => 'groups',
+				'type'              => 'new_blog_comment',
+			)
+		);
 	}
 }
 add_action( 'delete_comment', 'openlab_group_blog_remove_comment_activity' );
@@ -544,7 +563,7 @@ function cboxol_blogs_post_pre_publish( $return = true, $blog_id = 0, $post_id =
 	 */
 	$sitewide_tags_blog_settings = bp_core_get_root_option( 'sitewide_tags_blog' );
 	if ( ! empty( $sitewide_tags_blog_settings ) ) {
-		$st_options = maybe_unserialize( $sitewide_tags_blog_settings );
+		$st_options   = maybe_unserialize( $sitewide_tags_blog_settings );
 		$tags_blog_id = isset( $st_options['tags_blog_id'] ) ? $st_options['tags_blog_id'] : 0;
 	} else {
 		$tags_blog_id = bp_core_get_root_option( 'sitewide_tags_blog' );
@@ -574,24 +593,28 @@ add_filter( 'bp_activity_post_pre_comment', 'cboxol_blogs_post_pre_publish', 10,
  *
  * Can be refactored after https://buddypress.trac.wordpress.org/ticket/4831#comment:10
  */
-add_action( 'bp_setup_globals', function() {
+add_action(
+	'bp_setup_globals',
+	function() {
 
-	/**
-	 * Filters the post types to track for the Blogs component.
-	 *
-	 * @since 1.5.0
-	 * @deprecated 2.3.0
-	 *
-	 * @param array $value Array of post types to track.
-	 */
-	$post_types = apply_filters( 'bp_blogs_record_post_post_types', array( 'post' ) );
+		/**
+		 * Filters the post types to track for the Blogs component.
+		 *
+		 * @since 1.5.0
+		 * @deprecated 2.3.0
+		 *
+		 * @param array $value Array of post types to track.
+		 */
+		$post_types = apply_filters( 'bp_blogs_record_post_post_types', array( 'post' ) );
 
-	foreach ( $post_types as $post_type ) {
-		if ( ! post_type_supports( $post_type, 'buddypress-activity' ) ) {
-			add_post_type_support( $post_type, 'buddypress-activity' );
+		foreach ( $post_types as $post_type ) {
+			if ( ! post_type_supports( $post_type, 'buddypress-activity' ) ) {
+				add_post_type_support( $post_type, 'buddypress-activity' );
+			}
 		}
-	}
-}, 100 );
+	},
+	100
+);
 
 /**
  * Ensure that hide_sitewide is set conservatively for groupblog post items.
@@ -613,7 +636,7 @@ function cboxol_set_groupblog_activity_hide_sitewide( $activity ) {
 		return;
 	}
 
-	$site_id = openlab_get_site_id_by_group_id( $activity->item_id );
+	$site_id     = openlab_get_site_id_by_group_id( $activity->item_id );
 	$blog_public = (int) get_blog_option( $site_id, 'blog_public' );
 	if ( 1 !== $blog_public ) {
 		$activity->hide_sitewide = true;
@@ -672,7 +695,7 @@ function openlab_validate_groupblog_url() {
 	 * b1) the 'Set up a site?' checkbox has been checked, OR
 	 * b2) the group type is Portfolio, which requires a blog
 	 */
-	$group_type = isset( $_POST['group-type'] ) ? cboxol_get_group_type( wp_unslash( urldecode( $_POST['group-type'] ) ) ) : null;
+	$group_type               = isset( $_POST['group-type'] ) ? cboxol_get_group_type( wp_unslash( urldecode( $_POST['group-type'] ) ) ) : null;
 	$group_type_requires_site = false;
 	if ( $group_type && ! is_wp_error( $group_type ) && $group_type->get_requires_site() ) {
 		$group_type_requires_site = true;
@@ -711,13 +734,13 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
 function openlab_validate_groupblog_selection() {
 	if ( isset( $_POST['new_or_old'] ) ) {
 		switch ( $_POST['new_or_old'] ) {
-			case 'old' :
+			case 'old':
 				if ( empty( $_POST['groupblog-blogid'] ) ) {
 					$error_message = 'You must select an existing site from the dropdown menu.';
 				}
 				break;
 
-			case 'external' :
+			case 'external':
 				if ( empty( $_POST['external-site-url'] ) || ! openlab_validate_url( $_POST['external-site-url'] ) || 'http://' == trim( $_POST['external-site-url'] ) ) {
 					$error_message = 'You must provide a valid external site URL.';
 				}
@@ -738,15 +761,17 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
 function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
-	$slug = isset( $_POST['path'] ) ? wp_unslash( $_POST['path'] ) : '';
+	$slug      = isset( $_POST['path'] ) ? wp_unslash( $_POST['path'] ) : '';
 	$validated = cboxol_validate_blogname( $slug );
 
 	if ( $validated['validated'] ) {
 		wp_send_json_success();
 	} else {
-		wp_send_json_error( array(
-			'error' => esc_html( $validated['error'] ),
-		) );
+		wp_send_json_error(
+			array(
+				'error' => esc_html( $validated['error'] ),
+			)
+		);
 	}
 }
 
@@ -770,47 +795,49 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	// return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms ), $params );
 	//  get( $type, $limit = false, $page = false, $user_id = 0, $search_terms = false )
 	// Set up the necessary variables for the rest of the function, out of $params
-	$type = $params['type'];
-	$limit = $params['per_page'];
-	$page = $params['page'];
-	$user_id = $params['user_id'];
+	$type         = $params['type'];
+	$limit        = $params['per_page'];
+	$page         = $params['page'];
+	$user_id      = $params['user_id'];
 	$search_terms = $params['search_terms'];
 
 	// The magic: Pull up a list of blogs that have associated groups, and exclude them
 	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id'" );
 
 	if ( ! empty( $exclude_blogs ) ) {
-		$exclude_sql = " AND b.blog_id NOT IN ( " . implode( ',', $exclude_blogs ) . " ) ";
+		$exclude_sql = ' AND b.blog_id NOT IN ( ' . implode( ',', $exclude_blogs ) . ' ) ';
 	} else {
 		$exclude_sql = '';
 	}
 
-	if ( ! is_user_logged_in() || ( !is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) )
-		$hidden_sql = "AND wb.public = 1";
-	else
+	if ( ! is_user_logged_in() || ( ! is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) ) {
+		$hidden_sql = 'AND wb.public = 1';
+	} else {
 		$hidden_sql = '';
+	}
 
-	$pag_sql = ( $limit && $page ) ? $wpdb->prepare( " LIMIT %d, %d", intval( ( $page - 1 ) * $limit ), intval( $limit ) ) : '';
+	$pag_sql = ( $limit && $page ) ? $wpdb->prepare( ' LIMIT %d, %d', intval( ( $page - 1 ) * $limit ), intval( $limit ) ) : '';
 
-	$user_sql = ! empty( $user_id ) ? $wpdb->prepare( " AND b.user_id = %d", $user_id ) : '';
+	$user_sql = ! empty( $user_id ) ? $wpdb->prepare( ' AND b.user_id = %d', $user_id ) : '';
 
 	switch ( $type ) {
-		case 'active': default:
-			$order_sql = "ORDER BY bm.meta_value DESC";
+		case 'active':
+		default:
+			$order_sql = 'ORDER BY bm.meta_value DESC';
 			break;
 		case 'alphabetical':
-			$order_sql = "ORDER BY bm2.meta_value ASC";
+			$order_sql = 'ORDER BY bm2.meta_value ASC';
 			break;
 		case 'newest':
-			$order_sql = "ORDER BY wb.registered DESC";
+			$order_sql = 'ORDER BY wb.registered DESC';
 			break;
 		case 'random':
-			$order_sql = "ORDER BY RAND()";
+			$order_sql = 'ORDER BY RAND()';
 			break;
 	}
 
 	if ( ! empty( $search_terms ) ) {
-		$filter = like_escape( $wpdb->escape( $search_terms ) );
+		$filter      = like_escape( $wpdb->escape( $search_terms ) );
 		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
 		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
 	} else {
@@ -819,14 +846,17 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	}
 
 	$blog_ids = array();
-	foreach ( (array) $paged_blogs as $blog) {
+	foreach ( (array) $paged_blogs as $blog ) {
 		$blog_ids[] = $blog->blog_id;
 	}
 
-	$blog_ids = $wpdb->escape( join( ',', (array) $blog_ids));
+	$blog_ids    = $wpdb->escape( join( ',', (array) $blog_ids ) );
 	$paged_blogs = BP_Blogs_Blog::get_blog_extras( $paged_blogs, $blog_ids, $type );
 
-	return array( 'blogs' => $paged_blogs, 'total' => $total_blogs );
+	return array(
+		'blogs' => $paged_blogs,
+		'total' => $total_blogs,
+	);
 }
 
 add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10, 2 );
@@ -847,14 +877,14 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
 		$group_id = bp_get_group_id();
 	}
 
-	$blog_public = false;
+	$blog_public          = false;
 	$wds_bp_group_site_id = cboxol_get_group_site_id( $group_id );
 
-	if ( $wds_bp_group_site_id != "" ) {
+	if ( $wds_bp_group_site_id != '' ) {
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
 
 		switch ( $blog_private ) {
-			case '-3' :
+			case '-3':
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
 					if ( isset( $user_capabilities['administrator'] ) ) {
@@ -863,22 +893,22 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
 				}
 				break;
 
-			case '-2' :
+			case '-2':
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
-					if ( $user_capabilities != "" ) {
+					if ( $user_capabilities != '' ) {
 						$blog_public = true;
 					}
 				}
 				break;
 
-			case '-1' :
+			case '-1':
 				if ( is_user_logged_in() ) {
 					$blog_public = true;
 				}
 				break;
 
-			default :
+			default:
 				$blog_public = true;
 				break;
 		}
@@ -894,7 +924,7 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
  * Wrapper function to get the URL of an external site, if it exists
  */
 function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id) {
+	if ( 0 == (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -909,7 +939,7 @@ function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
  * Attempts to fetch from a transient before refreshing
  */
 function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id) {
+	if ( 0 == (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -937,7 +967,7 @@ function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
  * Attempts to fetch from a transient before refreshing
  */
 function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id) {
+	if ( 0 == (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -975,10 +1005,10 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
 	foreach ( $feed_posts->get_items( 0, $num_items ) as $key => $feed_item ) {
 		$items[] = array(
 			'permalink' => $feed_item->get_link(),
-			'title' => $feed_item->get_title(),
-			'content' => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
-			'author' => $feed_item->get_author(),
-			'date' => $feed_item->get_date()
+			'title'     => $feed_item->get_title(),
+			'content'   => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
+			'author'    => $feed_item->get_author(),
+			'date'      => $feed_item->get_date(),
 		);
 	}
 
@@ -989,7 +1019,7 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
  * Convert RSS items to activity items
  */
 function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts' ) {
-	$type = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
+	$type  = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
 	$group = groups_get_current_group();
 
 	$hide_sitewide = false;
@@ -999,14 +1029,14 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 
 	$group_id = ! empty( $group ) ? $group->id : '';
 
-	foreach ( (array) $items as $item) {
+	foreach ( (array) $items as $item ) {
 		// Make sure we don't have duplicates
 		// We check based on the item's permalink
 		if ( ! openlab_external_activity_item_exists( $item['permalink'], $group_id, $type ) ) {
 			$action = '';
 
-			$group = groups_get_current_group();
-			$group_name = $group->name;
+			$group           = groups_get_current_group();
+			$group_name      = $group->name;
 			$group_permalink = bp_get_group_permalink( $group );
 
 			$group_link = sprintf(
@@ -1030,20 +1060,20 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 			}
 
 			$item_date = strtotime( $item['date'] );
-			$now = time();
+			$now       = time();
 			if ( $item_date > $now ) {
 				$item_date = $now;
 			}
 			$recorded_time = date( 'Y-m-d H:i:s', $item_date );
 
 			$args = array(
-				'action' => $action,
-				'content' => $item['content'],
-				'component' => 'groups',
-				'type' => $type,
-				'primary_link' => $item['permalink'],
-				'user_id' => 0, // todo
-				'item_id' => bp_get_current_group_id(), // improve?
+				'action'        => $action,
+				'content'       => $item['content'],
+				'component'     => 'groups',
+				'type'          => $type,
+				'primary_link'  => $item['permalink'],
+				'user_id'       => 0, // todo
+				'item_id'       => bp_get_current_group_id(), // improve?
 				'recorded_time' => $recorded_time,
 				'hide_sitewide' => $hide_sitewide,
 			);
@@ -1067,7 +1097,7 @@ function openlab_external_activity_item_exists( $permalink, $group_id, $type ) {
 
 	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE primary_link = %s AND type = %s AND component = 'groups' AND item_id = %s", $permalink, $type, $group_id );
 
-	return ( bool ) $wpdb->get_var( $sql );
+	return (bool) $wpdb->get_var( $sql );
 }
 
 /**
@@ -1094,14 +1124,14 @@ function openlab_find_feed_urls( $url ) {
 	// Supported formats
 	$formats = array(
 		'wordpress' => array(
-			'posts' => '{{URL}}feed/',
+			'posts'    => '{{URL}}feed/',
 			'comments' => '{{URL}}comments/feed/',
 		),
-		'blogger' => array(
-			'posts' => '{{URL}}feeds/posts/default?alt=rss',
+		'blogger'   => array(
+			'posts'    => '{{URL}}feeds/posts/default?alt=rss',
 			'comments' => '{{URL}}feeds/comments/default?alt=rss',
 		),
-		'drupal' => array(
+		'drupal'    => array(
 			'posts' => '{{URL}}posts/feed',
 		),
 	);
@@ -1112,9 +1142,12 @@ function openlab_find_feed_urls( $url ) {
 		$maybe_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['posts'] );
 
 		// Do a HEAD check first to avoid loops when self-querying.
-		$maybe_feed_head = wp_remote_head( $maybe_feed_url, array(
-			'redirection' => 2,
-		) );
+		$maybe_feed_head = wp_remote_head(
+			$maybe_feed_url,
+			array(
+				'redirection' => 2,
+			)
+		);
 
 		if ( 200 != wp_remote_retrieve_response_code( $maybe_feed_head ) ) {
 			continue;
@@ -1130,14 +1163,17 @@ function openlab_find_feed_urls( $url ) {
 			}
 
 			$feed_urls['posts'] = $maybe_feed_url;
-			$feed_urls['type'] = $ftype;
+			$feed_urls['type']  = $ftype;
 
 			// Test the comment feed
 			if ( isset( $f['comments'] ) ) {
 				$maybe_comments_feed_url = str_replace( '{{URL}}', trailingslashit( $url ), $f['comments'] );
-				$maybe_comments_feed = wp_remote_get( $maybe_comments_feed_url, array(
-					'redirection' => 2,
-				) );
+				$maybe_comments_feed     = wp_remote_get(
+					$maybe_comments_feed_url,
+					array(
+						'redirection' => 2,
+					)
+				);
 
 				if ( 200 == $maybe_comments_feed['response']['code'] ) {
 					$feed_urls['comments'] = $maybe_comments_feed_url;
@@ -1155,7 +1191,7 @@ function openlab_find_feed_urls( $url ) {
  * AJAX handler for feed detection
  */
 function openlab_detect_feeds_handler() {
-	$url = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
+	$url   = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
 	$feeds = openlab_find_feed_urls( $url );
 
 	die( json_encode( $feeds ) );
@@ -1171,7 +1207,7 @@ function openlab_catch_refresh_feed_requests() {
 		return;
 	}
 
-	if ( ! isset( $_GET['refresh_feed'] ) || !in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ) ) ) {
+	if ( ! isset( $_GET['refresh_feed'] ) || ! in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ) ) ) {
 		return;
 	}
 
@@ -1227,7 +1263,7 @@ function openlab_olgc_notice() {
 
 	// Groan
 	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce = wp_create_nonce( 'olgc_notice_dismiss' );
+	$nonce       = wp_create_nonce( 'olgc_notice_dismiss' );
 	$dismiss_url = add_query_arg( 'olgc-notice-dismiss', '1', $dismiss_url );
 	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
@@ -1301,12 +1337,18 @@ function openlab_olgc_notify_instructor( $comment_id, $comment ) {
 
 	$subject = sprintf( 'New private comment on %s', get_option( 'blogname' ) );
 
-	$post = get_post( $comment->comment_post_ID );
-	$message = sprintf( 'There is a new private comment on your site %s.
+	$post    = get_post( $comment->comment_post_ID );
+	$message = sprintf(
+		'There is a new private comment on your site %s.
 
 Post name: %s
 Comment author: %s
-Comment URL: %s', get_option( 'blogname' ), $post->post_title, bp_core_get_user_displayname( $comment_author_user->ID ), get_comment_link( $comment ) );
+Comment URL: %s',
+		get_option( 'blogname' ),
+		$post->post_title,
+		bp_core_get_user_displayname( $comment_author_user->ID ),
+		get_comment_link( $comment )
+	);
 
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
@@ -1341,7 +1383,6 @@ function openlab_cloned_course_notice() {
 		return;
 	}
 
-
 	// Allow dismissal.
 	if ( get_option( 'openlab-clone-notice-dismissed' ) ) {
 		return;
@@ -1355,7 +1396,7 @@ function openlab_cloned_course_notice() {
 
 	// Groan
 	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce = wp_create_nonce( 'ol_clone_dismiss' );
+	$nonce       = wp_create_nonce( 'ol_clone_dismiss' );
 	$dismiss_url = add_query_arg( 'ol-clone-dismiss', '1', $dismiss_url );
 	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
@@ -1420,7 +1461,7 @@ function cboxol_copy_blog_page( $group_id ) {
 	}
 
 	$current_user = wp_get_current_user();
-	$group = groups_get_group( $group_id );
+	$group        = groups_get_group( $group_id );
 
 	// Validate.
 	$validate = wpmu_validate_blog_signup( $blog['domain'], $group->name, $current_user );
@@ -1445,7 +1486,7 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$wpdb->hide_errors();
 	$new_id = wpmu_create_blog( $validate['domain'], $validate['path'], $validate['blog_title'], $current_user->ID, array( 'public' => 1 ), $current_site->id );
-	$id = $new_id;
+	$id     = $new_id;
 
 	$wpdb->show_errors();
 
@@ -1467,14 +1508,14 @@ function cboxol_copy_blog_page( $group_id ) {
 	$msg = __( 'Site Created', 'commons-in-a-box' );
 	// now copy
 	$blogtables = $wpdb->base_prefix . $src_id . '_';
-	$newtables = $wpdb->base_prefix . $new_id . '_';
-	$query = "SHOW TABLES LIKE '{$blogtables}%'";
-	$tables = $wpdb->get_results( $query, ARRAY_A );
+	$newtables  = $wpdb->base_prefix . $new_id . '_';
+	$query      = "SHOW TABLES LIKE '{$blogtables}%'";
+	$tables     = $wpdb->get_results( $query, ARRAY_A );
 	if ( $tables ) {
 		reset( $tables );
-		$create = array();
-		$data = array();
-		$len = strlen( $blogtables );
+		$create     = array();
+		$data       = array();
+		$len        = strlen( $blogtables );
 		$create_col = 'Create Table';
 		// add std wp tables to this array
 		$wptables = array(
@@ -1491,16 +1532,16 @@ function cboxol_copy_blog_page( $group_id ) {
 			if ( substr( $table, 0, $len ) == $blogtables ) {
 				if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' || $table === $blogtables . 'commentmeta' ) ) {
 					$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
-					$data[ $table ] = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+					$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
 				}
 			}
 		}
 		//					var_dump( $create );
 		if ( $data ) {
 			switch_to_blog( $src_id );
-			$src_url = get_option( 'siteurl' );
+			$src_url      = get_option( 'siteurl' );
 			$option_query = "SELECT option_name, option_value FROM {$wpdb->options}";
-			$upload_dir = wp_upload_dir();
+			$upload_dir   = wp_upload_dir();
 			restore_current_blog();
 
 			$new_url = get_blog_option( $new_id, 'siteurl' );
@@ -1510,16 +1551,16 @@ function cboxol_copy_blog_page( $group_id ) {
 					$query = "DROP TABLE IF EXISTS {$table}";
 					$wpdb->query( $query );
 				}
-				$key = (array) $create[ $k ];
+				$key   = (array) $create[ $k ];
 				$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
 				$wpdb->query( $query );
 				$is_post = ( $k == $blogtables . 'posts' );
 				if ( $v ) {
 					foreach ( $v as $row ) {
 						if ( $is_post ) {
-							$row['guid'] = str_replace( $src_url, $new_url, $row['guid'] );
+							$row['guid']         = str_replace( $src_url, $new_url, $row['guid'] );
 							$row['post_content'] = str_replace( $src_url, $new_url, $row['post_content'] );
-							$row['post_author'] = $current_user->ID;
+							$row['post_author']  = $current_user->ID;
 						}
 						$wpdb->insert( $table, $row );
 					}
@@ -1552,7 +1593,7 @@ function cboxol_copy_blog_page( $group_id ) {
 				'upload_url_path',
 				"{$wpdb->base_prefix}{$src_id}_user_roles",
 			);
-			$options = $wpdb->get_results( $option_query );
+			$options      = $wpdb->get_results( $option_query );
 
 			// new blog stuff
 			if ( $options ) {
@@ -1593,7 +1634,7 @@ function cboxol_copy_blog_page( $group_id ) {
 function cboxol_group_is_hidden( $group_id = 0 ) {
 	$is_hidden = false;
 
-	if ( !$group_id ) {
+	if ( ! $group_id ) {
 		if ( bp_is_group() ) {
 			$group = groups_get_current_group();
 		} else {
@@ -1689,7 +1730,7 @@ function cboxol_validate_blogname( $blogname ) {
 
 	if ( $error ) {
 		$retval['validated'] = false;
-		$retval['error'] = $error;
+		$retval['error']     = $error;
 	}
 
 	return $retval;
@@ -1742,13 +1783,13 @@ function cboxol_add_links_to_nav_menu( $items ) {
 		if ( $group->is_visible ) {
 			$group_type = cboxol_get_group_group_type( $group_id );
 			if ( ! is_wp_error( $group_type ) ) {
-				$group = groups_get_group( $group_id );
-				$post_args = new stdClass;
-				$profile_item = new WP_Post( $post_args );
-				$profile_item->ID = 'group-profile-link';
-				$profile_item->title = '[ ' . $group_type->get_label( 'group_home' ) . ' ]';
-				$profile_item->slug = 'group-profile-link';
-				$profile_item->url = bp_get_group_permalink( $group );
+				$group                 = groups_get_group( $group_id );
+				$post_args             = new stdClass();
+				$profile_item          = new WP_Post( $post_args );
+				$profile_item->ID      = 'group-profile-link';
+				$profile_item->title   = '[ ' . $group_type->get_label( 'group_home' ) . ' ]';
+				$profile_item->slug    = 'group-profile-link';
+				$profile_item->url     = bp_get_group_permalink( $group );
 				$profile_item->classes = array( 'group-profile-link' );
 
 				$new_items[] = $profile_item;
@@ -1766,14 +1807,14 @@ function cboxol_add_links_to_nav_menu( $items ) {
 	}
 
 	if ( ! $has_home ) {
-		$post_args = new stdClass;
-		$home_link = new WP_Post( $post_args );
-		$home_link->title = 'Home';
-		$home_link->url = trailingslashit( site_url() );
-		$home_link->slug = 'home';
-		$home_link->ID = 'home';
+		$post_args          = new stdClass();
+		$home_link          = new WP_Post( $post_args );
+		$home_link->title   = 'Home';
+		$home_link->url     = trailingslashit( site_url() );
+		$home_link->slug    = 'home';
+		$home_link->ID      = 'home';
 		$home_link->classes = array();
-		$new_items[] = $home_link;
+		$new_items[]        = $home_link;
 	}
 
 	if ( $new_items ) {
@@ -1803,10 +1844,10 @@ function cboxol_load_theme_specific_fixes() {
 
 	switch ( $template ) {
 		// JS only.
-		case 'twentyfifteen' :
-			$js = CBOXOL_PLUGIN_URL . "assets/js/themes/{$template}.js";
+		case 'twentyfifteen':
+			$js  = CBOXOL_PLUGIN_URL . "assets/js/themes/{$template}.js";
 			$css = CBOXOL_PLUGIN_URL . "assets/css/themes/{$template}.css";
-		break;
+			break;
 	}
 
 	$ver = cboxol_get_asset_version();

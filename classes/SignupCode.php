@@ -6,11 +6,11 @@ use \WP_Error;
 
 class SignupCode {
 	protected $data = array(
-		'author_id' => null,
-		'code' => null,
-		'group_id' => null,
+		'author_id'   => null,
+		'code'        => null,
+		'group_id'    => null,
 		'member_type' => null,
-		'wp_post_id' => null,
+		'wp_post_id'  => null,
 	);
 
 	/**
@@ -21,8 +21,8 @@ class SignupCode {
 	public function save() {
 		// @todo prevent dupes
 		$post_args = array(
-			'post_type' => 'cboxol_signup_code',
-			'post_title' => $this->get_code(),
+			'post_type'   => 'cboxol_signup_code',
+			'post_title'  => $this->get_code(),
 			'post_author' => $this->get_author_id(),
 			'post_status' => 'publish',
 		);
@@ -59,8 +59,8 @@ class SignupCode {
 
 	public function get_for_endpoint() {
 		$retval = array(
-			'code' => $this->get_code(),
-			'group' => array(
+			'code'       => $this->get_code(),
+			'group'      => array(
 				'name' => '',
 				'slug' => '',
 			),
@@ -68,7 +68,7 @@ class SignupCode {
 				'name' => '',
 				'slug' => '',
 			),
-			'wpPostId' => $this->get_wp_post_id(),
+			'wpPostId'   => $this->get_wp_post_id(),
 		);
 
 		$group = $this->get_group();

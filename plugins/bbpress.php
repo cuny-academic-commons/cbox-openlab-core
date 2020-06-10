@@ -22,24 +22,26 @@ add_action( 'bp_actions', 'openlab_remove_forum_step_from_group_creation', 9 );
 function openlab_create_forum_on_group_creation( $group_id, $member, $group ) {
 	// Set the default forum status
 	switch ( $group->status ) {
-		case 'hidden' :
+		case 'hidden':
 			$status = bbp_get_hidden_status_id();
 			break;
-		case 'private' :
+		case 'private':
 			$status = bbp_get_private_status_id();
 			break;
-		case 'public' :
-		default :
+		case 'public':
+		default:
 			$status = bbp_get_public_status_id();
 			break;
 	}
 	// Create the initial forum
-	$forum_id = bbp_insert_forum(array(
-		'post_parent' => bbp_get_group_forums_root_id(),
-		'post_title' => $group->name,
-		'post_content' => $group->description,
-		'post_status' => $status,
-	));
+	$forum_id = bbp_insert_forum(
+		array(
+			'post_parent'  => bbp_get_group_forums_root_id(),
+			'post_title'   => $group->name,
+			'post_content' => $group->description,
+			'post_status'  => $status,
+		)
+	);
 	bbp_add_forum_id_to_group( $group_id, $forum_id );
 	bbp_add_group_id_to_forum( $forum_id, $group_id );
 

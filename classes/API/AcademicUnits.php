@@ -11,32 +11,40 @@ use \WP_REST_Response;
 
 class AcademicUnits extends WP_REST_Controller {
 	public function register_routes() {
-		$version = '1';
+		$version   = '1';
 		$namespace = 'cboxol/v' . $version;
 
-		register_rest_route( $namespace, '/academic-unit', array(
+		register_rest_route(
+			$namespace,
+			'/academic-unit',
 			array(
-				'methods'         => WP_REST_Server::CREATABLE,
-				'callback'        => array( $this, 'create_item' ),
-				'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 
-		register_rest_route( $namespace, '/academic-unit/(?P<id>\d+)', array(
+		register_rest_route(
+			$namespace,
+			'/academic-unit/(?P<id>\d+)',
 			array(
-				'methods'         => WP_REST_Server::EDITABLE,
-				'callback'        => array( $this, 'update_item' ),
-				'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-			array(
-				'methods'         => WP_REST_Server::DELETABLE,
-				'callback'        => array( $this, 'delete_item' ),
-				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'delete_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 	}
 
 	public function create_item_permissions_check( $request ) {
@@ -45,7 +53,7 @@ class AcademicUnits extends WP_REST_Controller {
 
 	public function create_item( $request ) {
 		$params = $request->get_params();
-		$data = $params['typeData'];
+		$data   = $params['typeData'];
 
 		$academic_unit = new AcademicUnit();
 
@@ -58,8 +66,8 @@ class AcademicUnits extends WP_REST_Controller {
 
 	public function update_item( $request ) {
 		$params = $request->get_params();
-		$data = $params['typeData'];
-		$id = $params['id'];
+		$data   = $params['typeData'];
+		$id     = $params['id'];
 
 		$academic_unit = new AcademicUnit();
 
@@ -84,7 +92,7 @@ class AcademicUnits extends WP_REST_Controller {
 
 		$academic_unit->save();
 
-		$retval = $academic_unit->get_for_endpoint();
+		$retval   = $academic_unit->get_for_endpoint();
 		$response = rest_ensure_response( $retval );
 		return $response;
 	}
@@ -99,10 +107,10 @@ class AcademicUnits extends WP_REST_Controller {
 		$deleted = wp_delete_post( $params['id'] );
 
 		if ( $deleted ) {
-			$data = __( 'OK', 'commons-in-a-box' );
+			$data   = __( 'OK', 'commons-in-a-box' );
 			$status = 200;
 		} else {
-			$data = __( 'Cannot delete academic unit.', 'commons-in-a-box' );
+			$data   = __( 'Cannot delete academic unit.', 'commons-in-a-box' );
 			$status = 403;
 		}
 

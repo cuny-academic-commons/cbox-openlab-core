@@ -4,12 +4,12 @@ namespace CBOX\OL;
 
 class AcademicUnit {
 	protected $data = array(
-		'count' => 0,
-		'order' => 0,
-		'name' => null,
-		'parent' => null,
-		'slug' => null,
-		'type' => null,
+		'count'      => 0,
+		'order'      => 0,
+		'name'       => null,
+		'parent'     => null,
+		'slug'       => null,
+		'type'       => null,
 		'wp_post_id' => null,
 	);
 
@@ -22,15 +22,15 @@ class AcademicUnit {
 		$post_id = $this->get_wp_post_id();
 
 		$post_params = array(
-			'post_type' => 'cboxol_acadunit',
-			'post_title' => $this->get_name(),
+			'post_type'   => 'cboxol_acadunit',
+			'post_title'  => $this->get_name(),
 			'post_status' => 'publish',
-			'menu_order' => $this->get_order(),
+			'menu_order'  => $this->get_order(),
 		);
 
 		if ( $post_id ) {
 			$post_params['ID'] = $post_id;
-			$updated = wp_update_post( $post_params );
+			$updated           = wp_update_post( $post_params );
 
 			if ( is_wp_error( $updated ) ) {
 				return $updated;
@@ -121,15 +121,15 @@ class AcademicUnit {
 
 	public function get_for_endpoint() {
 		$retval = array(
-			'count' => $this->get_count(),
-			'id' => $this->get_wp_post_id(),
-			'name' => $this->get_name(),
-			'order' => $this->get_order(),
-			'parent' => $this->get_parent(),
-			'slug' => $this->get_slug(),
-			'type' => $this->get_type(),
+			'count'      => $this->get_count(),
+			'id'         => $this->get_wp_post_id(),
+			'name'       => $this->get_name(),
+			'order'      => $this->get_order(),
+			'parent'     => $this->get_parent(),
+			'slug'       => $this->get_slug(),
+			'type'       => $this->get_type(),
 
-			'isLoading' => false,
+			'isLoading'  => false,
 			'isModified' => false,
 		);
 

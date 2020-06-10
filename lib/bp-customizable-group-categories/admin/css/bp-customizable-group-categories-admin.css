@@ -10,9 +10,9 @@
 	background-color: #fff;
 	-webkit-box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
 	box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
- 	margin: 10px 0 20px;
- 	padding: 10px;
- 	border-left: 4px solid #555;
+	margin: 10px 0 20px;
+	padding: 10px;
+	border-left: 4px solid #555;
 }
 
 #buddypress .tag-infos p {

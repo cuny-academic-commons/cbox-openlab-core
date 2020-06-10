@@ -2,7 +2,7 @@
 
 /**
  * BP Customizable Group Categories is a highly modified version of BP Groups Taxo,
- * (https://github.com/imath/bp-groups-taxo) centered around categories (instead of tags) 
+ * (https://github.com/imath/bp-groups-taxo) centered around categories (instead of tags)
  * for specific groups
  *
  * @link              http://early-adopter.com/
@@ -22,21 +22,21 @@
  * Domain Path:       /languages
  */
 // If this file is called directly, abort.
-if (!defined('WPINC')) {
-    die;
+if ( ! defined( 'WPINC' ) ) {
+	die;
 }
 
 /**
  * Constants
  */
-if (!defined('CUSTOCG_BASE_FILE')) {
-    define('CUSTOCG_BASE_FILE', __FILE__);
+if ( ! defined( 'CUSTOCG_BASE_FILE' ) ) {
+	define( 'CUSTOCG_BASE_FILE', __FILE__ );
 }
-if (!defined('CUSTOCG_BASE_DIR')) {
-    define('CUSTOCG_BASE_DIR', dirname(CUSTOCG_BASE_FILE));
+if ( ! defined( 'CUSTOCG_BASE_DIR' ) ) {
+	define( 'CUSTOCG_BASE_DIR', dirname( CUSTOCG_BASE_FILE ) );
 }
-if (!defined('CUSTOCG_PLUGIN_URL')) {
-    define('CUSTOCG_PLUGIN_URL', plugin_dir_url(__FILE__));
+if ( ! defined( 'CUSTOCG_PLUGIN_URL' ) ) {
+	define( 'CUSTOCG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 
 /**
@@ -44,8 +44,8 @@ if (!defined('CUSTOCG_PLUGIN_URL')) {
  * This action is documented in includes/class-bp-customizable-group-categories-activator.php
  */
 function activate_bp_customizable_group_categories() {
-    require_once plugin_dir_path(__FILE__) . 'includes/class-bp-customizable-group-categories-activator.php';
-    Bp_Customizable_Group_Categories_Activator::activate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-bp-customizable-group-categories-activator.php';
+	Bp_Customizable_Group_Categories_Activator::activate();
 }
 
 /**
@@ -53,18 +53,18 @@ function activate_bp_customizable_group_categories() {
  * This action is documented in includes/class-bp-customizable-group-categories-deactivator.php
  */
 function deactivate_bp_customizable_group_categories() {
-    require_once plugin_dir_path(__FILE__) . 'includes/class-bp-customizable-group-categories-deactivator.php';
-    Bp_Customizable_Group_Categories_Deactivator::deactivate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-bp-customizable-group-categories-deactivator.php';
+	Bp_Customizable_Group_Categories_Deactivator::deactivate();
 }
 
-register_activation_hook(__FILE__, 'activate_bp_customizable_group_categories');
-register_deactivation_hook(__FILE__, 'deactivate_bp_customizable_group_categories');
+register_activation_hook( __FILE__, 'activate_bp_customizable_group_categories' );
+register_deactivation_hook( __FILE__, 'deactivate_bp_customizable_group_categories' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path(__FILE__) . 'includes/class-bp-customizable-group-categories.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-bp-customizable-group-categories.php';
 
 /**
  * Begins execution of the plugin.
@@ -77,8 +77,8 @@ require plugin_dir_path(__FILE__) . 'includes/class-bp-customizable-group-catego
  */
 function run_bp_customizable_group_categories() {
 
-    $plugin = new Bp_Customizable_Group_Categories();
-    $plugin->run();
+	$plugin = new Bp_Customizable_Group_Categories();
+	$plugin->run();
 }
 
-add_action('bp_loaded', 'run_bp_customizable_group_categories', 1);
+add_action( 'bp_loaded', 'run_bp_customizable_group_categories', 1 );

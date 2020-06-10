@@ -1,7 +1,7 @@
 <?php
 
 function cboxol_brand_admin_page() {
-	$url_base = get_admin_url( bp_get_root_blog_id(), 'customize.php' );
+	$url_base      = get_admin_url( bp_get_root_blog_id(), 'customize.php' );
 	$customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), $url_base );
 
 	$pages = cboxol_get_brand_pages();
@@ -41,23 +41,23 @@ function cboxol_brand_admin_page() {
 
 function cboxol_get_brand_page_types() {
 	return array(
-		'about' => array(
-			'settings_page_title' => __( 'About Page', 'commons-in-a-box' ),
+		'about'          => array(
+			'settings_page_title'       => __( 'About Page', 'commons-in-a-box' ),
 			'settings_page_description' => __( 'This page can contain an introduction to your site, institution, and/or organization.', 'commons-in-a-box' ),
 		),
-		'help' => array(
-			'settings_page_title' => __( 'Help Page', 'commons-in-a-box' ),
+		'help'           => array(
+			'settings_page_title'       => __( 'Help Page', 'commons-in-a-box' ),
 			'settings_page_description' => __( 'This section can contain help and support documentation and answers to frequently asked questions for your site’s members and visitors.', 'commons-in-a-box' ),
 		),
-		'terms-of-use' => array(
-			'settings_page_title' => __( 'Terms of Service', 'commons-in-a-box' ),
+		'terms-of-use'   => array(
+			'settings_page_title'       => __( 'Terms of Service', 'commons-in-a-box' ),
 			'settings_page_description' => __( 'This page can contain the Terms of Service for your site. Terms of Service are the rules that a user must abide by while using your site.', 'commons-in-a-box' ),
-			'parent' => 'about',
+			'parent'                    => 'about',
 		),
-		'contact-us' => array(
-			'settings_page_title' => __( 'Contact Page', 'commons-in-a-box' ),
+		'contact-us'     => array(
+			'settings_page_title'       => __( 'Contact Page', 'commons-in-a-box' ),
 			'settings_page_description' => __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, comments, or need help.', 'commons-in-a-box' ),
-			'parent' => 'about',
+			'parent'                    => 'about',
 		),
 		'search-results' => array(
 			'settings_page_title'       => __( 'Search Results', 'commons-in-a-box' ),
@@ -75,20 +75,23 @@ function cboxol_get_brand_page_types() {
  */
 function cboxol_get_brand_pages() {
 	$brand_page_types = cboxol_get_brand_page_types();
-	$pages = array();
+	$pages            = array();
 	foreach ( $brand_page_types as $brand_page_type_name => $brand_page_type ) {
-		$pages[ $brand_page_type_name ] = array_merge( $brand_page_type, array(
-			'id' => 0,
-			'title' => '',
-			'edit_url' => '',
-			'preview_url' => '',
-		) );
+		$pages[ $brand_page_type_name ] = array_merge(
+			$brand_page_type,
+			array(
+				'id'          => 0,
+				'title'       => '',
+				'edit_url'    => '',
+				'preview_url' => '',
+			)
+		);
 	}
 
 	$page_ids = get_site_option( 'cboxol_brand_page_ids' );
 
 	$main_site_id = cboxol_get_main_site_id();
-	$switched = false;
+	$switched     = false;
 	if ( get_current_blog_id() !== $main_site_id ) {
 		switch_to_blog( $main_site_id );
 		$switched = true;
@@ -100,9 +103,9 @@ function cboxol_get_brand_pages() {
 			continue;
 		}
 
-		$pages[ $page_type ]['id'] = $page_id;
-		$pages[ $page_type ]['title'] = get_the_title( $page_id );
-		$pages[ $page_type ]['edit_url'] = get_admin_url( $main_site_id, 'post.php?post=' . intval( $page_id ) . '&action=edit' );
+		$pages[ $page_type ]['id']          = $page_id;
+		$pages[ $page_type ]['title']       = get_the_title( $page_id );
+		$pages[ $page_type ]['edit_url']    = get_admin_url( $main_site_id, 'post.php?post=' . intval( $page_id ) . '&action=edit' );
 		$pages[ $page_type ]['preview_url'] = get_permalink( $page_id );
 	}
 
@@ -162,12 +165,18 @@ function cboxol_default_avatar( $size = 'full' ) {
 	return CBOXOL_PLUGIN_URL . 'assets/img/default-avatar' . $size_suffix . '.png';
 }
 
-add_filter( 'bp_core_avatar_full', function( $full ) {
-	return cboxol_default_avatar( 'full' );
-} );
-add_filter( 'bp_core_avatar_thumb', function( $thumb ) {
-	return cboxol_default_avatar( 'thumb' );
-} );
+add_filter(
+	'bp_core_avatar_full',
+	function( $full ) {
+		return cboxol_default_avatar( 'full' );
+	}
+);
+add_filter(
+	'bp_core_avatar_thumb',
+	function( $thumb ) {
+		return cboxol_default_avatar( 'thumb' );
+	}
+);
 
 /**
  * Force default avatar instead of wavatar.

@@ -10,66 +10,78 @@ use \WP_REST_Response;
 
 class ItemTypes extends WP_REST_Controller {
 	public function register_routes() {
-		$version = '1';
+		$version   = '1';
 		$namespace = 'cboxol/v' . $version;
 
-		register_rest_route( $namespace, '/item-type', array(
+		register_rest_route(
+			$namespace,
+			'/item-type',
 			array(
-				'methods'         => WP_REST_Server::CREATABLE,
-				'callback'        => array( $this, 'create_item' ),
-				'permission_callback' => array( $this, 'create_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'create_item' ),
+					'permission_callback' => array( $this, 'create_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 
-		register_rest_route( $namespace, '/item-type/(?P<id>[\d]+)', array(
+		register_rest_route(
+			$namespace,
+			'/item-type/(?P<id>[\d]+)',
 			array(
-				'methods'         => WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'get_item' ),
-				'permission_callback' => array( $this, 'get_item_permissions_check' ),
-				'args'            => array(
-					'context'          => array(
-						'default'      => 'view',
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_item' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'args'                => array(
+						'context' => array(
+							'default' => 'view',
+						),
 					),
 				),
-			),
-			array(
-				'methods'         => WP_REST_Server::EDITABLE,
-				'callback'        => array( $this, 'update_item' ),
-				'permission_callback' => array( $this, 'update_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( false ),
-			),
-			array(
-				'methods'  => WP_REST_Server::DELETABLE,
-				'callback' => array( $this, 'delete_item' ),
-				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
-				'args'     => array(
-					'force'    => array(
-						'default'      => false,
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_item' ),
+					'permission_callback' => array( $this, 'update_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( false ),
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'delete_item' ),
+					'permission_callback' => array( $this, 'delete_item_permissions_check' ),
+					'args'                => array(
+						'force' => array(
+							'default' => false,
+						),
 					),
 				),
-			),
-		) );
+			)
+		);
 
-		register_rest_route( $namespace, '/item-type/schema', array(
-			'methods'  => WP_REST_Server::READABLE,
-			'callback' => array( $this, 'get_public_item_schema' ),
-		) );
+		register_rest_route(
+			$namespace,
+			'/item-type/schema',
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_public_item_schema' ),
+			)
+		);
 	}
 
 	public function create_item( $request ) {
 		$params = $request->get_params();
-		$class = $this->get_class_for_object_type( $params['objectType'] );
-		$type = $class::get_dummy();
+		$class  = $this->get_class_for_object_type( $params['objectType'] );
+		$type   = $class::get_dummy();
 		return $this->create_update_helper( $type, $params['typeData'], $params['objectType'] );
 	}
 
 	public function update_item( $request ) {
 		$params = $request->get_params();
-		$class = $this->get_class_for_object_type( $params['objectType'] );
+		$class  = $this->get_class_for_object_type( $params['objectType'] );
 
 		$wp_post = get_post( $params['id'] );
-		$type = $class::get_instance_from_wp_post( $wp_post );
+		$type    = $class::get_instance_from_wp_post( $wp_post );
 
 		return $this->create_update_helper( $type, $params['typeData'], $params['objectType'] );
 	}
@@ -93,7 +105,7 @@ class ItemTypes extends WP_REST_Controller {
 
 		$type->save();
 
-		$retval = $type->get_for_endpoint();
+		$retval   = $type->get_for_endpoint();
 		$response = rest_ensure_response( $retval );
 		return $response;
 	}
@@ -107,14 +119,14 @@ class ItemTypes extends WP_REST_Controller {
 		}
 
 		$class = $this->get_class_for_object_type( $wp_post->post_type );
-		$type = $class::get_instance_from_wp_post( $wp_post );
+		$type  = $class::get_instance_from_wp_post( $wp_post );
 
 		if ( ! $type->get_can_be_deleted() ) {
-			$data = __( 'Type cannot be deleted', 'commons-in-a-box' );
+			$data   = __( 'Type cannot be deleted', 'commons-in-a-box' );
 			$status = 403;
 		} else {
 			wp_delete_post( $params['id'] );
-			$data = __( 'OK', 'commons-in-a-box' );
+			$data   = __( 'OK', 'commons-in-a-box' );
 			$status = 200;
 		}
 
@@ -148,12 +160,12 @@ class ItemTypes extends WP_REST_Controller {
 
 	protected function get_class_for_object_type( $object_type ) {
 		switch ( $object_type ) {
-			case 'member' :
-			case 'cboxol_member_type' :
+			case 'member':
+			case 'cboxol_member_type':
 				return '\CBOX\OL\MemberType';
 
-			case 'group' :
-			case 'cboxol_group_type' :
+			case 'group':
+			case 'cboxol_group_type':
 				return 'CBOX\OL\GroupType';
 		}
 	}

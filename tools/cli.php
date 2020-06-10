@@ -19,9 +19,11 @@ class CBOXOL_Command extends WP_CLI_Command {
 
 		delete_option( 'cboxol_installing' );
 
-		$group_types = cboxol_get_group_types( array(
-			'enabled' => null,
-		) );
+		$group_types = cboxol_get_group_types(
+			array(
+				'enabled' => null,
+			)
+		);
 
 		foreach ( $group_types as $group_type ) {
 			wp_delete_post( $group_type->get_wp_post_id(), true );
@@ -32,9 +34,11 @@ class CBOXOL_Command extends WP_CLI_Command {
 			}
 		}
 
-		$member_types = cboxol_get_member_types( array(
-			'enabled' => null,
-		) );
+		$member_types = cboxol_get_member_types(
+			array(
+				'enabled' => null,
+			)
+		);
 
 		foreach ( $member_types as $member_type ) {
 			wp_delete_post( $member_type->get_wp_post_id(), true );
@@ -44,12 +48,14 @@ class CBOXOL_Command extends WP_CLI_Command {
 		// signup codes
 
 		// Sliders.
-		$sliders = get_posts( array(
-			'post_type' => 'slider',
-			'post_status' => 'any',
-			'posts_per_page' => '-1',
-			'fields' => 'ids',
-		) );
+		$sliders = get_posts(
+			array(
+				'post_type'      => 'slider',
+				'post_status'    => 'any',
+				'posts_per_page' => '-1',
+				'fields'         => 'ids',
+			)
+		);
 
 		foreach ( $sliders as $slide_id ) {
 			wp_delete_post( $slide_id, true );
@@ -107,7 +113,7 @@ class CBOXOL_Command extends WP_CLI_Command {
 
 		remove_action( 'after_switch_theme', '_wp_sidebars_changed' );
 
-//		update_option( 'theme_switched', 'openlab-theme' );
+		//      update_option( 'theme_switched', 'openlab-theme' );
 		delete_option( 'openlab_theme_installed' );
 	}
 }

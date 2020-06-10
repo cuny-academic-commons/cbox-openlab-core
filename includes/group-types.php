@@ -40,9 +40,11 @@ function openlab_is_group_type( $group_id = 0, $type = 'group' ) {
 	return $type == openlab_get_group_type( $group_id );
 }
 
-function openlab_is_course( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'course' ); }
+function openlab_is_course( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'course' ); }
 
-function openlab_is_project( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'project' ); }
+function openlab_is_project( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'project' ); }
 
 function cboxol_is_portfolio( $group_id = 0 ) {
 	if ( ! $group_id ) {
@@ -54,28 +56,31 @@ function cboxol_is_portfolio( $group_id = 0 ) {
 	return ! is_wp_error( $group_type ) && $group_type->get_is_portfolio();
 }
 
-function openlab_is_club( $group_id = 0 ) { return openlab_is_group_type( $group_id, 'club' ); }
+function openlab_is_club( $group_id = 0 ) {
+	return openlab_is_group_type( $group_id, 'club' ); }
 
 function cboxol_grouptypes_admin_page() {
 	wp_enqueue_script( 'cbox-ol-app' );
 
-	$types = cboxol_get_group_types( array(
-		'enabled' => null,
-	) );
+	$types = cboxol_get_group_types(
+		array(
+			'enabled' => null,
+		)
+	);
 
 	$type_data = array();
 	foreach ( $types as $type ) {
 		$type_data[ $type->get_slug() ] = $type->get_for_endpoint();
 	}
 
-	$dummy = \CBOX\OL\GroupType::get_dummy();
+	$dummy      = \CBOX\OL\GroupType::get_dummy();
 	$dummy_data = $dummy->get_for_endpoint();
 
 	$app_config = array(
-		'subapp' => 'TypesUI',
+		'subapp'     => 'TypesUI',
 		'objectType' => 'group',
-		'types' => $type_data,
-		'dummy' => $dummy_data,
+		'types'      => $type_data,
+		'dummy'      => $dummy_data,
 	);
 
 	?>
@@ -98,24 +103,27 @@ function cboxol_grouptypes_admin_page() {
  * Register the Group Type post type.
  */
 function cboxol_grouptypes_register_post_type() {
-	register_post_type( 'cboxol_group_type', array(
-		'labels' => array(
-			'name' => _x( 'Group Types', 'Post type general name', 'commons-in-a-box' ),
-			'singular_name' => _x( 'Group Type', 'Post type singular name', 'commons-in-a-box' ),
-			'add_new_item' => __( 'Add New Group Type', 'commons-in-a-box' ),
-			'new_item' => __( 'New Group Type', 'commons-in-a-box' ),
-			'edit_item' => __( 'Edit Group Type', 'commons-in-a-box' ),
-			'view_item' => __( 'View Group Type', 'commons-in-a-box' ),
-			'all_item' => __( 'All Group Types', 'commons-in-a-box' ),
-			'search_items' => __( 'Search Group Types', 'commons-in-a-box' ),
-			'not_found' => __( 'No group types found.', 'commons-in-a-box' ),
-			'not_found_in_trash' => __( 'No group types found in Trash.', 'commons-in-a-box' ),
-		),
-		'public' => false,
-		'publicly_queryable' => false,
-		'show_ui' => true,
-		'show_in_menu' => false,
-	) );
+	register_post_type(
+		'cboxol_group_type',
+		array(
+			'labels'             => array(
+				'name'               => _x( 'Group Types', 'Post type general name', 'commons-in-a-box' ),
+				'singular_name'      => _x( 'Group Type', 'Post type singular name', 'commons-in-a-box' ),
+				'add_new_item'       => __( 'Add New Group Type', 'commons-in-a-box' ),
+				'new_item'           => __( 'New Group Type', 'commons-in-a-box' ),
+				'edit_item'          => __( 'Edit Group Type', 'commons-in-a-box' ),
+				'view_item'          => __( 'View Group Type', 'commons-in-a-box' ),
+				'all_item'           => __( 'All Group Types', 'commons-in-a-box' ),
+				'search_items'       => __( 'Search Group Types', 'commons-in-a-box' ),
+				'not_found'          => __( 'No group types found.', 'commons-in-a-box' ),
+				'not_found_in_trash' => __( 'No group types found in Trash.', 'commons-in-a-box' ),
+			),
+			'public'             => false,
+			'publicly_queryable' => false,
+			'show_ui'            => true,
+			'show_in_menu'       => false,
+		)
+	);
 }
 
 /**
@@ -126,14 +134,17 @@ function cboxol_grouptypes_register_group_types() {
 
 	// @todo Conflict checking? Prefixing?
 	foreach ( $saved_types as $saved_type ) {
-		bp_groups_register_group_type( $saved_type->get_slug(), array(
-			'labels' => array(
-				'name' => $saved_type->get_label( 'plural' ),
-				'singular_name' => $saved_type->get_label( 'singular' ),
-			),
-			'has_directory' => true,
-			'show_in_create_screen' => false,
-		) );
+		bp_groups_register_group_type(
+			$saved_type->get_slug(),
+			array(
+				'labels'                => array(
+					'name'          => $saved_type->get_label( 'plural' ),
+					'singular_name' => $saved_type->get_label( 'singular' ),
+				),
+				'has_directory'         => true,
+				'show_in_create_screen' => false,
+			)
+		);
 	}
 }
 
@@ -144,15 +155,18 @@ function cboxol_grouptypes_register_group_types() {
  * @return \CBOX\OL\GroupType|null
  */
 function cboxol_get_group_type( $slug ) {
-	$types = cboxol_get_group_types( array(
-		'enabled' => null,
-	) );
+	$types = cboxol_get_group_types(
+		array(
+			'enabled' => null,
+		)
+	);
 
 	if ( isset( $types[ $slug ] ) ) {
 		return $types[ $slug ];
 	}
 
-	return new WP_Error( 'no_group_type_found', __( 'No group type found by that slug.', 'commons-in-a-box' ), $slug );;
+	return new WP_Error( 'no_group_type_found', __( 'No group type found by that slug.', 'commons-in-a-box' ), $slug );
+
 }
 
 /**
@@ -166,10 +180,13 @@ function cboxol_get_group_type( $slug ) {
  * }
  */
 function cboxol_get_group_types( $args = array() ) {
-	$r = array_merge( array(
-		'enabled' => true,
-		'exclude_portfolio' => false,
-	), $args );
+	$r = array_merge(
+		array(
+			'enabled'           => true,
+			'exclude_portfolio' => false,
+		),
+		$args
+	);
 
 	$post_status = 'publish';
 	if ( false === $r['enabled'] ) {
@@ -179,17 +196,17 @@ function cboxol_get_group_types( $args = array() ) {
 	}
 
 	$post_args = array(
-		'post_type' => 'cboxol_group_type',
-		'post_status' => $post_status,
+		'post_type'      => 'cboxol_group_type',
+		'post_status'    => $post_status,
 		'posts_per_page' => -1,
-		'orderby' => array(
+		'orderby'        => array(
 			'menu_order' => 'ASC',
-			'title' => 'ASC',
+			'title'      => 'ASC',
 		),
-		'fields' => 'ids',
+		'fields'         => 'ids',
 	);
 
-	$switched = false;
+	$switched     = false;
 	$main_site_id = cboxol_get_main_site_id();
 	if ( get_current_blog_id() !== $main_site_id ) {
 		switch_to_blog( $main_site_id );
@@ -197,8 +214,8 @@ function cboxol_get_group_types( $args = array() ) {
 	}
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
-	$ids = wp_cache_get( $cache_key, 'cboxol_group_types' );
+	$cache_key    = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$ids          = wp_cache_get( $cache_key, 'cboxol_group_types' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
 		_prime_post_caches( $ids );
@@ -356,7 +373,7 @@ function cboxol_enforce_group_type_on_creation() {
 	}
 
 	// Grab the first non-course, non-portfolio group type.
-	$types = cboxol_get_group_types();
+	$types         = cboxol_get_group_types();
 	$redirect_type = null;
 	foreach ( $types as $type ) {
 		if ( ! $type->get_is_portfolio() && ! $type->get_is_course() ) {

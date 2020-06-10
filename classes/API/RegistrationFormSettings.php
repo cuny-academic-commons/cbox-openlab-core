@@ -12,17 +12,21 @@ use \BP_Groups_Group;
 
 class RegistrationFormSettings extends WP_REST_Controller {
 	public function register_routes() {
-		$version = '1';
+		$version   = '1';
 		$namespace = 'cboxol/v' . $version;
 
-		register_rest_route( $namespace, '/registration-form-settings', array(
+		register_rest_route(
+			$namespace,
+			'/registration-form-settings',
 			array(
-				'methods'         => WP_REST_Server::EDITABLE,
-				'callback'        => array( $this, 'edit_item' ),
-				'permission_callback' => array( $this, 'edit_item_permissions_check' ),
-				'args'            => $this->get_endpoint_args_for_item_schema( true ),
-			),
-		) );
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'edit_item' ),
+					'permission_callback' => array( $this, 'edit_item_permissions_check' ),
+					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+				),
+			)
+		);
 	}
 
 	public function edit_item( $request ) {

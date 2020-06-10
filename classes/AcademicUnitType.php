@@ -4,14 +4,14 @@ namespace CBOX\OL;
 
 class AcademicUnitType {
 	protected $data = array(
-		'group_types' => array(),
-		'labels' => array(),
+		'group_types'  => array(),
+		'labels'       => array(),
 		'member_types' => array(),
-		'order' => null,
-		'name' => null,
-		'parent' => null,
-		'slug' => null,
-		'wp_post_id' => null,
+		'order'        => null,
+		'name'         => null,
+		'parent'       => null,
+		'slug'         => null,
+		'wp_post_id'   => null,
 	);
 
 	/**
@@ -23,15 +23,15 @@ class AcademicUnitType {
 		$post_id = $this->get_wp_post_id();
 
 		$post_params = array(
-			'menu_order' => $this->get_order(),
-			'post_type' => 'cboxol_acadunit_type',
-			'post_title' => $this->get_name(),
+			'menu_order'  => $this->get_order(),
+			'post_type'   => 'cboxol_acadunit_type',
+			'post_title'  => $this->get_name(),
 			'post_status' => 'publish',
 		);
 
 		if ( $post_id ) {
 			$post_params['ID'] = $post_id;
-			$updated = wp_update_post( $post_params );
+			$updated           = wp_update_post( $post_params );
 
 			if ( is_wp_error( $updated ) ) {
 				return $updated;
@@ -192,32 +192,32 @@ class AcademicUnitType {
 
 	public function get_for_endpoint() {
 		$retval = array(
-			'groupTypes' => array(),
-			'labels' => $this->get_labels(),
-			'memberTypes' => array(),
-			'name' => $this->get_name(),
-			'parent' => $this->get_parent(),
-			'slug' => $this->get_slug(),
-			'settings' => array(
+			'groupTypes'   => array(),
+			'labels'       => $this->get_labels(),
+			'memberTypes'  => array(),
+			'name'         => $this->get_name(),
+			'parent'       => $this->get_parent(),
+			'slug'         => $this->get_slug(),
+			'settings'     => array(
 				'Order' => array(
 					'component' => 'Order',
-					'data' => $this->get_order(),
+					'data'      => $this->get_order(),
 				),
 			),
 
-			'id' => $this->get_wp_post_id(),
+			'id'           => $this->get_wp_post_id(),
 
 			'canBeDeleted' => true,
-			'isCollapsed' => true,
-			'isEnabled' => true,
-			'isLoading' => false,
-			'isModified' => false,
+			'isCollapsed'  => true,
+			'isEnabled'    => true,
+			'isLoading'    => false,
+			'isModified'   => false,
 		);
 
-		$group_types = $this->get_group_types();
+		$group_types          = $this->get_group_types();
 		$retval['groupTypes'] = $group_types;
 
-		$member_types = $this->get_member_types();
+		$member_types          = $this->get_member_types();
 		$retval['memberTypes'] = $member_types;
 
 		return $retval;
@@ -371,17 +371,17 @@ class AcademicUnitType {
 	 */
 	public static function get_label_types() {
 		return array(
-			'plural' => array(
-				'slug' => 'plural',
-				'label' => _x( 'Plural', 'Academic Unit Type plural label', 'commons-in-a-box' ),
+			'plural'   => array(
+				'slug'        => 'plural',
+				'label'       => _x( 'Plural', 'Academic Unit Type plural label', 'commons-in-a-box' ),
 				'description' => __( 'Used in directory titles.', 'commons-in-a-box' ),
-				'value' => '',
+				'value'       => '',
 			),
 			'singular' => array(
-				'slug' => 'singular',
-				'label' => _x( 'Singular', 'Academic Unit Type singular label', 'commons-in-a-box' ),
+				'slug'        => 'singular',
+				'label'       => _x( 'Singular', 'Academic Unit Type singular label', 'commons-in-a-box' ),
 				'description' => __( 'Used on group and member profiles.', 'commons-in-a-box' ),
-				'value' => '',
+				'value'       => '',
 			),
 		);
 	}
