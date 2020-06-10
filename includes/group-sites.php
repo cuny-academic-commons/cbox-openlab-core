@@ -19,6 +19,7 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 	$group_id = wp_cache_get( $blog_id, 'site_group_ids' );
 
 	if ( false === $group_id ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id' AND meta_value = %d", $blog_id ) );
 
 		wp_cache_set( $blog_id, (int) $group_id, 'site_group_ids' );
@@ -117,7 +118,8 @@ function openlab_get_group_site_url( $group_id = false ) {
 	}
 
 	// First check for an internal site, then external
-	if ( $site_id = openlab_get_site_id_by_group_id( $group_id ) ) {
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( $site_id ) {
 		$site_url = get_blog_option( $site_id, 'siteurl' );
 	} else {
 		$site_url = openlab_get_external_site_url_by_group_id( $group_id );
@@ -135,6 +137,8 @@ function cboxol_save_group_extras( $group ) {
 	global $wpdb, $bp;
 
 	$is_editing = false;
+
+	// phpcs:disable WordPress.Security.NonceVerification.Missing
 
 	if ( isset( $_POST['_wp_http_referer'] ) && strpos( $_POST['_wp_http_referer'], 'edit-details' ) !== false ) {
 		$is_editing = true;
@@ -189,7 +193,7 @@ function cboxol_save_group_extras( $group ) {
 		$enabled = ! empty( $_POST['group-show-portfolio-list'] ) ? 'yes' : 'no';
 		groups_update_groupmeta( $group->id, 'portfolio_list_enabled', $enabled );
 
-		groups_update_groupmeta( $group->id, 'portfolio_list_heading', strip_tags( stripslashes( $_POST['group-portfolio-list-heading'] ) ) );
+		groups_update_groupmeta( $group->id, 'portfolio_list_heading', wp_strip_all_tags( stripslashes( $_POST['group-portfolio-list-heading'] ) ) );
 	}
 
 	// Feed URLs ( step two of group creation )
@@ -197,6 +201,8 @@ function cboxol_save_group_extras( $group ) {
 		groups_update_groupmeta( $group->id, 'external_site_posts_feed', $_POST['external-site-posts-feed'] );
 		groups_update_groupmeta( $group->id, 'external_site_comments_feed', $_POST['external-site-comments-feed'] );
 	}
+
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 }
 add_action( 'groups_group_after_save', 'cboxol_save_group_extras', 20 );
 
@@ -365,10 +371,10 @@ function openlab_group_blog_activity( $activity ) {
 
 	$blog_id = $activity->item_id;
 
-	if ( 'new_blog_post' == $activity->type ) {
+	if ( 'new_blog_post' === $activity->type ) {
 		$post_id = $activity->secondary_item_id;
 		$post    = get_post( $post_id );
-	} elseif ( 'new_blog_comment' == $activity->type ) {
+	} elseif ( 'new_blog_comment' === $activity->type ) {
 		$comment = get_comment( $activity->secondary_item_id );
 		$post_id = $comment->comment_post_ID;
 		$post    = get_post( $post_id );
@@ -414,9 +420,10 @@ function openlab_group_blog_activity( $activity ) {
 	}
 
 	// Replace the necessary values to display in group activity stream
-	if ( 'new_blog_post' == $activity->type ) {
+	if ( 'new_blog_post' === $activity->type ) {
 		$activity->action = sprintf(
-			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ),
+			// translators: 1. Link to author, 2. Link to post, 3. Link to group
+			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'commons-in-a-box' ),
 			bp_core_get_userlink( $activity->user_id ),
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
@@ -429,7 +436,8 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-			__( '%1$s commented on %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ),
+			// translators: 1. Link to commenter, 2. Link to post, 3. Link to group
+			__( '%1$s commented on %2$s in the group %3$s', 'commons-in-a-box' ),
 			$userlink,
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
 			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
@@ -577,7 +585,7 @@ function cboxol_blogs_post_pre_publish( $return = true, $blog_id = 0, $post_id =
 	 *
 	 * @param bool $value Current status of the sitewide tags activity.
 	 */
-	if ( (int) $blog_id == $tags_blog_id && apply_filters( 'bp_blogs_block_sitewide_tags_activity', true ) ) {
+	if ( (int) $blog_id === (int) $tags_blog_id && apply_filters( 'bp_blogs_block_sitewide_tags_activity', true ) ) {
 		return false;
 	}
 
@@ -695,22 +703,27 @@ function openlab_validate_groupblog_url() {
 	 * b1) the 'Set up a site?' checkbox has been checked, OR
 	 * b2) the group type is Portfolio, which requires a blog
 	 */
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$group_type               = isset( $_POST['group-type'] ) ? cboxol_get_group_type( wp_unslash( urldecode( $_POST['group-type'] ) ) ) : null;
 	$group_type_requires_site = false;
 	if ( $group_type && ! is_wp_error( $group_type ) && $group_type->get_requires_site() ) {
 		$group_type_requires_site = true;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$new_or_old = isset( $_POST['new_or_old'] ) && in_array( $_POST['new_or_old'], array( 'new', 'clone' ), true ) ? wp_unslash( $_POST['new_or_old'] ) : '';
 	if (
-		isset( $_POST['new_or_old'] ) &&
-		( 'new' == $_POST['new_or_old'] || 'clone' == $_POST['new_or_old'] ) &&
+		$new_or_old &&
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		( isset( $_POST['set-up-site-toggle'] ) || $group_type_requires_site )
 	) {
 		// Which field we check depends on whether this is a clone
 		$path = '';
-		if ( 'clone' == $_POST['new_or_old'] ) {
+		if ( 'clone' === $new_or_old ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$path = wp_unslash( $_POST['clone-destination-path'] );
 		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$path = wp_unslash( $_POST['blog']['domain'] );
 		}
 
@@ -732,16 +745,20 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
  * For groupblog types other than 'Create a new site', perform basic validation
  */
 function openlab_validate_groupblog_selection() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( isset( $_POST['new_or_old'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		switch ( $_POST['new_or_old'] ) {
 			case 'old':
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				if ( empty( $_POST['groupblog-blogid'] ) ) {
 					$error_message = 'You must select an existing site from the dropdown menu.';
 				}
 				break;
 
 			case 'external':
-				if ( empty( $_POST['external-site-url'] ) || ! openlab_validate_url( $_POST['external-site-url'] ) || 'http://' == trim( $_POST['external-site-url'] ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				if ( empty( $_POST['external-site-url'] ) || ! openlab_validate_url( $_POST['external-site-url'] ) || 'http://' === trim( $_POST['external-site-url'] ) ) {
 					$error_message = 'You must provide a valid external site URL.';
 				}
 				break;
@@ -761,6 +778,7 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
 function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$slug      = isset( $_POST['path'] ) ? wp_unslash( $_POST['path'] ) : '';
 	$validated = cboxol_validate_blogname( $slug );
 
@@ -792,8 +810,6 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 
 	global $bp, $wpdb;
 
-	// return apply_filters( 'bp_blogs_get_blogs', BP_Blogs_Blog::get( $type, $per_page, $page, $user_id, $search_terms ), $params );
-	//  get( $type, $limit = false, $page = false, $user_id = 0, $search_terms = false )
 	// Set up the necessary variables for the rest of the function, out of $params
 	$type         = $params['type'];
 	$limit        = $params['per_page'];
@@ -802,6 +818,7 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	$search_terms = $params['search_terms'];
 
 	// The magic: Pull up a list of blogs that have associated groups, and exclude them
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$exclude_blogs = $wpdb->get_col( "SELECT meta_value FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id'" );
 
 	if ( ! empty( $exclude_blogs ) ) {
@@ -810,7 +827,7 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 		$exclude_sql = '';
 	}
 
-	if ( ! is_user_logged_in() || ( ! is_super_admin() && ( $user_id != $bp->loggedin_user->id ) ) ) {
+	if ( ! is_user_logged_in() || ( ! is_super_admin() && ( (int) bp_loggedin_user_id() !== (int) $user_id ) ) ) {
 		$hidden_sql = 'AND wb.public = 1';
 	} else {
 		$hidden_sql = '';
@@ -837,11 +854,17 @@ function openlab_filter_groupblogs_from_my_sites( $blogs, $params ) {
 	}
 
 	if ( ! empty( $search_terms ) ) {
-		$filter      = like_escape( $wpdb->escape( $search_terms ) );
+		// phpcs:ignore WordPress.WP.DeprecatedFunctions.like_escapeFound
+		$filter = like_escape( $wpdb->escape( $search_terms ) );
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' AND bm2.meta_value LIKE '%%$filter%%' {$user_sql} {$exclude_sql} GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2 WHERE b.blog_id = wb.blog_id AND bm.blog_id = b.blog_id AND bm2.blog_id = b.blog_id AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} AND bm.meta_key = 'name' AND bm2.meta_key = 'description' AND ( bm.meta_value LIKE '%%$filter%%' || bm2.meta_value LIKE '%%$filter%%' ) {$user_sql} {$exclude_sql}" );
 	} else {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$paged_blogs = $wpdb->get_results( "SELECT b.blog_id, b.user_id as admin_user_id, u.user_email as admin_user_email, wb.domain, wb.path, bm.meta_value as last_activity, bm2.meta_value as name FROM {$bp->blogs->table_name} b, {$bp->blogs->table_name_blogmeta} bm, {$bp->blogs->table_name_blogmeta} bm2, {$wpdb->base_prefix}blogs wb, {$wpdb->users} u WHERE b.blog_id = wb.blog_id AND b.user_id = u.ID AND b.blog_id = bm.blog_id AND b.blog_id = bm2.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql} AND bm.meta_key = 'last_activity' AND bm2.meta_key = 'name' GROUP BY b.blog_id {$order_sql} {$pag_sql}" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$total_blogs = $wpdb->get_var( "SELECT COUNT( DISTINCT b.blog_id ) FROM {$bp->blogs->table_name} b, {$wpdb->base_prefix}blogs wb WHERE b.blog_id = wb.blog_id {$user_sql} AND wb.archived = '0' AND wb.spam = 0 AND wb.mature = 0 AND wb.deleted = 0 {$hidden_sql} {$exclude_sql}" );
 	}
 
@@ -880,7 +903,7 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
 	$blog_public          = false;
 	$wds_bp_group_site_id = cboxol_get_group_site_id( $group_id );
 
-	if ( $wds_bp_group_site_id != '' ) {
+	if ( $wds_bp_group_site_id ) {
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
 
 		switch ( $blog_private ) {
@@ -896,7 +919,7 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
 			case '-2':
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
-					if ( $user_capabilities != '' ) {
+					if ( '' !== $user_capabilities ) {
 						$blog_public = true;
 					}
 				}
@@ -924,7 +947,7 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
  * Wrapper function to get the URL of an external site, if it exists
  */
 function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id ) {
+	if ( 0 === (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -939,7 +962,7 @@ function openlab_get_external_site_url_by_group_id( $group_id = 0 ) {
  * Attempts to fetch from a transient before refreshing
  */
 function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id ) {
+	if ( 0 === (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -967,7 +990,7 @@ function openlab_get_external_posts_by_group_id( $group_id = 0 ) {
  * Attempts to fetch from a transient before refreshing
  */
 function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
-	if ( 0 == (int) $group_id ) {
+	if ( 0 === (int) $group_id ) {
 		$group_id = bp_get_current_group_id();
 	}
 
@@ -1006,7 +1029,7 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
 		$items[] = array(
 			'permalink' => $feed_item->get_link(),
 			'title'     => $feed_item->get_title(),
-			'content'   => strip_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
+			'content'   => wp_strip_all_tags( bp_create_excerpt( $feed_item->get_content(), 135, array( 'html' => true ) ) ),
 			'author'    => $feed_item->get_author(),
 			'date'      => $feed_item->get_date(),
 		);
@@ -1019,11 +1042,11 @@ function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
  * Convert RSS items to activity items
  */
 function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts' ) {
-	$type  = 'posts' == $item_type ? 'new_blog_post' : 'new_blog_comment';
+	$type  = 'posts' === $item_type ? 'new_blog_post' : 'new_blog_comment';
 	$group = groups_get_current_group();
 
 	$hide_sitewide = false;
-	if ( ! empty( $group ) && isset( $group->status ) && 'public' != $group->status ) {
+	if ( ! empty( $group ) && isset( $group->status ) && 'public' !== $group->status ) {
 		$hide_sitewide = true;
 	}
 
@@ -1064,7 +1087,7 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 			if ( $item_date > $now ) {
 				$item_date = $now;
 			}
-			$recorded_time = date( 'Y-m-d H:i:s', $item_date );
+			$recorded_time = gmdate( 'Y-m-d H:i:s', $item_date );
 
 			$args = array(
 				'action'        => $action,
@@ -1095,8 +1118,10 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 function openlab_external_activity_item_exists( $permalink, $group_id, $type ) {
 	global $wpdb, $bp;
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$sql = $wpdb->prepare( "SELECT id FROM {$bp->activity->table_name} WHERE primary_link = %s AND type = %s AND component = 'groups' AND item_id = %s", $permalink, $type, $group_id );
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	return (bool) $wpdb->get_var( $sql );
 }
 
@@ -1149,12 +1174,12 @@ function openlab_find_feed_urls( $url ) {
 			)
 		);
 
-		if ( 200 != wp_remote_retrieve_response_code( $maybe_feed_head ) ) {
+		if ( 200 !== wp_remote_retrieve_response_code( $maybe_feed_head ) ) {
 			continue;
 		}
 
 		$maybe_feed = wp_remote_get( $maybe_feed_url );
-		if ( ! is_wp_error( $maybe_feed ) && 200 == $maybe_feed['response']['code'] ) {
+		if ( ! is_wp_error( $maybe_feed ) && 200 === (int) $maybe_feed['response']['code'] ) {
 
 			// Check to make sure this is actually a feed
 			$feed_items = fetch_feed( $maybe_feed_url );
@@ -1175,7 +1200,7 @@ function openlab_find_feed_urls( $url ) {
 					)
 				);
 
-				if ( 200 == $maybe_comments_feed['response']['code'] ) {
+				if ( 200 === (int) $maybe_comments_feed['response']['code'] ) {
 					$feed_urls['comments'] = $maybe_comments_feed_url;
 				}
 			}
@@ -1191,10 +1216,11 @@ function openlab_find_feed_urls( $url ) {
  * AJAX handler for feed detection
  */
 function openlab_detect_feeds_handler() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$url   = isset( $_REQUEST['site_url'] ) ? $_REQUEST['site_url'] : '';
 	$feeds = openlab_find_feed_urls( $url );
 
-	die( json_encode( $feeds ) );
+	die( wp_json_encode( $feeds ) );
 }
 
 add_action( 'wp_ajax_openlab_detect_feeds', 'openlab_detect_feeds_handler' );
@@ -1207,7 +1233,7 @@ function openlab_catch_refresh_feed_requests() {
 		return;
 	}
 
-	if ( ! isset( $_GET['refresh_feed'] ) || ! in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ) ) ) {
+	if ( ! isset( $_GET['refresh_feed'] ) || ! in_array( $_GET['refresh_feed'], array( 'posts', 'comments' ), true ) ) {
 		return;
 	}
 
@@ -1215,6 +1241,7 @@ function openlab_catch_refresh_feed_requests() {
 		return;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$feed_type = $_GET['refresh_feed'];
 
 	check_admin_referer( 'refresh-' . $feed_type . '-feed' );
@@ -1352,7 +1379,7 @@ Comment URL: %s',
 
 	foreach ( $admins as $admin ) {
 		// Don't send notification to instructor of her own comment.
-		if ( $admin->user_id == $comment_author_user->ID ) {
+		if ( (int) $admin->user_id === (int) $comment_author_user->ID ) {
 			continue;
 		}
 
@@ -1401,7 +1428,7 @@ function openlab_cloned_course_notice() {
 	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
 	$posts_url = admin_url( 'edit.php' );
-	$pages_url = admin_url( 'edit.php' );
+	$pages_url = admin_url( 'edit.php?post_type=page' );
 	$menus_url = admin_url( 'nav-menus.php' );
 
 	?>
@@ -1418,8 +1445,19 @@ function openlab_cloned_course_notice() {
 		}
 	</style>
 	<div class="updated fade ol-cloned-message">
-		<p><span><?php printf( __( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="%1$s">Posts</a> and <a href="%2$s">Pages</a>. Custom menus will need to be reactivated via <a href="%3$s">Appearance > Menus</a>', 'commons-in-a-box' ), esc_url( $posts_url ), esc_url( $pages_url ), esc_url( $menus_url ) ); ?>.</span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'commons-in-a-box' ); ?></a>
+		<p>
+			<span>
+				<?php
+				printf(
+					// translators: 1. Link to Posts admin page, 2. Link to Pages admin page, 3. Link to Menus admin page
+					esc_html__( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via %1$s and %2$s. Custom menus will need to be reactivated via %3$s.', 'commons-in-a-box' ),
+					sprintf( '<a href="%s">%s</a>', esc_url( $posts_url ), esc_html__( 'Posts', 'commons-in-a-box' ) ),
+					sprintf( '<a href="%s">%s</a>', esc_url( $pages_url ), esc_html__( 'Pages', 'commons-in-a-box' ) ),
+					sprintf( '<a href="%s">%s</a>', esc_url( $menus_url ), esc_html__( 'Appearance > Menu', 'commons-in-a-box' ) )
+				);
+				?>
+			</span>
+			<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'commons-in-a-box' ); ?></a>
 		</p>
 	</div>
 	<?php
@@ -1454,6 +1492,7 @@ add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
 function cboxol_copy_blog_page( $group_id ) {
 	global $bp, $wpdb, $current_site, $user_email;
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
 
 	if ( empty( $blog['domain'] ) ) {
@@ -1471,6 +1510,7 @@ function cboxol_copy_blog_page( $group_id ) {
 		return $validate;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$src_id = intval( $_POST['source_blog'] );
 
 	$title = $group->name;
@@ -1496,10 +1536,12 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	cboxol_set_group_site_id( $group_id, $id );
 
+	// translators: 1. login of user who created new site, 2. URL of the new site, 3. title of the new site
 	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", 'commons-in-a-box' ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
 
 	wp_mail(
 		get_site_option( 'admin_email' ),
+		// translators: site name
 		sprintf( __( '[%s] New Blog Created', 'commons-in-a-box' ), $current_site->site_name ),
 		$content_mail,
 		'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>'
@@ -1510,13 +1552,17 @@ function cboxol_copy_blog_page( $group_id ) {
 	$blogtables = $wpdb->base_prefix . $src_id . '_';
 	$newtables  = $wpdb->base_prefix . $new_id . '_';
 	$query      = "SHOW TABLES LIKE '{$blogtables}%'";
-	$tables     = $wpdb->get_results( $query, ARRAY_A );
+
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$tables = $wpdb->get_results( $query, ARRAY_A );
+
 	if ( $tables ) {
 		reset( $tables );
 		$create     = array();
 		$data       = array();
 		$len        = strlen( $blogtables );
 		$create_col = 'Create Table';
+
 		// add std wp tables to this array
 		$wptables = array(
 			$blogtables . 'links',
@@ -1527,16 +1573,20 @@ function cboxol_copy_blog_page( $group_id ) {
 			$blogtables . 'term_relationships',
 			$blogtables . 'termmeta',
 		);
-		for ( $i = 0; $i < count( $tables ); $i++ ) {
+
+		$table_count = count( $tables );
+		for ( $i = 0; $i < $table_count; $i++ ) {
 			$table = current( $tables[ $i ] );
-			if ( substr( $table, 0, $len ) == $blogtables ) {
-				if ( ! ( $table == $blogtables . 'options' || $table == $blogtables . 'comments' || $table === $blogtables . 'commentmeta' ) ) {
+			if ( substr( $table, 0, $len ) === $blogtables ) {
+				if ( ! ( $table === $blogtables . 'options' || $table === $blogtables . 'comments' || $table === $blogtables . 'commentmeta' ) ) {
+					// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					$create[ $table ] = $wpdb->get_row( "SHOW CREATE TABLE {$table}" );
 					$data[ $table ]   = $wpdb->get_results( "SELECT * FROM {$table}", ARRAY_A );
+					// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				}
 			}
 		}
-		//					var_dump( $create );
+
 		if ( $data ) {
 			switch_to_blog( $src_id );
 			$src_url      = get_option( 'siteurl' );
@@ -1547,14 +1597,17 @@ function cboxol_copy_blog_page( $group_id ) {
 			$new_url = get_blog_option( $new_id, 'siteurl' );
 			foreach ( $data as $k => $v ) {
 				$table = str_replace( $blogtables, $newtables, $k );
-				if ( in_array( $k, $wptables ) ) { // drop new blog table
+				if ( in_array( $k, $wptables, true ) ) { // drop new blog table
 					$query = "DROP TABLE IF EXISTS {$table}";
+					// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					$wpdb->query( $query );
 				}
 				$key   = (array) $create[ $k ];
 				$query = str_replace( $blogtables, $newtables, $key[ $create_col ] );
+
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$wpdb->query( $query );
-				$is_post = ( $k == $blogtables . 'posts' );
+				$is_post = ( $k === $blogtables . 'posts' );
 				if ( $v ) {
 					foreach ( $v as $row ) {
 						if ( $is_post ) {
@@ -1574,6 +1627,9 @@ function cboxol_copy_blog_page( $group_id ) {
 			cboxol_copyr( $source_site_upload_dir, $dest_site_upload_dir );
 
 			// update options
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$options = $wpdb->get_results( $option_query );
+
 			$skip_options = array(
 				'admin_email',
 				'blogname',
@@ -1593,7 +1649,6 @@ function cboxol_copy_blog_page( $group_id ) {
 				'upload_url_path',
 				"{$wpdb->base_prefix}{$src_id}_user_roles",
 			);
-			$options      = $wpdb->get_results( $option_query );
 
 			// new blog stuff
 			if ( $options ) {
@@ -1603,7 +1658,7 @@ function cboxol_copy_blog_page( $group_id ) {
 				$dest_site_url   = get_blog_option( $new_id, 'home' );
 
 				foreach ( $options as $o ) {
-					if ( ! in_array( $o->option_name, $skip_options ) && substr( $o->option_name, 0, 6 ) != '_trans' ) {
+					if ( ! in_array( $o->option_name, $skip_options, true ) && substr( $o->option_name, 0, 6 ) !== '_trans' ) {
 						$value = maybe_unserialize( $o->option_value );
 						$value = map_deep(
 							maybe_unserialize( $o->option_value ),
@@ -1649,7 +1704,7 @@ function cboxol_group_is_hidden( $group_id = 0 ) {
 	if ( empty( $group ) ) {
 		return $is_hidden;
 	} else {
-		return isset( $group->status ) && 'hidden' == $group->status;
+		return isset( $group->status ) && 'hidden' === $group->status;
 	}
 }
 
@@ -1746,7 +1801,7 @@ function cboxol_validate_blogname( $blogname ) {
  */
 function cboxol_blogname_is_illegal( $blogname ) {
 	$illegal_names = get_site_option( 'illegal_names' );
-	if ( $illegal_names == false ) {
+	if ( false === $illegal_names ) {
 		$illegal_names = array( 'www', 'web', 'root', 'admin', 'main', 'invite', 'administrator' );
 		add_site_option( 'illegal_names', $illegal_names );
 	}
@@ -1840,7 +1895,8 @@ function cboxol_load_theme_specific_fixes() {
 		return;
 	}
 
-	$css = $js = null;
+	$css = null;
+	$js  = null;
 
 	switch ( $template ) {
 		// JS only.
