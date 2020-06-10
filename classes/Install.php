@@ -65,10 +65,10 @@ class Install {
 	public function install_default_member_types() {
 		$types_data = array(
 			'student' => array(
-				'name'               => __( 'Students', 'cbox-openlab-core' ),
+				'name'               => __( 'Students', 'commons-in-a-box' ),
 				'labels'             => array(
-					'singular' => __( 'Student', 'cbox-openlab-core' ),
-					'plural'   => __( 'Students', 'cbox-openlab-core' ),
+					'singular' => __( 'Student', 'commons-in-a-box' ),
+					'plural'   => __( 'Students', 'commons-in-a-box' ),
 				),
 				'can_create_courses' => false,
 				'selectable_types'   => array( 'student', 'alumni' ),
@@ -76,10 +76,10 @@ class Install {
 				'order'              => 1,
 			),
 			'faculty' => array(
-				'name'               => __( 'Faculty', 'cbox-openlab-core' ),
+				'name'               => __( 'Faculty', 'commons-in-a-box' ),
 				'labels'             => array(
-					'singular' => __( 'Faculty', 'cbox-openlab-core' ),
-					'plural'   => __( 'Faculty', 'cbox-openlab-core' ),
+					'singular' => __( 'Faculty', 'commons-in-a-box' ),
+					'plural'   => __( 'Faculty', 'commons-in-a-box' ),
 				),
 				'can_create_courses' => true,
 				'selectable_types'   => array(),
@@ -87,10 +87,10 @@ class Install {
 				'order'              => 2,
 			),
 			'staff'   => array(
-				'name'               => __( 'Staff', 'cbox-openlab-core' ),
+				'name'               => __( 'Staff', 'commons-in-a-box' ),
 				'labels'             => array(
-					'singular' => __( 'Staff', 'cbox-openlab-core' ),
-					'plural'   => __( 'Staff', 'cbox-openlab-core' ),
+					'singular' => __( 'Staff', 'commons-in-a-box' ),
+					'plural'   => __( 'Staff', 'commons-in-a-box' ),
 				),
 				'can_create_courses' => false,
 				'selectable_types'   => array(),
@@ -98,10 +98,10 @@ class Install {
 				'order'              => 3,
 			),
 			'alumni'  => array(
-				'name'               => __( 'Alumni', 'cbox-openlab-core' ),
+				'name'               => __( 'Alumni', 'commons-in-a-box' ),
 				'labels'             => array(
-					'singular' => __( 'Alumni', 'cbox-openlab-core' ),
-					'plural'   => __( 'Alumni', 'cbox-openlab-core' ),
+					'singular' => __( 'Alumni', 'commons-in-a-box' ),
+					'plural'   => __( 'Alumni', 'commons-in-a-box' ),
 				),
 				'can_create_courses' => false,
 				'selectable_types'   => array( 'student', 'alumni' ),
@@ -172,24 +172,24 @@ class Install {
 	public function install_default_group_types() {
 		$types_data = array(
 			'course'    => array(
-				'name'                             => __( 'Courses', 'cbox-openlab-core' ),
+				'name'                             => __( 'Courses', 'commons-in-a-box' ),
 				'is_enabled'                       => true,
 				'order'                            => 1,
 				'site_settings'                    => array(
 					'theme' => 'twentysixteen',
 					'pages' => array(
 						'syllabus'          => array(
-							'title'   => __( 'Syllabus', 'cbox-openlab-core' ),
-							'content' => __( 'This is a default syllabus page. Enter your syllabus here, or delete this page if you don\'t wish to use it.', 'cbox-openlab-core' ),
+							'title'   => __( 'Syllabus', 'commons-in-a-box' ),
+							'content' => __( 'This is a default syllabus page. Enter your syllabus here, or delete this page if you don\'t wish to use it.', 'commons-in-a-box' ),
 							'order'   => 0,
 						),
 						'assignments'       => array(
-							'title'   => __( 'Assignments', 'cbox-openlab-core' ),
-							'content' => __( 'This is a default assignments page. Enter your assignments here, or delete this page if you don\'t wish to use it.', 'cbox-openlab-core' ),
+							'title'   => __( 'Assignments', 'commons-in-a-box' ),
+							'content' => __( 'This is a default assignments page. Enter your assignments here, or delete this page if you don\'t wish to use it.', 'commons-in-a-box' ),
 							'order'   => 1,
 						),
 						'sample-assignment' => array(
-							'title'   => __( 'Sample Assignment', 'cbox-openlab-core' ),
+							'title'   => __( 'Sample Assignment', 'commons-in-a-box' ),
 							'content' => '',
 							'order'   => 0,
 							'parent'  => 'assignments',
@@ -198,56 +198,56 @@ class Install {
 				),
 
 				'labels'                           => array(
-					'singular'                             => __( 'Course', 'cbox-openlab-core' ),
-					'plural'                               => __( 'Courses', 'cbox-openlab-core' ),
-					'create_clone_item'                    => __( 'Create/Clone Course', 'cbox-openlab-core' ),
-					'item_creation'                        => __( 'Course Creation', 'cbox-openlab-core' ),
-					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your course. These settings affect the course home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'clone_help_text'                      => __( 'Note: Cloning copies the course home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'cbox-openlab-core' ),
-					'name_help_text'                       => __( 'Please choose your course name carefully. A clear name will make it easier for others to find your course. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
-					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this course. The image will be shown on the course home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the course is created.', 'cbox-openlab-core' ),
-					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your course.', 'cbox-openlab-core' ),
-					'privacy_help_text'                    => __( 'These settings affect how others view your course.', 'cbox-openlab-core' ),
-					'privacy_help_text_new'                => __( 'You may change these settings later in the course settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content'     => __( 'Course and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory'   => __( 'Course will be listed in the "Courses" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership'  => __( 'Any community member may join this course.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content'    => __( 'Course content and activity will only be visible to members of the course.', 'cbox-openlab-core' ),
-					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this course.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory'  => __( 'Course will NOT be listed in the "Courses" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this course.', 'cbox-openlab-core' ),
-					'group_details'                        => __( 'Course Details', 'cbox-openlab-core' ),
-					'my_groups'                            => __( 'My Courses', 'cbox-openlab-core' ),
-					'course_code'                          => __( 'Course Code', 'cbox-openlab-core' ),
-					'course_information'                   => __( 'Course Information', 'cbox-openlab-core' ),
-					'course_information_description'       => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'cbox-openlab-core' ),
-					'section_code'                         => __( 'Section Code', 'cbox-openlab-core' ),
-					'group_site'                           => __( 'Course Site', 'cbox-openlab-core' ),
-					'status_open'                          => __( 'This Course is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site'           => __( 'This Course is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site'             => __( 'This Course is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private'                       => __( 'This Course is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site'        => __( 'This Course is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site'             => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site'          => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'site_help_text'                       => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'cbox-openlab-core' ),
-					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the course page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'visit_group_site'                     => __( 'Visit Course Site', 'cbox-openlab-core' ),
-					'group_home'                           => __( 'Course Home', 'cbox-openlab-core' ),
-					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your course home page.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your course calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_members'  => __( 'Any course member may connect events to this course.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this course.', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your course home page.', 'cbox-openlab-core' ),
-					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group'              => __( 'Invite Members to Course', 'cbox-openlab-core' ),
-					'invite_community_members_to_group'    => __( 'Invite Community Members to Course', 'cbox-openlab-core' ),
-					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'cbox-openlab-core' ),
-					'group_contact'                        => __( 'Faculty', 'cbox-openlab-core' ),
-					'group_contact_help_text'              => __( 'By default, you are the sole faculty member associated with this Course. You may add or remove faculty once your Course has more members.', 'cbox-openlab-core' ),
-					'group_discussion'                     => __( 'Course Discussion', 'cbox-openlab-core' ),
+					'singular'                             => __( 'Course', 'commons-in-a-box' ),
+					'plural'                               => __( 'Courses', 'commons-in-a-box' ),
+					'create_clone_item'                    => __( 'Create/Clone Course', 'commons-in-a-box' ),
+					'item_creation'                        => __( 'Course Creation', 'commons-in-a-box' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your course. These settings affect the course home, discussion, docs, and files.', 'commons-in-a-box' ),
+					'clone_help_text'                      => __( 'Note: Cloning copies the course home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'commons-in-a-box' ),
+					'name_help_text'                       => __( 'Please choose your course name carefully. A clear name will make it easier for others to find your course. We recommend keeping the name under 50 characters.', 'commons-in-a-box' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this course. The image will be shown on the course home page, and in search results.', 'commons-in-a-box' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the course is created.', 'commons-in-a-box' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your course.', 'commons-in-a-box' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your course.', 'commons-in-a-box' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the course settings.', 'commons-in-a-box' ),
+					'privacy_help_text_public_content'     => __( 'Course and related content and activity will be visible to the public.', 'commons-in-a-box' ),
+					'privacy_help_text_public_directory'   => __( 'Course will be listed in the "Courses" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this course.', 'commons-in-a-box' ),
+					'privacy_help_text_private_content'    => __( 'Course content and activity will only be visible to members of the course.', 'commons-in-a-box' ),
+					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this course.', 'commons-in-a-box' ),
+					'privacy_help_text_private_directory'  => __( 'Course will NOT be listed in the "Courses" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this course.', 'commons-in-a-box' ),
+					'group_details'                        => __( 'Course Details', 'commons-in-a-box' ),
+					'my_groups'                            => __( 'My Courses', 'commons-in-a-box' ),
+					'course_code'                          => __( 'Course Code', 'commons-in-a-box' ),
+					'course_information'                   => __( 'Course Information', 'commons-in-a-box' ),
+					'course_information_description'       => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'commons-in-a-box' ),
+					'section_code'                         => __( 'Section Code', 'commons-in-a-box' ),
+					'group_site'                           => __( 'Course Site', 'commons-in-a-box' ),
+					'status_open'                          => __( 'This Course is OPEN.', 'commons-in-a-box' ),
+					'status_open_community_site'           => __( 'This Course is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Course is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Course is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Course is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'site_help_text'                       => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'commons-in-a-box' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the course page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+					'visit_group_site'                     => __( 'Visit Course Site', 'commons-in-a-box' ),
+					'group_home'                           => __( 'Course Home', 'commons-in-a-box' ),
+					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your course home page.', 'commons-in-a-box' ),
+					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your course calendar and for the community-wide calendar.', 'commons-in-a-box' ),
+					'settings_help_text_calendar_members'  => __( 'Any course member may connect events to this course.', 'commons-in-a-box' ),
+					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this course.', 'commons-in-a-box' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your course home page.', 'commons-in-a-box' ),
+					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'commons-in-a-box' ),
+					'invite_members_to_group'              => __( 'Invite Members to Course', 'commons-in-a-box' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Course', 'commons-in-a-box' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your course', 'commons-in-a-box' ),
+					'group_contact'                        => __( 'Faculty', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the sole faculty member associated with this Course. You may add or remove faculty once your Course has more members.', 'commons-in-a-box' ),
+					'group_discussion'                     => __( 'Course Discussion', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => true,
@@ -264,7 +264,7 @@ class Install {
 			),
 
 			'project'   => array(
-				'name'                             => __( 'Projects', 'cbox-openlab-core' ),
+				'name'                             => __( 'Projects', 'commons-in-a-box' ),
 				'is_enabled'                       => true,
 				'order'                            => 2,
 				'site_settings'                    => array(
@@ -272,51 +272,51 @@ class Install {
 				),
 
 				'labels'                           => array(
-					'singular'                             => __( 'Project', 'cbox-openlab-core' ),
-					'plural'                               => __( 'Projects', 'cbox-openlab-core' ),
-					'create_clone_item'                    => __( 'Create Project', 'cbox-openlab-core' ),
-					'item_creation'                        => __( 'Project Creation', 'cbox-openlab-core' ),
-					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your project. These settings affect the project home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'name_help_text'                       => __( 'Please choose your project name carefully. A clear name will make it easier for others to find your project. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
-					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this project. The image will be shown on the project home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the project is created.', 'cbox-openlab-core' ),
-					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your project.', 'cbox-openlab-core' ),
-					'privacy_help_text'                    => __( 'These settings affect how others view your project.', 'cbox-openlab-core' ),
-					'privacy_help_text_new'                => __( 'You may change these settings later in the project settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content'     => __( 'Project and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory'   => __( 'Project will be listed in the "Projects" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership'  => __( 'Any community member may join this project.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content'    => __( 'Project content and activity will only be visible to members of the project.', 'cbox-openlab-core' ),
-					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this project.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory'  => __( 'Project will NOT be listed in the "Projects" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this project.', 'cbox-openlab-core' ),
-					'group_details'                        => __( 'Project Details', 'cbox-openlab-core' ),
-					'my_groups'                            => __( 'My Projects', 'cbox-openlab-core' ),
-					'group_site'                           => __( 'Project Site', 'cbox-openlab-core' ),
-					'status_open'                          => __( 'This Project is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site'           => __( 'This Project is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site'             => __( 'This Project is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private'                       => __( 'This Project is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site'        => __( 'This Project is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site'             => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site'          => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'site_help_text'                       => __( 'Each project can also have an optional associated site. This is a WordPress site that all members of your project can access and contribute to.', 'cbox-openlab-core' ),
-					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your project. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the project page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'visit_group_site'                     => __( 'Visit Project Site', 'cbox-openlab-core' ),
-					'group_home'                           => __( 'Project Home', 'cbox-openlab-core' ),
-					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your project home page.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your project calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_members'  => __( 'Any project member may connect events to this project.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this project.', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your project home page.', 'cbox-openlab-core' ),
-					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group'              => __( 'Invite Members to Project', 'cbox-openlab-core' ),
-					'invite_community_members_to_group'    => __( 'Invite Community Members to Project', 'cbox-openlab-core' ),
-					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'cbox-openlab-core' ),
-					'group_contact'                        => __( 'Project Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text'              => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion'                     => __( 'Project Discussion', 'cbox-openlab-core' ),
+					'singular'                             => __( 'Project', 'commons-in-a-box' ),
+					'plural'                               => __( 'Projects', 'commons-in-a-box' ),
+					'create_clone_item'                    => __( 'Create Project', 'commons-in-a-box' ),
+					'item_creation'                        => __( 'Project Creation', 'commons-in-a-box' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your project. These settings affect the project home, discussion, docs, and files.', 'commons-in-a-box' ),
+					'name_help_text'                       => __( 'Please choose your project name carefully. A clear name will make it easier for others to find your project. We recommend keeping the name under 50 characters.', 'commons-in-a-box' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this project. The image will be shown on the project home page, and in search results.', 'commons-in-a-box' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the project is created.', 'commons-in-a-box' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your project.', 'commons-in-a-box' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your project.', 'commons-in-a-box' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the project settings.', 'commons-in-a-box' ),
+					'privacy_help_text_public_content'     => __( 'Project and related content and activity will be visible to the public.', 'commons-in-a-box' ),
+					'privacy_help_text_public_directory'   => __( 'Project will be listed in the "Projects" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this project.', 'commons-in-a-box' ),
+					'privacy_help_text_private_content'    => __( 'Project content and activity will only be visible to members of the project.', 'commons-in-a-box' ),
+					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this project.', 'commons-in-a-box' ),
+					'privacy_help_text_private_directory'  => __( 'Project will NOT be listed in the "Projects" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this project.', 'commons-in-a-box' ),
+					'group_details'                        => __( 'Project Details', 'commons-in-a-box' ),
+					'my_groups'                            => __( 'My Projects', 'commons-in-a-box' ),
+					'group_site'                           => __( 'Project Site', 'commons-in-a-box' ),
+					'status_open'                          => __( 'This Project is OPEN.', 'commons-in-a-box' ),
+					'status_open_community_site'           => __( 'This Project is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Project is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Project is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Project is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'site_help_text'                       => __( 'Each project can also have an optional associated site. This is a WordPress site that all members of your project can access and contribute to.', 'commons-in-a-box' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your project. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the project page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+					'visit_group_site'                     => __( 'Visit Project Site', 'commons-in-a-box' ),
+					'group_home'                           => __( 'Project Home', 'commons-in-a-box' ),
+					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your project home page.', 'commons-in-a-box' ),
+					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your project calendar and for the community-wide calendar.', 'commons-in-a-box' ),
+					'settings_help_text_calendar_members'  => __( 'Any project member may connect events to this project.', 'commons-in-a-box' ),
+					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this project.', 'commons-in-a-box' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your project home page.', 'commons-in-a-box' ),
+					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'commons-in-a-box' ),
+					'invite_members_to_group'              => __( 'Invite Members to Project', 'commons-in-a-box' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Project', 'commons-in-a-box' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'commons-in-a-box' ),
+					'group_contact'                        => __( 'Project Contact', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'commons-in-a-box' ),
+					'group_discussion'                     => __( 'Project Discussion', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => false,
@@ -333,7 +333,7 @@ class Install {
 			),
 
 			'club'      => array(
-				'name'                             => __( 'Clubs', 'cbox-openlab-core' ),
+				'name'                             => __( 'Clubs', 'commons-in-a-box' ),
 				'is_enabled'                       => true,
 				'order'                            => 3,
 				'site_settings'                    => array(
@@ -341,51 +341,51 @@ class Install {
 				),
 
 				'labels'                           => array(
-					'singular'                             => __( 'Club', 'cbox-openlab-core' ),
-					'plural'                               => __( 'Clubs', 'cbox-openlab-core' ),
-					'create_clone_item'                    => __( 'Create Club', 'cbox-openlab-core' ),
-					'item_creation'                        => __( 'Club Creation', 'cbox-openlab-core' ),
-					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your club. These settings affect the club home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'name_help_text'                       => __( 'Please choose your club name carefully. A clear name will make it easier for others to find your club. We recommend keeping the name under 50 characters.', 'cbox-openlab-core' ),
-					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this club. The image will be shown on the club home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the club is created.', 'cbox-openlab-core' ),
-					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your club.', 'cbox-openlab-core' ),
-					'privacy_help_text'                    => __( 'These settings affect how others view your club.', 'cbox-openlab-core' ),
-					'privacy_help_text_new'                => __( 'You may change these settings later in the club settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content'     => __( 'Club and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory'   => __( 'Club will be listed in the "Clubs" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership'  => __( 'Any community member may join this club.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content'    => __( 'Club content and activity will only be visible to members of the club.', 'cbox-openlab-core' ),
-					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this club.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory'  => __( 'Club will NOT be listed in the "Clubs" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this club.', 'cbox-openlab-core' ),
-					'group_details'                        => __( 'Club Details', 'cbox-openlab-core' ),
-					'my_groups'                            => __( 'My Clubs', 'cbox-openlab-core' ),
-					'group_site'                           => __( 'Club Site', 'cbox-openlab-core' ),
-					'status_open'                          => __( 'This Club is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site'           => __( 'This Club is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site'             => __( 'This Club is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private'                       => __( 'This Club is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site'        => __( 'This Club is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site'             => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site'          => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'site_help_text'                       => __( 'Each club can also have an optional associated site. This is a WordPress site that all members of your club can access and contribute to.', 'cbox-openlab-core' ),
-					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your club. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the club page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'visit_group_site'                     => __( 'Visit Club Site', 'cbox-openlab-core' ),
-					'group_home'                           => __( 'Club Home', 'cbox-openlab-core' ),
-					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your club home page.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your club calendar and for the community-wide calendar.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_members'  => __( 'Any club member may connect events to this club.', 'cbox-openlab-core' ),
-					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this club.', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your club home page.', 'cbox-openlab-core' ),
-					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group'              => __( 'Invite Members to Club', 'cbox-openlab-core' ),
-					'invite_community_members_to_group'    => __( 'Invite Community Members to Club', 'cbox-openlab-core' ),
-					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'cbox-openlab-core' ),
-					'group_contact'                        => __( 'Club Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text'              => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion'                     => __( 'Club Discussion', 'cbox-openlab-core' ),
+					'singular'                             => __( 'Club', 'commons-in-a-box' ),
+					'plural'                               => __( 'Clubs', 'commons-in-a-box' ),
+					'create_clone_item'                    => __( 'Create Club', 'commons-in-a-box' ),
+					'item_creation'                        => __( 'Club Creation', 'commons-in-a-box' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your club. These settings affect the club home, discussion, docs, and files.', 'commons-in-a-box' ),
+					'name_help_text'                       => __( 'Please choose your club name carefully. A clear name will make it easier for others to find your club. We recommend keeping the name under 50 characters.', 'commons-in-a-box' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this club. The image will be shown on the club home page, and in search results.', 'commons-in-a-box' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the club is created.', 'commons-in-a-box' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your club.', 'commons-in-a-box' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your club.', 'commons-in-a-box' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the club settings.', 'commons-in-a-box' ),
+					'privacy_help_text_public_content'     => __( 'Club and related content and activity will be visible to the public.', 'commons-in-a-box' ),
+					'privacy_help_text_public_directory'   => __( 'Club will be listed in the "Clubs" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this club.', 'commons-in-a-box' ),
+					'privacy_help_text_private_content'    => __( 'Club content and activity will only be visible to members of the club.', 'commons-in-a-box' ),
+					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this club.', 'commons-in-a-box' ),
+					'privacy_help_text_private_directory'  => __( 'Club will NOT be listed in the "Clubs" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this club.', 'commons-in-a-box' ),
+					'group_details'                        => __( 'Club Details', 'commons-in-a-box' ),
+					'my_groups'                            => __( 'My Clubs', 'commons-in-a-box' ),
+					'group_site'                           => __( 'Club Site', 'commons-in-a-box' ),
+					'status_open'                          => __( 'This Club is OPEN.', 'commons-in-a-box' ),
+					'status_open_community_site'           => __( 'This Club is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Club is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Club is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Club is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'site_help_text'                       => __( 'Each club can also have an optional associated site. This is a WordPress site that all members of your club can access and contribute to.', 'commons-in-a-box' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your club. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the club page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+					'visit_group_site'                     => __( 'Visit Club Site', 'commons-in-a-box' ),
+					'group_home'                           => __( 'Club Home', 'commons-in-a-box' ),
+					'settings_help_text_discussion'        => __( 'These settings enable or disable the discussion forum on your club home page.', 'commons-in-a-box' ),
+					'settings_help_text_calendar'          => __( 'These settings determine who can create an event for your club calendar and for the community-wide calendar.', 'commons-in-a-box' ),
+					'settings_help_text_calendar_members'  => __( 'Any club member may connect events to this club.', 'commons-in-a-box' ),
+					'settings_help_text_calendar_admins'   => __( 'Only administrators and moderators may connect events to this club.', 'commons-in-a-box' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your club home page.', 'commons-in-a-box' ),
+					'settings_help_text_portfoliolist'     => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'commons-in-a-box' ),
+					'invite_members_to_group'              => __( 'Invite Members to Club', 'commons-in-a-box' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Club', 'commons-in-a-box' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'commons-in-a-box' ),
+					'group_contact'                        => __( 'Club Contact', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'commons-in-a-box' ),
+					'group_discussion'                     => __( 'Club Discussion', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => false,
@@ -407,35 +407,35 @@ class Install {
 			 * is_portfolio checks will be used as a proxy.
 			 */
 			'portfolio' => array(
-				'name'                             => __( 'Portfolios', 'cbox-openlab-core' ),
+				'name'                             => __( 'Portfolios', 'commons-in-a-box' ),
 				'is_enabled'                       => true,
 				'order'                            => 4,
 				'site_settings'                    => array(
 					'theme' => 'twentysixteen',
 					'pages' => array(
 						'about-me'          => array(
-							'title'   => __( 'About Me', 'cbox-openlab-core' ),
-							'content' => __( 'This is a good place to introduce yourself and explain what visitors will find on this site.', 'cbox-openlab-core' ),
+							'title'   => __( 'About Me', 'commons-in-a-box' ),
+							'content' => __( 'This is a good place to introduce yourself and explain what visitors will find on this site.', 'commons-in-a-box' ),
 							'order'   => 0,
 						),
 						'academics'         => array(
-							'title'   => __( 'Academics', 'cbox-openlab-core' ),
-							'content' => __( 'On this page, give an overview of your academic goals. Then edit the sub-section page Sample Course or create additional sub-section pages with a selection of your best academic work.', 'cbox-openlab-core' ),
+							'title'   => __( 'Academics', 'commons-in-a-box' ),
+							'content' => __( 'On this page, give an overview of your academic goals. Then edit the sub-section page Sample Course or create additional sub-section pages with a selection of your best academic work.', 'commons-in-a-box' ),
 							'order'   => 1,
 						),
 						'sample-assignment' => array(
-							'title'   => __( 'Sample Course', 'cbox-openlab-core' ),
+							'title'   => __( 'Sample Course', 'commons-in-a-box' ),
 							'content' => '',
 							'order'   => 0,
 							'parent'  => 'academics',
 						),
 						'career'            => array(
-							'title'   => __( 'Career', 'cbox-openlab-core' ),
-							'content' => __( 'This is a good place to describe your professional goals and give an overview of your career experience. Then edit the sub-section page Resume or create additional sub-section pages to develop the career section of your portfolio.', 'cbox-openlab-core' ),
+							'title'   => __( 'Career', 'commons-in-a-box' ),
+							'content' => __( 'This is a good place to describe your professional goals and give an overview of your career experience. Then edit the sub-section page Resume or create additional sub-section pages to develop the career section of your portfolio.', 'commons-in-a-box' ),
 							'order'   => 2,
 						),
 						'resume'            => array(
-							'title'   => __( 'Resume', 'cbox-openlab-core' ),
+							'title'   => __( 'Resume', 'commons-in-a-box' ),
 							'content' => '',
 							'order'   => 0,
 							'parent'  => 'career',
@@ -444,49 +444,49 @@ class Install {
 				),
 
 				'labels'                           => array(
-					'singular'                             => __( 'Portfolio', 'cbox-openlab-core' ),
-					'plural'                               => __( 'Portfolios', 'cbox-openlab-core' ),
-					'create_clone_item'                    => __( 'Create Portfolio', 'cbox-openlab-core' ),
-					'item_creation'                        => __( 'Portfolio Creation', 'cbox-openlab-core' ),
-					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'cbox-openlab-core' ),
-					'name_help_text'                       => __( 'The suggested Portfolio Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.', 'cbox-openlab-core' ),
-					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'cbox-openlab-core' ),
-					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'cbox-openlab-core' ),
-					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text'                    => __( 'These settings affect how others view your portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_new'                => __( 'You may change these settings later in the portfolio settings.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_content'     => __( 'Portfolio and related content and activity will be visible to the public.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_directory'   => __( 'Portfolio will be listed in the "Portfolios" directory, in search results, and may be displayed on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_public_membership'  => __( 'Any community member may join this portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_content'    => __( 'Portfolio content and activity will only be visible to members of the portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this portfolio.', 'cbox-openlab-core' ),
-					'privacy_help_text_private_directory'  => __( 'Portfolio will NOT be listed in the "Portfolios" directory, in search results, or on the community home page.', 'cbox-openlab-core' ),
-					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this portfolio.', 'cbox-openlab-core' ),
-					'create_item'                          => __( 'Create Portfolio', 'cbox-openlab-core' ),
-					'group_details'                        => __( 'Portfolio Details', 'cbox-openlab-core' ),
-					'my_portfolio'                         => __( 'My Portfolio', 'cbox-openlab-core' ),
-					'my_portfolio_site'                    => __( 'My Portfolio Site', 'cbox-openlab-core' ),
-					'status_open'                          => __( 'This Portfolio is OPEN.', 'cbox-openlab-core' ),
-					'status_open_community_site'           => __( 'This Portfolio is OPEN, but only logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_open_private_site'             => __( 'This Portfolio is OPEN, but the corresponding Site is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private'                       => __( 'This Portfolio is PRIVATE.', 'cbox-openlab-core' ),
-					'status_private_community_site'        => __( 'This Portfolio is PRIVATE, but all logged-in community members may view the corresponding Site.', 'cbox-openlab-core' ),
-					'status_private_open_site'             => __( 'This Portfolio is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'cbox-openlab-core' ),
-					'status_private_private_site'          => __( 'This Portfolio is PRIVATE, and you must be a member to view the corresponding Site.', 'cbox-openlab-core' ),
-					'visit_portfolio_site'                 => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
-					'visit_group_site'                     => __( 'Visit Portfolio Site', 'cbox-openlab-core' ),
-					'site_help_text'                       => __( 'Each portfolio is associated with a WordPress site. The site is where portfolio owners display their work and accomplishments.', 'cbox-openlab-core' ),
-					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your portfolio. You will not be able to change it once you\'ve created it.', 'cbox-openlab-core' ),
-					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the portfolio page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'cbox-openlab-core' ),
-					'group_site'                           => __( 'Portfolio Site', 'cbox-openlab-core' ),
-					'group_home'                           => __( 'Portfolio Home', 'cbox-openlab-core' ),
-					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'cbox-openlab-core' ),
-					'invite_members_to_group'              => __( 'Invite Members to Portfolio', 'cbox-openlab-core' ),
-					'invite_community_members_to_group'    => __( 'Invite Community Members to Portfolio', 'cbox-openlab-core' ),
-					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'cbox-openlab-core' ),
-					'group_contact'                        => __( 'Porfolio Contact', 'cbox-openlab-core' ),
-					'group_contact_help_text'              => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'cbox-openlab-core' ),
-					'group_discussion'                     => __( 'Portfolio Discussion', 'cbox-openlab-core' ),
+					'singular'                             => __( 'Portfolio', 'commons-in-a-box' ),
+					'plural'                               => __( 'Portfolios', 'commons-in-a-box' ),
+					'create_clone_item'                    => __( 'Create Portfolio', 'commons-in-a-box' ),
+					'item_creation'                        => __( 'Portfolio Creation', 'commons-in-a-box' ),
+					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'commons-in-a-box' ),
+					'name_help_text'                       => __( 'The suggested Portfolio Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.', 'commons-in-a-box' ),
+					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'commons-in-a-box' ),
+					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'commons-in-a-box' ),
+					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your portfolio.', 'commons-in-a-box' ),
+					'privacy_help_text'                    => __( 'These settings affect how others view your portfolio.', 'commons-in-a-box' ),
+					'privacy_help_text_new'                => __( 'You may change these settings later in the portfolio settings.', 'commons-in-a-box' ),
+					'privacy_help_text_public_content'     => __( 'Portfolio and related content and activity will be visible to the public.', 'commons-in-a-box' ),
+					'privacy_help_text_public_directory'   => __( 'Portfolio will be listed in the "Portfolios" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_public_membership'  => __( 'Any community member may join this portfolio.', 'commons-in-a-box' ),
+					'privacy_help_text_private_content'    => __( 'Portfolio content and activity will only be visible to members of the portfolio.', 'commons-in-a-box' ),
+					'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this portfolio.', 'commons-in-a-box' ),
+					'privacy_help_text_private_directory'  => __( 'Portfolio will NOT be listed in the "Portfolios" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+					'privacy_help_text_invited_membership' => __( 'Only community members who are invited may join this portfolio.', 'commons-in-a-box' ),
+					'create_item'                          => __( 'Create Portfolio', 'commons-in-a-box' ),
+					'group_details'                        => __( 'Portfolio Details', 'commons-in-a-box' ),
+					'my_portfolio'                         => __( 'My Portfolio', 'commons-in-a-box' ),
+					'my_portfolio_site'                    => __( 'My Portfolio Site', 'commons-in-a-box' ),
+					'status_open'                          => __( 'This Portfolio is OPEN.', 'commons-in-a-box' ),
+					'status_open_community_site'           => __( 'This Portfolio is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Portfolio is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Portfolio is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Portfolio is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Portfolio is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Portfolio is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'visit_portfolio_site'                 => __( 'Visit Portfolio Site', 'commons-in-a-box' ),
+					'visit_group_site'                     => __( 'Visit Portfolio Site', 'commons-in-a-box' ),
+					'site_help_text'                       => __( 'Each portfolio is associated with a WordPress site. The site is where portfolio owners display their work and accomplishments.', 'commons-in-a-box' ),
+					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your portfolio. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the portfolio page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+					'group_site'                           => __( 'Portfolio Site', 'commons-in-a-box' ),
+					'group_home'                           => __( 'Portfolio Home', 'commons-in-a-box' ),
+					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'commons-in-a-box' ),
+					'invite_members_to_group'              => __( 'Invite Members to Portfolio', 'commons-in-a-box' ),
+					'invite_community_members_to_group'    => __( 'Invite Community Members to Portfolio', 'commons-in-a-box' ),
+					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'commons-in-a-box' ),
+					'group_contact'                        => __( 'Porfolio Contact', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'commons-in-a-box' ),
+					'group_discussion'                     => __( 'Portfolio Discussion', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => false,
@@ -557,31 +557,31 @@ class Install {
 	protected function install_default_group_categories() {
 		$cats = array(
 			'academic'   => array(
-				'name'  => __( 'Academic', 'cbox-openlab-core' ),
+				'name'  => __( 'Academic', 'commons-in-a-box' ),
 				'types' => array( 'club' ),
 			),
 			'coursework' => array(
-				'name'  => __( 'Coursework', 'cbox-openlab-core' ),
+				'name'  => __( 'Coursework', 'commons-in-a-box' ),
 				'types' => array( 'project' ),
 			),
 			'faculty'    => array(
-				'name'  => __( 'Faculty', 'cbox-openlab-core' ),
+				'name'  => __( 'Faculty', 'commons-in-a-box' ),
 				'types' => array( 'project', 'club' ),
 			),
 			'research'   => array(
-				'name'  => __( 'Research', 'cbox-openlab-core' ),
+				'name'  => __( 'Research', 'commons-in-a-box' ),
 				'types' => array( 'project' ),
 			),
 			'resource'   => array(
-				'name'  => __( 'Resource', 'cbox-openlab-core' ),
+				'name'  => __( 'Resource', 'commons-in-a-box' ),
 				'types' => array( 'project' ),
 			),
 			'staff'      => array(
-				'name'  => __( 'Staff', 'cbox-openlab-core' ),
+				'name'  => __( 'Staff', 'commons-in-a-box' ),
 				'types' => array( 'project', 'club' ),
 			),
 			'student'    => array(
-				'name'  => __( 'Student', 'cbox-openlab-core' ),
+				'name'  => __( 'Student', 'commons-in-a-box' ),
 				'types' => array( 'project', 'club' ),
 			),
 		);
@@ -603,10 +603,10 @@ class Install {
 	protected function install_default_academic_types() {
 		$types = array(
 			'schools'     => array(
-				'name'         => __( 'Schools', 'cbox-openlab-core' ),
+				'name'         => __( 'Schools', 'commons-in-a-box' ),
 				'labels'       => array(
-					'singular' => __( 'School', 'cbox-openlab-core' ),
-					'plural'   => __( 'Schools', 'cbox-openlab-core' ),
+					'singular' => __( 'School', 'commons-in-a-box' ),
+					'plural'   => __( 'Schools', 'commons-in-a-box' ),
 				),
 				'parent'       => '',
 				'order'        => 1,
@@ -624,10 +624,10 @@ class Install {
 				),
 			),
 			'departments' => array(
-				'name'         => __( 'Departments', 'cbox-openlab-core' ),
+				'name'         => __( 'Departments', 'commons-in-a-box' ),
 				'labels'       => array(
-					'singular' => __( 'Department', 'cbox-openlab-core' ),
-					'plural'   => __( 'Departments', 'cbox-openlab-core' ),
+					'singular' => __( 'Department', 'commons-in-a-box' ),
+					'plural'   => __( 'Departments', 'commons-in-a-box' ),
 				),
 				'parent'       => 'schools',
 				'order'        => 2,
@@ -678,12 +678,12 @@ class Install {
 		$units = array(
 			'arts-and-sciences' => array(
 				'type'   => 'schools',
-				'name'   => __( 'Arts and Sciences', 'cbox-openlab-core' ),
+				'name'   => __( 'Arts and Sciences', 'commons-in-a-box' ),
 				'parent' => '',
 			),
 			'english'           => array(
 				'type'   => 'departments',
-				'name'   => __( 'English', 'cbox-openlab-core' ),
+				'name'   => __( 'English', 'commons-in-a-box' ),
 				'parent' => 'arts-and-sciences',
 			),
 		);
@@ -719,34 +719,34 @@ class Install {
 	protected function install_default_brand_pages() {
 		$admin_text = '<p>' . sprintf(
 			/* translators: link to Dashboard > Pages > About */
-			esc_html__( 'If you are the administrator, visit %s to modify this text.', 'cbox-openlab-core' ),
+			esc_html__( 'If you are the administrator, visit %s to modify this text.', 'commons-in-a-box' ),
 			sprintf(
 				'<a href="%s">%s</a>',
 				esc_attr( admin_url( 'edit.php?post_type=page' ) ),
-				esc_html__( 'Dashboard > Pages', 'cbox-openlab-core' )
+				esc_html__( 'Dashboard > Pages', 'commons-in-a-box' )
 			)
 		) . '</p>';
 
 		$brand_page_types = cboxol_get_brand_page_types();
 		$pages            = array(
 			'about'          => array(
-				'post_title'   => __( 'About', 'cbox-openlab-core' ),
-				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
+				'post_title'   => __( 'About', 'commons-in-a-box' ),
+				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'commons-in-a-box' ) . '</p>' . $admin_text,
 			),
 			'help'           => array(
-				'post_title'   => __( 'Help', 'cbox-openlab-core' ),
-				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
+				'post_title'   => __( 'Help', 'commons-in-a-box' ),
+				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'commons-in-a-box' ) . '</p>' . $admin_text,
 			),
 			'terms-of-use'   => array(
-				'post_title'   => __( 'Terms of Use', 'cbox-openlab-core' ),
-				'post_content' => '<p>' . __( 'This page can contain the Terms of Service for your site. Terms of Service are the rules that a visitor or member must abide by while using your site.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
+				'post_title'   => __( 'Terms of Use', 'commons-in-a-box' ),
+				'post_content' => '<p>' . __( 'This page can contain the Terms of Service for your site. Terms of Service are the rules that a visitor or member must abide by while using your site.', 'commons-in-a-box' ) . '</p>' . $admin_text,
 			),
 			'contact-us'     => array(
-				'post_title'   => __( 'Contact Us', 'cbox-openlab-core' ),
-				'post_content' => '<p>' . __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, want to provide feedback, or need help.', 'cbox-openlab-core' ) . '</p>' . $admin_text,
+				'post_title'   => __( 'Contact Us', 'commons-in-a-box' ),
+				'post_content' => '<p>' . __( 'This page can contain contact information for the administrators of your site, which visitors to the site can use when they have questions, want to provide feedback, or need help.', 'commons-in-a-box' ) . '</p>' . $admin_text,
 			),
 			'search-results' => array(
-				'post_title'   => __( 'Search Results', 'cbox-openlab-core' ),
+				'post_title'   => __( 'Search Results', 'commons-in-a-box' ),
 				'post_content' => '',
 				'meta'         => [
 					'_wp_page_template' => 'search-results.php',
@@ -802,7 +802,7 @@ class Install {
 		$page_id = wp_insert_post(
 			[
 				'post_type'    => 'page',
-				'post_title'   => __( 'Search Results', 'cbox-openlab-core' ),
+				'post_title'   => __( 'Search Results', 'commons-in-a-box' ),
 				'post_content' => '',
 				'post_name'    => 'search-results',
 				'post_status'  => 'publish',
@@ -825,7 +825,7 @@ class Install {
 			array(
 				'confirmationText' => sprintf(
 					/* translators: 1: TOS URL, 2: TOS page title */
-					__( 'By clicking "Complete Sign Up", you are agreeing to the <a href="%1$s">%2$s</a>.', 'cbox-openlab-core' ),
+					__( 'By clicking "Complete Sign Up", you are agreeing to the <a href="%1$s">%2$s</a>.', 'commons-in-a-box' ),
 					esc_url( $brand_pages['terms-of-use']['preview_url'] ),
 					esc_html( $brand_pages['terms-of-use']['title'] )
 				),
@@ -868,16 +868,16 @@ class Install {
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
 						'crop_length'             => 300,
-						'custom_description'      => __( 'Use this space to highlight content from around your network.', 'openlab-theme' ),
+						'custom_description'      => __( 'Use this space to highlight content from around your network.', 'openlab-theme', 'commons-in-a-box' ),
 						'display_images'          => true,
 						'featured_content_type'   => 'resource',
-						'featured_resource_title' => __( 'Featured Item', 'openlab-theme' ),
+						'featured_resource_title' => __( 'Featured Item', 'openlab-theme', 'commons-in-a-box' ),
 						'featured_resource_link'  => home_url(),
 						'image_url'               => bp_core_avatar_default(),
 						'image_height'            => 50,
 						'image_width'             => 50,
 						'read_more'               => '',
-						'title'                   => __( 'In The Spotlight', 'openlab-theme' ),
+						'title'                   => __( 'In The Spotlight', 'openlab-theme', 'commons-in-a-box' ),
 						'title_element'           => 'h2',
 					),
 				)
@@ -888,7 +888,7 @@ class Install {
 					'id_base'    => 'openlab-whats-happening',
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
-						'title' => __( 'What\'s Happening?', 'openlab-theme' ),
+						'title' => __( 'What\'s Happening?', 'openlab-theme', 'commons-in-a-box' ),
 					),
 				)
 			);
@@ -898,7 +898,7 @@ class Install {
 					'id_base'    => 'openlab-whos-online',
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
-						'title' => __( 'Who\'s Online?', 'openlab-theme' ),
+						'title' => __( 'Who\'s Online?', 'openlab-theme', 'commons-in-a-box' ),
 					),
 				)
 			);
@@ -908,7 +908,7 @@ class Install {
 					'id_base'    => 'openlab-new-members',
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
-						'title' => __( 'New Members', 'openlab-theme' ),
+						'title' => __( 'New Members', 'openlab-theme', 'commons-in-a-box' ),
 					),
 				)
 			);
@@ -916,14 +916,14 @@ class Install {
 
 		// Footer sidebar.
 		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'footer' ) ) {
-			$welcome_text = __( 'The footer areas can be used to display general information about your site, such as contact information and links to terms of service.', 'openlab-theme' );
+			$welcome_text = __( 'The footer areas can be used to display general information about your site, such as contact information and links to terms of service.', 'openlab-theme', 'commons-in-a-box' );
 
 			CBox_Widget_Setter::set_widget(
 				array(
 					'id_base'    => 'text',
 					'sidebar_id' => 'footer',
 					'settings'   => array(
-						'title'  => __( 'Footer area 1', 'openlab-theme' ),
+						'title'  => __( 'Footer area 1', 'openlab-theme', 'commons-in-a-box' ),
 						'text'   => $welcome_text,
 						'filter' => false,
 					),
@@ -931,14 +931,14 @@ class Install {
 			);
 
 			/* translators: link to Customizer */
-			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme' ), get_admin_url( cboxol_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
+			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme', 'commons-in-a-box' ), get_admin_url( cboxol_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
 
 			CBox_Widget_Setter::set_widget(
 				array(
 					'id_base'    => 'text',
 					'sidebar_id' => 'footer',
 					'settings'   => array(
-						'title'  => __( 'Footer area 2', 'openlab-theme' ),
+						'title'  => __( 'Footer area 2', 'openlab-theme', 'commons-in-a-box' ),
 						'text'   => $welcome_text,
 						'filter' => false,
 					),
@@ -954,7 +954,7 @@ class Install {
 	 */
 	protected function install_default_nav_menus() {
 		// Main Menu.
-		$menu_name = wp_slash( __( 'Main Menu', 'cbox-openlab-core' ) );
+		$menu_name = wp_slash( __( 'Main Menu', 'commons-in-a-box' ) );
 		$menu_id   = wp_create_nav_menu( $menu_name );
 
 		if ( is_wp_error( $menu_id ) ) {
@@ -1006,7 +1006,7 @@ class Install {
 				$menu_id,
 				0,
 				array(
-					'menu-item-title'   => __( 'Calendar', 'cbox-openlab-core' ),
+					'menu-item-title'   => __( 'Calendar', 'commons-in-a-box' ),
 					'menu-item-classes' => 'sitewide-calendar',
 					'menu-item-url'     => trailingslashit( bp_get_root_domain() ) . 'calendar/',
 					'menu-item-status'  => 'publish',
@@ -1033,7 +1033,7 @@ class Install {
 
 		// About Menu.
 		if ( isset( $brand_pages['about'] ) ) {
-			$menu_name = wp_slash( __( 'About Menu', 'cbox-openlab-core' ) );
+			$menu_name = wp_slash( __( 'About Menu', 'commons-in-a-box' ) );
 			$menu_id   = wp_create_nav_menu( $menu_name );
 
 			if ( is_wp_error( $menu_id ) ) {
@@ -1082,14 +1082,14 @@ class Install {
 	protected function install_default_slides() {
 		$slides = array(
 			array(
-				'title'   => __( 'Share Information Here', 'openlab-theme' ),
-				'content' => __( 'Site administrators can customize the slider area with images and text to welcome new members, highlight features, share important announcements, publicize events, and more.', 'cbox-openlab-core' ),
+				'title'   => __( 'Share Information Here', 'openlab-theme', 'commons-in-a-box' ),
+				'content' => __( 'Site administrators can customize the slider area with images and text to welcome new members, highlight features, share important announcements, publicize events, and more.', 'commons-in-a-box' ),
 				'image'   => get_template_directory() . '/images/default-slide-1.jpeg',
 			),
 			array(
-				'title'   => __( 'Welcome to CBOX OpenLab!', 'openlab-theme' ),
+				'title'   => __( 'Welcome to CBOX OpenLab!', 'openlab-theme', 'commons-in-a-box' ),
 				/* translators: link to CBOX OpenLab documentation */
-				'content' => sprintf( __( 'Read our <a href="%s">documentation</a> to learn more about how you can use CBOX OpenLab to create a commons for open learning.', 'cbox-openlab-core' ), 'http://commonsinabox.org/cbox-openlab-overview' ),
+				'content' => sprintf( __( 'Read our <a href="%s">documentation</a> to learn more about how you can use CBOX OpenLab to create a commons for open learning.', 'commons-in-a-box' ), 'http://commonsinabox.org/cbox-openlab-overview' ),
 				'image'   => get_template_directory() . '/images/default-slide-2.jpeg',
 			),
 		);
@@ -1153,11 +1153,11 @@ class Install {
 	 * @since 1.1.0
 	 */
 	protected function install_default_footer() {
-		$left_heading = __( 'Welcome to CBOX OpenLab!', 'cbox-openlab-core' );
+		$left_heading = __( 'Welcome to CBOX OpenLab!', 'commons-in-a-box' );
 
 		/* translators: link to CBOX OpenLab documentation */
-		$left_text    = sprintf( __( 'Read our <a href="%s">documentation</a> to learn more about how you can use CBOX OpenLab to create a commons for open learning.', 'cbox-openlab-core' ), 'http://commonsinabox.org/cbox-openlab-overview' );
-		$left_content = '<div class="col-md-4"><img class="cboxol-footer-image" src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" alt="' . esc_attr__( 'CBOX-OL Logo', 'cbox-openlab-core' ) . '" /></div>
+		$left_text    = sprintf( __( 'Read our <a href="%s">documentation</a> to learn more about how you can use CBOX OpenLab to create a commons for open learning.', 'commons-in-a-box' ), 'http://commonsinabox.org/cbox-openlab-overview' );
+		$left_content = '<div class="col-md-4"><img class="cboxol-footer-image" src="' . esc_url( CBOXOL_PLUGIN_URL ) . '/assets/img/default-avatar-full.png" alt="' . esc_attr__( 'CBOX-OL Logo', 'commons-in-a-box' ) . '" /></div>
 
 <div class="col-md-20">
 <p>' . $left_text . '</p>
@@ -1166,10 +1166,10 @@ class Install {
 		set_theme_mod( 'openlab_footer_left_heading', $left_heading );
 		set_theme_mod( 'openlab_footer_left_content', $left_content );
 
-		$middle_heading = __( 'Customize this footer', 'cbox-openlab-core' );
+		$middle_heading = __( 'Customize this footer', 'commons-in-a-box' );
 
 		/* translators: link to CBOX OpenLab Brand Settings admin page */
-		$middle_text    = sprintf( __( 'You can customize the contents of this footer to meet the needs of your community: see the <a href="%s">Brand Settings documentation</a> for details.', 'cbox-openlab-core' ), esc_url( 'http://commonsinabox.org/visual/' ) );
+		$middle_text    = sprintf( __( 'You can customize the contents of this footer to meet the needs of your community: see the <a href="%s">Brand Settings documentation</a> for details.', 'commons-in-a-box' ), esc_url( 'http://commonsinabox.org/visual/' ) );
 		$middle_content = '<div class="cboxol-footer-middle-para"><p>' . $middle_text . '</p></div>';
 
 		set_theme_mod( 'openlab_footer_middle_heading', $middle_heading );

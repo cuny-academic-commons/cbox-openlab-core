@@ -410,7 +410,7 @@ function openlab_group_blog_activity( $activity ) {
 	// Replace the necessary values to display in group activity stream
 	if ( 'new_blog_post' == $activity->type ) {
 		$activity->action = sprintf(
-			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog' ), bp_core_get_userlink( $activity->user_id ), '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ), bp_core_get_userlink( $activity->user_id ), '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
 		$userlink = '';
@@ -420,7 +420,7 @@ function openlab_group_blog_activity( $activity ) {
 			$userlink = '<a href="' . esc_attr( $comment->comment_author_url ) . '">' . esc_html( $comment->comment_author ) . '</a>';
 		}
 		$activity->action = sprintf(
-			__( '%1$s commented on %2$s in the group %3$s', 'groupblog' ), $userlink, '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			__( '%1$s commented on %2$s in the group %3$s', 'groupblog', 'commons-in-a-box' ), $userlink, '<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>', '<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	}
 
@@ -1023,10 +1023,10 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 
 			if ( 'posts' === $item_type ) {
 				/* translators: 1. Post link, 2. Group link */
-				$action = sprintf( __( 'A new post %1$s was published in %2$s', 'cbox-openlab-core' ), $post_link, $group_link );
+				$action = sprintf( __( 'A new post %1$s was published in %2$s', 'commons-in-a-box' ), $post_link, $group_link );
 			} elseif ( 'comments' === $item_type ) {
 				/* translators: 1. Post link, 2. Group link */
-				$action = sprintf( __( 'A new comment was posted on the post %1$s in %2$s', 'cbox-openlab-core' ), $post_link, $group_link );
+				$action = sprintf( __( 'A new comment was posted on the post %1$s in %2$s', 'commons-in-a-box' ), $post_link, $group_link );
 			}
 
 			$item_date = strtotime( $item['date'] );
@@ -1377,8 +1377,8 @@ function openlab_cloned_course_notice() {
 		}
 	</style>
 	<div class="updated fade ol-cloned-message">
-		<p><span><?php printf( __( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="%1$s">Posts</a> and <a href="%2$s">Pages</a>. Custom menus will need to be reactivated via <a href="%3$s">Appearance > Menus</a>', 'cbox-openlab-core' ), esc_url( $posts_url ), esc_url( $pages_url ), esc_url( $menus_url ) ); ?>.</span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'cbox-openlab-core' ); ?></a>
+		<p><span><?php printf( __( 'Please Note: Posts and pages from the site you cloned are set to "draft" until you publish or delete them via <a href="%1$s">Posts</a> and <a href="%2$s">Pages</a>. Custom menus will need to be reactivated via <a href="%3$s">Appearance > Menus</a>', 'commons-in-a-box' ), esc_url( $posts_url ), esc_url( $pages_url ), esc_url( $menus_url ) ); ?>.</span>
+		<a class="ol-clone-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Dismiss', 'commons-in-a-box' ); ?></a>
 		</p>
 	</div>
 	<?php
@@ -1436,7 +1436,7 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$msg = '';
 	if ( ! $src_id ) {
-		$msg = __( 'Select a source blog.', 'cbox-openlab-core' );
+		$msg = __( 'Select a source blog.', 'commons-in-a-box' );
 	}
 
 	if ( $msg ) {
@@ -1455,16 +1455,16 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	cboxol_set_group_site_id( $group_id, $id );
 
-	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", 'cbox-openlab-core' ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
+	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", 'commons-in-a-box' ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
 
 	wp_mail(
 		get_site_option( 'admin_email' ),
-		sprintf( __( '[%s] New Blog Created', 'cbox-openlab-core' ), $current_site->site_name ),
+		sprintf( __( '[%s] New Blog Created', 'commons-in-a-box' ), $current_site->site_name ),
 		$content_mail,
 		'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>'
 	);
 
-	$msg = __( 'Site Created', 'cbox-openlab-core' );
+	$msg = __( 'Site Created', 'commons-in-a-box' );
 	// now copy
 	$blogtables = $wpdb->base_prefix . $src_id . '_';
 	$newtables = $wpdb->base_prefix . $new_id . '_';
@@ -1579,7 +1579,7 @@ function cboxol_copy_blog_page( $group_id ) {
 				}
 
 				restore_current_blog();
-				$msg = __( 'Blog Copied', 'cbox-openlab-core' );
+				$msg = __( 'Blog Copied', 'commons-in-a-box' );
 			}
 		}
 	}
@@ -1626,7 +1626,7 @@ function cboxol_allow_extended_blogname_charset( $retval ) {
 		return $retval;
 	}
 
-	$chars_message = __( 'Site names can only contain lowercase letters (a-z) and numbers.' );
+	$chars_message = __( 'Site names can only contain lowercase letters (a-z) and numbers.', 'commons-in-a-box' );
 	if ( ! in_array( $chars_message, $blogname_messages, true ) ) {
 		return $retval;
 	}
@@ -1673,14 +1673,14 @@ function cboxol_validate_blogname( $blogname ) {
 	$minimum_site_name_length = apply_filters( 'minimum_site_name_length', 4 );
 
 	if ( cboxol_blogname_contains_illegal_characters( $blogname ) ) {
-		$error = __( 'URLs can contain only alphanumeric characters, hyphens, and underscores.', 'cbox-openlab-core' );
+		$error = __( 'URLs can contain only alphanumeric characters, hyphens, and underscores.', 'commons-in-a-box' );
 	} elseif ( get_id_from_blogname( $blogname ) ) {
-		$error = __( 'That site URL is already taken. Please try another.', 'cbox-openlab-core' );
+		$error = __( 'That site URL is already taken. Please try another.', 'commons-in-a-box' );
 	} elseif ( cboxol_blogname_is_illegal( $blogname ) ) {
-		$error = __( 'That URL is not allowed', 'cbox-openlab-core' );
+		$error = __( 'That URL is not allowed', 'commons-in-a-box' );
 	} elseif ( strlen( $blogname ) < $minimum_site_name_length ) {
 		/* translators: %s: minimum site name length */
-		$error = sprintf( _n( 'Site name must be at least %s character.', 'Site name must be at least %s characters.', $minimum_site_name_length, 'cbox-openlab-core' ), number_format_i18n( $minimum_site_name_length ) );
+		$error = sprintf( _n( 'Site name must be at least %s character.', 'Site name must be at least %s characters.', $minimum_site_name_length, 'commons-in-a-box' ), number_format_i18n( $minimum_site_name_length ) );
 	}
 
 	$retval = array(

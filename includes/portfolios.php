@@ -198,7 +198,7 @@ function openlab_portfolio_label( $args = array() ) {
  * Suggest a name for a portfolio, based on the user's FN + LN
  */
 function openlab_suggest_portfolio_name() {
-	return sprintf( __( "%s's Portfolio", 'cboxol-openlab-core' ), bp_loggedin_user_fullname() );
+	return sprintf( __( "%s's Portfolio", 'cboxol-openlab-core', 'commons-in-a-box' ), bp_loggedin_user_fullname() );
 }
 
 /**

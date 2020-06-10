@@ -101,12 +101,12 @@ class Bp_Customizable_Group_Categories_Admin {
      * @since BP Customizable Group Categories (1.0.0)
      */
     public function bp_groups_admin_menu() {
-        $this->admin_menu = add_menu_page(_x('Group Categories', 'admin page title', 'bp-custocg'), _x('Group Categories', 'admin menu title', 'bp-custocg'), 'bp_moderate', 'bp-group-categories', array($this, 'admin_tags'), 'dashicons-yes', 42);
-        $this->admin_submenu = add_submenu_page('bp-group-categories', _x('All Categories', 'admin page title', 'bp-custocg'), _x('All Categories', 'admin menu title', 'bp-custocg'), 'bp_moderate', 'bp-group-categories');
+        $this->admin_menu = add_menu_page(_x('Group Categories', 'admin page title', 'bp-custocg', 'commons-in-a-box'), _x('Group Categories', 'admin menu title', 'bp-custocg', 'commons-in-a-box'), 'bp_moderate', 'bp-group-categories', array($this, 'admin_tags'), 'dashicons-yes', 42);
+        $this->admin_submenu = add_submenu_page('bp-group-categories', _x('All Categories', 'admin page title', 'bp-custocg', 'commons-in-a-box'), _x('All Categories', 'admin menu title', 'bp-custocg', 'commons-in-a-box'), 'bp_moderate', 'bp-group-categories');
 
         //if sorting plugin Category Order and Taxonomy Terms Order is available
         if (function_exists('tto_info_box')) {
-            $this->admin_submenu_sort = add_submenu_page('bp-group-categories', _x('Sort Group Categories', 'admin page title', 'bp-custocg'), _x('Sort Group Categories', 'admin menu title', 'bp-custocg'), 'bp_moderate', 'bpcgc-sorting', array($this, 'sorting_tags'));
+            $this->admin_submenu_sort = add_submenu_page('bp-group-categories', _x('Sort Group Categories', 'admin page title', 'bp-custocg', 'commons-in-a-box'), _x('Sort Group Categories', 'admin menu title', 'bp-custocg', 'commons-in-a-box'), 'bp_moderate', 'bpcgc-sorting', array($this, 'sorting_tags'));
             add_action('admin_head', array($this, 'admin_head_actions'));
         }
 
@@ -175,7 +175,7 @@ class Bp_Customizable_Group_Categories_Admin {
         $wp_post_types[$post_type]->show_in_menu = false;
         $wp_post_types[$post_type]->show_admin_column = false;
         $wp_post_types[$post_type]->labels = new stdClass;
-        $wp_post_types[$post_type]->labels->name = __('Groups', 'bp-custocg');
+        $wp_post_types[$post_type]->labels->name = __('Groups', 'bp-custocg', 'commons-in-a-box');
         $wp_post_types[$post_type]->name = $post_type;
     }
 
@@ -208,7 +208,7 @@ class Bp_Customizable_Group_Categories_Admin {
     public function admin_tags_load() {
         global $wp_http_referer;
 
-        $cheating = __('Cheatin&#8217; uh?', 'bp-custocg');
+        $cheating = __('Cheatin&#8217; uh?', 'bp-custocg', 'commons-in-a-box');
 
         if (!bp_current_user_can('bp_moderate')) {
             wp_die($cheating);
@@ -234,7 +234,7 @@ class Bp_Customizable_Group_Categories_Admin {
             $bp_group_categories_tax = get_taxonomy($taxonomy);
 
             if (!$bp_group_categories_tax) {
-                wp_die(__('Invalid taxonomy', 'bp-custocg'));
+                wp_die(__('Invalid taxonomy', 'bp-custocg', 'commons-in-a-box'));
             }
 
             switch ($doaction) {
@@ -297,7 +297,7 @@ class Bp_Customizable_Group_Categories_Admin {
 
                     $tag = get_term($tag_ID, $taxonomy, OBJECT, 'edit');
                     if (!$tag)
-                        wp_die(__('You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?'));
+                        wp_die(__('You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'commons-in-a-box'));
 
                     require_once( ABSPATH . 'wp-admin/admin-header.php' );
                     include( ABSPATH . 'wp-admin/edit-tag-form.php' );
@@ -313,7 +313,7 @@ class Bp_Customizable_Group_Categories_Admin {
 
                     $tag = BPCGC_Groups_Terms::get_term($tag_ID, $bp_group_categories_tax->name);
                     if (!$tag) {
-                        wp_die(__('You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'bp-custocg'));
+                        wp_die(__('You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'bp-custocg', 'commons-in-a-box'));
                     }
 
                     $ret = BPCGC_Groups_Terms::update_term($tag_ID, $bp_group_categories_tax->name, $_POST);
@@ -456,7 +456,7 @@ class Bp_Customizable_Group_Categories_Admin {
         $tag = $this->add_tag();
 
         if (!$tag || is_wp_error($tag) || (!$tag = get_term($tag['term_id'], $taxonomy))) {
-            $message = __('An error has occurred. Please reload the page and try again.');
+            $message = __('An error has occurred. Please reload the page and try again.', 'commons-in-a-box');
             if (is_wp_error($tag) && $tag->get_error_message())
                 $message = $tag->get_error_message();
 

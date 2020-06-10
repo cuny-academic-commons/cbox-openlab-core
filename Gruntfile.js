@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 
 		addtextdomain: {
 			options: {
-				textdomain: 'cbox-openlab-core',
+				textdomain: 'commons-in-a-box',
 			},
 			target: {
 				files: {

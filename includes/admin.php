@@ -16,8 +16,8 @@ function cboxol_register_admin_menu() {
 	// @todo How do I make it "About" as first option
 	/*
 	add_menu_page(
-		__( 'OpenLab Setup', 'cbox-openlab-core' ),
-		__( 'OpenLab Setup', 'cbox-openlab-core' ),
+		__( 'OpenLab Setup', 'commons-in-a-box' ),
+		__( 'OpenLab Setup', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug(),
 		'cboxol_admin_about_page',
@@ -28,8 +28,8 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
-		__( 'Member Settings', 'cbox-openlab-core' ),
-		__( 'Member Settings', 'cbox-openlab-core' ),
+		__( 'Member Settings', 'commons-in-a-box' ),
+		__( 'Member Settings', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug( 'member-settings' ),
 		'cboxol_member_settings_admin_page',
@@ -38,8 +38,8 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
-		__( 'Group Settings', 'cbox-openlab-core' ),
-		__( 'Group Settings', 'cbox-openlab-core' ),
+		__( 'Group Settings', 'commons-in-a-box' ),
+		__( 'Group Settings', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug( 'group-settings' ),
 		'cboxol_group_settings_admin_page',
@@ -48,8 +48,8 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
-		__( 'Academic Units', 'cbox-openlab-core' ),
-		__( 'Academic Units', 'cbox-openlab-core' ),
+		__( 'Academic Units', 'commons-in-a-box' ),
+		__( 'Academic Units', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug( 'academic-units' ),
 		'cboxol_academic_units_admin_page',
@@ -58,8 +58,8 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
-		__( 'Brand Settings', 'cbox-openlab-core' ),
-		__( 'Brand Settings', 'cbox-openlab-core' ),
+		__( 'Brand Settings', 'commons-in-a-box' ),
+		__( 'Brand Settings', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug( 'brand-settings' ),
 		'cboxol_brand_settings_admin_page',
@@ -68,8 +68,8 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
-		__( 'Communication Settings', 'cbox-openlab-core' ),
-		__( 'Communication Settings', 'cbox-openlab-core' ),
+		__( 'Communication Settings', 'commons-in-a-box' ),
+		__( 'Communication Settings', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug( 'communication-settings' ),
 		'cboxol_communication_settings_admin_page',
@@ -90,75 +90,75 @@ function cboxol_register_assets() {
 		'nonce' => wp_create_nonce( 'wp_rest' ),
 		'endpointBase' => home_url( '/wp-json/cboxol/v1/' ),
 		'strings' => array(
-			'academicUnitNameLabel' => _x( 'Name', '"Name" label for adding new academic units', 'cbox-openlab-core' ),
-			'academicUnitParentLegend' => __( 'Define a parent/child relationship to indicate which category from the parent Academic Unit Type this new category should be associated with.', 'cbox-openlab-core' ),
-			'action' => _x( 'Action', 'Header for Action column in admin tables', 'cbox-openlab-core' ),
-			'add' => _x( 'Add', '"Add" button text', 'cbox-openlab-core' ),
-			'addEmailDomain' => __( 'Add email domain', 'cbox-openlab-core' ),
-			'addNewAcademicUnit' => __( 'Add New Academic Unit', 'cbox-openlab-core' ),
-			'addNewAcademicUnitTitle' => __( 'Add New', 'cbox-openlab-core' ),
-			'addNewCategory' => __( 'Add New Category', 'cbox-openlab-core' ),
-			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'cbox-openlab-core' ),
-			'associatedWithGroupTypes' => __( 'Associated with Group Types', 'cbox-openlab-core' ),
-			'associatedWithMemberTypes' => __( 'Associated with Member Types', 'cbox-openlab-core' ),
-			'cancel' => __( 'Cancel', 'cbox-openlab-core' ),
-			'code' => _x( 'Code', 'Column header for signup code value', 'cbox-openlab-core' ),
-			'confirmationText' => __( 'Confirmation Text', 'cbox-openlab-core' ),
-			'confirmationTextLegend' => __( 'The text that appears just above the "Complete Sign Up" button on the registration form.', 'cbox-openlab-core' ),
-			'count' => _x( 'Count', 'Column header', 'cbox-openlab-core' ),
-			'delete' => __( 'Delete', 'cbox-openlab-core' ),
-			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'cbox-openlab-core' ),
-			'domain' => _x( 'Domain', 'Domain from email domain whitelist', 'cbox-openlab-core' ),
-			'edit' => __( 'Edit', 'cbox-openlab-core' ),
-			'editing' => __( 'Editing', 'cbox-openlab-core' ),
-			'emailDomainWhitelist' => __( 'Email Domain Whitelist', 'cbox-openlab-core' ),
-			'emailDomainWhitelistLegend' => __( 'To limit new user registrations to one or multiple email domains, include them here. Only users with emails matching the whitelisted domain(s) will be allowed to register for accounts. Wildcards are supported for multiple formats of the same base domain (e.g. *.schoolname.edu).', 'cbox-openlab-core' ),
-			'enterSignupCode' => __( 'Enter Signup Code', 'cbox-openlab-core' ),
-			'formCustomization' => __( 'Form Customization', 'cbox-openlab-core' ),
-			'formCustomizationLegend' => __( 'Use these settings to customize the registration form.', 'cbox-openlab-core' ),
-			'formCustomizationSave' => __( 'Save Form Customization Settings', 'cbox-openlab-core' ),
-			'group' => _x( 'Group', 'Column header for signup code table', 'cbox-openlab-core' ),
-			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'cbox-openlab-core' ),
-			'labels' => _x( 'Labels', 'subheader for item type labels', 'cbox-openlab-core' ),
-			'mayCreateCoursesLegend' => __( 'Members may create courses', 'cbox-openlab-core' ),
+			'academicUnitNameLabel' => _x( 'Name', '"Name" label for adding new academic units', 'commons-in-a-box' ),
+			'academicUnitParentLegend' => __( 'Define a parent/child relationship to indicate which category from the parent Academic Unit Type this new category should be associated with.', 'commons-in-a-box' ),
+			'action' => _x( 'Action', 'Header for Action column in admin tables', 'commons-in-a-box' ),
+			'add' => _x( 'Add', '"Add" button text', 'commons-in-a-box' ),
+			'addEmailDomain' => __( 'Add email domain', 'commons-in-a-box' ),
+			'addNewAcademicUnit' => __( 'Add New Academic Unit', 'commons-in-a-box' ),
+			'addNewAcademicUnitTitle' => __( 'Add New', 'commons-in-a-box' ),
+			'addNewCategory' => __( 'Add New Category', 'commons-in-a-box' ),
+			'addNewType' => _x( 'Add New Type', 'placeholder for new item type form', 'commons-in-a-box' ),
+			'associatedWithGroupTypes' => __( 'Associated with Group Types', 'commons-in-a-box' ),
+			'associatedWithMemberTypes' => __( 'Associated with Member Types', 'commons-in-a-box' ),
+			'cancel' => __( 'Cancel', 'commons-in-a-box' ),
+			'code' => _x( 'Code', 'Column header for signup code value', 'commons-in-a-box' ),
+			'confirmationText' => __( 'Confirmation Text', 'commons-in-a-box' ),
+			'confirmationTextLegend' => __( 'The text that appears just above the "Complete Sign Up" button on the registration form.', 'commons-in-a-box' ),
+			'count' => _x( 'Count', 'Column header', 'commons-in-a-box' ),
+			'delete' => __( 'Delete', 'commons-in-a-box' ),
+			'deleteConfirm' => __( 'Are you sure you want to delete this content?', 'commons-in-a-box' ),
+			'domain' => _x( 'Domain', 'Domain from email domain whitelist', 'commons-in-a-box' ),
+			'edit' => __( 'Edit', 'commons-in-a-box' ),
+			'editing' => __( 'Editing', 'commons-in-a-box' ),
+			'emailDomainWhitelist' => __( 'Email Domain Whitelist', 'commons-in-a-box' ),
+			'emailDomainWhitelistLegend' => __( 'To limit new user registrations to one or multiple email domains, include them here. Only users with emails matching the whitelisted domain(s) will be allowed to register for accounts. Wildcards are supported for multiple formats of the same base domain (e.g. *.schoolname.edu).', 'commons-in-a-box' ),
+			'enterSignupCode' => __( 'Enter Signup Code', 'commons-in-a-box' ),
+			'formCustomization' => __( 'Form Customization', 'commons-in-a-box' ),
+			'formCustomizationLegend' => __( 'Use these settings to customize the registration form.', 'commons-in-a-box' ),
+			'formCustomizationSave' => __( 'Save Form Customization Settings', 'commons-in-a-box' ),
+			'group' => _x( 'Group', 'Column header for signup code table', 'commons-in-a-box' ),
+			'itemTypeNameLabel' => _x( 'Name', 'item type Name label', 'commons-in-a-box' ),
+			'labels' => _x( 'Labels', 'subheader for item type labels', 'commons-in-a-box' ),
+			'mayCreateCoursesLegend' => __( 'Members may create courses', 'commons-in-a-box' ),
 
 			// @todo This probably will not translate.
-			'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'cbox-openlab-core' ),
-			'memberType' => __( 'Member Type', 'cbox-openlab-core' ),
+			'mayChangeMemberTypeToLegend' => __( 'Members may change Type to', 'commons-in-a-box' ),
+			'memberType' => __( 'Member Type', 'commons-in-a-box' ),
 
-			'name' => _x( 'Name', 'table header', 'cbox-openlab-core' ),
-			'no' => _x( 'No', 'radio button option', 'cbox-openlab-core' ),
-			'noEmailDomains' => __( 'Registration is currently open for all email domains. Enter one or more domains to restrict registration by email address.', 'cbox-openlab-core' ),
-			'none' => _x( 'None', 'null dropdown option', 'cbox-openlab-core' ),
-			'noSignupCodes' => __( 'Currently, users may select any Member Type when creating or editing their accounts. To restrict access to a Member Type, create a corresponding Signup Code below.', 'cbox-openlab-core' ),
-			'noUnitsOfType' => __( 'There are no units of this type.', 'cbox-openlab-core' ),
-			'off' => _x( '(Off)', 'disabled label for item type', 'cbox-openlab-core' ),
-			'onOffSwitchLabel' => __( 'On/off toggle', 'cbox-openlab-core' ),
-			'optional' => __( 'Optional', 'cbox-openlab-core' ),
-			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'cbox-openlab-core' ),
-			'orderLegend' => __( 'Order', 'cbox-openlab-core' ),
-			'parent' => __( 'Parent', 'cbox-openlab-core' ),
-			'required' => __( 'Required', 'cbox-openlab-core' ),
-			'save' => __( 'Save', 'cbox-openlab-core' ),
-			'saveChanges' => __( 'Save Changes', 'cbox-openlab-core' ),
-			'saved' => __( 'Saved!', 'cbox-openlab-core' ),
-			'saving' => __( 'Saving', 'cbox-openlab-core' ),
-			'settings' => _x( 'Settings', 'subheader for item type settings', 'cbox-openlab-core' ),
-			'selectAll' => __( 'Select All', 'cbox-openlab-core' ),
-			'selectGroup' => __( 'Select Group', 'cbox-openlab-core' ),
-			'selectMemberType' => __( 'Select Member Type', 'cbox-openlab-core' ),
-			'selectUnit' => _x( 'Select Unit: %s', 'checkbox screen reader text', 'cbox-openlab-core' ),
-			'signUpCode' => __( 'Signup Code', 'cbox-openlab-core' ),
-			'signUpCodes' => __( 'Sign Up Codes', 'cbox-openlab-core' ),
-			'signUpCodesLegend' => __( 'Registration codes let you restrict access to specific member account types (e.g faculty, staff, student). Each code can be associated with a group, so that users registering with the code will automatically be added to the group when their registration is complete. These account codes do not allow users to bypass the Email Domain Whitelist above.', 'cbox-openlab-core' ),
-			'template' => _x( 'Template', 'subheader for template site settings section', 'cbox-openlab-core' ),
-			'templateDashboardLink' => _x( 'Dashboard', 'template site dashboard link', 'cbox-openlab-core' ),
-			'templateSiteDescription' => __( 'When a group of this type creates a site, default settings and data will be copied from the group type\'s template site. Use the links below to view and configure the template site.', 'cbox-openlab-core' ),
-			'templateViewLink' => _x( 'View Template', 'template site view link', 'cbox-openlab-core' ),
-			'thisGroupTypeIsDesignedForCourses' => __( 'Note: This Group Type is designed for Courses.', 'cbox-openlab-core' ),
-			'thisGroupTypeIsDesignedForPortfolios' => __( 'Note: This Group Type is designed for Portfolios.', 'cbox-openlab-core' ),
-			'update' => __( 'Update', 'cbox-openlab-core' ),
-			'yes' => _x( 'Yes', 'radio button option', 'cbox-openlab-core' ),
+			'name' => _x( 'Name', 'table header', 'commons-in-a-box' ),
+			'no' => _x( 'No', 'radio button option', 'commons-in-a-box' ),
+			'noEmailDomains' => __( 'Registration is currently open for all email domains. Enter one or more domains to restrict registration by email address.', 'commons-in-a-box' ),
+			'none' => _x( 'None', 'null dropdown option', 'commons-in-a-box' ),
+			'noSignupCodes' => __( 'Currently, users may select any Member Type when creating or editing their accounts. To restrict access to a Member Type, create a corresponding Signup Code below.', 'commons-in-a-box' ),
+			'noUnitsOfType' => __( 'There are no units of this type.', 'commons-in-a-box' ),
+			'off' => _x( '(Off)', 'disabled label for item type', 'commons-in-a-box' ),
+			'onOffSwitchLabel' => __( 'On/off toggle', 'commons-in-a-box' ),
+			'optional' => __( 'Optional', 'commons-in-a-box' ),
+			'orderDescription' => __( 'Used when displaying lists of types throughout the site.', 'commons-in-a-box' ),
+			'orderLegend' => __( 'Order', 'commons-in-a-box' ),
+			'parent' => __( 'Parent', 'commons-in-a-box' ),
+			'required' => __( 'Required', 'commons-in-a-box' ),
+			'save' => __( 'Save', 'commons-in-a-box' ),
+			'saveChanges' => __( 'Save Changes', 'commons-in-a-box' ),
+			'saved' => __( 'Saved!', 'commons-in-a-box' ),
+			'saving' => __( 'Saving', 'commons-in-a-box' ),
+			'settings' => _x( 'Settings', 'subheader for item type settings', 'commons-in-a-box' ),
+			'selectAll' => __( 'Select All', 'commons-in-a-box' ),
+			'selectGroup' => __( 'Select Group', 'commons-in-a-box' ),
+			'selectMemberType' => __( 'Select Member Type', 'commons-in-a-box' ),
+			'selectUnit' => _x( 'Select Unit: %s', 'checkbox screen reader text', 'commons-in-a-box' ),
+			'signUpCode' => __( 'Signup Code', 'commons-in-a-box' ),
+			'signUpCodes' => __( 'Sign Up Codes', 'commons-in-a-box' ),
+			'signUpCodesLegend' => __( 'Registration codes let you restrict access to specific member account types (e.g faculty, staff, student). Each code can be associated with a group, so that users registering with the code will automatically be added to the group when their registration is complete. These account codes do not allow users to bypass the Email Domain Whitelist above.', 'commons-in-a-box' ),
+			'template' => _x( 'Template', 'subheader for template site settings section', 'commons-in-a-box' ),
+			'templateDashboardLink' => _x( 'Dashboard', 'template site dashboard link', 'commons-in-a-box' ),
+			'templateSiteDescription' => __( 'When a group of this type creates a site, default settings and data will be copied from the group type\'s template site. Use the links below to view and configure the template site.', 'commons-in-a-box' ),
+			'templateViewLink' => _x( 'View Template', 'template site view link', 'commons-in-a-box' ),
+			'thisGroupTypeIsDesignedForCourses' => __( 'Note: This Group Type is designed for Courses.', 'commons-in-a-box' ),
+			'thisGroupTypeIsDesignedForPortfolios' => __( 'Note: This Group Type is designed for Portfolios.', 'commons-in-a-box' ),
+			'update' => __( 'Update', 'commons-in-a-box' ),
+			'yes' => _x( 'Yes', 'radio button option', 'commons-in-a-box' ),
 		),
 	) );
 
@@ -196,19 +196,19 @@ function cboxol_admin_slug( $parent_page = '' ) {
 function cboxol_admin_page_label( $page ) {
 	switch ( $page ) {
 		case 'member-settings' :
-			return __( 'Member Settings', 'cbox-openlab-core' );
+			return __( 'Member Settings', 'commons-in-a-box' );
 
 		case 'group-settings' :
-			return __( 'Group Settings', 'cbox-openlab-core' );
+			return __( 'Group Settings', 'commons-in-a-box' );
 
 		case 'brand-settings' :
-			return __( 'Brand Settings', 'cbox-openlab-core' );
+			return __( 'Brand Settings', 'commons-in-a-box' );
 
 		case 'communication-settings' :
-			return __( 'Communication Settings', 'cbox-openlab-core' );
+			return __( 'Communication Settings', 'commons-in-a-box' );
 
 		case 'academic-units' :
-			return __( 'Academic Units', 'cbox-openlab-core' );
+			return __( 'Academic Units', 'commons-in-a-box' );
 	}
 }
 
@@ -217,31 +217,31 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 		case 'member-settings' :
 			switch ( $page ) {
 				case 'types' :
-					return _x( 'Types', 'Member Types admin label', 'cbox-openlab-core' );
+					return _x( 'Types', 'Member Types admin label', 'commons-in-a-box' );
 
 				case 'registration' :
-					return _x( 'Registration', 'Registration admin label', 'cbox-openlab-core' );
+					return _x( 'Registration', 'Registration admin label', 'commons-in-a-box' );
 
 				case 'profile-fields' :
-					return _x( 'Profile Fields', 'Member profile fields admin label', 'cbox-openlab-core' );
+					return _x( 'Profile Fields', 'Member profile fields admin label', 'commons-in-a-box' );
 			}
 
 		case 'group-settings' :
 			switch ( $page ) {
 				case 'types' :
-					return _x( 'Types', 'Group Types admin label', 'cbox-openlab-core' );
+					return _x( 'Types', 'Group Types admin label', 'commons-in-a-box' );
 
 				case 'group-categories' :
-					return _x( 'Group Categories', 'Group categories admin label', 'cbox-openlab-core' );
+					return _x( 'Group Categories', 'Group categories admin label', 'commons-in-a-box' );
 			}
 
 		case 'communication-settings' :
 			switch ( $page ) {
 				case 'email' :
-					return _x( 'Email', 'Communication Settings admin label', 'cbox-openlab-core' );
+					return _x( 'Email', 'Communication Settings admin label', 'commons-in-a-box' );
 
 				case 'invitations' :
-					return _x( 'Invitations', 'Communication Settings admin label', 'cbox-openlab-core' );
+					return _x( 'Invitations', 'Communication Settings admin label', 'commons-in-a-box' );
 			}
 	}
 }

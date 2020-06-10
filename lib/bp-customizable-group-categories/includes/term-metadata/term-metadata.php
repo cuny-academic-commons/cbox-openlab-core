@@ -31,7 +31,7 @@ if (!function_exists('add_term_meta')):
     function add_term_meta($term_id, $meta_key, $meta_value, $unique = false) {
 
         if (wp_term_is_shared($term_id)) {
-            return new WP_Error('ambiguous_term_id', __('Term meta cannot be added to terms that are shared between taxonomies.'), $term_id);
+            return new WP_Error('ambiguous_term_id', __('Term meta cannot be added to terms that are shared between taxonomies.', 'commons-in-a-box'), $term_id);
         }
 
         $added = add_metadata('term', $term_id, $meta_key, $meta_value, $unique);
@@ -113,7 +113,7 @@ if (!function_exists('update_term_meta')):
     function update_term_meta($term_id, $meta_key, $meta_value, $prev_value = '') {
 
         if (wp_term_is_shared($term_id)) {
-            return new WP_Error('ambiguous_term_id', __('Term meta cannot be added to terms that are shared between taxonomies.'), $term_id);
+            return new WP_Error('ambiguous_term_id', __('Term meta cannot be added to terms that are shared between taxonomies.', 'commons-in-a-box'), $term_id);
         }
 
         $updated = update_metadata('term', $term_id, $meta_key, $meta_value, $prev_value);
