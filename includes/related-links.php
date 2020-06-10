@@ -33,6 +33,12 @@ function openlab_get_group_related_links( $group_id, $mode = 'display' ) {
  * Catch Related Links List settings saves and process.
  */
 function openlab_process_related_links_settings_save( $group_id ) {
+	if ( ! isset( $_POST['group-related-link-settings-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'group_related_link_settings', 'group-related-link-settings-nonce' );
+
 	if ( ! empty( $_POST['related-links-list-enable'] ) ) {
 		groups_update_groupmeta( $group_id, 'openlab_related_links_list_enable', '1' );
 

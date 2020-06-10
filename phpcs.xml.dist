@@ -26,9 +26,6 @@
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 	</rule>
 
-	<!-- Add in some extra rules from other standards. -->
-	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
-
 	<rule ref="WordPress.WP.DeprecatedClasses">
 		<properties>
 			<property name="minimum_supported_version" value="5.1"/>
