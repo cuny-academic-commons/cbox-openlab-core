@@ -868,16 +868,16 @@ class Install {
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
 						'crop_length'             => 300,
-						'custom_description'      => __( 'Use this space to highlight content from around your network.', 'openlab-theme', 'commons-in-a-box' ),
+						'custom_description'      => __( 'Use this space to highlight content from around your network.', 'commons-in-a-box' ),
 						'display_images'          => true,
 						'featured_content_type'   => 'resource',
-						'featured_resource_title' => __( 'Featured Item', 'openlab-theme', 'commons-in-a-box' ),
+						'featured_resource_title' => __( 'Featured Item', 'commons-in-a-box' ),
 						'featured_resource_link'  => home_url(),
 						'image_url'               => bp_core_avatar_default(),
 						'image_height'            => 50,
 						'image_width'             => 50,
 						'read_more'               => '',
-						'title'                   => __( 'In The Spotlight', 'openlab-theme', 'commons-in-a-box' ),
+						'title'                   => __( 'In The Spotlight', 'commons-in-a-box' ),
 						'title_element'           => 'h2',
 					),
 				)
@@ -888,7 +888,7 @@ class Install {
 					'id_base'    => 'openlab-whats-happening',
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
-						'title' => __( 'What\'s Happening?', 'openlab-theme', 'commons-in-a-box' ),
+						'title' => __( 'What\'s Happening?', 'commons-in-a-box' ),
 					),
 				)
 			);
@@ -898,7 +898,7 @@ class Install {
 					'id_base'    => 'openlab-whos-online',
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
-						'title' => __( 'Who\'s Online?', 'openlab-theme', 'commons-in-a-box' ),
+						'title' => __( 'Who\'s Online?', 'commons-in-a-box' ),
 					),
 				)
 			);
@@ -908,7 +908,7 @@ class Install {
 					'id_base'    => 'openlab-new-members',
 					'sidebar_id' => 'home-sidebar',
 					'settings'   => array(
-						'title' => __( 'New Members', 'openlab-theme', 'commons-in-a-box' ),
+						'title' => __( 'New Members', 'commons-in-a-box' ),
 					),
 				)
 			);
@@ -916,14 +916,14 @@ class Install {
 
 		// Footer sidebar.
 		if ( ! CBox_Widget_Setter::is_sidebar_populated( 'footer' ) ) {
-			$welcome_text = __( 'The footer areas can be used to display general information about your site, such as contact information and links to terms of service.', 'openlab-theme', 'commons-in-a-box' );
+			$welcome_text = __( 'The footer areas can be used to display general information about your site, such as contact information and links to terms of service.', 'commons-in-a-box' );
 
 			CBox_Widget_Setter::set_widget(
 				array(
 					'id_base'    => 'text',
 					'sidebar_id' => 'footer',
 					'settings'   => array(
-						'title'  => __( 'Footer area 1', 'openlab-theme', 'commons-in-a-box' ),
+						'title'  => __( 'Footer area 1', 'commons-in-a-box' ),
 						'text'   => $welcome_text,
 						'filter' => false,
 					),
@@ -931,14 +931,14 @@ class Install {
 			);
 
 			/* translators: link to Customizer */
-			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'openlab-theme', 'commons-in-a-box' ), get_admin_url( cboxol_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
+			$welcome_text = sprintf( __( 'Modify the text of this and other widgets using the <a href="%s">Customizer</a>.', 'commons-in-a-box' ), get_admin_url( cboxol_get_main_site_id(), 'customize.php?autofocus[section]=sidebar-widgets-footer' ) );
 
 			CBox_Widget_Setter::set_widget(
 				array(
 					'id_base'    => 'text',
 					'sidebar_id' => 'footer',
 					'settings'   => array(
-						'title'  => __( 'Footer area 2', 'openlab-theme', 'commons-in-a-box' ),
+						'title'  => __( 'Footer area 2', 'commons-in-a-box' ),
 						'text'   => $welcome_text,
 						'filter' => false,
 					),
@@ -1082,12 +1082,12 @@ class Install {
 	protected function install_default_slides() {
 		$slides = array(
 			array(
-				'title'   => __( 'Share Information Here', 'openlab-theme', 'commons-in-a-box' ),
+				'title'   => __( 'Share Information Here', 'commons-in-a-box' ),
 				'content' => __( 'Site administrators can customize the slider area with images and text to welcome new members, highlight features, share important announcements, publicize events, and more.', 'commons-in-a-box' ),
 				'image'   => get_template_directory() . '/images/default-slide-1.jpeg',
 			),
 			array(
-				'title'   => __( 'Welcome to CBOX OpenLab!', 'openlab-theme', 'commons-in-a-box' ),
+				'title'   => __( 'Welcome to CBOX OpenLab!', 'commons-in-a-box' ),
 				/* translators: link to CBOX OpenLab documentation */
 				'content' => sprintf( __( 'Read our <a href="%s">documentation</a> to learn more about how you can use CBOX OpenLab to create a commons for open learning.', 'commons-in-a-box' ), 'http://commonsinabox.org/cbox-openlab-overview' ),
 				'image'   => get_template_directory() . '/images/default-slide-2.jpeg',

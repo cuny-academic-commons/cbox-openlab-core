@@ -6,15 +6,15 @@
 function openlab_color_schemes() {
 	return array(
 		'red' => array(
-			'label' => __( 'Red', 'openlab-theme', 'commons-in-a-box' ),
+			'label' => __( 'Red', 'commons-in-a-box' ),
 			'icon_color' => '#a9280e',
 		),
 		'blue' => array(
-			'label' => __( 'Blue', 'openlab-theme', 'commons-in-a-box' ),
+			'label' => __( 'Blue', 'commons-in-a-box' ),
 			'icon_color' => '#1d5f7b',
 		),
 		'green' => array(
-			'label' => __( 'Green', 'openlab-theme', 'commons-in-a-box' ),
+			'label' => __( 'Green', 'commons-in-a-box' ),
 			'icon_color' => '#b6d498',
 		),
 	);
