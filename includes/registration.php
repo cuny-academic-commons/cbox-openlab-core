@@ -77,7 +77,7 @@ function cboxol_registration_admin_page() {
 		<p><?php esc_html_e( 'Registration management allows you to control who can create accounts and what types of accounts different types of users can create.', 'commons-in-a-box' ); ?></p>
 
 		<script type="text/javascript">
-			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
+			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
 		</script>
 
 		<div id="cboxol-admin"></div>
@@ -176,9 +176,9 @@ function cboxol_wildcard_email_domain_check( $user_email ) {
 				$limited_email_domain     = str_replace( '.', '\.', $limited_email_domain );        // Escape your .s
 				$limited_email_domain     = str_replace( '*', '[-_\.a-zA-Z0-9]+', $limited_email_domain );     // replace * with REGEX for 1+ occurrence of anything
 				$limited_email_domain     = '/^' . $limited_email_domain . '/';   // bracket the email with the necessary pattern markings
-				$valid_email_domain_check = ( $valid_email_domain_check or preg_match( $limited_email_domain, $emaildomain ) );
+				$valid_email_domain_check = ( $valid_email_domain_check || preg_match( $limited_email_domain, $emaildomain ) );
 			} else {
-				$valid_email_domain_check = $limited_email_domain == $emaildomain;
+				$valid_email_domain_check = $limited_email_domain === $emaildomain;
 			}
 		}
 	}
@@ -226,7 +226,7 @@ function cboxol_get_signup_codes( $args = array() ) {
 	);
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key    = 'cboxol_signup_codes_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$cache_key    = 'cboxol_signup_codes_' . md5( wp_json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids          = wp_cache_get( $cache_key, 'cboxol_signup_codes' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
@@ -285,7 +285,8 @@ function openlab_registration_errors_object() {
 		}
 	}
 
-	$error_json = json_encode( $errors );
+	$error_json = wp_json_encode( $errors );
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo '<script type="text/javascript">var OpenLab_Registration_Errors = ' . $error_json . '</script>';
 }
 add_action( 'wp_head', 'openlab_registration_errors_object' );
@@ -298,11 +299,13 @@ function cboxol_registration_validate_email() {
 		'message' => '',
 	);
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( ! isset( $_POST['email'] ) ) {
 		$retval['message'] = __( 'No email provided.', 'commons-in-a-box' );
 		wp_send_json_error( $retval );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$email = wp_unslash( $_POST['email'] );
 
 	if ( ! is_email( $email ) ) {
@@ -330,7 +333,9 @@ function cboxol_registration_validate_email() {
  */
 function cboxol_validate_signup_member_type( $validate ) {
 	$account_type = null;
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( isset( $_POST['account-type'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$account_type = wp_unslash( $_POST['account-type'] );
 	}
 
@@ -348,7 +353,9 @@ function cboxol_validate_signup_member_type( $validate ) {
 		}
 
 		$signup_code = '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST['account-type-signup-code'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$signup_code = wp_unslash( $_POST['account-type-signup-code'] );
 		}
 
@@ -374,6 +381,7 @@ function cboxol_validate_signup_member_type( $validate ) {
  * @return array
  */
 function cboxol_save_signup_member_type( $usermeta ) {
+	// phpcs:disable WordPress.Security.NonceVerification.Missing
 	$account_type = null;
 	if ( isset( $_POST['account-type'] ) ) {
 		$account_type = wp_unslash( $_POST['account-type'] );
@@ -383,6 +391,7 @@ function cboxol_save_signup_member_type( $usermeta ) {
 	if ( isset( $_POST['account-type-signup-code'] ) ) {
 		$account_type_signup_code = wp_unslash( $_POST['account-type-signup-code'] );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	$usermeta['account_type']             = $account_type;
 	$usermeta['account_type_signup_code'] = $account_type_signup_code;
@@ -400,7 +409,8 @@ function cboxol_save_signup_member_type( $usermeta ) {
  * @param array  $user
  */
 function cboxol_save_activated_user_member_type( $user_id, $key, $user ) {
-	$account_type = $account_type_signup_code = null;
+	$account_type             = null;
+	$account_type_signup_code = null;
 
 	if ( isset( $user['meta']['account_type'] ) ) {
 		$account_type = $user['meta']['account_type'];
@@ -436,6 +446,7 @@ function cboxol_save_activated_user_member_type( $user_id, $key, $user ) {
  * AJAX callback for validating signup code.
  */
 function cboxol_registration_validate_signup_code() {
+	// phpcs:disable WordPress.Security.NonceVerification.Missing
 	if ( empty( $_POST['member_type'] ) || empty( $_POST['code'] ) ) {
 		wp_send_json_error();
 	}
@@ -446,6 +457,7 @@ function cboxol_registration_validate_signup_code() {
 	if ( ! is_wp_error( $member_type ) ) {
 		$validated = $member_type->validate_signup_code( wp_unslash( $_POST['code'] ) );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 	if ( is_wp_error( $validated ) ) {
 		wp_send_json_error();
