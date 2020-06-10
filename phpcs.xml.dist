@@ -8,8 +8,13 @@
 	<!-- Exclude any Node Modules directory. -->
 	<exclude-pattern>/node_modules/*</exclude-pattern>
 
-	<!-- Exclude minified Javascript files. -->
+	<!-- Exclude minified and built Javascript files. -->
 	<exclude-pattern>*.min.js</exclude-pattern>
+	<exclude-pattern>/assets/js/build.js</exclude-pattern>
+
+	<!-- Exclude other libraries -->
+	<exclude-pattern>assets/js/lib/hyphenator/*</exclude-pattern>
+	<exclude-pattern>assets/js/lib/succinct/*</exclude-pattern>
 
 	<rule ref="PHPCompatibilityWP"/>
 
