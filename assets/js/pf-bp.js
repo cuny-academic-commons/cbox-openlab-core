@@ -1,17 +1,21 @@
 (function($){
-	$(document).ready(function(){
-		$(document).ajaxComplete(function(evt,XHR,settings){
-			if ( 'undefined' === typeof settings.data ) {
-				return;
-			}
+	$( document ).ready(
+		function(){
+			$( document ).ajaxComplete(
+				function(evt,XHR,settings){
+					if ( 'undefined' === typeof settings.data ) {
+						return;
+					}
 
-			if ( -1 === settings.data.indexOf( 'pf_ajax_get_comments' ) ) {
-				return;
-			}
+					if ( -1 === settings.data.indexOf( 'pf_ajax_get_comments' ) ) {
+						return;
+					}
 
-			hookToReplycontent();
-		});
-	});
+					hookToReplycontent();
+				}
+			);
+		}
+	);
 
 	/*
 	 * A few notes:
@@ -25,23 +29,25 @@
 		var mentionsQueryCache = [],
 			mentionsItem;
 
-		$('#ef-replycontent').bp_mentions({
-			data: PFBPMentions.users,
-			delay: 0,
+		$( '#ef-replycontent' ).bp_mentions(
+			{
+				data: PFBPMentions.users,
+				delay: 0,
 
-			// Overriding BP's default behavior to avoid additional markup in comment field.
-			insertTpl: '@${ID}',
+				// Overriding BP's default behavior to avoid additional markup in comment field.
+				insertTpl: '@${ID}',
 
-			callbacks: {
-				// Disable remote search.
-				remoteFilter: function( query, render_view ) {
-					mentionsItem = mentionsQueryCache[ query ];
-					if ( typeof mentionsItem === 'object' ) {
-						render_view( mentionsItem );
-						return;
+				callbacks: {
+					// Disable remote search.
+					remoteFilter: function( query, render_view ) {
+						mentionsItem = mentionsQueryCache[ query ];
+						if ( typeof mentionsItem === 'object' ) {
+							render_view( mentionsItem );
+							return;
+						}
 					}
 				}
 			}
-		});
+		);
 	}
 }(jQuery));

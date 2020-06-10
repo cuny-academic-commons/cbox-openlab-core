@@ -13,41 +13,48 @@
 
 	$.fn.succinct = function(options) {
 
-		var settings = $.extend({
+		var settings = $.extend(
+			{
 				size: 240,
 				omission: '...',
 				ignore: true,
-                                splitByWord: false,
-			}, options);
+				splitByWord: false,
+			},
+			options
+		);
 
-		return this.each(function() {
+		return this.each(
+			function() {
 
-			var textDefault,
+				var textDefault,
 				textTruncated,
-				elements = $(this),
+				elements = $( this ),
 				regex    = /[!-\/:-@\[-`{-~]$/,
 				init     = function() {
-					elements.each(function() {
-						textDefault = $(this).html();
+					elements.each(
+						function() {
+							textDefault = $( this ).html();
 
-						if (textDefault.length > settings.size) {
-							textTruncated = $.trim(textDefault)
-											.substring(0, settings.size);
-                                                        if (settings.splitByWord){
-                                                            textTruncated = textTruncated.split(' ')
-											.slice(0, -1)
-											.join(' ');
-                                                        }
+							if (textDefault.length > settings.size) {
+								textTruncated = $.trim( textDefault )
+											.substring( 0, settings.size );
+								if (settings.splitByWord) {
+									textTruncated = textTruncated.split( ' ' )
+									.slice( 0, -1 )
+									.join( ' ' );
+								}
 
-							if (settings.ignore) {
-								textTruncated = textTruncated.replace(regex, '');
+								if (settings.ignore) {
+									textTruncated = textTruncated.replace( regex, '' );
+								}
+
+								$( this ).html( textTruncated + settings.omission );
 							}
-
-							$(this).html(textTruncated + settings.omission);
 						}
-					});
+					);
 				};
-			init();
-		});
+				init();
+			}
+		);
 	};
-})(jQuery);
+})( jQuery );

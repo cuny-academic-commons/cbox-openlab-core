@@ -5,11 +5,14 @@ module.exports = {
 				return this.$store.state.signupCodes[ this.wpPostId ].code
 			},
 			set( value ) {
-				this.$store.commit( 'setSignupCodeProperty', {
-					wpPostId: this.wpPostId,
-					field: 'code',
-					value
-				} )
+				this.$store.commit(
+					'setSignupCodeProperty',
+					{
+						wpPostId: this.wpPostId,
+						field: 'code',
+						value
+					}
+				)
 			},
 		},
 
@@ -18,11 +21,14 @@ module.exports = {
 				return this.$store.state.signupCodes[ this.wpPostId ].group
 			},
 			set( value ) {
-				this.$store.commit( 'setSignupCodeProperty', {
-					wpPostId: this.wpPostId,
-					field: 'group',
-					value: value
-				} )
+				this.$store.commit(
+					'setSignupCodeProperty',
+					{
+						wpPostId: this.wpPostId,
+						field: 'group',
+						value: value
+					}
+				)
 			},
 		},
 
@@ -53,11 +59,14 @@ module.exports = {
 				return this.memberType.slug
 			},
 			set( value ) {
-				this.$store.commit( 'setSignupCodeProperty', {
-					wpPostId: this.wpPostId,
-					field: 'memberTypeSlug',
-					value: value
-				} )
+				this.$store.commit(
+					'setSignupCodeProperty',
+					{
+						wpPostId: this.wpPostId,
+						field: 'memberTypeSlug',
+						value: value
+					}
+				)
 			},
 		},
 

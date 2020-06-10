@@ -7,48 +7,55 @@
 		$academicUnitCheckboxes,
 		$academicUnits;
 
-	$(document).ready(function() {
-		if ( CBOXOLAcademicTypes.entityType === 'user' ) {
-			$accountTypeSelector = $('#account-type');
-			if ( ! $accountTypeSelector.length ) {
-				$accountTypeSelector = $('#member-type');
+	$( document ).ready(
+		function() {
+			if ( CBOXOLAcademicTypes.entityType === 'user' ) {
+				$accountTypeSelector = $( '#account-type' );
+				if ( ! $accountTypeSelector.length ) {
+					$accountTypeSelector = $( '#member-type' );
+				}
+
+				showAcademicUnitTypesForMemberType( $accountTypeSelector.val() );
+				$accountTypeSelector.change(
+					function() {
+						showAcademicUnitTypesForMemberType( this.value );
+					}
+				);
+			} else {
+				showAcademicUnitTypesForGroupType( CBOXOLAcademicTypes.groupType );
 			}
 
-			showAcademicUnitTypesForMemberType( $accountTypeSelector.val() );
-			$accountTypeSelector.change( function() {
-				showAcademicUnitTypesForMemberType( this.value );
-			} );
-		} else {
-			showAcademicUnitTypesForGroupType( CBOXOLAcademicTypes.groupType );
+			$academicUnits          = $( '.academic-unit' );
+			$academicUnitCheckboxes = $( '.academic-unit-checkbox' );
+			validateAcademicTypeSelector();
+			$academicUnitCheckboxes.change( validateAcademicTypeSelector );
+
+			$( '.cboxol-academic-unit-selector' ).closest( 'form' ).on(
+				'submit',
+				function(e) {
+					return validateRequiredTypes();
+				}
+			);
 		}
-
-		$academicUnits = $('.academic-unit');
-		$academicUnitCheckboxes = $('.academic-unit-checkbox');
-		validateAcademicTypeSelector();
-		$academicUnitCheckboxes.change( validateAcademicTypeSelector );
-
-		$('.cboxol-academic-unit-selector').closest('form').on('submit', function(e) {
-			return validateRequiredTypes();
-		});
-	});
+	);
 
 	/**
 	 * Hide/show unit types based on selected member type.
 	 */
 	function showAcademicUnitTypesForMemberType( memberType ) {
-		$('.cboxol-academic-unit-selector-for-type').hide();
+		$( '.cboxol-academic-unit-selector-for-type' ).hide();
 		var typesValidated, checked = true;
 		if ( CBOXOLAcademicTypes.typesByMemberType.hasOwnProperty( memberType ) ) {
 			var typeObject, $selector;
 			for ( var i in CBOXOLAcademicTypes.typesByMemberType[ memberType ] ) {
 				typeObject = CBOXOLAcademicTypes.typesByMemberType[ memberType ][ i ];
-				$selector = $('.cboxol-academic-unit-selector-for-type-' + typeObject.slug);
+				$selector  = $( '.cboxol-academic-unit-selector-for-type-' + typeObject.slug );
 				$selector.show();
 
 				if ( 'required' === typeObject.status ) {
-					$selector.find('.academic-unit-type-required-label').html(CBOXOLAcademicTypes.requiredLabel);
+					$selector.find( '.academic-unit-type-required-label' ).html( CBOXOLAcademicTypes.requiredLabel );
 				} else {
-					$selector.find('.academic-unit-type-required-label').html('');
+					$selector.find( '.academic-unit-type-required-label' ).html( '' );
 				}
 			}
 		}
@@ -58,11 +65,11 @@
 	 * Hide/show unit types based group type.
 	 */
 	function showAcademicUnitTypesForGroupType( groupType ) {
-		$('.cboxol-academic-unit-selector-for-type').hide();
+		$( '.cboxol-academic-unit-selector-for-type' ).hide();
 		if ( CBOXOLAcademicTypes.typesByGroupType.hasOwnProperty( groupType ) ) {
 			for ( var i in CBOXOLAcademicTypes.typesByGroupType[ groupType ] ) {
 				typeObject = CBOXOLAcademicTypes.typesByGroupType[ groupType ][ i ];
-				$('.cboxol-academic-unit-selector-for-type-' + typeObject.slug).show();
+				$( '.cboxol-academic-unit-selector-for-type-' + typeObject.slug ).show();
 			}
 		}
 	}
@@ -71,23 +78,27 @@
 	 * Hide/show units based on whether the parent is selected.
 	 */
 	function validateAcademicTypeSelector() {
-		var $selectedUnits = $('.academic-unit-checkbox:checked');
+		var $selectedUnits    = $( '.academic-unit-checkbox:checked' );
 		var selectedUnitSlugs = [];
-		$selectedUnits.each( function( k, v	) {
-			selectedUnitSlugs.push( v.value );
-		} );
+		$selectedUnits.each(
+			function( k, v	) {
+				selectedUnitSlugs.push( v.value );
+			}
+		);
 
 		$academicUnits.removeClass( 'academic-unit-visible' ).addClass( 'academic-unit-hidden' );
-		$academicUnitCheckboxes.each( function( k, v ) {
-			// Items without parents or with unchecked parents should be shown.
-			var hasParent = v.dataset.hasOwnProperty( 'parent' ) && v.dataset.parent.length > 0;
-			if ( ! hasParent || -1 !== selectedUnitSlugs.indexOf( v.dataset.parent ) ) {
-				$( v ).closest( '.academic-unit' ).removeClass( 'academic-unit-hidden' ).addClass( 'academic-unit-visible' );
-			} else {
-				// Hidden fields can't be checked.
-				$( v ).prop( 'checked', false );
+		$academicUnitCheckboxes.each(
+			function( k, v ) {
+				// Items without parents or with unchecked parents should be shown.
+				var hasParent = v.dataset.hasOwnProperty( 'parent' ) && v.dataset.parent.length > 0;
+				if ( ! hasParent || -1 !== selectedUnitSlugs.indexOf( v.dataset.parent ) ) {
+					  $( v ).closest( '.academic-unit' ).removeClass( 'academic-unit-hidden' ).addClass( 'academic-unit-visible' );
+				} else {
+					// Hidden fields can't be checked.
+					$( v ).prop( 'checked', false );
+				}
 			}
-		} );
+		);
 	}
 
 	/**
@@ -99,10 +110,10 @@
 		var validated = true;
 
 		if ( 'group' === entityType ) {
-			typeOfType = CBOXOLAcademicTypes.groupType;
+			typeOfType          = CBOXOLAcademicTypes.groupType;
 			entityTypeUnitTypes = CBOXOLAcademicTypes.typesByGroupType[ typeOfType ];
 		} else {
-			typeOfType = $accountTypeSelector.val();
+			typeOfType          = $accountTypeSelector.val();
 			entityTypeUnitTypes = CBOXOLAcademicTypes.typesByMemberType[ typeOfType ];
 		}
 
@@ -111,16 +122,16 @@
 				continue;
 			}
 
-			if ( 0 === $('.cboxol-academic-unit-selector-for-type-' + entityTypeUnitTypes[ i ].slug).find(':checked').length ) {
+			if ( 0 === $( '.cboxol-academic-unit-selector-for-type-' + entityTypeUnitTypes[ i ].slug ).find( ':checked' ).length ) {
 				validated = false;
 				break;
 			}
 		}
 
 		if ( validated ) {
-			$('.academic-unit-notice').remove();
+			$( '.academic-unit-notice' ).remove();
 		} else {
-			$('.cboxol-academic-unit-selector').closest('.panel-body').prepend('<div id="message" class="bp-template-notice error academic-unit-notice"><p>' + CBOXOLAcademicTypes.requiredError + '</p></div>');
+			$( '.cboxol-academic-unit-selector' ).closest( '.panel-body' ).prepend( '<div id="message" class="bp-template-notice error academic-unit-notice"><p>' + CBOXOLAcademicTypes.requiredError + '</p></div>' );
 
 			var aurOffset = $( '#panel-academic-units' ).offset();
 			if ( aurOffset ) {

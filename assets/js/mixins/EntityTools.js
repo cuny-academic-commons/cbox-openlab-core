@@ -33,12 +33,15 @@ module.exports = {
 			get() { return this.getEntityProp( 'isModified' ) },
 			set( value ) {
 				// Don't use setEntityProp() to avoid recursion.
-				this.$store.commit( 'setEntityProperty', {
-					itemsKey: this.itemsKey,
-					property: 'isModified',
-					slug: this.slug,
-					value: value
-				} )
+				this.$store.commit(
+					'setEntityProperty',
+					{
+						itemsKey: this.itemsKey,
+						property: 'isModified',
+						slug: this.slug,
+						value: value
+					}
+				)
 			}
 		},
 
@@ -104,12 +107,15 @@ module.exports = {
 				this.isModified = true
 			}
 
-			this.$store.commit( 'setEntityProperty', {
-				itemsKey: this.itemsKey,
-				property: prop,
-				slug: this.slug,
-				value: value
-			} )
+			this.$store.commit(
+				'setEntityProperty',
+				{
+					itemsKey: this.itemsKey,
+					property: prop,
+					slug: this.slug,
+					value: value
+				}
+			)
 		}
 	},
 
