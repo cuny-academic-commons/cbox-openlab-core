@@ -14,17 +14,6 @@ function cboxol_register_admin_menu() {
 	// @todo only add on "main" site
 	// @todo icon
 	// @todo How do I make it "About" as first option
-	/*
-	add_menu_page(
-		__( 'OpenLab Setup', 'commons-in-a-box' ),
-		__( 'OpenLab Setup', 'commons-in-a-box' ),
-		'manage_network_options',
-		cboxol_admin_slug(),
-		'cboxol_admin_about_page',
-		'',
-		2
-	);
-	*/
 
 	add_submenu_page(
 		cboxol_admin_slug(),
@@ -150,6 +139,7 @@ function cboxol_register_assets() {
 				'selectAll'                            => __( 'Select All', 'commons-in-a-box' ),
 				'selectGroup'                          => __( 'Select Group', 'commons-in-a-box' ),
 				'selectMemberType'                     => __( 'Select Member Type', 'commons-in-a-box' ),
+				// translators: Unit name
 				'selectUnit'                           => _x( 'Select Unit: %s', 'checkbox screen reader text', 'commons-in-a-box' ),
 				'signUpCode'                           => __( 'Signup Code', 'commons-in-a-box' ),
 				'signUpCodes'                          => __( 'Sign Up Codes', 'commons-in-a-box' ),
@@ -230,6 +220,8 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 					return _x( 'Profile Fields', 'Member profile fields admin label', 'commons-in-a-box' );
 			}
 
+			break;
+
 		case 'group-settings':
 			switch ( $page ) {
 				case 'types':
@@ -239,6 +231,8 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 					return _x( 'Group Categories', 'Group categories admin label', 'commons-in-a-box' );
 			}
 
+			break;
+
 		case 'communication-settings':
 			switch ( $page ) {
 				case 'email':
@@ -247,11 +241,14 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 				case 'invitations':
 					return _x( 'Invitations', 'Communication Settings admin label', 'commons-in-a-box' );
 			}
+
+			break;
 	}
 }
 
 function cboxol_admin_header( $parent_page, $sub_page ) {
-	$parent_title = $sub_title = '';
+	$parent_title = '';
+	$sub_title    = '';
 
 	$subpage_label = cboxol_admin_subpage_label( $parent_page, $sub_page );
 
@@ -268,6 +265,7 @@ function cboxol_admin_header( $parent_page, $sub_page ) {
 		);
 	}
 
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo $title;
 
 	cboxol_admin_tabs( $parent_page, $sub_page );
@@ -290,11 +288,12 @@ function cboxol_admin_tabs( $parent_page, $active_tab = '' ) {
 
 	// Loop through tabs and build navigation.
 	foreach ( array_values( $tabs ) as $tab_data ) {
-		$is_current = (bool) ( $tab_data['name'] == $active_tab );
+		$is_current = (bool) ( $tab_data['name'] === $active_tab );
 		$tab_class  = $is_current ? $active_class : $idle_class;
 		$tabs_html .= '<a href="' . esc_url( $tab_data['href'] ) . '" class="' . esc_attr( $tab_class ) . '">' . esc_html( $tab_data['label'] ) . '</a>';
 	}
 
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo '<div class="nav-tab-wrapper">' . $tabs_html . '</div>';
 }
 
@@ -420,11 +419,13 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 }
 
 function cboxol_group_settings_admin_page() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'types';
 	cboxol_admin_page( 'group-settings', $current_section );
 }
 
 function cboxol_member_settings_admin_page() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'types';
 	cboxol_admin_page( 'member-settings', $current_section );
 }
@@ -435,6 +436,7 @@ function cboxol_brand_settings_admin_page() {
 }
 
 function cboxol_communication_settings_admin_page() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$current_section = isset( $_GET['cboxol-section'] ) ? wp_unslash( $_GET['cboxol-section'] ) : 'email';
 	cboxol_admin_page( 'communication-settings', $current_section );
 }
