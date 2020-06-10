@@ -28,7 +28,6 @@
 
 	<!-- Add in some extra rules from other standards. -->
 	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
-	<rule ref="Generic.Commenting.Todo"/>
 
 	<rule ref="WordPress.WP.DeprecatedClasses">
 		<properties>

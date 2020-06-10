@@ -27,17 +27,11 @@ function openlab_get_group_type( $group_id = 0 ) {
 
 	$group_type = groups_get_groupmeta( $group_id, 'wds_group_type' );
 
-	/*
-	if ( !in_array( $group_type, openlab_group_types() ) ) {
-		$group_type = 'group';
-	}
-	*/
-
 	return $group_type;
 }
 
 function openlab_is_group_type( $group_id = 0, $type = 'group' ) {
-	return $type == openlab_get_group_type( $group_id );
+	return openlab_get_group_type( $group_id ) === $type;
 }
 
 function openlab_is_course( $group_id = 0 ) {
@@ -90,7 +84,7 @@ function cboxol_grouptypes_admin_page() {
 		<p><?php esc_html_e( 'Group Types allow your site\'s groups to be categorized in various ways. Each group type gets its own directory, and groups of different types may differ in functionality and appearance.', 'commons-in-a-box' ); ?></p>
 
 		<script type="text/javascript">
-			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
+			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
 		</script>
 
 		<div id="cboxol-admin"></div>
@@ -214,7 +208,7 @@ function cboxol_get_group_types( $args = array() ) {
 	}
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key    = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$cache_key    = 'cboxol_types_' . md5( wp_json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids          = wp_cache_get( $cache_key, 'cboxol_group_types' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
@@ -270,12 +264,14 @@ function cboxol_get_edited_group_group_type() {
 		$the_group_id = bp_get_new_group_id();
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	$group_type = null;
 	if ( $the_group_id ) {
 		$group_type = cboxol_get_group_group_type( $the_group_id );
 	} elseif ( isset( $_GET['group_type'] ) ) {
 		$group_type = cboxol_get_group_type( wp_unslash( urldecode( $_GET['group_type'] ) ) );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	if ( ! $group_type ) {
 		return new WP_Error( 'no_group_type', __( 'No group type found.', 'commons-in-a-box' ) );
@@ -290,9 +286,11 @@ function cboxol_get_edited_group_group_type() {
 function cboxol_grouptypes_hidden_field() {
 	$group_type = null;
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	if ( bp_is_group_create() && isset( $_GET['group_type'] ) ) {
 		$group_type = wp_unslash( urldecode( $_GET['group_type'] ) );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$group_type_object = cboxol_get_group_type( $group_type );
 	if ( is_wp_error( $group_type_object ) ) {
@@ -302,7 +300,7 @@ function cboxol_grouptypes_hidden_field() {
 	printf(
 		'<input type="hidden" name="group-type" value="%s" /><input type="hidden" name="group-type-nonce" value="%s" />',
 		esc_attr( $group_type_object->get_slug() ),
-		wp_create_nonce( 'cboxol_set_group_type' )
+		esc_attr( wp_create_nonce( 'cboxol_set_group_type' ) )
 	);
 }
 
@@ -352,14 +350,17 @@ function cboxol_enforce_group_type_on_creation() {
 		return;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	if ( ! empty( $_POST ) ) {
 		return;
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	$group_type = null;
 	if ( isset( $_GET['group_type'] ) ) {
 		$group_type = cboxol_get_group_type( wp_unslash( urldecode( $_GET['group_type'] ) ) );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$redirect = false;
 	if ( ! $group_type || is_wp_error( $group_type ) ) {
@@ -388,7 +389,7 @@ function cboxol_enforce_group_type_on_creation() {
 	}
 
 	$redirect_url = add_query_arg( 'group_type', $redirect_type->get_slug(), bp_get_groups_directory_permalink() . 'create/step/group-details/' );
-	wp_redirect( $redirect_url );
+	wp_safe_redirect( $redirect_url );
 	die();
 }
 

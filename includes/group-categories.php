@@ -36,7 +36,7 @@ function cboxol_groupcategories_admin_page() {
 		<p><?php esc_html_e( 'Group categories make it easier to organize and discover groups. Group administrators can add the categories you create here to their groups, which will then be filterable by category on group directory pages.', 'commons-in-a-box' ); ?></p>
 
 		<script type="text/javascript">
-			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
+			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
 		</script>
 
 		<div id="cboxol-admin"></div>

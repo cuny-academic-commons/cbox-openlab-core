@@ -113,7 +113,6 @@ class CBOXOL_Command extends WP_CLI_Command {
 
 		remove_action( 'after_switch_theme', '_wp_sidebars_changed' );
 
-		//      update_option( 'theme_switched', 'openlab-theme' );
 		delete_option( 'openlab_theme_installed' );
 	}
 }
