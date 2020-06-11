@@ -230,11 +230,7 @@ class Bp_Customizable_Group_Categories {
 	 */
 	public function root_blog_check() {
 
-		if ( ! function_exists( 'bp_get_root_blog_id' ) ) {
-			return false;
-		}
-
-		if ( get_current_blog_id() != bp_get_root_blog_id() ) {
+		if ( ! bp_is_root_blog() ) {
 			return false;
 		}
 
@@ -263,11 +259,12 @@ class Bp_Customizable_Group_Categories {
 		$warnings = array();
 
 		if ( ! $this->version_check() ) {
-			$warnings[] = sprintf( __( 'BP Customizable Group Categories requires at least version %1$s of BuddyPress and version %2$s of WordPress.', 'bp-custocg', 'commons-in-a-box' ), self::$required_version['bp'], self::$required_version['wp'] );
+			// translators: 1. required BP version, 2. required WP version
+			$warnings[] = sprintf( __( 'BP Customizable Group Categories requires at least version %1$s of BuddyPress and version %2$s of WordPress.', 'commons-in-a-box' ), self::$required_version['bp'], self::$required_version['wp'] );
 		}
 
 		if ( ! bp_core_do_network_admin() && ! $this->root_blog_check() ) {
-			$warnings[] = __( 'BP Customizable Group Categories requires to be activated on the blog where BuddyPress is activated.', 'bp-custocg', 'commons-in-a-box' );
+			$warnings[] = __( 'BP Customizable Group Categories requires to be activated on the blog where BuddyPress is activated.', 'commons-in-a-box' );
 		}
 
 		if ( ! empty( $warnings ) ) :
@@ -358,8 +355,8 @@ class Bp_Customizable_Group_Categories {
 		}
 
 		$labels = array(
-			'name'          => _x( 'Group Categories', 'taxonomy general name', 'bp-custocg', 'commons-in-a-box' ),
-			'singular_name' => _x( 'Group Tag', 'taxonomy singular name', 'bp-custocg', 'commons-in-a-box' ),
+			'name'          => _x( 'Group Categories', 'taxonomy general name', 'commons-in-a-box' ),
+			'singular_name' => _x( 'Group Tag', 'taxonomy singular name', 'commons-in-a-box' ),
 		);
 
 		$bp         = buddypress();

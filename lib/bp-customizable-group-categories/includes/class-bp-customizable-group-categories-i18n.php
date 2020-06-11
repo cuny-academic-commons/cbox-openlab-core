@@ -24,6 +24,7 @@
  * @subpackage Bp_Customizable_Group_Categories/includes
  * @author     Joe Unander <joe@early-adopter.com>
  */
+// phpcs:ignore PEAR.NamingConventions.ValidClassName.Invalid
 class Bp_Customizable_Group_Categories_i18n {
 
 	/**

@@ -82,6 +82,7 @@ class Bp_Customizable_Group_Categories_Activator {
   KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;";
 
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$result = $wpdb->query( $sql );
 			}
 		}

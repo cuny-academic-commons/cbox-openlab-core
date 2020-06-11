@@ -23,6 +23,7 @@ function bpcgc_get_terms_by_group_type( $group_type ) {
 		$query = $wpdb->prepare( "SELECT t.* FROM $wpdb->terms t INNER JOIN $wpdb->termmeta tm on tm.term_id = t.term_id WHERE tm.meta_key=%s", $key );
 	}
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$terms_out = $wpdb->get_results( $query );
 
 	return $terms_out;

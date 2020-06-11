@@ -101,12 +101,12 @@ class Bp_Customizable_Group_Categories_Admin {
 	 * @since BP Customizable Group Categories (1.0.0)
 	 */
 	public function bp_groups_admin_menu() {
-		$this->admin_menu    = add_menu_page( _x( 'Group Categories', 'admin page title', 'bp-custocg', 'commons-in-a-box' ), _x( 'Group Categories', 'admin menu title', 'bp-custocg', 'commons-in-a-box' ), 'bp_moderate', 'bp-group-categories', array( $this, 'admin_tags' ), 'dashicons-yes', 42 );
-		$this->admin_submenu = add_submenu_page( 'bp-group-categories', _x( 'All Categories', 'admin page title', 'bp-custocg', 'commons-in-a-box' ), _x( 'All Categories', 'admin menu title', 'bp-custocg', 'commons-in-a-box' ), 'bp_moderate', 'bp-group-categories' );
+		$this->admin_menu    = add_menu_page( _x( 'Group Categories', 'admin page title', 'commons-in-a-box' ), _x( 'Group Categories', 'admin menu title', 'commons-in-a-box' ), 'bp_moderate', 'bp-group-categories', array( $this, 'admin_tags' ), 'dashicons-yes', 42 );
+		$this->admin_submenu = add_submenu_page( 'bp-group-categories', _x( 'All Categories', 'admin page title', 'commons-in-a-box' ), _x( 'All Categories', 'admin menu title', 'commons-in-a-box' ), 'bp_moderate', 'bp-group-categories' );
 
 		//if sorting plugin Category Order and Taxonomy Terms Order is available
 		if ( function_exists( 'tto_info_box' ) ) {
-			$this->admin_submenu_sort = add_submenu_page( 'bp-group-categories', _x( 'Sort Group Categories', 'admin page title', 'bp-custocg', 'commons-in-a-box' ), _x( 'Sort Group Categories', 'admin menu title', 'bp-custocg', 'commons-in-a-box' ), 'bp_moderate', 'bpcgc-sorting', array( $this, 'sorting_tags' ) );
+			$this->admin_submenu_sort = add_submenu_page( 'bp-group-categories', _x( 'Sort Group Categories', 'admin page title', 'commons-in-a-box' ), _x( 'Sort Group Categories', 'admin menu title', 'commons-in-a-box' ), 'bp_moderate', 'bpcgc-sorting', array( $this, 'sorting_tags' ) );
 			add_action( 'admin_head', array( $this, 'admin_head_actions' ) );
 		}
 
@@ -121,9 +121,10 @@ class Bp_Customizable_Group_Categories_Admin {
 	 * Hooks into admin_head, because any earlier causes issues
 	 * @global array $submenu
 	 */
-	function admin_head_actions() {
+	public function admin_head_actions() {
 		global $submenu;
 
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$submenu['bp-group-categories'][1][2] = 'admin.php?page=bpcgc-sorting&post_type=bp_group&taxonomy=bp_group_categories';
 	}
 
@@ -135,7 +136,7 @@ class Bp_Customizable_Group_Categories_Admin {
 	 *
 	 * @param WP_Screen $current_screen
 	 */
-	function set_current_screen( $current_screen = OBJECT ) {
+	public function set_current_screen( $current_screen = OBJECT ) {
 		global $page_hook;
 
 		if ( empty( $this->admin_menu ) || false === strpos( $this->admin_menu, $current_screen->id ) ) {
@@ -160,23 +161,26 @@ class Bp_Customizable_Group_Categories_Admin {
 	 *
 	 * @global $wp_post_types the list of available post types
 	 */
-	function register_post_type() {
+	public function register_post_type() {
 		global $wp_post_types;
 
-		if ( empty( $_GET['page'] ) || 'bp-group-categories' != $_GET['page'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( empty( $_GET['page'] ) || 'bp-group-categories' !== $_GET['page'] ) {
 			return;
 		}
 
 		$post_type = 'bp_group';
 
 		// Set needed properties
+		// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited
 		$wp_post_types[ $post_type ]                    = new stdClass();
 		$wp_post_types[ $post_type ]->show_ui           = true;
 		$wp_post_types[ $post_type ]->show_in_menu      = false;
 		$wp_post_types[ $post_type ]->show_admin_column = false;
 		$wp_post_types[ $post_type ]->labels            = new stdClass();
-		$wp_post_types[ $post_type ]->labels->name      = __( 'Groups', 'bp-custocg', 'commons-in-a-box' );
+		$wp_post_types[ $post_type ]->labels->name      = __( 'Groups', 'commons-in-a-box' );
 		$wp_post_types[ $post_type ]->name              = $post_type;
+		// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
 	}
 
 	/**
@@ -185,13 +189,15 @@ class Bp_Customizable_Group_Categories_Admin {
 	 * @access public
 	 * @since BP Customizable Group Categories (1.0.0)
 	 */
-	function current_action() {
+	public function current_action() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		$action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
 
 		// If the bottom is set, let it override the action
-		if ( ! empty( $_REQUEST['action2'] ) && $_REQUEST['action2'] != '-1' ) {
+		if ( ! empty( $_REQUEST['action2'] ) && '-1' !== $_REQUEST['action2'] ) {
 			$action = $_REQUEST['action2'];
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		return $action;
 	}
@@ -208,23 +214,21 @@ class Bp_Customizable_Group_Categories_Admin {
 	public function admin_tags_load() {
 		global $wp_http_referer;
 
-		$cheating = __( 'Cheatin&#8217; uh?', 'bp-custocg', 'commons-in-a-box' );
+		$cheating = __( 'Cheatin&#8217; uh?', 'commons-in-a-box' );
 
 		if ( ! bp_current_user_can( 'bp_moderate' ) ) {
-			wp_die( $cheating );
+			wp_die( esc_html( $cheating ) );
 		}
 
 		$post_type = 'bp_group';
-		$taxnow    = $taxonomy = 'bp_group_categories';
+		$taxnow    = 'bp_group_categories';
+		$taxonomy  = $taxnow;
 
 		$redirect_to = add_query_arg(
 			'page',
 			'bp-group-categories',
 			get_admin_url( bp_get_root_blog_id(), 'admin.php' )
 		);
-
-		// Filter the updated messages
-		//add_filter('term_updated_messages', array($this, 'admin_updated_message'), 10, 1);
 
 		$doaction = $this->current_action();
 		/**
@@ -234,7 +238,7 @@ class Bp_Customizable_Group_Categories_Admin {
 			$bp_group_categories_tax = get_taxonomy( $taxonomy );
 
 			if ( ! $bp_group_categories_tax ) {
-				wp_die( __( 'Invalid taxonomy', 'bp-custocg', 'commons-in-a-box' ) );
+				wp_die( esc_html__( 'Invalid taxonomy', 'commons-in-a-box' ) );
 			}
 
 			switch ( $doaction ) {
@@ -244,42 +248,43 @@ class Bp_Customizable_Group_Categories_Admin {
 					if ( ! empty( $inserted ) && ! is_wp_error( $inserted ) ) {
 						$redirect_to = add_query_arg( 'message', 1, $redirect_to );
 						//term meta
+						// phpcs:ignore WordPress.Security.NonceVerification.Missing
 						$this->process_term_meta( $_POST, $inserted );
 					} else {
 						$redirect_to = add_query_arg( 'message', 4, $redirect_to );
 					}
-					wp_redirect( $redirect_to );
+					wp_safe_redirect( $redirect_to );
 					exit;
 
 				case 'delete':
 				case 'bulk-delete':
-					$tag_IDs    = array();
+					$tag_ids    = array();
 					$query_args = array();
 
 					if ( empty( $_REQUEST['tag_ID'] ) && empty( $_REQUEST['delete_tags'] ) ) {
-						wp_redirect( $redirect_to );
+						wp_safe_redirect( $redirect_to );
 						exit;
 					} elseif ( ! empty( $_REQUEST['tag_ID'] ) ) {
-						$tag_ID = absint( $_REQUEST['tag_ID'] );
-						check_admin_referer( 'delete-tag_' . $tag_ID );
-						$tag_IDs               = array( $tag_ID );
+						$tag_id = absint( $_REQUEST['tag_ID'] );
+						check_admin_referer( 'delete-tag_' . $tag_id );
+						$tag_ids               = array( $tag_id );
 						$query_args['message'] = 2;
 					} else {
 						check_admin_referer( 'bulk-tags' );
-						$tag_IDs               = wp_parse_id_list( $_REQUEST['delete_tags'] );
+						$tag_ids               = wp_parse_id_list( $_REQUEST['delete_tags'] );
 						$query_args['message'] = 6;
 					}
 
 					if ( ! bp_current_user_can( $bp_group_categories_tax->cap->delete_terms ) ) {
-						wp_die( $cheating );
+						wp_die( esc_html( $cheating ) );
 					}
 
-					foreach ( $tag_IDs as $tag_ID ) {
-						BPCGC_Groups_Terms::delete_term( $tag_ID, $bp_group_categories_tax->name );
+					foreach ( $tag_ids as $tag_id ) {
+						BPCGC_Groups_Terms::delete_term( $tag_id, $bp_group_categories_tax->name );
 					}
 
 					$redirect_to = add_query_arg( $query_args, $redirect_to );
-					wp_redirect( $redirect_to );
+					wp_safe_redirect( $redirect_to );
 					exit;
 
 				case 'edit':
@@ -295,11 +300,11 @@ class Bp_Customizable_Group_Categories_Admin {
 					$tax   = get_taxonomy( $taxnow );
 					$title = $tax->labels->edit_item;
 
-					$tag_ID = (int) $_REQUEST['tag_ID'];
+					$tag_id = (int) $_REQUEST['tag_ID'];
 
-					$tag = get_term( $tag_ID, $taxonomy, OBJECT, 'edit' );
+					$tag = get_term( $tag_id, $taxonomy, OBJECT, 'edit' );
 					if ( ! $tag ) {
-						wp_die( __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'commons-in-a-box' ) );
+						wp_die( esc_html__( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'commons-in-a-box' ) );
 					}
 
 					require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -308,19 +313,19 @@ class Bp_Customizable_Group_Categories_Admin {
 					exit;
 
 				case 'editedtag':
-					$tag_ID = (int) $_POST['tag_ID'];
-					check_admin_referer( 'update-tag_' . $tag_ID );
+					$tag_id = (int) $_POST['tag_ID'];
+					check_admin_referer( 'update-tag_' . $tag_id );
 
 					if ( ! bp_current_user_can( $bp_group_categories_tax->cap->edit_terms ) ) {
-						wp_die( $cheating );
+						wp_die( esc_html( $cheating ) );
 					}
 
-					$tag = BPCGC_Groups_Terms::get_term( $tag_ID, $bp_group_categories_tax->name );
+					$tag = BPCGC_Groups_Terms::get_term( $tag_id, $bp_group_categories_tax->name );
 					if ( ! $tag ) {
-						wp_die( __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'bp-custocg', 'commons-in-a-box' ) );
+						wp_die( esc_html__( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?', 'commons-in-a-box' ) );
 					}
 
-					$ret = BPCGC_Groups_Terms::update_term( $tag_ID, $bp_group_categories_tax->name, $_POST );
+					$ret = BPCGC_Groups_Terms::update_term( $tag_id, $bp_group_categories_tax->name, $_POST );
 
 					if ( ! empty( $ret ) && ! is_wp_error( $ret ) ) {
 						//term meta
@@ -330,7 +335,7 @@ class Bp_Customizable_Group_Categories_Admin {
 						$redirect_to = add_query_arg( 'message', 3, $redirect_to );
 					}
 
-					wp_redirect( $redirect_to );
+					wp_safe_redirect( $redirect_to );
 					exit;
 			}
 
@@ -392,6 +397,7 @@ class Bp_Customizable_Group_Categories_Admin {
 		include CUSTOCG_BASE_DIR . '/parts/category-extra-fields.php';
 		$fields_out = ob_get_clean();
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $fields_out;
 	}
 
@@ -403,6 +409,7 @@ class Bp_Customizable_Group_Categories_Admin {
 		$possible_groups = array( 'club', 'project' );
 		$values          = array();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$tag_ID = (int) $_REQUEST['tag_ID'];
 
 		$tag = get_term( $tag_ID, 'bp_group_categories', OBJECT, 'edit' );
@@ -420,6 +427,7 @@ class Bp_Customizable_Group_Categories_Admin {
 		include CUSTOCG_BASE_DIR . '/parts/category-extra-fields.php';
 		$fields_out = ob_get_clean();
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $fields_out;
 	}
 
@@ -444,7 +452,7 @@ class Bp_Customizable_Group_Categories_Admin {
 	 * @since BP Customizable Group Categories (1.0.0)
 	 */
 	public function edit_term_link( $link = '', $term_id = 0, $taxonomy = '', $object_type = '' ) {
-		if ( empty( $taxonomy ) || 'bp_group_categories' != $taxonomy ) {
+		if ( empty( $taxonomy ) || 'bp_group_categories' !== $taxonomy ) {
 			return $link;
 		}
 
@@ -462,8 +470,11 @@ class Bp_Customizable_Group_Categories_Admin {
 		$x        = new WP_Ajax_Response();
 
 		$tag = $this->add_tag();
+		if ( ! $tag ) {
+			$tag = get_term( $tag['term_id'], $taxonomy );
+		}
 
-		if ( ! $tag || is_wp_error( $tag ) || ( ! $tag = get_term( $tag['term_id'], $taxonomy ) ) ) {
+		if ( ! $tag ) {
 			$message = __( 'An error has occurred. Please reload the page and try again.', 'commons-in-a-box' );
 			if ( is_wp_error( $tag ) && $tag->get_error_message() ) {
 				$message = $tag->get_error_message();
@@ -479,8 +490,10 @@ class Bp_Customizable_Group_Categories_Admin {
 		}
 
 		//term meta
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$this->process_term_meta( $_POST, $tag );
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$wp_list_table = _get_list_table( 'WP_Terms_List_Table', array( 'screen' => $_POST['screen'] ) );
 
 		$level = 0;
@@ -518,7 +531,7 @@ class Bp_Customizable_Group_Categories_Admin {
 		check_admin_referer( 'add-tag', '_wpnonce_add-tag' );
 
 		if ( ! bp_current_user_can( $bp_group_categories_tax->cap->edit_terms ) ) {
-			wp_die( $cheating );
+			wp_die();
 		}
 
 		$inserted = BPCGC_Groups_Terms::insert_term( $_POST['tag-name'], $bp_group_categories_tax->name, $_POST );
