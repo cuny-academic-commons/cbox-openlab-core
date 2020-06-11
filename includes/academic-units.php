@@ -628,7 +628,6 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 					</ul>
 				</div>
 			</fieldset>
-
 		</div>
 		<?php
 	}
@@ -719,6 +718,14 @@ function cboxol_save_activated_user_academic_units( $user_id, $key, $user ) {
  * @param int $user_id
  */
 function cboxol_academic_units_process_change_for_user( $user_id ) {
+	if ( ! isset( $_POST['cboxol-academic-unit-selector-nonce'] ) ) {
+		return;
+	}
+
+	if ( ! wp_verify_nonce( $_POST['cboxol-academic-unit-selector-nonce'], 'cboxol-academic-unit-selector' ) ) {
+		return;
+	}
+
 	$academic_units = array();
 	if ( isset( $_POST['academic-units'] ) ) {
 		$academic_units = wp_unslash( $_POST['academic-units'] );
