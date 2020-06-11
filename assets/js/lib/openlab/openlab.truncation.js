@@ -233,7 +233,8 @@ OpenLab.truncation = (function ($) {
 			var thisContainer = thisElem.closest( '.truncate-sizer' );
 			var breakpoints   = ['lg', 'md', 'sm', 'xs', 'xxs'];
 
-			for (var i = 0; i < breakpoints.length; i++) {
+			var breakpointCount = breakponts.length
+			for (var i = 0; i < breakpointCount; i++) {
 
 				var breakpoint     = breakpoints[i];
 				var checkContainer = thisElem.closest( '.truncate-sizer-' + breakpoint );

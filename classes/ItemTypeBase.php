@@ -16,6 +16,7 @@ class ItemTypeBase {
 	);
 
 	// can_be_deleted and is_enabled have special logic, so can't be lumped in.
+	// phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
 	protected $_boolean_props = array();
 
 	protected $boolean_props = array();

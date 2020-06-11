@@ -663,6 +663,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$site_id = wpmu_create_blog(
 			$domain,
 			$path,
+			// translators: Group type name
 			sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), $this->get_name() ),
 			get_current_user_id()
 		);

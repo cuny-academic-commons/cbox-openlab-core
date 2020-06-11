@@ -5,7 +5,8 @@ import CBOXOLAdmin from './components/CBOXOLAdmin.vue'
 
 Vue.use( Vuex )
 
-const store                            = new Vuex.Store(
+// phpcs:ignore Generic.Formatting.MultipleStatementAlignment.NotSameWarning
+const store = new Vuex.Store(
 	{
 		state: {
 			academicUnits: {},
@@ -218,7 +219,7 @@ const store                            = new Vuex.Store(
 					newEntityNames.sort(
 						function( a, b ) {
 							if ( '_new' === a.substr( 0, 4 ) ) {
-								  return -1
+								return -1
 							}
 
 							let order_a

@@ -8,4 +8,4 @@ php:
 before_script:
 - composer install
 
-script: ./vendor/bin/phpcs -p cbox-openlab-core.php classes/ includes/ lib/ --standard=PHPCompatibilityWP --runtime-set testVersion 5.6- --extensions=php
+script: ./vendor/bin/phpcs -ps cbox-openlab-core.php
