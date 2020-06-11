@@ -279,6 +279,12 @@ function cboxol_user_can_create_courses( $user_id ) {
  * @param int $user_id
  */
 function cboxol_membertypes_process_change( $user_id ) {
+	if ( ! isset( $_POST['change-member-type-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'change_member_type', 'change-member-type-nonce' );
+
 	if ( ! isset( $_POST['member-type'] ) ) {
 		return;
 	}
