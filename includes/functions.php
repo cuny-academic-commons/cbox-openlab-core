@@ -163,6 +163,7 @@ function cboxol_copyr( $source, $dest ) {
 
 	// Loop through the folder
 	$dir = dir( $source );
+	// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 	while ( false !== $entry = $dir->read() ) {
 		// Skip pointers
 		if ( '.' === $entry || '..' === $entry ) {
