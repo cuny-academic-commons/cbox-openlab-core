@@ -131,11 +131,11 @@ function openlab_sitewide_header( $location = 'header' ) {
 		<div class="container-fluid">
 			<div class="navbar-header clearfix">
 				<header class="menu-title pull-left">
-					<a href="<?php echo bp_get_root_domain(); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'commons-in-a-box' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
+					<a href="<?php echo esc_attr( bp_get_root_domain() ); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'commons-in-a-box' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
 				</header>
 				<div class="pull-right search">
 					<div class="search-trigger-wrapper">
-						<button  class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo $location; ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'commons-in-a-box' ); ?></span></button>
+						<button class="search-trigger btn-link" data-mode="mobile" data-location="<?php echo esc_attr( $location ); ?>" href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only"><?php esc_html_e( 'Open Search', 'commons-in-a-box' ); ?></span></button>
 					</div>
 				</div>
 			</div>
@@ -169,14 +169,14 @@ function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location ) {
 
 	$button_sr_text = esc_html__( 'Open Search', 'commons-in-a-box' );
 
-	if ( $mode == 'desktop' ) :
+	if ( 'desktop' === $mode ) {
 
 		$mobile_mup .= <<<HTML
 <div class="search-trigger-wrapper">
     <button class="search-trigger btn-link" data-mode="desktop" data-location={$location} href="#"><span class="fa fa-search" aria-hidden="true"></span><span class="sr-only">{$button_sr_text}</span></button>
 </div>
 HTML;
-	endif;
+	}
 
 	$form_action = trailingslashit( bp_get_root_domain() );
 	$nonce       = wp_create_nonce( 'bp_search_form' );
@@ -213,6 +213,7 @@ HTML;
     </div>
 HTML;
 
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo $mobile_mup;
 }
 
@@ -221,8 +222,11 @@ HTML;
  */
 function openlab_mu_search_override() {
 	if ( isset( $_POST['search'] ) ) {
-		$nonce = isset( $_POST['_bp_search_nonce'] ) ? $_POST['_bp_search_nonce'] : '';
-		if ( ! wp_verify_nonce( $nonce, 'bp_search_form' ) ) {
+		if ( ! isset( $_POST['_bp_search_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_POST['_bp_search_nonce'], 'bp_search_form' ) ) {
 			return;
 		}
 
@@ -281,7 +285,7 @@ class OpenLab_Admin_Bar {
 		}
 	}
 
-	function __construct() {
+	public function __construct() {
 		// Bail if BP is not present
 		if ( ! class_exists( 'BP_Core' ) ) {
 			return;
@@ -362,26 +366,26 @@ class OpenLab_Admin_Bar {
 			add_action( 'admin_bar_menu', array( $this, 'add_messages_menu' ), 24 );
 			add_action( 'admin_bar_menu', array( $this, 'add_activity_menu' ), 26 );
 
-						//customizations for site menu
-						remove_action( 'admin_bar_menu', 'wp_admin_bar_site_menu', 30 );
-						add_action( 'admin_bar_menu', array( $this, 'openlab_custom_admin_bar_site_menu' ), 30 );
+			// customizations for site menu
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_site_menu', 30 );
+			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_admin_bar_site_menu' ), 30 );
 
 			add_action( 'admin_bar_menu', array( $this, 'maybe_remove_thisblog' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_adduser' ), 9999 );
 
-						//removing the default account information item and menu so we can a custom Bootstrap-style one
-						remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
-						add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_item' ), 7 );
-						remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
-						add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_menu' ), 0 );
+			//removing the default account information item and menu so we can a custom Bootstrap-style one
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
+			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_item' ), 7 );
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
+			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_menu' ), 0 );
 
 			add_action( 'admin_bar_menu', array( $this, 'add_logout_item' ), 9999 );
-			//          add_action( 'admin_bar_menu', array( $this, 'fix_logout_redirect' ), 10000 );
-						//creating custom menus for comments, new content, and editing
 
-						remove_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 50 );
-						add_action( 'admin_bar_menu', array( $this, 'add_custom_updates_menu' ), 50 );
+			//creating custom menus for comments, new content, and editing
+
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 50 );
+			add_action( 'admin_bar_menu', array( $this, 'add_custom_updates_menu' ), 50 );
 
 			if ( ! is_network_admin() && ! is_user_admin() ) {
 				remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );
@@ -402,15 +406,15 @@ class OpenLab_Admin_Bar {
 		}
 	}
 
-	function remove_bp_admin_bar_styles( $styles ) {
+	public function remove_bp_admin_bar_styles( $styles ) {
 		unset( $styles['bp-admin-bar'] );
 		return $styles;
 	}
 
-		/**
-		 * Custom dashboard toggle on mobile
-		 */
-	function custom_admin_bar_sidebar_toggle( $wp_admin_bar ) {
+	/**
+	 * Custom dashboard toggle on mobile
+	 */
+	public function custom_admin_bar_sidebar_toggle( $wp_admin_bar ) {
 		if ( is_admin() ) {
 
 			$sr_text = __( 'Menu', 'commons-in-a-box' );
@@ -437,12 +441,11 @@ HTML;
 	/**
 	 * Add the main OpenLab menu
 	 */
-	function add_network_menu( $wp_admin_bar ) {
+	public function add_network_menu( $wp_admin_bar ) {
 		$logo_url = openlab_get_logo_url();
 
 		$wp_admin_bar->add_node(
 			array(
-				/*'parent' => 'top-secondary',*/
 				'id'    => 'openlab',
 				'title' => bp_get_option( 'blogname' ),
 				'href'  => bp_get_root_domain(),
@@ -464,7 +467,7 @@ HTML;
 		$this->openlab_menu_items( 'openlab' );
 	}
 
-	function openlab_menu_items( $parent ) {
+	public function openlab_menu_items( $parent ) {
 		global $wp_admin_bar;
 
 		$wp_admin_bar->add_node(
@@ -500,7 +503,7 @@ HTML;
 	 * The MOL link on mobile needs to sit between the hamburger menus and the logout link
 	 * So we'll need a third group for this (makes styling easier)
 	 */
-	function add_middle_group_for_mobile( $wp_admin_bar ) {
+	public function add_middle_group_for_mobile( $wp_admin_bar ) {
 		$wp_admin_bar->add_group(
 			array(
 				'id'   => 'mobile-centered',
@@ -512,9 +515,9 @@ HTML;
 	}
 
 	/**
-		 * Mol link on mobile
-		 */
-	function add_mobile_mol_link( $wp_admin_bar ) {
+	 * Mol link on mobile
+	 */
+	public function add_mobile_mol_link( $wp_admin_bar ) {
 		$current_user = wp_get_current_user();
 
 		//truncating to be on the safe side
@@ -528,7 +531,10 @@ HTML;
 			$username_small = $username;
 		}
 
-		$howdy       = '<span class="small-size">' . sprintf( __( 'Hi, %1$s', 'commons-in-a-box' ), $username ) . '</span>';
+		// translators: display name of logged-in user
+		$howdy = '<span class="small-size">' . sprintf( __( 'Hi, %1$s', 'commons-in-a-box' ), $username ) . '</span>';
+
+		// translators: display name of logged-in user
 		$howdy_small = '<span class="very-small-size">' . sprintf( __( 'Hi, %1$s', 'commons-in-a-box' ), $username_small ) . '</span>';
 
 			$wp_admin_bar->add_menu(
@@ -547,10 +553,11 @@ HTML;
 	/**
 	 * Adds 'My Profile' menu
 	 */
-	function add_my_openlab_menu( $wp_admin_bar ) {
+	public function add_my_openlab_menu( $wp_admin_bar ) {
 
 		$current_user = wp_get_current_user();
 
+		// translators: display name of logged-in user
 		$howdy = sprintf( __( 'Hi, %1$s', 'commons-in-a-box' ), $current_user->display_name );
 
 		$wp_admin_bar->add_node(
@@ -569,7 +576,7 @@ HTML;
 	/**
 	 * Hamburger menu (mobile only)
 	 */
-	function openlab_hamburger_menu( $wp_admin_bar ) {
+	public function openlab_hamburger_menu( $wp_admin_bar ) {
 
 		$hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle direct-toggle network-menu" data-target="#wp-admin-bar-network-menu-mobile .ab-sub-wrapper" data-plusheight="19">
@@ -604,10 +611,10 @@ HTML;
 
 	}
 
-		/**
-		 * Hamurger menu (mobile only)
-		 */
-	function openlab_hamburger_mol_menu( $wp_admin_bar ) {
+	/**
+	 * Hamurger menu (mobile only)
+	 */
+	public function openlab_hamburger_mol_menu( $wp_admin_bar ) {
 
 		$hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle direct-toggle mol-menu" data-target="#wp-admin-bar-my-openlab .ab-sub-wrapper" data-plusheight="19">
@@ -632,7 +639,7 @@ HTML;
 	/**
 	 * Change 'Howdy' message to 'Hi'
 	 */
-	function change_howdy_to_hi( $wp_admin_bar ) {
+	public function change_howdy_to_hi( $wp_admin_bar ) {
 		global $bp;
 		$wp_admin_bar->add_node(
 			array(
@@ -646,12 +653,12 @@ HTML;
 	/**
 	 * Removes BP default "My" items, and builds our own
 	 */
-	function prepend_my_to_my_openlab_items( $wp_admin_bar ) {
+	public function prepend_my_to_my_openlab_items( $wp_admin_bar ) {
 		$nodes            = $wp_admin_bar->get_nodes();
 		$my_openlab_nodes = array();
 
 		foreach ( $nodes as $id => $node ) {
-			if ( 'my-account-buddypress' == $node->parent ) {
+			if ( 'my-account-buddypress' === $node->parent ) {
 				$wp_admin_bar->remove_node( $id );
 				$my_openlab_nodes[] = $id;
 			}
@@ -662,7 +669,7 @@ HTML;
 		unset( $nodes );
 		$nodes = $wp_admin_bar->get_nodes();
 		foreach ( $nodes as $id => $node ) {
-			if ( in_array( $node->parent, $my_openlab_nodes ) ) {
+			if ( in_array( $node->parent, $my_openlab_nodes, true ) ) {
 				$wp_admin_bar->remove_node( $id );
 			}
 		}
@@ -768,14 +775,14 @@ HTML;
 	 * We have to do it in a function like this because of the way BP adds the menu in the first
 	 * place
 	 */
-	function remove_notifications_hook( $wp_admin_bar ) {
+	public function remove_notifications_hook( $wp_admin_bar ) {
 		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
 	}
 
 	/**
 	 * Maybe remove the current blog menu
 	 */
-	function maybe_remove_thisblog( $wp_admin_bar ) {
+	public function maybe_remove_thisblog( $wp_admin_bar ) {
 		if ( ! current_user_can( 'publish_posts' ) ) {
 			$wp_admin_bar->remove_node( 'site-name' );
 		}
@@ -784,7 +791,7 @@ HTML;
 	/**
 	 * Add the Invites menu (Friend Requests + Group Invitations)
 	 */
-	function add_invites_menu( $wp_admin_bar ) {
+	public function add_invites_menu( $wp_admin_bar ) {
 		if ( ! bp_is_active( 'friends' ) || ! bp_is_active( 'groups' ) ) {
 			return;
 		}
@@ -848,7 +855,7 @@ HTML;
 				$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . bp_get_member_link() . '">' . bp_get_member_name() . '</a></p>';
 
 				// accept/reject buttons
-				$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_friend_accept_request_link() . '">' . __( 'Accept', 'buddypress', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_friend_reject_request_link() . '">' . __( 'Reject', 'buddypress', 'commons-in-a-box' ) . '</a></p></div></div>';
+				$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_friend_accept_request_link() . '">' . __( 'Accept', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_friend_reject_request_link() . '">' . __( 'Reject', 'commons-in-a-box' ) . '</a></p></div></div>';
 
 				$wp_admin_bar->add_node(
 					array(
@@ -918,7 +925,7 @@ HTML;
 					$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $group ) . '">' . stripslashes( $group->name ) . '</a></p>';
 
 					// accept/reject buttons
-					$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'buddypress', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'buddypress', 'commons-in-a-box' ) . '</a></p></div></div>';
+					$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'commons-in-a-box' ) . '</a></p></div></div>';
 
 					$wp_admin_bar->add_node(
 						array(
@@ -953,7 +960,7 @@ HTML;
 	/**
 	 * Add the Messages menu
 	 */
-	function add_messages_menu( $wp_admin_bar ) {
+	public function add_messages_menu( $wp_admin_bar ) {
 		if ( ! bp_is_active( 'messages' ) ) {
 			return;
 		}
@@ -1004,7 +1011,7 @@ HTML;
 					$title .= '<p class="message-excerpt">' . bp_format_time( strtotime( $messages_template->thread->last_message_date ) ) . '<br />';
 
 					// Message excerpt
-					$title .= strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">See More<span class="sr-only">' . bp_create_excerpt( bp_get_message_thread_subject(), 30 ) . '</span></a></p></div></div>';
+					$title .= wp_strip_all_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">' . __( 'See More', 'commons-in-a-box' ) . '<span class="sr-only">' . bp_create_excerpt( bp_get_message_thread_subject(), 30 ) . '</span></a></p></div></div>';
 
 					$wp_admin_bar->add_node(
 						array(
@@ -1052,11 +1059,11 @@ HTML;
 	/**
 	 * Add the Activity menu (My Group activity)
 	 */
-	function add_activity_menu( $wp_admin_bar ) {
+	public function add_activity_menu( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'activity',
-				'title' => '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">Activity</span>',
+				'title' => sprintf( '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">%s</span>', __( 'Activity', 'commons-in-a-box' ) ),
 				'meta'  => array(
 					'class'    => 'hidden-xs',
 					'tabindex' => 0,
@@ -1071,39 +1078,49 @@ HTML;
 		);
 
 		if ( bp_has_activities( $activity_args ) ) {
-					global $activities_template;
+			global $activities_template;
 			while ( bp_activities() ) {
 				bp_the_activity();
 
 				// avatar
-				$title = '<div class="row activity-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_activity_user_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
-					array(
-						'item_id' => bp_get_activity_user_id(),
-						'object'  => 'member',
-						'type'    => 'full',
-						'html'    => false,
+				$title = sprintf(
+					'<div class="row activity-row"><div class="col-sm-6"><div class="item-avatar"><a href="%s"><img class="img-responsive" src="%s" alt="%s" /></a></div></div>',
+					bp_get_activity_user_link(),
+					bp_core_fetch_avatar(
+						array(
+							'item_id' => bp_get_activity_user_id(),
+							'object'  => 'member',
+							'type'    => 'full',
+							'html'    => false,
+						)
+					),
+					sprintf(
+						// translators: user name
+						__( 'Profile picture of %s', 'commons-in-a-box' ),
+						bp_core_get_user_displayname( bp_get_activity_user_id() )
 					)
-				) . '" alt="Profile picture of ' . bp_get_activity_user_id() . '"/></a></div></div>';
+				);
 
 				// action
 				$title .= '<div class="col-sm-18">';
 
-								//the things we do...
-								$action_output     = '';
-								$action_output_raw = $activities_template->activity->action;
-								$action_output_ary = explode( '<a', $action_output_raw );
-								$count             = 0;
+				//the things we do...
+				$action_output     = '';
+				$action_output_raw = $activities_template->activity->action;
+				$action_output_ary = explode( '<a', $action_output_raw );
+				$count             = 0;
+
 				foreach ( $action_output_ary as $action_redraw ) {
 					if ( ! ctype_space( $action_redraw ) ) {
-						$class          = ( $count == 0 ? 'activity-user' : 'activity-action' );
+						$class          = 0 === $count ? 'activity-user' : 'activity-action';
 						$action_output .= '<a class="' . $class . '"' . $action_redraw;
 						$count++;
 					}
 				}
 
-								$title .= '<p class="item inline-links hyphenate">' . $action_output . '</p>';
-								$title .= '<p class="item">' . bp_insert_activity_meta( '' ) . '</p>';
-								$title .= '</div></div>';
+				$title .= '<p class="item inline-links hyphenate">' . $action_output . '</p>';
+				$title .= '<p class="item">' . bp_insert_activity_meta( '' ) . '</p>';
+				$title .= '</div></div>';
 
 				$wp_admin_bar->add_node(
 					array(
@@ -1137,7 +1154,7 @@ HTML;
 		);
 	}
 
-	function openlab_custom_admin_bar_site_menu( $wp_admin_bar ) {
+	public function openlab_custom_admin_bar_site_menu( $wp_admin_bar ) {
 		// Don't show for logged out users.
 		if ( ! is_user_logged_in() ) {
 			return;
@@ -1155,9 +1172,11 @@ HTML;
 		}
 
 		if ( is_network_admin() ) {
-				$blogname = sprintf( __( 'Network Admin: %s', 'commons-in-a-box' ), esc_html( get_current_site()->site_name ) );
+			// translators: Site name
+			$blogname = sprintf( esc_html__( 'Network Admin: %s', 'commons-in-a-box' ), esc_html( get_current_site()->site_name ) );
 		} elseif ( is_user_admin() ) {
-			$blogname = sprintf( __( 'Global Dashboard: %s', 'commons-in-a-box' ), esc_html( get_current_site()->site_name ) );
+			// translators: Network main site name
+			$blogname = sprintf( esc_html__( 'Global Dashboard: %s', 'commons-in-a-box' ), esc_html( get_current_site()->site_name ) );
 		}
 
 		$title       = wp_html_excerpt( $blogname, 40, '&hellip;' );
@@ -1214,93 +1233,92 @@ HTML;
 		}
 	}
 
-	function add_custom_edit_menu( $wp_admin_bar ) {
+	public function add_custom_edit_menu( $wp_admin_bar ) {
 		global $tag, $wp_the_query;
 		$post = get_post();
-		if ( $post instanceof WP_Post ) {
-			$post_label = str_replace( array( '-', '_' ), ' ', $post->post_type );
-		}
 
 		if ( is_admin() ) {
 			$current_screen = get_current_screen();
 
-			if ( 'post' == $current_screen->base
-					&& 'add' != $current_screen->action
-					&& ( $post_type_object = get_post_type_object( $post->post_type ) )
-					&& current_user_can( 'read_post', $post->ID )
-					&& ( $post_type_object->public )
-					&& ( $post_type_object->show_in_admin_bar ) ) {
-				$wp_admin_bar->add_menu(
-					array(
-						'id'    => 'view',
-						'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View ' . $post_label . '</span>',
-						'href'  => get_permalink( $post->ID ),
-						'meta'  => array(
-							'tabindex' => 0,
-						),
-					)
-				);
-			} elseif ( 'edit-tags' == $current_screen->base
-					&& isset( $tag ) && is_object( $tag )
-					&& ( $tax = get_taxonomy( $tag->taxonomy ) )
-					&& $tax->public ) {
-				$wp_admin_bar->add_menu(
-					array(
-						'id'    => 'view',
-						'title' => '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">View ' . $post_label . '</span>',
-						'href'  => get_term_link( $tag ),
-						'meta'  => array(
-							'tabindex' => 0,
-						),
-					)
-				);
+			if ( 'post' === $current_screen->base && 'add' !== $current_screen->action && current_user_can( 'read_post', $post->ID ) ) {
+				$post_type_object = get_post_type_object( $post->post_type );
+				if ( $post_type_object && $post_type_object->public && $post_type_object->show_in_admin_bar ) {
+					$wp_admin_bar->add_menu(
+						array(
+							'id'    => 'view',
+							'title' => sprintf( '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">%s</span>', $post_type_object->labels->view_item ),
+							'href'  => get_permalink( $post->ID ),
+							'meta'  => array(
+								'tabindex' => 0,
+							),
+						)
+					);
+				}
+			} elseif ( 'edit-tags' === $current_screen->base && isset( $tag ) && is_object( $tag ) ) {
+				$tax = get_taxonomy( $tag->taxonomy );
+				if ( $tax && $tax->public ) {
+					$wp_admin_bar->add_menu(
+						array(
+							'id'    => 'view',
+							'title' => sprintf( '<span class="fa fa-eye" aria-hidden="true"></span><span class="sr-only">%s</span>', $tax->labels->view_item ),
+							'href'  => get_term_link( $tag ),
+							'meta'  => array(
+								'tabindex' => 0,
+							),
+						)
+					);
+				}
 			}
 		} else {
 			$current_object = $wp_the_query->get_queried_object();
 
 			if ( empty( $current_object ) ) {
-					return;
+				return;
 			}
 
-			if ( ! empty( $current_object->post_type )
-					&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
+			if ( ! empty( $current_object->post_type ) ) {
+				$post_type_object = get_post_type_object( $current_object->post_type );
+				if ( $post_type_object
 					&& current_user_can( 'edit_post', $current_object->ID )
 					&& $post_type_object->show_ui && $post_type_object->show_in_admin_bar ) {
-				$wp_admin_bar->add_menu(
-					array(
-						'id'    => 'edit',
-						'title' => '<span class="fa fa-pencil" aria-hidden="true"></span><span class="sr-only">Edit ' . $post_label . '</span>',
-						'href'  => get_edit_post_link( $current_object->ID ),
-						'meta'  => array(
-							'class'    => 'hidden-xs',
-							'tabindex' => 0,
-						),
-					)
-				);
-			} elseif ( ! empty( $current_object->taxonomy )
-					&& ( $tax = get_taxonomy( $current_object->taxonomy ) )
+					$wp_admin_bar->add_menu(
+						array(
+							'id'    => 'edit',
+							'title' => sprintf( '<span class="fa fa-pencil" aria-hidden="true"></span><span class="sr-only">%s</span>', esc_html( $post_type_object->labels->edit_item ) ),
+							'href'  => get_edit_post_link( $current_object->ID ),
+							'meta'  => array(
+								'class'    => 'hidden-xs',
+								'tabindex' => 0,
+							),
+						)
+					);
+				}
+			} elseif ( ! empty( $current_object->taxonomy ) ) {
+				$tax = get_taxonomy( $current_object->taxonomy );
+				if ( $tax
 					&& current_user_can( $tax->cap->edit_terms )
 					&& $tax->show_ui ) {
-				$wp_admin_bar->add_menu(
-					array(
-						'id'    => 'edit',
-						'title' => '<span class="fa fa-pencil aria-hidden="true"></span><span class="sr-only">Edit ' . $post_label . '</span>',
-						'href'  => get_edit_term_link( $current_object->term_id, $current_object->taxonomy ),
-						'meta'  => array(
-							'class'    => 'hidden-xs',
-							'tabindex' => 0,
-						),
-					)
-				);
+					$wp_admin_bar->add_menu(
+						array(
+							'id'    => 'edit',
+							'title' => sprintf( '<span class="fa fa-pencil aria-hidden="true"></span><span class="sr-only">%s</span>', esc_html( $tax->labels->edit_item ) ),
+							'href'  => get_edit_term_link( $current_object->term_id, $current_object->taxonomy ),
+							'meta'  => array(
+								'class'    => 'hidden-xs',
+								'tabindex' => 0,
+							),
+						)
+					);
+				}
 			}
 		}
 	}
 
-		/**
-		 * Cleaning up any plugin addons to the admin bar
-		 * @param type $wp_admin_bar
-		 */
-	function adminbar_plugin_cleanup( $wp_admin_bar ) {
+	/**
+	 * Cleaning up any plugin addons to the admin bar
+	 * @param type $wp_admin_bar
+	 */
+	public function adminbar_plugin_cleanup( $wp_admin_bar ) {
 		global $wp_admin_bar;
 
 		$wp_admin_bar->remove_menu( 'tribe-events' );
@@ -1312,7 +1330,7 @@ HTML;
 	 * @param type $wp_admin_bar
 	 * @return type
 	 */
-	function add_custom_content_menu( $wp_admin_bar ) {
+	public function add_custom_content_menu( $wp_admin_bar ) {
 		$actions = array();
 
 		$cpts = (array) get_post_types( array( 'show_in_admin_bar' => true ), 'objects' );
@@ -1389,7 +1407,7 @@ HTML;
 		}
 	}
 
-	function add_dashboard_link( $wp_admin_bar ) {
+	public function add_dashboard_link( $wp_admin_bar ) {
 		global $bp;
 
 		$current_screen       = new stdClass();
@@ -1399,7 +1417,7 @@ HTML;
 			$current_screen = get_current_screen();
 		}
 
-		if ( current_user_can( 'edit_published_posts' ) && $current_screen->base !== 'my-sites' ) {
+		if ( current_user_can( 'edit_published_posts' ) && 'my-sites' !== $current_screen->base ) {
 
 			$title = ( is_admin() ? '<span class="ab-icon dashicon-icon dashicons dashicons-admin-home" aria-hidden="true"></span>' : '<span class="ab-icon dashicon-icon dashicons dashicons-dashboard" aria-hidden="true"></span>' );
 
@@ -1419,7 +1437,7 @@ HTML;
 		}
 	}
 
-	function add_custom_updates_menu( $wp_admin_bar ) {
+	public function add_custom_updates_menu( $wp_admin_bar ) {
 		$update_data = wp_get_update_data();
 
 		if ( ! $update_data['counts']['total'] ) {
@@ -1450,7 +1468,7 @@ HTML;
 	 * @param type $wp_admin_bar
 	 * @return type
 	 */
-	function add_custom_comments_menu( $wp_admin_bar ) {
+	public function add_custom_comments_menu( $wp_admin_bar ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;
 		}
@@ -1458,9 +1476,15 @@ HTML;
 		$awaiting_mod   = wp_count_comments();
 		$awaiting_mod   = $awaiting_mod->moderated;
 		$awaiting_count = openlab_admin_bar_counts( number_format_i18n( $awaiting_mod ), ' sub-count' );
+
+		// translators: Number of comments awaiting moderation
 		$awaiting_title = esc_attr( sprintf( _n( '%s comment awaiting moderation', '%s comments awaiting moderation', $awaiting_mod, 'commons-in-a-box' ), number_format_i18n( $awaiting_mod ) ) );
 
-		$icon = '<span class="fa fa-comment hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">Comments</span>';
+		$icon = sprintf(
+			'<span class="fa fa-comment hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">%s</span>',
+			esc_html__( 'Comments', 'commons-in-a-box' )
+		);
+
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'comments',
@@ -1485,7 +1509,7 @@ HTML;
 	/**
 	 * Add a 'Log Out' link to the far right
 	 */
-	function add_logout_item( $wp_admin_bar ) {
+	public function add_logout_item( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'parent' => 'top-secondary',
@@ -1499,7 +1523,7 @@ HTML;
 		);
 	}
 
-	function openlab_custom_my_account_item( $wp_admin_bar ) {
+	public function openlab_custom_my_account_item( $wp_admin_bar ) {
 
 		$user_id      = get_current_user_id();
 		$current_user = wp_get_current_user();
@@ -1509,8 +1533,11 @@ HTML;
 			return;
 		}
 
-		$howdy       = sprintf( __( 'Hi, %1$s', 'commons-in-a-box' ), $current_user->display_name );
-		$howdy_short = sprintf( __( 'Hi, %1$s', 'commons-in-a-box' ), wp_html_excerpt( $current_user->display_name, 15, '&hellip;' ) );
+		// translators: user name
+		$howdy = sprintf( esc_html__( 'Hi, %s', 'commons-in-a-box' ), esc_html( $current_user->display_name ) );
+
+		// translators: user name
+		$howdy_short = sprintf( esc_html__( 'Hi, %s', 'commons-in-a-box' ), esc_html( wp_html_excerpt( $current_user->display_name, 15, '&hellip;' ) ) );
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -1531,7 +1558,7 @@ HTML;
 		 * @param type $wp_admin_bar
 		 * @return type
 		 */
-	function openlab_custom_my_account_menu( $wp_admin_bar ) {
+	public function openlab_custom_my_account_menu( $wp_admin_bar ) {
 		$user_login   = '';
 		$user_id      = get_current_user_id();
 		$current_user = wp_get_current_user();
@@ -1576,7 +1603,7 @@ HTML;
 	/**
 	 * Fix the logout redirect
 	 */
-	function fix_logout_redirect( $wp_admin_bar ) {
+	public function fix_logout_redirect( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'   => 'logout',
@@ -1588,7 +1615,7 @@ HTML;
 	/**
 	 * Adds the Sign Up item
 	 */
-	function add_signup_item( $wp_admin_bar ) {
+	public function add_signup_item( $wp_admin_bar ) {
 		// Remove so we can replace in the right order
 		$signup = $wp_admin_bar->get_node( 'bp-register' );
 		$login  = $wp_admin_bar->get_node( 'bp-login' );
@@ -1608,8 +1635,7 @@ HTML;
 		$wp_admin_bar->add_node( (array) $login );
 	}
 
-	function fix_tabindex( $wp_admin_bar ) {
-		//var_Dump( $wp_admin_bar );
+	public function fix_tabindex( $wp_admin_bar ) {
 		$wp_admin_bar->add_menu(
 			array(
 				'id'   => 'bp-login',
@@ -1632,7 +1658,7 @@ HTML;
 		}
 	}
 
-	function body_class( $body_class ) {
+	public function body_class( $body_class ) {
 		if ( bp_is_root_blog() ) {
 			$body_class[] = 'openlab-main';
 		} else {
@@ -1642,7 +1668,7 @@ HTML;
 		return $body_class;
 	}
 
-	function admin_body_class( $body_class ) {
+	public function admin_body_class( $body_class ) {
 		if ( bp_is_root_blog() ) {
 			$body_class .= ' openlab-main ';
 		} else {
@@ -1652,7 +1678,7 @@ HTML;
 		return $body_class;
 	}
 
-	function enqueue_styles() {
+	public function enqueue_styles() {
 		global $wpdb;
 
 		$root_blog_id = bp_get_root_blog_id();
@@ -1690,7 +1716,7 @@ HTML;
 		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), $ver );
 	}
 
-	function adminbar_special_body_class( $classes ) {
+	public function adminbar_special_body_class( $classes ) {
 
 		$classes[] = 'adminbar-special';
 
@@ -1698,7 +1724,7 @@ HTML;
 
 	}
 
-	function admin_bar_html_update() {
+	public function admin_bar_html_update() {
 		?>
 
 		<style type="text/css" media="screen">
@@ -1713,7 +1739,7 @@ HTML;
 		<?php
 	}
 
-	function admin_bar_group_sites_html_update() {
+	public function admin_bar_group_sites_html_update() {
 		?>
 
 		<style type="text/css" media="screen">
@@ -1728,7 +1754,7 @@ HTML;
 		<?php
 	}
 
-	function admin_bar_padding_in_admin() {
+	public function admin_bar_padding_in_admin() {
 		?>
 
 			<style type="text/css" media="screen">
@@ -1753,7 +1779,7 @@ HTML;
 		<?php
 	}
 
-	function groups_sites_fix_for_mobile() {
+	public function groups_sites_fix_for_mobile() {
 		?>
 
 			<meta name="viewport" content="width=device-width">
@@ -1776,19 +1802,19 @@ function openlab_admin_bar_counts( $count, $pull_right = ' pull-right' ) {
 function cac_adminbar_enqueue_scripts() {
 	$ver = cboxol_get_asset_version();
 
-	wp_enqueue_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/search.js', array( 'jquery' ), $ver );
+	wp_enqueue_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/search.js', array( 'jquery' ), $ver, true );
 	wp_register_script( 'smoothscroll-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/jquery-smooth-scroll/jquery.smooth-scroll.min.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'smoothscroll-js' );
 	wp_register_script( 'select-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/select2/select2.min.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'select-js' );
-	wp_register_script( 'hyphenator-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/hyphenator/hyphenator.js', array( 'jquery' ), $ver );
+	wp_register_script( 'hyphenator-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/hyphenator/hyphenator.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'hyphenator-js' );
-	wp_register_script( 'succinct-mod-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/succint/jQuery.succinct.mod.js', array( 'jquery' ), $ver );
+	wp_register_script( 'succinct-mod-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/succint/jQuery.succinct.mod.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'succinct-mod-js' );
 	wp_register_script( 'openlab-search-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.search.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-search-js' );
 
-	wp_register_script( 'openlab-truncation-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.truncation.js', array( 'jquery' ), $ver );
+	wp_register_script( 'openlab-truncation-js', CBOXOL_PLUGIN_URL . '/assets/js/lib/openlab/openlab.truncation.js', array( 'jquery' ), $ver, true );
 	wp_enqueue_script( 'openlab-truncation-js' );
 	wp_localize_script(
 		'openlab-truncation-js',
@@ -1839,7 +1865,7 @@ function openlab_wrap_adminbar_top() {
 
 		$admin_class = ( is_admin() ? ' admin-area' : '' );
 		?>
-		<div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo $admin_class; ?>">
+		<div class="oplb-bs adminbar-manual-bootstrap<?php echo esc_attr( $admin_class ); ?>"><div class="oplb-bs adminbar-manual-bootstrap<?php echo esc_attr( $admin_class ); ?>">
 	<?php else : ?>
 		<div class="oplb-bs"><div class="oplb-bs">
 		<?php
@@ -1873,9 +1899,11 @@ function openlab_network_footer() {
 		return;
 	}
 
+	// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo $footer;
 
 	echo preg_replace( '/id="openlab-footer" class="([^"]+)"/', 'id="openlab-footer" class="oplb-bs placeholder" aria-hidden="true" tabindex="-1"', $footer );
+	// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 }
 add_action( 'wp_footer', 'openlab_network_footer', 5 );
