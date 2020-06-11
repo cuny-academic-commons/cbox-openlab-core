@@ -8,7 +8,7 @@ spl_autoload_register(
 		// Does the class use the namespace prefix?
 		$len = strlen( $prefix );
 		if ( strncmp( $prefix, $class, $len ) !== 0 ) {
-			  return;
+			return;
 		}
 
 		// Get the relative class name.
