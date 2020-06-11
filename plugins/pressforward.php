@@ -22,7 +22,7 @@ add_action(
 
 		$ver = cboxol_get_asset_version();
 
-		wp_enqueue_script( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/js/pf-bp.js', array( 'bp-mentions' ), $ver );
+		wp_enqueue_script( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/js/pf-bp.js', array( 'bp-mentions' ), $ver, true );
 		wp_enqueue_style( 'pf-bp-mentions', CBOXOL_PLUGIN_URL . 'assets/css/pf-bp.css', array(), $ver );
 
 		// @todo Should some roles be excluded/included? PF doesn't make it easy to get its internal setting for this, and I don't know how to translate "minmium" setting into something user-queryable
@@ -118,7 +118,7 @@ function pfbp_register_activity_actions() {
 		'new_pf_feed_item_comment',
 		__( 'Posted a comment on a PressForward feed item.', 'commons-in-a-box' ),
 		'pfbp_format_activity_item_new_pf_feed_item_comment',
-		__( 'PressForward Comments', 'buddypress', 'commons-in-a-box' ),
+		__( 'PressForward Comments', 'commons-in-a-box' ),
 		array( 'activity', 'member', 'member_groups' )
 	);
 }
@@ -155,6 +155,7 @@ function pfbp_format_activity_item_new_pf_feed_item_comment( $action, $activity 
 
 	$post_link = sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), esc_html( $post_title ) );
 
+	// translators: 1. commenter link, 2. post link, 3. site link
 	$action = sprintf( __( '%1$s posted a comment on the feed item %2$s on the site %3$s', 'commons-in-a-box' ), $user_link, $post_link, $site_link );
 
 	/**
@@ -198,6 +199,7 @@ function pfbp_generate_activity_item_for_comment( $comment_id, $comment ) {
 	$post_url  = admin_url( 'admin.php?page=pf-menu' ) . '#modal-' . get_post_meta( $post->ID, 'item_id', true );
 	$post_link = sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), esc_html( $post->post_title ) );
 
+	// translators: 1. commenter link, 2. post link, 3. site link
 	$action = sprintf( __( '%1$s posted a comment on the feed item %2$s on the site %3$s', 'commons-in-a-box' ), $user_link, $post_link, $site_link );
 
 	groups_record_activity(
