@@ -119,7 +119,7 @@ function cboxol_get_member_types( $args = array() ) {
 	}
 
 	$last_changed = wp_cache_get_last_changed( 'posts' );
-	$cache_key    = 'cboxol_types_' . md5( json_encode( $post_args ) ) . '_' . $last_changed;
+	$cache_key    = 'cboxol_types_' . md5( wp_json_encode( $post_args ) ) . '_' . $last_changed;
 	$ids          = wp_cache_get( $cache_key, 'cboxol_member_types' );
 	if ( false === $ids ) {
 		$ids = get_posts( $post_args );
@@ -178,10 +178,18 @@ function cboxol_membertypes_admin_page() {
 	?>
 
 	<div class="cboxol-admin-content">
-		<p><?php printf( __( 'Member Types are used to organize your site’s users. Members are able to choose their own Member Type according to the rules that you configure on this page, as well as in <a href="%s">Registration settings</a>.', 'commons-in-a-box' ), esc_url( $registration_url ) ); ?></p>
+		<p>
+			<?php
+			printf(
+				// translators: link to registration settings panel
+				esc_html__( 'Member Types are used to organize your site’s users. Members are able to choose their own Member Type according to the rules that you configure on this page, as well as in %s.', 'commons-in-a-box' ),
+				sprintf( '<a href="%s">%s</a>', esc_url( $registration_url ), esc_html_e( 'Registration settings', 'commons-in-a-box' ) )
+			);
+			?>
+		</p>
 
 		<script type="text/javascript">
-			var CBOXOL_AppConfig = <?php echo json_encode( $app_config ); ?>;
+			var CBOXOL_AppConfig = <?php echo wp_json_encode( $app_config ); ?>;
 		</script>
 
 		<div id="cboxol-admin"></div>
