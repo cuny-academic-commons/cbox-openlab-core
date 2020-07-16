@@ -95,7 +95,7 @@ class NavMenus extends Upgrade {
 				'menu-item-url'      => bp_get_group_permalink( $group ),
 				'menu-item-status'   => 'publish',
 				'menu-item-position' => -1,
-				'menu-item-classes' => 'group-profile-link',
+				'menu-item-classes'  => 'group-profile-link',
 			)
 		);
 
@@ -108,7 +108,7 @@ class NavMenus extends Upgrade {
 				'menu-item-url'      => home_url( '/' ),
 				'menu-item-status'   => 'publish',
 				'menu-item-position' => -1,
-				'menu-item-classes' => 'home',
+				'menu-item-classes'  => 'home',
 			)
 		);
 
