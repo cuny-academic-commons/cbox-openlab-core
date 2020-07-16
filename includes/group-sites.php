@@ -1919,7 +1919,7 @@ function cboxol_get_nav_menu_items() {
 			'menu_item_parent' => 0,
 			'attr_title'       => '',
 			'target'           => '',
-			'xfn'              => ''
+			'xfn'              => '',
 		];
 	}
 
