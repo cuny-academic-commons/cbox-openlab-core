@@ -740,8 +740,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 			$menu_id,
 			'cboxol_custom_menus',
 			array(
-				'home'  => $home_menu_item_id,
-				'group' => $group_menu_item_id,
+				'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
+				'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
 			),
 			true
 		);
