@@ -58,6 +58,19 @@ class NavMenus extends Upgrade {
 		foreach ( $groups['groups'] as $group_id ) {
 			$this->push( new Upgrade_Item( $group_id, array( 'group_id' => $group_id ) ) );
 		}
+
+		// Template sites don't have associated groups and are handled separately.
+		$group_types = cboxol_get_group_types();
+		foreach ( $group_types as $group_type ) {
+			$template_site_id = $group_type->get_template_site_id();
+			if ( $template_site_id ) {
+				$upgrade_data = array(
+					'site_id'    => $template_site_id,
+					'group_type' => $group_type->get_slug(),
+				);
+				$this->push( new Upgrade_Item( 'site-' . $template_site_id, $upgrade_data ) );
+			}
+		}
 	}
 
 	/**
@@ -67,7 +80,17 @@ class NavMenus extends Upgrade {
 	 */
 	public function process( $item ) {
 		$group_id = $item->get_value( 'group_id' );
-		$site_id  = cboxol_get_group_site_id( $group_id );
+
+		if ( $group_id ) {
+			$site_id    = cboxol_get_group_site_id( $group_id );
+			$group      = groups_get_group( $group_id );
+			$group_type = cboxol_get_group_group_type( $group_id );
+			$home_url   = bp_get_group_permalink( $group );
+		} else {
+			$site_id    = $item->get_value( 'site_id' );
+			$group_type = cboxol_get_group_type( $item->get_value( 'group_type' ) );
+			$home_url   = '/';
+		}
 
 		if ( ! $site_id ) {
 			return new WP_Error( 'upgrade_skipped', 'Skipped: group has no site.' );
@@ -83,16 +106,13 @@ class NavMenus extends Upgrade {
 			return new WP_Error( 'upgrade_skipped', 'Missing primary menu location.' );
 		}
 
-		$group      = groups_get_group( $group_id );
-		$group_type = cboxol_get_group_group_type( $group_id );
-
 		// Create Group Profile URL.
 		$group_menu_item_id = wp_update_nav_menu_item(
 			$menu_id,
 			0,
 			array(
 				'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
-				'menu-item-url'      => bp_get_group_permalink( $group ),
+				'menu-item-url'      => $home_url,
 				'menu-item-status'   => 'publish',
 				'menu-item-position' => -1,
 				'menu-item-classes'  => 'group-profile-link',
