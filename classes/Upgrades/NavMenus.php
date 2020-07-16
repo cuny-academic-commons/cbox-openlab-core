@@ -87,7 +87,7 @@ class NavMenus extends Upgrade {
 		$group_type = cboxol_get_group_group_type( $group_id );
 
 		// Create Group Profile URL.
-		wp_update_nav_menu_item(
+		$group_menu_item_id = wp_update_nav_menu_item(
 			$menu_id,
 			0,
 			array(
@@ -100,7 +100,7 @@ class NavMenus extends Upgrade {
 		);
 
 		// Create the Home URL.
-		wp_update_nav_menu_item(
+		$home_menu_item_id = wp_update_nav_menu_item(
 			$menu_id,
 			0,
 			array(
@@ -110,6 +110,17 @@ class NavMenus extends Upgrade {
 				'menu-item-position' => -1,
 				'menu-item-classes'  => 'home',
 			)
+		);
+
+		// Store flag for injected custom menu items
+		add_term_meta(
+			$menu_id,
+			'cboxol_custom_menus',
+			array(
+				'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
+				'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
+			),
+			true
 		);
 
 		restore_current_blog();
