@@ -63,7 +63,7 @@ class NavMenus extends Upgrade {
 	/**
 	 * Process item handler.
 	 *
-	 * @param CBOX\Upgrades\Upgrade_Item $item Item .
+	 * @param CBOX\Upgrades\Upgrade_Item $item Item.
 	 */
 	public function process( $item ) {
 		$group_id = $item->get_value( 'group_id' );
@@ -77,35 +77,40 @@ class NavMenus extends Upgrade {
 
 		$locations = get_theme_mod( 'nav_menu_locations' );
 		$menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
-		$nav_items = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
 
-		// Convert to bail eary and return WP_Error.
-		if ( $menu_id && ! empty( $nav_items ) ) {
-			$group      = groups_get_group( $group_id );
-			$group_type = cboxol_get_group_group_type( $group_id );
-
-			// Update Group Profile URL.
-			wp_update_nav_menu_item(
-				$menu_id,
-				$nav_items['group'],
-				array(
-					'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
-					'menu-item-url'      => bp_get_group_permalink( $group ),
-					'menu-item-position' => 1,
-				)
-			);
-
-			// Update home URL.
-			wp_update_nav_menu_item(
-				$menu_id,
-				$nav_items['home'],
-				array(
-					'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
-					'menu-item-url'      => home_url( '/' ),
-					'menu-item-position' => 1,
-				)
-			);
+		if ( ! $menu_id ) {
+			restore_current_blog();
+			return new WP_Error( 'upgrade_skipped', 'Missing primary menu location.' );
 		}
+
+		$group      = groups_get_group( $group_id );
+		$group_type = cboxol_get_group_group_type( $group_id );
+
+		// Create Group Profile URL.
+		wp_update_nav_menu_item(
+			$menu_id,
+			0,
+			array(
+				'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
+				'menu-item-url'      => bp_get_group_permalink( $group ),
+				'menu-item-status'   => 'publish',
+				'menu-item-position' => -1,
+				'menu-item-classes' => 'group-profile-link',
+			)
+		);
+
+		// Create the Home URL.
+		wp_update_nav_menu_item(
+			$menu_id,
+			0,
+			array(
+				'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
+				'menu-item-url'      => home_url( '/' ),
+				'menu-item-status'   => 'publish',
+				'menu-item-position' => -1,
+				'menu-item-classes' => 'home',
+			)
+		);
 
 		restore_current_blog();
 		return true;
