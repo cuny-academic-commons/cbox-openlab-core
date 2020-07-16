@@ -2008,7 +2008,7 @@ add_filter( 'customize_nav_menu_available_item_types', 'cboxol_add_customizer_na
  * @return array   $items
  */
 function cboxol_customizer_nav_menu_items( $items = [], $type = '', $object = '', $page = 0 ) {
-	if ( $object !== 'cboxol_box' ) {
+	if ( 'cboxol_box' !== $object ) {
 		return $items;
 	}
 
