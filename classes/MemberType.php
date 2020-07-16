@@ -184,16 +184,25 @@ class MemberType extends ItemTypeBase implements ItemType {
 	public function get_label_types() {
 		return array(
 			'singular' => array(
+				'value'       => '',
+			),
+			'plural'   => array(
+				'value'       => '',
+			),
+		);
+	}
+
+	public function get_label_types_info() {
+		return array(
+			'singular' => array(
 				'slug'        => 'singular',
 				'label'       => _x( 'Singular', 'Member Type singular label', 'commons-in-a-box' ),
 				'description' => __( 'Used wherever a specific member\'s Type is mentioned, such as the User Edit interface.', 'commons-in-a-box' ),
-				'value'       => '',
 			),
 			'plural'   => array(
 				'slug'        => 'plural',
 				'label'       => _x( 'Plural', 'Member Type plural label', 'commons-in-a-box' ),
 				'description' => __( 'Used in directory titles.', 'commons-in-a-box' ),
-				'value'       => '',
 			),
 		);
 	}

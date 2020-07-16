@@ -46,7 +46,15 @@ class ItemTypeBase {
 	}
 
 	public function get_labels() {
-		return $this->data['labels'];
+		$retval     = array();
+		$label_info = $this->get_label_types_info();
+		foreach ( $this->data['labels'] as $label_slug => $label ) {
+			$label_data            = $label_info[ $label_slug ];
+			$label_data['value']   = $label['value'];
+			$retval[ $label_slug ] = $label_data;
+		}
+
+		return $retval;
 	}
 
 	public function get_is_enabled() {
