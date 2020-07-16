@@ -1674,6 +1674,37 @@ function cboxol_copy_blog_page( $group_id ) {
 					}
 				}
 
+				// Updated custom nav menu items
+				$locations = get_theme_mod( 'nav_menu_locations' );
+				$menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
+				$nav_items = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
+
+				if ( $menu_id && ! empty( $nav_items ) ) {
+					$group_type = cboxol_get_group_group_type( $group_id );
+
+					// Update Group Profile URL.
+					wp_update_nav_menu_item(
+						$menu_id,
+						$nav_items['group'],
+						array(
+							'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
+							'menu-item-url'      => bp_get_group_permalink( $group ),
+							'menu-item-position' => 1,
+						)
+					);
+
+					// Update home URL.
+					wp_update_nav_menu_item(
+						$menu_id,
+						$nav_items['home'],
+						array(
+							'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
+							'menu-item-url'      => home_url( '/' ),
+							'menu-item-position' => 1,
+						)
+					);
+				}
+
 				restore_current_blog();
 				$msg = __( 'Blog Copied', 'commons-in-a-box' );
 			}
@@ -1818,69 +1849,6 @@ function cboxol_blogname_is_illegal( $blogname ) {
 }
 
 /**
- * Add dynamic "Home" and "Profile" links to group site menu.
- *
- * @param array $items Menu items.
- * @return array
- */
-function cboxol_add_links_to_nav_menu( $items ) {
-	if ( get_current_blog_id() === cboxol_get_main_site_id() ) {
-		return $items;
-	}
-
-	$new_items = array();
-
-	// Add Group Home link.
-	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	if ( $group_id ) {
-		$group = groups_get_group( $group_id );
-
-		if ( $group->is_visible ) {
-			$group_type = cboxol_get_group_group_type( $group_id );
-			if ( ! is_wp_error( $group_type ) ) {
-				$group                 = groups_get_group( $group_id );
-				$post_args             = new stdClass();
-				$profile_item          = new WP_Post( $post_args );
-				$profile_item->ID      = 'group-profile-link';
-				$profile_item->title   = '[ ' . $group_type->get_label( 'group_home' ) . ' ]';
-				$profile_item->slug    = 'group-profile-link';
-				$profile_item->url     = bp_get_group_permalink( $group );
-				$profile_item->classes = array( 'group-profile-link' );
-
-				$new_items[] = $profile_item;
-			}
-		}
-	}
-
-	// Add the "Home" link only if one is not already found.
-	$has_home = false;
-	foreach ( $items as $item ) {
-		if ( 'Home' === $item->title && trailingslashit( site_url() ) === trailingslashit( $item->url ) ) {
-			$has_home = true;
-			break;
-		}
-	}
-
-	if ( ! $has_home ) {
-		$post_args          = new stdClass();
-		$home_link          = new WP_Post( $post_args );
-		$home_link->title   = 'Home';
-		$home_link->url     = trailingslashit( site_url() );
-		$home_link->slug    = 'home';
-		$home_link->ID      = 'home';
-		$home_link->classes = array();
-		$new_items[]        = $home_link;
-	}
-
-	if ( $new_items ) {
-		$items = array_merge( $new_items, $items );
-	}
-
-	return $items;
-}
-add_filter( 'wp_nav_menu_objects', 'cboxol_add_links_to_nav_menu' );
-
-/**
  * Load theme-specific fixes.
  */
 function cboxol_load_theme_specific_fixes() {
@@ -1917,3 +1885,151 @@ function cboxol_load_theme_specific_fixes() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'cboxol_load_theme_specific_fixes' );
+
+/**
+ * Generate array of nav menu items.
+ *
+ * @return array $items
+ */
+function cboxol_get_nav_menu_items() {
+	$items = [];
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return $items;
+	}
+
+	$group = groups_get_group( $group_id );
+	if ( ! $group->is_visible ) {
+		return $items;
+	}
+
+	$group_type = cboxol_get_group_group_type( $group_id );
+	if ( ! is_wp_error( $group_type ) ) {
+		$items[] = (object) [
+			'ID'               => 'group-profile-link',
+			'db_id'            => 0,
+			'object_id'        => $group_id,
+			'object'           => 'custom',
+			'title'            => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
+			'url'              => bp_get_group_permalink( $group ),
+			'slug'             => 'group-profile-link',
+			'type'             => 'custom',
+			'classes'          => [ 'group-profile-link' ],
+			'menu_item_parent' => 0,
+			'attr_title'       => '',
+			'target'           => '',
+			'xfn'              => ''
+		];
+	}
+
+	return $items;
+}
+
+/**
+ * Register meta box for CBOX OpenLab nav menu.
+ *
+ * @return void
+ */
+function cboxol_wp_nav_menu_meta_box() {
+	$is_group_site = (bool) openlab_get_group_id_by_blog_id( get_current_blog_id() );
+
+	// Only add meta box panel to group sites.
+	if ( ! $is_group_site ) {
+		return;
+	}
+
+	add_meta_box(
+		'cboxol-nav-menu-box',
+		__( 'CBOX OpenLab', 'cbox-openlab-core' ),
+		'cboxol_render_nav_menu_meta_box',
+		'nav-menus',
+		'side',
+		'default'
+	);
+}
+add_action( 'load-nav-menus.php', 'cboxol_wp_nav_menu_meta_box' );
+
+/**
+ * Render CBOX OpenLab meta box panel on Appearance > Menus.
+ *
+ * @return void
+ */
+function cboxol_render_nav_menu_meta_box() {
+	global $nav_menu_selected_id;
+
+	$walker = new Walker_Nav_Menu_Checklist();
+	$args   = [ 'walker' => $walker ];
+	$items  = cboxol_get_nav_menu_items();
+
+	?>
+	<div id="cboxol-menu" class="posttypediv">
+		<div id="tabs-panel-cboxol-all" class="tabs-panel tabs-panel-active">
+			<ul id="cboxol-menu-checklist" class="categorychecklist form-no-clear">
+				<?php echo walk_nav_menu_tree( array_map( 'wp_setup_nav_menu_item', $items ), 0, (object) $args ); ?>
+			</ul>
+		</div>
+
+		<p class="button-controls wp-clearfix">
+			<span class="add-to-menu">
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu', 'cbox-openlab-core' ); ?>" name="add-custom-menu-item" id="submit-cboxol-menu" />
+				<span class="spinner"></span>
+			</span>
+		</p>
+	</div>
+	<?php
+}
+
+/**
+ * Set CBOX OpenLab item nav for the customizer.
+ *
+ * @param array $item_types Navigation menu item types.
+ * @return array $item_types Updated menu item types.
+ */
+function cboxol_add_customizer_nav_menu_item_types( $item_types = [] ) {
+	$item_types[] = [
+		'title'      => __( 'CBOX OpenLab', 'cbox-openlab-core' ),
+		'type_label' => __( 'CBOX OpenLab', 'cbox-openlab-core' ),
+		'type'       => 'cboxol_nav',
+		'object'     => 'cboxol_box',
+	];
+
+	return $item_types;
+}
+add_filter( 'customize_nav_menu_available_item_types', 'cboxol_add_customizer_nav_menu_item_types' );
+
+/**
+ * Populate CBOX OpenLab nav menu items for the customizer.
+ *
+ * @param  array   $items  List of nav menu items.
+ * @param  string  $type   Nav menu type.
+ * @param  string  $object Nav menu object.
+ * @param  int     $page   Page number.
+ * @return array   $items
+ */
+function cboxol_customizer_nav_menu_items( $items = [], $type = '', $object = '', $page = 0 ) {
+	if ( $object !== 'cboxol_box' ) {
+		return $items;
+	}
+
+	// Don't allow pagination since all items are loaded at once.
+	if ( 0 < $page ) {
+		return $items;
+	}
+
+	$cboxol_items = cboxol_get_nav_menu_items();
+
+	foreach ( $cboxol_items as $cboxol_item ) {
+		$items[] = [
+			'id'         => 'group-profile-link',
+			'title'      => html_entity_decode( $cboxol_item->title, ENT_QUOTES, get_bloginfo( 'charset' ) ),
+			'type'       => $cboxol_item->type,
+			'url'        => esc_url_raw( $cboxol_item->url ),
+			'classes'    => $cboxol_item->classes,
+			'type_label' => _x( 'Custom Link', 'customizer menu type label', 'cbox-openlab-core' ),
+		];
+	}
+
+	return $items;
+}
+add_filter( 'customize_nav_menu_available_items', 'cboxol_customizer_nav_menu_items', 10, 4 );
