@@ -250,7 +250,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		}
 
 		// this is a real mess
-		$retval = array();
+		$retval     = array();
 		$label_info = $this->get_label_types_info();
 		foreach ( $this->data['labels'] as $label_slug => $label ) {
 			if ( is_array( $label ) && isset( $label['slug'] ) ) {
@@ -261,8 +261,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 			if ( in_array( $ls, $type_labels, true ) ) {
 				$label_data          = $label_info[ $label_slug ];
-				$label_data['value'] = $label['value'];;
-				$retval[ $ls ]       = $label_data;
+				$label_data['value'] = $label['value'];
+
+				$retval[ $ls ] = $label_data;
 			}
 		}
 
@@ -304,166 +305,166 @@ class GroupType extends ItemTypeBase implements ItemType {
 	public function get_label_types() {
 		return array(
 			'course_code'                            => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'course_information'                     => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'course_information_description'         => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'create_item'                            => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'create_clone_item'                      => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'item_creation'                          => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'create_item_help_text'                  => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'clone_help_text'                        => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'name_help_text'                         => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'avatar_help_text'                       => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'avatar_help_text_cant_decide'           => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'url_help_text'                          => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text'                      => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_new'                  => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_public_content'       => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_public_directory'     => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_public_membership'    => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_private_content'      => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_byrequest_membership' => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_private_directory'    => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'privacy_help_text_invited_membership'   => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'group_home'                             => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'group_site'                             => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'group_details'                          => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'my_groups'                              => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'my_portfolio'                           => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'my_portfolio_site'                      => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'plural'                                 => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'section_code'                           => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'singular'                               => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_open'                            => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_open_community_site'             => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_open_private_site'               => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_private'                         => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_private_community_site'          => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_private_open_site'               => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'status_private_private_site'            => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'visit_group_site'                       => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'site_help_text'                         => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'site_address_help_text'                 => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'site_feed_check_help_text'              => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'visit_portfolio_site'                   => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'settings_help_text_discussion'          => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'settings_help_text_calendar'            => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'settings_help_text_calendar_members'    => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'settings_help_text_calendar_admins'     => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'settings_help_text_relatedlinks'        => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'settings_help_text_portfoliolist'       => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'invite_members_to_group'                => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'invite_community_members_to_group'      => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'search_for_members_to_invite_to_group'  => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'group_contact'                          => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'group_contact_help_text'                => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'group_discussion'                       => array(
-				'value'       => '',
+				'value' => '',
 			),
 		);
 	}

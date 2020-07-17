@@ -184,10 +184,10 @@ class MemberType extends ItemTypeBase implements ItemType {
 	public function get_label_types() {
 		return array(
 			'singular' => array(
-				'value'       => '',
+				'value' => '',
 			),
 			'plural'   => array(
-				'value'       => '',
+				'value' => '',
 			),
 		);
 	}
