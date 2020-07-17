@@ -29,6 +29,7 @@
 	<rule ref="WordPress-Extra">
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
 	</rule>
 
 	<rule ref="WordPress.WP.DeprecatedClasses">
