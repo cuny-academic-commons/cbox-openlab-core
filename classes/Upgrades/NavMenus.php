@@ -12,6 +12,8 @@ namespace CBOX\OL\Upgrades;
 use CBOX\Upgrades\Upgrade;
 use CBOX\Upgrades\Upgrade_Item;
 
+use \WP_Error;
+
 /**
  * Upgrade nav menus handler.
  */
