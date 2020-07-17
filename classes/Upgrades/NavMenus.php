@@ -132,16 +132,17 @@ class NavMenus extends Upgrade {
 			)
 		);
 
-		// Store flag for injected custom menu items
-		add_term_meta(
-			$menu_id,
-			'cboxol_custom_menus',
-			array(
-				'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
-				'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
-			),
-			true
-		);
+		if ( ! $group_id ) {
+			// Store flag for injected custom menu items
+			update_term_meta(
+				$menu_id,
+				'cboxol_custom_menus',
+				array(
+					'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
+					'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
+				)
+			);
+		}
 
 		restore_current_blog();
 		return true;
