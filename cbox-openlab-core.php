@@ -48,6 +48,14 @@ function cboxol_init() {
 	// @todo Better loading for these libraries.
 	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';
 
+	// Upgrades.
+	add_action(
+		'cboxol_register_upgrader',
+		function() {
+			require CBOXOL_PLUGIN_DIR . 'includes/upgrades.php';
+		}
+	);
+
 	if ( is_admin() ) {
 		include CBOXOL_PLUGIN_DIR . 'includes/admin.php';
 	}
