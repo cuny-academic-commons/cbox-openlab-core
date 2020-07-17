@@ -1689,7 +1689,9 @@ function cboxol_copy_blog_page( $group_id ) {
 						array(
 							'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
 							'menu-item-url'      => bp_get_group_permalink( $group ),
+							'menu-item-status'   => 'publish',
 							'menu-item-position' => -1,
+							'menu-item-classes'  => 'group-profile-link',
 						)
 					);
 
@@ -1700,7 +1702,9 @@ function cboxol_copy_blog_page( $group_id ) {
 						array(
 							'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
 							'menu-item-url'      => home_url( '/' ),
+							'menu-item-status'   => 'publish',
 							'menu-item-position' => -1,
+							'menu-item-classes'  => 'home',
 						)
 					);
 				}
