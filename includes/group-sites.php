@@ -80,6 +80,41 @@ function cboxol_set_group_site_id( $group_id, $site_id ) {
 }
 
 /**
+ * Syncs the group site's blog_public setting to the linked group.
+ *
+ * @since 1.2.0
+ *
+ * @param string $old_value
+ * @param string $new_value
+ */
+function cboxol_sync_group_site_blog_public( $old_value, $value ) {
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return;
+	}
+
+	groups_update_groupmeta( $group_id, 'blog_public', $value );
+}
+add_action( 'update_option_blog_public', 'cboxol_sync_group_site_blog_public', 10, 2 );
+
+/**
+ * Syncs the group site's blog_public setting to the linked group when group is saved.
+ *
+ * @param \BP_Groups_Group $group Group object.
+ */
+function cboxol_sync_group_blog_public_on_group_save( $group ) {
+	$site_id = openlab_get_site_id_by_group_id( $group->id );
+	if ( ! $site_id ) {
+		return;
+	}
+
+	$blog_public = get_blog_option( $site_id, 'blog_public' );
+
+	groups_update_groupmeta( $group->id, 'blog_public', (int) $blog_public );
+}
+add_action( 'groups_group_after_save', 'cboxol_sync_group_blog_public_on_group_save' );
+
+/**
  * Get site type based on the group type.
  *
  * @param int $site_id
