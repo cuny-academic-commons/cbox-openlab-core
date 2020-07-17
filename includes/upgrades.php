@@ -15,4 +15,8 @@ if ( ! get_option( CBOX\OL\Upgrades\NavMenus::FLAG, false ) ) {
 	$registry->register( $upgrade_nav_menus->id, $upgrade_nav_menus );
 }
 
-// Add more upgrades...
+// v1.2.0 - Save blog_public to groupmeta.
+if ( ! get_option( CBOX\OL\Upgrades\GroupSiteBlogPublic::FLAG, false ) ) {
+	$upgrade_blog_public = new CBOX\OL\Upgrades\GroupSiteBlogPublic();
+	$registry->register( $upgrade_blog_public->id, $upgrade_blog_public );
+}
