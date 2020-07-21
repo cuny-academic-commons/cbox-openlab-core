@@ -252,18 +252,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 		// this is a real mess
 		$retval     = array();
 		$label_info = $this->get_label_types_info();
-		foreach ( $this->data['labels'] as $label_slug => $label ) {
-			if ( is_array( $label ) && isset( $label['slug'] ) ) {
-				$ls = $label['slug'];
-			} else {
-				$ls = $label_slug;
-			}
-
-			if ( in_array( $ls, $type_labels, true ) ) {
+		foreach ( $this->data['labels'] as $label_slug => $label_value ) {
+			if ( in_array( $label_slug, $type_labels, true ) ) {
 				$label_data          = $label_info[ $label_slug ];
-				$label_data['value'] = $label['value'];
+				$label_data['value'] = $label_value;
 
-				$retval[ $ls ] = $label_data;
+				$retval[ $label_slug ] = $label_data;
 			}
 		}
 

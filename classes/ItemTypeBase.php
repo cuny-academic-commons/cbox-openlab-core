@@ -39,7 +39,7 @@ class ItemTypeBase {
 	public function get_label( $label_type ) {
 		$label = null;
 		if ( isset( $this->data['labels'][ $label_type ] ) ) {
-			$label = $this->data['labels'][ $label_type ]['value'];
+			$label = $this->data['labels'][ $label_type ];
 		}
 
 		return $label;
@@ -48,9 +48,9 @@ class ItemTypeBase {
 	public function get_labels() {
 		$retval     = array();
 		$label_info = $this->get_label_types_info();
-		foreach ( $this->data['labels'] as $label_slug => $label ) {
+		foreach ( $this->data['labels'] as $label_slug => $label_value ) {
 			$label_data            = $label_info[ $label_slug ];
-			$label_data['value']   = $label['value'];
+			$label_data['value']   = $label_value;
 			$retval[ $label_slug ] = $label_data;
 		}
 
@@ -83,12 +83,8 @@ class ItemTypeBase {
 			$saved_labels = array();
 		}
 
-		foreach ( $this->get_label_types() as $label_type => $label_labels ) {
-			if ( isset( $saved_labels[ $label_type ] ) ) {
-				$label_labels['value'] = $saved_labels[ $label_type ];
-			}
-
-			$this->set_label( $label_type, $label_labels );
+		foreach ( $saved_labels as $label_type => $label_value ) {
+			$this->set_label( $label_type, $label_value );
 		}
 
 		// Enabled.
