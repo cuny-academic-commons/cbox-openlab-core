@@ -183,7 +183,7 @@ function cboxol_membertypes_admin_page() {
 			printf(
 				// translators: link to registration settings panel
 				esc_html__( 'Member Types are used to organize your site’s users. Members are able to choose their own Member Type according to the rules that you configure on this page, as well as in %s.', 'commons-in-a-box' ),
-				sprintf( '<a href="%s">%s</a>', esc_url( $registration_url ), esc_html_e( 'Registration settings', 'commons-in-a-box' ) )
+				sprintf( '<a href="%s">%s</a>', esc_url( $registration_url ), esc_html__( 'Registration settings', 'commons-in-a-box' ) )
 			);
 			?>
 		</p>
