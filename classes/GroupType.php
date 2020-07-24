@@ -140,6 +140,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_calendar_admins',
 				'settings_help_text_relatedlinks',
 				'settings_help_text_portfoliolist',
+				'settings_help_text_sharing',
 				'invite_members_to_group',
 				'invite_community_members_to_group',
 				'search_for_members_to_invite_to_group',
@@ -197,6 +198,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'plural',
 				'create_clone_item',
 				'create_item_help_text',
+				'clone_help_text',
 				'item_creation',
 				'name_help_text',
 				'avatar_help_text',
@@ -232,6 +234,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'settings_help_text_calendar_admins',
 				'settings_help_text_relatedlinks',
 				'settings_help_text_portfoliolist',
+				'settings_help_text_sharing',
 				'invite_members_to_group',
 				'invite_community_members_to_group',
 				'search_for_members_to_invite_to_group',
@@ -440,6 +443,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 			'settings_help_text_portfoliolist'       => array(
+				'value' => '',
+			),
+			'settings_help_text_sharing'             => array(
 				'value' => '',
 			),
 			'invite_members_to_group'                => array(
@@ -704,6 +710,11 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug'        => 'settings_help_text_portfoliolist',
 				'label'       => __( 'Settings Help Text - Portfolio List', 'commons-in-a-box' ),
 				'description' => __( 'Help text for the Portfolio List Settings panel.', 'commons-in-a-box' ),
+			),
+			'settings_help_text_sharing'             => array(
+				'slug'        => 'settings_help_text_sharing',
+				'label'       => __( 'Settings Help Text - Sharing', 'commons-in-a-box' ),
+				'description' => __( 'Help text for the Sharing Settings panel.', 'commons-in-a-box' ),
 			),
 			'invite_members_to_group'                => array(
 				'slug'        => 'invite_members_to_group',
