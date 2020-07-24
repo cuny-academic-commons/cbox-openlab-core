@@ -44,16 +44,18 @@ class GroupTypeSettings extends Upgrade {
 			return;
 		}
 
-		$type_ids = get_posts( [
-			'post_type'      => 'cboxol_group_type',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'title'      => 'ASC',
-			),
-			'fields'         => 'ids',
-		] );
+		$type_ids = get_posts(
+			[
+				'post_type'      => 'cboxol_group_type',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'orderby'        => array(
+					'menu_order' => 'ASC',
+					'title'      => 'ASC',
+				),
+				'fields'         => 'ids',
+			]
+		);
 
 		foreach ( $type_ids as $type_id ) {
 			$this->push( new Upgrade_Item( $type_id, array( 'type_id' => $type_id ) ) );
@@ -110,15 +112,15 @@ class GroupTypeSettings extends Upgrade {
 	public function get_labels( $slug ) {
 		$labels = [
 			'course'  => [
-				'settings_help_text_sharing'           => __( 'This setting enables other faculty to clone your Course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original Course authors will be included.', 'commons-in-a-box' ),
+				'settings_help_text_sharing' => __( 'This setting enables other faculty to clone your Course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original Course authors will be included.', 'commons-in-a-box' ),
 			],
 			'project' => [
-				'clone_help_text'                      => __( 'Note: Cloning copies the project home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'commons-in-a-box' ),
-				'settings_help_text_sharing'           => __( 'This setting enables other members to clone your Project. If enabled, other members can reuse, remix, transform, and build upon the material in this project. Attribution to original Project authors will be included.', 'commons-in-a-box' ),
+				'clone_help_text'            => __( 'Note: Cloning copies the project home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'commons-in-a-box' ),
+				'settings_help_text_sharing' => __( 'This setting enables other members to clone your Project. If enabled, other members can reuse, remix, transform, and build upon the material in this project. Attribution to original Project authors will be included.', 'commons-in-a-box' ),
 			],
-			'club'   => [
-				'clone_help_text'                      => __( 'Note: Cloning copies the club home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'commons-in-a-box' ),
-				'settings_help_text_sharing'           => __( 'This setting enables other members to clone your Club. If enabled, other members can reuse, remix, transform, and build upon the material in this club. Attribution to original Club authors will be included.', 'commons-in-a-box' ),
+			'club'    => [
+				'clone_help_text'            => __( 'Note: Cloning copies the club home, site set-up, and all documents, files, discussions and posts you\'ve created. Posts will be set to "draft" mode. The clone will not copy membership or member-created documents, files, discussions, comments or posts.', 'commons-in-a-box' ),
+				'settings_help_text_sharing' => __( 'This setting enables other members to clone your Club. If enabled, other members can reuse, remix, transform, and build upon the material in this club. Attribution to original Club authors will be included.', 'commons-in-a-box' ),
 			],
 		];
 
