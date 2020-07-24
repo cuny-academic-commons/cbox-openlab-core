@@ -20,3 +20,9 @@ if ( ! get_option( CBOX\OL\Upgrades\GroupSiteBlogPublic::FLAG, false ) ) {
 	$upgrade_blog_public = new CBOX\OL\Upgrades\GroupSiteBlogPublic();
 	$registry->register( $upgrade_blog_public->id, $upgrade_blog_public );
 }
+
+// v1.2.0 - Upgrade group type settings.
+if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings120::FLAG, false ) ) {
+	$upgrade_group_type_settings = new CBOX\OL\Upgrades\GroupTypeSettings120();
+	$registry->register( $upgrade_group_type_settings->id, $upgrade_group_type_settings );
+}
