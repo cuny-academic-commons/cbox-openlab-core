@@ -22,7 +22,7 @@ if ( ! get_option( CBOX\OL\Upgrades\GroupSiteBlogPublic::FLAG, false ) ) {
 }
 
 // v1.2.0 - Upgrade group type settings.
-if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings::FLAG, false ) ) {
-	$upgrade_group_type_settings = new CBOX\OL\Upgrades\GroupTypeSettings();
+if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings120::FLAG, false ) ) {
+	$upgrade_group_type_settings = new CBOX\OL\Upgrades\GroupTypeSettings120();
 	$registry->register( $upgrade_group_type_settings->id, $upgrade_group_type_settings );
 }

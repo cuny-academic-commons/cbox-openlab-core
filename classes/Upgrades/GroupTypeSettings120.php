@@ -17,7 +17,7 @@ use CBOX\Upgrades\Upgrade_Item;
 /**
  * Upgrade Group Type settings.
  */
-class GroupTypeSettings extends Upgrade {
+class GroupTypeSettings120 extends Upgrade {
 
 	/**
 	 * Internal ID.
