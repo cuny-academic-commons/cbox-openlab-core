@@ -229,6 +229,9 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 
 				case 'group-categories':
 					return _x( 'Group Categories', 'Group categories admin label', 'commons-in-a-box' );
+
+				case 'badges':
+					return _x( 'Badges', 'Group settings admin label', 'commons-in-a-box' );
 			}
 
 			break;
@@ -342,6 +345,11 @@ function cboxol_get_admin_tabs( $parent_page ) {
 					'name'  => 'group-categories',
 					'label' => cboxol_admin_subpage_label( 'group-settings', 'group-categories' ),
 				),
+				'2' => array(
+					'href'  => add_query_arg( 'cboxol-section', 'badges', $base ),
+					'name'  => 'badges',
+					'label' => cboxol_admin_subpage_label( 'group-settings', 'badges' ),
+				),
 			);
 
 			break;
@@ -391,6 +399,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 
 				case 'group-categories':
 					cboxol_groupcategories_admin_page();
+					break;
+
+				case 'badges':
+					cboxol_badges_admin_page();
 					break;
 			}
 

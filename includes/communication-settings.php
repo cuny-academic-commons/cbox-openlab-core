@@ -84,6 +84,48 @@ function cboxol_communication_admin_page_invitations() {
 	<?php
 }
 
+/**
+ * Badges settings panel under Communication Settings.
+ *
+ * @since 1.2.0
+ */
+function cboxol_badges_admin_page() {
+	$url = add_query_arg(
+		'page',
+		'openlab-badges',
+		network_admin_url( 'admin.php' )
+	);
+
+	$settings = array(
+		array(
+			'title'       => __( 'OpenLab Badges', 'commons-in-a-box' ),
+			'url'         => $url,
+			'description' => __( 'Create and manage group badges on the Badges admin page.', 'commons-in-a-box' ),
+		),
+	);
+
+	?>
+	<div class="cboxol-admin-content">
+		<p><?php esc_html_e( 'OpenLab Badges allows the network administrator to create custom badges that can be awarded to groups. These badges are displayed in group directories and on group home pages, and can be used to find and filter groups in the directories.', 'commons-in-a-box' ); ?></p>
+
+		<?php cboxol_communication_settings_markup( $settings ); ?>
+	</div>
+	<?php
+}
+
+/**
+ * Helper function for building markup on Communication Settings panels.
+ *
+ * @since 1.1.0
+ *
+ * @param array $settings {
+ *   Values for the various parts of the panel interface.
+ *
+ *   @type string $title       Panel title.
+ *   @type string $url         URL for the link.
+ *   @type string $description Description text.
+ * }
+ */
 function cboxol_communication_settings_markup( $settings ) {
 	?>
 		<ul class="cboxol-communication-settings">
