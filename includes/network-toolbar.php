@@ -1690,7 +1690,7 @@ HTML;
 		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), $ver, 'all' );
 		wp_enqueue_style( 'google-open-sans' );
 
-		$openlab_theme_link = get_site_url( $root_blog_id, 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
+		$openlab_theme_link = home_url( 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
 		$openlab_theme_link = set_url_scheme( $openlab_theme_link );
 
 		// making sure dashicons fire up for front end
