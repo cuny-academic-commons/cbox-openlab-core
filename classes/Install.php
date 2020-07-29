@@ -176,7 +176,7 @@ class Install {
 				'is_enabled'                       => true,
 				'order'                            => 1,
 				'site_settings'                    => array(
-					'theme' => 'twentysixteen',
+					'theme' => $this->get_default_theme(),
 					'pages' => array(
 						'syllabus'          => array(
 							'title'   => __( 'Syllabus', 'commons-in-a-box' ),
@@ -269,7 +269,7 @@ class Install {
 				'is_enabled'                       => true,
 				'order'                            => 2,
 				'site_settings'                    => array(
-					'theme' => 'twentysixteen',
+					'theme' => $this->get_default_theme(),
 				),
 
 				'labels'                           => array(
@@ -340,7 +340,7 @@ class Install {
 				'is_enabled'                       => true,
 				'order'                            => 3,
 				'site_settings'                    => array(
-					'theme' => 'twentysixteen',
+					'theme' => $this->get_default_theme(),
 				),
 
 				'labels'                           => array(
@@ -416,7 +416,7 @@ class Install {
 				'is_enabled'                       => true,
 				'order'                            => 4,
 				'site_settings'                    => array(
-					'theme' => 'twentysixteen',
+					'theme' => $this->get_default_theme(),
 					'pages' => array(
 						'about-me'          => array(
 							'title'   => __( 'About Me', 'commons-in-a-box' ),
@@ -1179,5 +1179,45 @@ class Install {
 
 		set_theme_mod( 'openlab_footer_middle_heading', $middle_heading );
 		set_theme_mod( 'openlab_footer_middle_content', $middle_content );
+	}
+
+	/**
+	 * Gets the default theme for the template sites.
+	 *
+	 * We have a list of preferred themes, and check whether they're available.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string Stylesheet slug.
+	 */
+	protected function get_default_theme() {
+		$default = null;
+
+		$preferred = [
+			'twentysixteen',
+			'twentytwenty',
+		];
+
+		foreach ( $preferred as $p ) {
+			// Take the first one available.
+			if ( wp_get_theme( $preferred )->exists() ) {
+				$default = $p;
+				break;
+			}
+		}
+
+		// Fall back on the system default theme.
+		if ( ! $default ) {
+			$default = WP_DEFAULT_THEME;
+		}
+
+		/**
+		 * Filters the default theme used for site templates.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param string $default Stylesheet slug.
+		 */
+		return apply_filters( 'cboxol_site_template_default_theme', $default );
 	}
 }
