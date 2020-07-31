@@ -242,7 +242,17 @@ function cboxol_get_selectable_member_types_for_user( $user_id ) {
 	$selectable_types = array();
 
 	$type_obj = cboxol_get_user_member_type( $user_id );
-	if ( ! is_wp_error( $type_obj ) ) {
+	if ( is_wp_error( $type_obj ) ) {
+		// If the user has no member type, allow them to select any non-restricted type.
+		$all_member_types = cboxol_get_member_types();
+		foreach ( $all_member_types as $type ) {
+			if ( $type->get_requires_signup_code() ) {
+				continue;
+			}
+
+			$all_member_types[] = $type->get_slug();
+		}
+	} else {
 		$selectable_types = $type_obj->get_selectable_types();
 	}
 
