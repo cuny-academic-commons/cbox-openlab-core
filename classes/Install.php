@@ -318,7 +318,7 @@ class Install {
 					'invite_community_members_to_group'    => __( 'Invite Community Members to Project', 'commons-in-a-box' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your project', 'commons-in-a-box' ),
 					'group_contact'                        => __( 'Project Contact', 'commons-in-a-box' ),
-					'group_contact_help_text'              => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your portfolio has more members.', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your Portfolio has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Project Discussion', 'commons-in-a-box' ),
 				),
 
@@ -389,7 +389,7 @@ class Install {
 					'invite_community_members_to_group'    => __( 'Invite Community Members to Club', 'commons-in-a-box' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your club', 'commons-in-a-box' ),
 					'group_contact'                        => __( 'Club Contact', 'commons-in-a-box' ),
-					'group_contact_help_text'              => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your portfolio has more members.', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your Club has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Club Discussion', 'commons-in-a-box' ),
 				),
 
@@ -490,7 +490,7 @@ class Install {
 					'invite_community_members_to_group'    => __( 'Invite Community Members to Portfolio', 'commons-in-a-box' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'commons-in-a-box' ),
 					'group_contact'                        => __( 'Porfolio Contact', 'commons-in-a-box' ),
-					'group_contact_help_text'              => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your portfolio has more members.', 'commons-in-a-box' ),
+					'group_contact_help_text'              => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your Portfolio has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Portfolio Discussion', 'commons-in-a-box' ),
 				),
 
