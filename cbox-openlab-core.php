@@ -47,6 +47,7 @@ function cboxol_init() {
 
 	// @todo Better loading for these libraries.
 	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/clone.php';
 
 	// Upgrades.
 	add_action(

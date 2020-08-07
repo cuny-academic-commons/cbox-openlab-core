@@ -147,6 +147,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'group_contact',
 				'group_contact_help_text',
 				'group_discussion',
+				'clone_credits_widget_description',
+				'shareable_content_widget_description',
+				'clone_this_group',
 			),
 			'portfolio' => array(
 				'singular',
@@ -192,6 +195,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'group_contact',
 				'group_contact_help_text',
 				'group_discussion',
+				'clone_credits_widget_description',
+				'shareable_content_widget_description',
+				'clone_this_group',
 			),
 			'default'   => array(
 				'singular',
@@ -241,6 +247,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'group_contact',
 				'group_contact_help_text',
 				'group_discussion',
+				'clone_credits_widget_description',
+				'shareable_content_widget_description',
+				'clone_this_group',
 			),
 		);
 
@@ -464,6 +473,15 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 			'group_discussion'                       => array(
+				'value' => '',
+			),
+			'clone_credits_widget_description'       => array(
+				'value' => '',
+			),
+			'shareable_content_widget_description'   => array(
+				'value' => '',
+			),
+			'clone_this_group'                       => array(
 				'value' => '',
 			),
 		);
@@ -745,6 +763,21 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug'        => 'group_discussion',
 				'label'       => __( 'Group Discussion', 'commons-in-a-box' ),
 				'description' => __( 'Used for forum navigation.', 'commons-in-a-box' ),
+			),
+			'clone_credits_widget_description'       => array(
+				'slug'        => 'clone_credits_widget_description',
+				'label'       => __( 'Clone Credits Widget Description', 'commons-in-a-box' ),
+				'description' => __( 'Describes the Clone Credits widget.', 'commons-in-a-box' ),
+			),
+			'shareable_content_widget_description'   => array(
+				'slug'        => 'shareable_content_widget_description',
+				'label'       => __( 'Shareable Content Widget Description', 'commons-in-a-box' ),
+				'description' => __( 'Describes the Shareable Content widget.', 'commons-in-a-box' ),
+			),
+			'clone_this_group'                       => array(
+				'slug'        => 'clone_this_group',
+				'label'       => __( 'Clone This Group', 'commons-in-a-box' ),
+				'description' => __( 'Used in the Shareable Content widget.', 'commons-in-a-box' ),
 			),
 		);
 	}

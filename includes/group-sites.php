@@ -1518,6 +1518,70 @@ function openlab_catch_cloned_course_notice_dismissals() {
 add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
 
 /**
+ * Add a widget to the "main" sidebar.
+ *
+ * This function includes some guesswork about what the "main" sidebar is, based on the theme.
+ *
+ * @since 1.2.0
+ *
+ * @param string $widget
+ */
+function openlab_add_widget_to_main_sidebar( $widget ) {
+	switch ( get_template() ) {
+		case 'hemingway':
+		case 'genesis':
+			$sidebar = 'sidebar';
+			break;
+
+		case 'twentyten':
+			$sidebar = 'primary-widget-area';
+			break;
+
+		case 'gillian':
+		case 'twentyfifteen':
+		case 'twentyfourteen':
+		case 'twentyeleven':
+		case 'twentyseventeen':
+		case 'twentysixteen':
+		case 'twentythirteen':
+		case 'twentytwelve':
+			$sidebar = 'sidebar-1';
+			break;
+
+		default:
+			$sidebar = reset( array_keys( $GLOBALS['wp_registered_sidebars'] ) );
+			break;
+	}
+
+	// No doubles.
+	$sidebars = get_option( 'sidebars_widgets', array() );
+	$already  = false;
+	if ( ! empty( $sidebars[ $sidebar ] ) ) {
+		foreach ( $sidebars[ $sidebar ] as $widget_id ) {
+			if ( 0 === strpos( $widget_id, $widget ) ) {
+				$already = true;
+				break;
+			}
+		}
+	}
+
+	if ( $already ) {
+		return;
+	}
+
+	if ( ! class_exists( 'CBox_Widget_Setter' ) ) {
+		require CBOXOL_PLUGIN_DIR . '/lib/cbox-widget-setter.php';
+	}
+
+	CBox_Widget_Setter::set_widget(
+		array(
+			'id_base'    => $widget,
+			'sidebar_id' => $sidebar,
+		)
+	);
+}
+
+/**
  * Copy blog from a template.
  *
  * @todo Merge with course copy code, which is better than this.

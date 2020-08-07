@@ -249,6 +249,9 @@ class Install {
 					'group_contact'                        => __( 'Faculty', 'commons-in-a-box' ),
 					'group_contact_help_text'              => __( 'By default, you are the sole faculty member associated with this Course. You may add or remove faculty once your Course has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Course Discussion', 'commons-in-a-box' ),
+					'clone_credits_widget_description'     => __( 'A list of Courses that have contributed to your Course.', 'commons-in-a-box' ),
+					'shareable_content_widget_description' => __( 'Provides a link for others to clone your Course.', 'commons-in-a-box' ),
+					'clone_this_group'                     => __( 'Clone this Course', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => true,
@@ -320,6 +323,9 @@ class Install {
 					'group_contact'                        => __( 'Project Contact', 'commons-in-a-box' ),
 					'group_contact_help_text'              => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your Portfolio has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Project Discussion', 'commons-in-a-box' ),
+					'clone_credits_widget_description'     => __( 'A list of Projects that have contributed to your Project.', 'commons-in-a-box' ),
+					'shareable_content_widget_description' => __( 'Provides a link for others to clone your Project.', 'commons-in-a-box' ),
+					'clone_this_group'                     => __( 'Clone this Project', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => true,
@@ -391,6 +397,9 @@ class Install {
 					'group_contact'                        => __( 'Club Contact', 'commons-in-a-box' ),
 					'group_contact_help_text'              => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your Club has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Club Discussion', 'commons-in-a-box' ),
+					'clone_credits_widget_description'     => __( 'A list of Clubs that have contributed to your Club.', 'commons-in-a-box' ),
+					'shareable_content_widget_description' => __( 'Provides a link for others to clone your Club.', 'commons-in-a-box' ),
+					'clone_this_group'                     => __( 'Clone this Club', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => true,
@@ -492,6 +501,9 @@ class Install {
 					'group_contact'                        => __( 'Porfolio Contact', 'commons-in-a-box' ),
 					'group_contact_help_text'              => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your Portfolio has more members.', 'commons-in-a-box' ),
 					'group_discussion'                     => __( 'Portfolio Discussion', 'commons-in-a-box' ),
+					'clone_credits_widget_description'     => __( 'A list of Portfolios that have contributed to your Portfolio.', 'commons-in-a-box' ),
+					'shareable_content_widget_description' => __( 'Provides a link for others to clone your Portfolio.', 'commons-in-a-box' ),
+					'clone_this_group'                     => __( 'Clone this Portfolio', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => false,
