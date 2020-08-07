@@ -124,5 +124,5 @@ function openlab_get_group_clone_history_list( $group_id, $exclude_creator = nul
 		$history_data
 	);
 
-	return implode( "\n", $credits_groups );
+	return '<ul class="group-credits">' . implode( "\n", $credits_groups ) . '</ul>';
 }
