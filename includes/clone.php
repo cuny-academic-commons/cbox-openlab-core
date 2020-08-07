@@ -126,3 +126,57 @@ function openlab_get_group_clone_history_list( $group_id, $exclude_creator = nul
 
 	return '<ul class="group-credits">' . implode( "\n", $credits_groups ) . '</ul>';
 }
+
+/**
+ * Get the group ID of a group's clone source.
+ *
+ * @param int $group_id
+ * @return int $group_id
+ */
+function openlab_get_clone_source_group_id( $group_id ) {
+	return (int) groups_get_groupmeta( $group_id, 'clone_source_group_id' );
+}
+
+/**
+ * Determines whether a group can be cloned.
+ *
+ * @param int $group_id The group ID.
+ */
+function openlab_group_can_be_cloned( $group_id = null ) {
+	if ( null === $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	if ( ! $group_id ) {
+		return false;
+	}
+
+	$sharing_enabled_for_group = groups_get_groupmeta( $group_id, 'enable_sharing', true );
+
+	return ! empty( $sharing_enabled_for_group );
+}
+
+/**
+ * Determines whether a current user can clone current group.
+ *
+ * @param \CBOX\OL\GroupType $group_type Group type object.
+ * @return bool
+ */
+function openlab_user_can_clone_group( $group_type ) {
+	if ( is_super_admin() ) {
+		return true;
+	}
+
+	$user_id     = get_current_user_id();
+	$member_type = cboxol_get_user_member_type( $user_id );
+
+	if ( is_wp_error( $member_type ) ) {
+		return false;
+	}
+
+	if ( $group_type->get_is_course() && ! $member_type->get_can_create_courses() ) {
+		return false;
+	}
+
+	return true;
+}
