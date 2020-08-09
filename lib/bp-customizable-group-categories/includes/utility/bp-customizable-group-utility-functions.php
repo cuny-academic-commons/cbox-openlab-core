@@ -15,13 +15,15 @@ function bpcgc_get_terms_by_group_type( $group_type = '' ) {
 
 		//if sorting plugin Category Order and Taxonomy Terms Order is available, use the custom sort
 		if ( function_exists( 'tto_info_box' ) ) {
-			$query = $wpdb->prepare( "SELECT t.* FROM $wpdb->terms t INNER JOIN $wpdb->termmeta tm on tm.term_id = t.term_id WHERE tm.meta_key=%s ORDER BY t.term_order ASC", $key );
+			$query = $wpdb->prepare( "SELECT t.term_id FROM $wpdb->terms t INNER JOIN $wpdb->termmeta tm on tm.term_id = t.term_id WHERE tm.meta_key=%s ORDER BY t.term_order ASC", $key );
 		} else {
-			$query = $wpdb->prepare( "SELECT t.* FROM $wpdb->terms t INNER JOIN $wpdb->termmeta tm on tm.term_id = t.term_id WHERE tm.meta_key=%s", $key );
+			$query = $wpdb->prepare( "SELECT t.term_id FROM $wpdb->terms t INNER JOIN $wpdb->termmeta tm on tm.term_id = t.term_id WHERE tm.meta_key=%s", $key );
 		}
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$terms_out = $wpdb->get_results( $query );
+		$term_ids = $wpdb->get_col( $query );
+
+		$terms_out = array_map( 'get_term', $term_ids );
 	} else {
 		$terms_out = get_terms(
 			[
