@@ -12,6 +12,12 @@
  * @since 1.2.0
  */
 function cboxol_register_widgets() {
+	// Bail if this is a site without a corresponding group.
+	$group_id = cboxol_get_group_site_id( get_current_blog_id() );
+	if ( ! $group_id ) {
+		return;
+	}
+
 	$widgets = [
 		'\CBOX\OL\Widget\CloneCredits',
 		'\CBOX\OL\Widget\ShareableContent',
