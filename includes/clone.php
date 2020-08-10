@@ -11,13 +11,7 @@
  *
  * @since 1.2.0
  */
-function cboxol_register_widgets() {
-	// Bail if this is a site without a corresponding group.
-	$group_id = cboxol_get_group_site_id( get_current_blog_id() );
-	if ( ! $group_id ) {
-		return;
-	}
-
+function cboxol_register_clone_widgets() {
 	$widgets = [
 		'\CBOX\OL\Widget\CloneCredits',
 		'\CBOX\OL\Widget\ShareableContent',
@@ -27,7 +21,24 @@ function cboxol_register_widgets() {
 		register_widget( $widget );
 	}
 }
-add_action( 'widgets_init', 'cboxol_register_widgets' );
+add_action( 'widgets_init', 'cboxol_register_clone_widgets' );
+
+function cboxol_unregister_clone_widgets() {
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( $group_id ) {
+		return;
+	}
+
+	$widgets = [
+		'\CBOX\OL\Widget\CloneCredits',
+		'\CBOX\OL\Widget\ShareableContent',
+	];
+
+	foreach ( $widgets as $widget ) {
+		unregister_widget( $widget );
+	}
+}
+add_action( 'bp_setup_globals', 'cboxol_unregister_clone_widgets' );
 
 /**
  * Get the clone history of a group.

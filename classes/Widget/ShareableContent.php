@@ -70,6 +70,10 @@ class ShareableContent extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$group_type = cboxol_get_group_site_type( get_current_blog_id() );
+		if ( ! $group_type || is_wp_error( $group_type ) ) {
+			return;
+		}
+
 		?>
 		<p><?php echo esc_html( $group_type->get_label( 'shareable_content_widget_description' ) ); ?></p>
 		<?php
