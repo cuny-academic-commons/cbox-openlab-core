@@ -22,7 +22,9 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$group_id = $wpdb->get_var( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'cboxol_group_site_id' AND meta_value = %d", $blog_id ) );
 
-		wp_cache_set( $blog_id, (int) $group_id, 'site_group_ids' );
+		if ( null !== $group_id ) {
+			wp_cache_set( $blog_id, (int) $group_id, 'site_group_ids' );
+		}
 	}
 
 	return (int) $group_id;
