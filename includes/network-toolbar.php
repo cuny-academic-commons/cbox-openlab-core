@@ -1380,7 +1380,7 @@ HTML;
 			return;
 		}
 
-		$title = '<span class="fa fa-plus-circle hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">Add New</span>';
+		$title = '<span class="fa fa-plus-circle hidden-xs" aria-hidden="true"></span><span class="ab-icon dashicon-icon visible-xs" aria-hidden="true"></span><span class="sr-only">' . _x( 'Add New', 'admin bar menu group label', 'commons-in-a-box' ) . '</span>';
 
 		$wp_admin_bar->add_menu(
 			array(
