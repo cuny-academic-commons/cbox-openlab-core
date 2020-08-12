@@ -1355,6 +1355,11 @@ HTML;
 
 		// Add any additional custom post types.
 		foreach ( $cpts as $cpt ) {
+			// Ignore bbPress content.
+			if ( in_array( $cpt->name, [ 'topic', 'forum' ], true ) ) {
+				continue;
+			}
+
 			if ( ! current_user_can( $cpt->cap->create_posts ) ) {
 				continue;
 			}
