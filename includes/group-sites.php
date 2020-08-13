@@ -1791,7 +1791,7 @@ function cboxol_copy_blog_page( $group_id ) {
 							'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
 							'menu-item-url'      => bp_get_group_permalink( $group ),
 							'menu-item-status'   => 'publish',
-							'menu-item-position' => -1,
+							'menu-item-position' => -2,
 							'menu-item-classes'  => 'group-profile-link',
 						)
 					);
