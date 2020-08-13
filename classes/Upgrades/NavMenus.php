@@ -116,7 +116,7 @@ class NavMenus extends Upgrade {
 				'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
 				'menu-item-url'      => $home_url,
 				'menu-item-status'   => 'publish',
-				'menu-item-position' => -1,
+				'menu-item-position' => -2,
 				'menu-item-classes'  => 'group-profile-link',
 			)
 		);
