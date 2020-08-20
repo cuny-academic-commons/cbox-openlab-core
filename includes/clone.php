@@ -152,7 +152,7 @@ function openlab_get_group_clone_history_list( $group_id, $exclude_creator = nul
  * @param int $group_id
  * @return int $group_id
  */
-function openlab_get_clone_source_group_id( $group_id ) {
+function cboxol_get_clone_source_group_id( $group_id ) {
 	return (int) groups_get_groupmeta( $group_id, 'clone_source_group_id' );
 }
 
