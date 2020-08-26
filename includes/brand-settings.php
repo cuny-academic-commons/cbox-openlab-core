@@ -148,7 +148,7 @@ function cboxol_is_brand_page( $page_type, $post_id = null ) {
 	}
 
 	$brand_page = cboxol_get_brand_page( $page_type );
-	if ( ! $brand_page ) {
+	if ( ! $brand_page || 0 === $brand_page['id'] ) {
 		return false;
 	}
 
