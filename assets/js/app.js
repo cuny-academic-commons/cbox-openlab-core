@@ -209,72 +209,72 @@ const store = new Vuex.Store(
 
 					// Push to typeNames to force render.
 					state[ namesKey ].push( key )
-				},
+				}
+			},
 
-				orderEntities( state, payload ) {
-					const { itemsKey, namesKey } = payload
+			orderEntities( state, payload ) {
+				const { itemsKey, namesKey } = payload
 
-					let newEntityNames = state[ namesKey ]
+				let newEntityNames = state[ namesKey ]
 
-					newEntityNames.sort(
-						function( a, b ) {
-							if ( '_new' === a.substr( 0, 4 ) ) {
-								return -1
-							}
-
-							let order_a
-							if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
-								order_a = state[ itemsKey ][ a ].order
-							} else {
-								order_a = state[ itemsKey ][ a ].settings.Order.data
-							}
-
-							let order_b
-							if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
-								order_b = state[ itemsKey ][ b ].order
-							} else {
-								order_b = state[ itemsKey ][ b ].settings.Order.data
-							}
-
-							order_a = parseInt( order_a )
-							order_b = parseInt( order_b )
-
-							if ( order_a == order_b ) {
-								return state[ itemsKey ][ a ].name > state[ itemsKey ][ b ].name
-							}
-
-							return order_a > order_b
+				newEntityNames.sort(
+					function( a, b ) {
+						if ( '_new' === a.substr( 0, 4 ) ) {
+							return -1
 						}
-					)
+
+						let order_a
+						if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
+							order_a = state[ itemsKey ][ a ].order
+						} else {
+							order_a = state[ itemsKey ][ a ].settings.Order.data
+						}
+
+						let order_b
+						if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
+							order_b = state[ itemsKey ][ b ].order
+						} else {
+							order_b = state[ itemsKey ][ b ].settings.Order.data
+						}
+
+						order_a = parseInt( order_a )
+						order_b = parseInt( order_b )
+
+						if ( order_a == order_b ) {
+							return state[ itemsKey ][ a ].name > state[ itemsKey ][ b ].name
+						}
+
+						return order_a > order_b
+					}
+				)
 
 				state[ namesKey ] = newEntityNames
-				},
+			},
 
-				removeEmailDomain( state, payload ) {
-					const { domain } = payload
+			removeEmailDomain( state, payload ) {
+				const { domain } = payload
 
-					let newEmailDomains = Object.assign( {}, state.emailDomains )
-					delete newEmailDomains[ domain ]
+				let newEmailDomains = Object.assign( {}, state.emailDomains )
+				delete newEmailDomains[ domain ]
 
-					state.emailDomains = newEmailDomains
-				},
+				state.emailDomains = newEmailDomains
+			},
 
-				removeSignupCode( state, payload ) {
-					const { wpPostId } = payload
+			removeSignupCode( state, payload ) {
+				const { wpPostId } = payload
 
-					let newSignupCodes = Object.assign( {}, state.signupCodes )
-					delete newSignupCodes[ wpPostId ]
+				let newSignupCodes = Object.assign( {}, state.signupCodes )
+				delete newSignupCodes[ wpPostId ]
 
-					state.signupCodes = newSignupCodes
-				},
+				state.signupCodes = newSignupCodes
+			},
 
-				removeEntity( state, payload ) {
-					const { itemsKey, namesKey, slug } = payload
+			removeEntity( state, payload ) {
+				const { itemsKey, namesKey, slug } = payload
 
-					var index = state[ namesKey ].indexOf( slug )
-					if ( index > -1 ) {
-						state[ namesKey ].splice( index, 1 )
-					}
+				var index = state[ namesKey ].indexOf( slug )
+				if ( index > -1 ) {
+					state[ namesKey ].splice( index, 1 )
 				}
 
 				delete state[ itemsKey ][ slug ]

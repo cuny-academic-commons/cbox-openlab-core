@@ -21,6 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _vue2.default.use(_vuex2.default);
 
+// phpcs:ignore Generic.Formatting.MultipleStatementAlignment.NotSameWarning
 var store = new _vuex2.default.Store({
 	state: {
 		academicUnits: {},
@@ -202,16 +203,17 @@ var store = new _vuex2.default.Store({
 				} else {
 					isAvailable = true;
 				}
-			} while (!isAvailable);
+			} while (!isAvailable);{
 
-			// Clone dummy data to that key.
-			var dummy = JSON.parse(JSON.stringify(state.dummy));
-			dummy.slug = key;
-			dummy.isCollapsed = false;
-			state[itemsKey][key] = dummy;
+				// Clone dummy data to that key.
+				var dummy = JSON.parse(JSON.stringify(state.dummy));
+				dummy.slug = key;
+				dummy.isCollapsed = false;
+				state[itemsKey][key] = dummy;
 
-			// Push to typeNames to force render.
-			state[namesKey].push(key);
+				// Push to typeNames to force render.
+				state[namesKey].push(key);
+			}
 		},
 		orderEntities: function orderEntities(state, payload) {
 			var itemsKey = payload.itemsKey,
@@ -2008,7 +2010,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-04520930", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-04520930", __vue__options__)
+    hotAPI.reload("data-v-04520930", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"./AcademicUnitParentSelector.vue":19,"vue":77,"vue-hot-reload-api":76}],19:[function(require,module,exports){
@@ -2249,7 +2251,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-ecca841a", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-ecca841a", __vue__options__)
+    hotAPI.reload("data-v-ecca841a", __vue__options__)
   }
 })()}
 },{"../../mixins/i18nTools.js":30,"./AcademicUnit.vue":18,"./AcademicUnitParentSelector.vue":19,"vue":77,"vue-hot-reload-api":76}],21:[function(require,module,exports){
