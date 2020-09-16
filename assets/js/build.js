@@ -1718,7 +1718,7 @@ exports.default = {
 			get: function get() {
 				var value = this.$store.state[this.itemsKey][this.typeSlug].labels[this.labelSlug].value;
 
-				if (0 == value.length) {
+				if (null === value || 0 == value.length) {
 					value = this.$store.state[this.itemsKey][this.typeSlug].name;
 				}
 
