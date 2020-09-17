@@ -106,25 +106,25 @@ class GroupTypeSettings123 extends Upgrade {
 	 */
 	public function get_labels( $slug ) {
 		$labels = [
-			'course'   => [
+			'course'    => [
 				'clone_credits_widget_description'     => __( 'A list of Courses that have contributed to your Course.', 'commons-in-a-box' ),
 				'shareable_content_widget_description' => __( 'Provides a link for others to clone your Course.', 'commons-in-a-box' ),
 				'clone_this_group'                     => __( 'Clone this Course', 'commons-in-a-box' ),
 			],
-			'project'  => [
+			'project'   => [
 				'clone_credits_widget_description'     => __( 'A list of Projects that have contributed to your Project.', 'commons-in-a-box' ),
 				'shareable_content_widget_description' => __( 'Provides a link for others to clone your Project.', 'commons-in-a-box' ),
 				'clone_this_group'                     => __( 'Clone this Project', 'commons-in-a-box' ),
 			],
-			'club'     => [
+			'club'      => [
 				'clone_credits_widget_description'     => __( 'A list of Clubs that have contributed to your Club.', 'commons-in-a-box' ),
 				'shareable_content_widget_description' => __( 'Provides a link for others to clone your Club.', 'commons-in-a-box' ),
 				'clone_this_group'                     => __( 'Clone this Club', 'commons-in-a-box' ),
 			],
 			'portfolio' => [
-					'clone_credits_widget_description'     => __( 'A list of Portfolios that have contributed to your Portfolio.', 'commons-in-a-box' ),
-					'shareable_content_widget_description' => __( 'Provides a link for others to clone your Portfolio.', 'commons-in-a-box' ),
-					'clone_this_group'                     => __( 'Clone this Portfolio', 'commons-in-a-box' ),
+				'clone_credits_widget_description'     => __( 'A list of Portfolios that have contributed to your Portfolio.', 'commons-in-a-box' ),
+				'shareable_content_widget_description' => __( 'Provides a link for others to clone your Portfolio.', 'commons-in-a-box' ),
+				'clone_this_group'                     => __( 'Clone this Portfolio', 'commons-in-a-box' ),
 			],
 		];
 
