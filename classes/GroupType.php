@@ -276,7 +276,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 		// this continues to be a real mess
 		$sorted = array();
 		foreach ( $type_labels as $value ) {
-			$sorted[ $value ] = $retval[ $value ];
+			if ( ! empty( $retval[ $value ] ) ) {
+				$sorted[ $value ] = $retval[ $value ];
+			}
 		}
 
 		return $sorted;
