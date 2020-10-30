@@ -125,6 +125,7 @@ class GroupTypeSettings123 extends Upgrade {
 				'clone_credits_widget_description'     => __( 'A list of Portfolios that have contributed to your Portfolio.', 'commons-in-a-box' ),
 				'shareable_content_widget_description' => __( 'Provides a link for others to clone your Portfolio.', 'commons-in-a-box' ),
 				'clone_this_group'                     => __( 'Clone this Portfolio', 'commons-in-a-box' ),
+				'settings_help_text_add_to_portfolio'  => __( 'The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site.', 'commons-in-a-box' ),
 			],
 		];
 
