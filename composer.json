@@ -4,7 +4,7 @@
     "license": "GPLv2",
     "require": {},
     "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
         "phpcompatibility/phpcompatibility-wp": "*",
         "wp-coding-standards/wpcs": "*"
     }
