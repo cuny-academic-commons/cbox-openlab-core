@@ -42,6 +42,45 @@ function cboxol_bust_site_group_id_cache( $group_id, $site_id ) {
 add_action( 'cboxol_set_group_site_id', 'cboxol_bust_site_group_id_cache', 10, 2 );
 
 /**
+ * Deletes groupmeta linking a site to a group when the site is deleted.
+ *
+ * @since 1.2.3
+ *
+ * @param WP_Site $site Site object.
+ */
+function cboxol_unlink_site_from_group_on_site_deletion( $site ) {
+	$group_id = openlab_get_group_id_by_blog_id( $site->id );
+
+	if ( ! $group_id ) {
+		return;
+	}
+
+	// For debugging purposes in case of unlinked groups.
+	groups_update_groupmeta( $group_id, 'cboxol_group_site_id_deleted', $site->id );
+
+	groups_delete_groupmeta( $group_id, 'cboxol_group_site_id' );
+
+	cboxol_bust_site_group_id_cache( $group_id, $site->id );
+}
+add_action( 'wp_delete_site', 'cboxol_unlink_site_from_group_on_site_deletion' );
+
+/**
+ * Deletes groupmeta linking a site to a group when site is marked as deleted or spam.
+ *
+ * @since 1.2.3
+ *
+ * @param WP_Site $site Site object.
+ */
+function cboxol_unlink_site_from_group_on_site_status_change( $site ) {
+	if ( ! $site->spam && ! $site->deleted ) {
+		return;
+	}
+
+	cboxol_unlink_site_from_group_on_site_deletion( $site );
+}
+add_action( 'wp_update_site', 'cboxol_unlink_site_from_group_on_site_status_change' );
+
+/**
  * Utility function for fetching the site id for a group
  */
 function openlab_get_site_id_by_group_id( $group_id = 0 ) {
