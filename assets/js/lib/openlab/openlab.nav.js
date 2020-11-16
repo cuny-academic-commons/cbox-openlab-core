@@ -501,7 +501,7 @@ OpenLab.nav = (function ($) {
 
 (function ($) {
 
-	var windowWidth = $( window ).width();
+	var windowWidth    = $( window ).width();
 	var $adminmenuwrap = $( '#adminmenuwrap' );
 
 	$( document ).ready(
