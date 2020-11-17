@@ -519,9 +519,12 @@ OpenLab.nav = (function ($) {
 				function() {
 					if ( 'absolute' === $adminmenuwrap.css( 'position' ) ) {
 						$adminmenuwrap.css( 'top', 0 );
+					} else if ( 'fixed' === $adminmenuwrap.css( 'position' ) ) {
+						$adminmenuwrap.css( 'top', 0 );
+						$adminmenuwrap.css( 'position', 'absolute' );
 					}
 				},
-				10
+				1
 			);
 		}
 	);
