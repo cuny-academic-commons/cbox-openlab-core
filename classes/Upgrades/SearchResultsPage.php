@@ -43,6 +43,11 @@ class SearchResultsPage extends Upgrade {
 	 * Setup method.
 	 */
 	public function setup() {
+		// Prevent running during activation.
+		if ( ! function_exists( 'cboxol_get_main_site_id' ) ) {
+			return;
+		}
+
 		$this->push( new Upgrade_Item( cboxol_get_main_site_id(), array( 'site_id' => cboxol_get_main_site_id() ) ) );
 	}
 
