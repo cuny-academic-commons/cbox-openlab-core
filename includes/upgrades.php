@@ -26,3 +26,15 @@ if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings120::FLAG, false ) ) {
 	$upgrade_group_type_settings = new CBOX\OL\Upgrades\GroupTypeSettings120();
 	$registry->register( $upgrade_group_type_settings->id, $upgrade_group_type_settings );
 }
+
+// v1.2.2 - Install Search Results page.
+if ( ! get_option( CBOX\OL\Upgrades\SearchResultsPage::FLAG, false ) ) {
+	$search_results_page = new CBOX\OL\Upgrades\SearchResultsPage();
+	$registry->register( $search_results_page->id, $search_results_page );
+}
+
+// v1.2.3 - Install Search Results page.
+if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings123::FLAG, false ) ) {
+	$upgrade_group_type_settings_123 = new CBOX\OL\Upgrades\GroupTypeSettings123();
+	$registry->register( $upgrade_group_type_settings_123->id, $upgrade_group_type_settings_123 );
+}

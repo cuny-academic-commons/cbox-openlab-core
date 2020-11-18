@@ -189,6 +189,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'visit_group_site',
 				'group_home',
 				'settings_help_text_relatedlinks',
+				'settings_help_text_add_to_portfolio',
 				'invite_members_to_group',
 				'invite_community_members_to_group',
 				'search_for_members_to_invite_to_group',
@@ -276,7 +277,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 		// this continues to be a real mess
 		$sorted = array();
 		foreach ( $type_labels as $value ) {
-			$sorted[ $value ] = $retval[ $value ];
+			if ( ! empty( $retval[ $value ] ) ) {
+				$sorted[ $value ] = $retval[ $value ];
+			}
 		}
 
 		return $sorted;
@@ -455,6 +458,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 			'settings_help_text_sharing'             => array(
+				'value' => '',
+			),
+			'settings_help_text_add_to_portfolio'    => array(
 				'value' => '',
 			),
 			'invite_members_to_group'                => array(
@@ -733,6 +739,11 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug'        => 'settings_help_text_sharing',
 				'label'       => __( 'Settings Help Text - Sharing', 'commons-in-a-box' ),
 				'description' => __( 'Help text for the Sharing Settings panel.', 'commons-in-a-box' ),
+			),
+			'settings_help_text_add_to_portfolio'    => array(
+				'slug'        => 'settings_help_text_add_to_portfolio',
+				'label'       => __( 'Settings Help Text - Add to Portfolio', 'commons-in-a-box' ),
+				'description' => __( 'Help text for the Add to Portfolio Settings panel.', 'commons-in-a-box' ),
 			),
 			'invite_members_to_group'                => array(
 				'slug'        => 'invite_members_to_group',

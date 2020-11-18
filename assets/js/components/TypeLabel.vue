@@ -33,7 +33,7 @@
 					let value = this.$store.state[ this.itemsKey ][ this.typeSlug ].labels[ this.labelSlug ].value
 
 					// Fall back on name.
-					if ( 0 == value.length ) {
+					if ( null === value || 0 == value.length ) {
 						value = this.$store.state[ this.itemsKey ][ this.typeSlug ].name
 					}
 

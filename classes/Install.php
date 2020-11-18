@@ -495,6 +495,7 @@ class Install {
 					'group_site'                           => __( 'Portfolio Site', 'commons-in-a-box' ),
 					'group_home'                           => __( 'Portfolio Home', 'commons-in-a-box' ),
 					'settings_help_text_relatedlinks'      => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'commons-in-a-box' ),
+					'settings_help_text_add_to_portfolio'  => __( 'The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site.', 'commons-in-a-box' ),
 					'invite_members_to_group'              => __( 'Invite Members to Portfolio', 'commons-in-a-box' ),
 					'invite_community_members_to_group'    => __( 'Invite Community Members to Portfolio', 'commons-in-a-box' ),
 					'search_for_members_to_invite_to_group' => __( 'Search for Community Members to invite to your portfolio', 'commons-in-a-box' ),

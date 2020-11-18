@@ -501,8 +501,8 @@ OpenLab.nav = (function ($) {
 
 (function ($) {
 
-	var windowWidth        = $( window ).width();
-		var $adminmenuwrap = $( '#adminmenuwrap' );
+	var windowWidth    = $( window ).width();
+	var $adminmenuwrap = $( '#adminmenuwrap' );
 
 	$( document ).ready(
 		function () {
@@ -512,17 +512,22 @@ OpenLab.nav = (function ($) {
 		}
 	);
 
-		$( document ).on(
-			'scroll.unpin-menu',
-			function() {
-				setTimeout(
-					function(){
-						$adminmenuwrap.css( 'top',0 );
-					},
-					1
-				);
-			}
-		);
+	$( document ).on(
+		'scroll.pin-menu',
+		function() {
+			setTimeout(
+				function() {
+					if ( 'absolute' === $adminmenuwrap.css( 'position' ) ) {
+						$adminmenuwrap.css( 'top', 0 );
+					} else if ( 'fixed' === $adminmenuwrap.css( 'position' ) ) {
+						$adminmenuwrap.css( 'top', 0 );
+						$adminmenuwrap.css( 'position', 'absolute' );
+					}
+				},
+				1
+			);
+		}
+	);
 
 	$( window ).on(
 		'resize',
