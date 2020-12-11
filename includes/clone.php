@@ -199,3 +199,27 @@ function openlab_user_can_clone_group( $group_type ) {
 
 	return true;
 }
+
+/**
+ * Flushes rewrite rules on newly created sites.
+ *
+ * @since 1.2.4
+ */
+function cboxol_flush_rewrite_rules_on_newly_created_sites() {
+	if ( bp_is_root_blog() ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( get_option( 'cboxol_initial_rewrite_flush' ) ) {
+		return;
+	}
+
+	update_option( 'cboxol_initial_rewrite_flush', time() );
+
+	flush_rewrite_rules( false );
+}
+add_action( 'shutdown', 'cboxol_flush_rewrite_rules_on_newly_created_sites' );
