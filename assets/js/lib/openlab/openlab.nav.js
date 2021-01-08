@@ -79,7 +79,7 @@ OpenLab.nav = (function ($) {
 		hoverFixes: function () {
 			//fixing hover issues on mobile
 			if (OpenLab.nav.isBreakpoint( 'xs' ) || OpenLab.nav.isBreakpoint( 'sm' )) {
-				$( '.mobile-no-hover' ).bind(
+				$( '.mobile-no-hover' ).on(
 					'touchend',
 					function () {
 						OpenLab.nav.fixHoverOnMobile( $( this ) );
