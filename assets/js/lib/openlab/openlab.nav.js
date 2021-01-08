@@ -597,7 +597,8 @@ jQuery( document ).ready(
 
 	}
 );
-jQuery( window ).scroll(
+jQuery( window ).on(
+	'scroll',
 	function ($) {
 		getCurrentScroll();
 	}
