@@ -5,7 +5,7 @@
  * Description:     Core functionality for CBOX-OpenLab
  * Text Domain:     cbox-openlab-core
  * Domain Path:     /languages
- * Version:         1.2.4
+ * Version:         1.3.0-alpha
  * Network:         true
  */
 
