@@ -42,7 +42,8 @@ OpenLab.nav = (function ($) {
 
 			$( "#wp-admin-bar-bp-login" ).append( loginform );
 
-			$( "#wp-admin-bar-bp-login > a" ).click(
+			$( "#wp-admin-bar-bp-login > a" ).on(
+				'click',
 				function () {
 
 					if ( ! $( this ).hasClass( 'login-click' )) {
@@ -78,7 +79,7 @@ OpenLab.nav = (function ($) {
 		hoverFixes: function () {
 			//fixing hover issues on mobile
 			if (OpenLab.nav.isBreakpoint( 'xs' ) || OpenLab.nav.isBreakpoint( 'sm' )) {
-				$( '.mobile-no-hover' ).bind(
+				$( '.mobile-no-hover' ).on(
 					'touchend',
 					function () {
 						OpenLab.nav.fixHoverOnMobile( $( this ) );
@@ -597,7 +598,8 @@ jQuery( document ).ready(
 
 	}
 );
-jQuery( window ).scroll(
+jQuery( window ).on(
+	'scroll',
 	function ($) {
 		getCurrentScroll();
 	}

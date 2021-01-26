@@ -160,6 +160,7 @@ function cboxol_get_clone_source_group_id( $group_id ) {
  * Determines whether a group can be cloned.
  *
  * @param int $group_id The group ID.
+ * @param bool
  */
 function openlab_group_can_be_cloned( $group_id = null ) {
 	if ( null === $group_id ) {
@@ -176,26 +177,68 @@ function openlab_group_can_be_cloned( $group_id = null ) {
 }
 
 /**
- * Determines whether a current user can clone current group.
+ * Determines whether a current user can clone the group.
  *
- * @param \CBOX\OL\GroupType $group_type Group type object.
+ * @param int $group_id The group id.
  * @return bool
  */
-function openlab_user_can_clone_group( $group_type ) {
+function openlab_user_can_clone_group( $group_id ) {
+	$group_type = cboxol_get_group_group_type( $group_id );
+
+	if ( is_wp_error( $group_type ) ) {
+		return false;
+	}
+
 	if ( is_super_admin() ) {
 		return true;
 	}
 
-	$user_id     = get_current_user_id();
+	$user_id       = get_current_user_id();
+	$can_be_cloned = $group_type->get_can_be_cloned();
+
+	if ( groups_is_user_admin( $user_id, $group_id ) ) {
+		return $can_be_cloned;
+	}
+
 	$member_type = cboxol_get_user_member_type( $user_id );
 
 	if ( is_wp_error( $member_type ) ) {
 		return false;
 	}
 
-	if ( $group_type->get_is_course() && ! $member_type->get_can_create_courses() ) {
-		return false;
+	$sharing_enabled = openlab_group_can_be_cloned( $group_id );
+
+	if ( $group_type->get_is_course() && $sharing_enabled ) {
+		return $member_type->get_can_create_courses();
 	}
 
-	return true;
+	if ( $sharing_enabled ) {
+		return $can_be_cloned;
+	}
+
+	return false;
 }
+
+/**
+ * Flushes rewrite rules on newly created sites.
+ *
+ * @since 1.2.4
+ */
+function cboxol_flush_rewrite_rules_on_newly_created_sites() {
+	if ( bp_is_root_blog() ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( get_option( 'cboxol_initial_rewrite_flush' ) ) {
+		return;
+	}
+
+	update_option( 'cboxol_initial_rewrite_flush', time() );
+
+	flush_rewrite_rules( false );
+}
+add_action( 'shutdown', 'cboxol_flush_rewrite_rules_on_newly_created_sites' );
