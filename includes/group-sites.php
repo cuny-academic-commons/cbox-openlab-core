@@ -1676,6 +1676,18 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	cboxol_set_group_site_id( $group_id, $id );
 
+	$template_id = get_site_meta( (int) $src_id, '_site_template_id', true );
+
+	/**
+	 * Save "Site Template" ID if we have one.
+	 *
+	 * We're saving this with a different meta key, mainly to avoid syncing side effects.
+	 * We don't want to delete "Site Template" when a non-blueprint site is deleted.
+	 */
+	if ( $template_id ) {
+		update_site_meta( $id, '_template_id', $template_id );
+	}
+
 	// translators: 1. login of user who created new site, 2. URL of the new site, 3. title of the new site
 	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", 'commons-in-a-box' ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );
 
