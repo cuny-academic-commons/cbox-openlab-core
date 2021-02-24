@@ -1348,7 +1348,8 @@ add_filter( 'olgc_display_notices', '__return_false' );
  * @return void
  */
 function openlab_olgc_fallback( WP_Comment_Query $query ) {
-	if ( ! current_user_can( 'manage_options' ) ) {
+	// Make private comments visible for admins in the dashboard.
+	if ( is_admin() && current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
