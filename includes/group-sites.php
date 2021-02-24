@@ -1337,6 +1337,45 @@ function openlab_olgc_is_instructor( $is ) {
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
 
+// Disable admin notices for wp-grade-comments.
+add_filter( 'olgc_display_notices', '__return_false' );
+
+/**
+ * WP Grade Comments fallback.
+ *
+ * Hide private comments even after the plugin was deactivated.
+ *
+ * @return void
+ */
+function openlab_olgc_fallback( WP_Comment_Query $query ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$plugin = 'wp-grade-comments/wp-grade-comments.php';
+	if ( in_array( $plugin, (array) get_option( 'active_plugins', [] ), true ) ) {
+		return;
+	}
+
+	/**
+	 * Have to override meta query.
+	 *
+	 * See: https://core.trac.wordpress.org/ticket/32762
+	 */
+	$query->meta_query = new WP_Meta_Query( [
+		'relation' => 'OR',
+		[
+			'key'   => 'olgc_is_private',
+			'value' => '0',
+		],
+		[
+			'key' => 'olgc_is_private',
+			'compare' => 'NOT EXISTS',
+		]
+	] );
+}
+add_action( 'pre_get_comments', 'openlab_olgc_fallback' );
+
 /**
  * Email the course instructor when a wp-grade-comments "private" comment is posted.
  *
