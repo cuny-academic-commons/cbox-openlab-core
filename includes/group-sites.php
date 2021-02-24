@@ -1362,17 +1362,19 @@ function openlab_olgc_fallback( WP_Comment_Query $query ) {
 	 *
 	 * See: https://core.trac.wordpress.org/ticket/32762
 	 */
-	$query->meta_query = new WP_Meta_Query( [
-		'relation' => 'OR',
+	$query->meta_query = new WP_Meta_Query(
 		[
-			'key'   => 'olgc_is_private',
-			'value' => '0',
-		],
-		[
-			'key' => 'olgc_is_private',
-			'compare' => 'NOT EXISTS',
+			'relation' => 'OR',
+			[
+				'key'   => 'olgc_is_private',
+				'value' => '0',
+			],
+			[
+				'key'     => 'olgc_is_private',
+				'compare' => 'NOT EXISTS',
+			],
 		]
-	] );
+	);
 }
 add_action( 'pre_get_comments', 'openlab_olgc_fallback' );
 
