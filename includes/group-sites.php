@@ -1337,78 +1337,47 @@ function openlab_olgc_is_instructor( $is ) {
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
 
-/**
- * Set up admin notice when wp-grade-comments is activated.
- */
-function openlab_olgc_activation() {
-	if ( ! get_option( 'olgc_notice_dismissed' ) ) {
-		update_option( 'olgc_notice_dismissed', '0' );
-	}
-}
-add_action( 'activate_wp-grade-comments/wp-grade-comments.php', 'openlab_olgc_activation' );
+// Disable admin notices for wp-grade-comments.
+add_filter( 'olgc_display_notices', '__return_false' );
 
 /**
- * Show wp-grade-comments activation admin notice.
+ * WP Grade Comments fallback.
+ *
+ * Hide private comments even after the plugin was deactivated.
+ *
+ * @return void
  */
-function openlab_olgc_notice() {
-	if ( ! current_user_can( 'manage_options' ) ) {
+function openlab_olgc_fallback( WP_Comment_Query $query ) {
+	// Make private comments visible for admins in the dashboard.
+	if ( is_admin() && current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
-	if ( ! is_plugin_active( 'wp-grade-comments/wp-grade-comments.php' ) ) {
+	$plugin = 'wp-grade-comments/wp-grade-comments.php';
+	if ( in_array( $plugin, (array) get_option( 'active_plugins', [] ), true ) ) {
 		return;
 	}
 
-	// Allow dismissal.
-	if ( get_option( 'olgc_notice_dismissed' ) ) {
-		return;
-	}
-
-	// Groan
-	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce       = wp_create_nonce( 'olgc_notice_dismiss' );
-	$dismiss_url = add_query_arg( 'olgc-notice-dismiss', '1', $dismiss_url );
-	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
-
-	?>
-	<style type="text/css">
-		.olgc-notice-message {
-			position: relative;
-		}
-		.olgc-notice-message > p > span {
-			width: 80%;
-		}
-		.olgc-notice-message-dismiss {
-			position: absolute;
-			right: 15px;
-		}
-	</style>
-	<div class="updated fade olgc-notice-message">
-		<p><span>Please note: The WP Grade Comments plugin allows all Site Administrators to add, view, and edit private comments and grades.</span>
-		<a class="olgc-notice-message-dismiss" href="<?php echo esc_url( $dismiss_url ); ?>">Dismiss</a>
-		</p>
-	</div>
-	<?php
+	/**
+	 * Have to override meta query.
+	 *
+	 * See: https://core.trac.wordpress.org/ticket/32762
+	 */
+	$query->meta_query = new WP_Meta_Query(
+		[
+			'relation' => 'OR',
+			[
+				'key'   => 'olgc_is_private',
+				'value' => '0',
+			],
+			[
+				'key'     => 'olgc_is_private',
+				'compare' => 'NOT EXISTS',
+			],
+		]
+	);
 }
-add_action( 'admin_notices', 'openlab_olgc_notice' );
-
-/**
- * Catch wp-grade-comments notice dismissals.
- */
-function openlab_catch_olgc_notice_dismissals() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
-	if ( empty( $_GET['olgc-notice-dismiss'] ) ) {
-		return;
-	}
-
-	check_admin_referer( 'olgc_notice_dismiss' );
-
-	update_option( 'olgc_notice_dismissed', 1 );
-}
-add_action( 'admin_init', 'openlab_catch_olgc_notice_dismissals' );
+add_action( 'pre_get_comments', 'openlab_olgc_fallback' );
 
 /**
  * Email the course instructor when a wp-grade-comments "private" comment is posted.
@@ -1675,6 +1644,18 @@ function cboxol_copy_blog_page( $group_id ) {
 	}
 
 	cboxol_set_group_site_id( $group_id, $id );
+
+	$template_id = get_site_meta( (int) $src_id, '_site_template_id', true );
+
+	/**
+	 * Save "Site Template" ID if we have one.
+	 *
+	 * We're saving this with a different meta key, mainly to avoid syncing side effects.
+	 * We don't want to delete "Site Template" when a non-blueprint site is deleted.
+	 */
+	if ( $template_id ) {
+		update_site_meta( $id, '_template_id', $template_id );
+	}
 
 	// translators: 1. login of user who created new site, 2. URL of the new site, 3. title of the new site
 	$content_mail = sprintf( __( "New site created by %1$1s\n\nAddress: http://%2$2s\nName: %3$3s", 'commons-in-a-box' ), $current_user->user_login, $validate['domain'] . $validate['path'], stripslashes( $validate['blog_title'] ) );

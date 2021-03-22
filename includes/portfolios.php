@@ -133,13 +133,17 @@ function openlab_suggest_portfolio_name() {
 /**
  * Suggest a path for a portfolio, based on the user's display name.
  */
-function openlab_suggest_portfolio_path() {
+function openlab_suggest_portfolio_path( $user_id = null ) {
 	$portfolio_type = cboxol_get_portfolio_group_type();
 	if ( is_wp_error( $portfolio_type ) ) {
 		return '';
 	}
 
-	$display_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
+	if ( ! $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	$display_name = bp_core_get_user_displayname( $user_id );
 	$slug         = sanitize_title( $display_name . '-' . $portfolio_type->get_slug() );
 
 	// Ensure uniqueness.
