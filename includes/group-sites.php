@@ -2158,3 +2158,40 @@ function cboxol_customizer_nav_menu_items( $items = [], $type = '', $object = ''
 	return $items;
 }
 add_filter( 'customize_nav_menu_available_items', 'cboxol_customizer_nav_menu_items', 10, 4 );
+
+/**
+ * Indicates whether the specified site should display the WP toolbar to logged-out users.
+ *
+ * @since 1.3.0
+ *
+ * @param int $site_id ID of the site.
+ * @return bool
+ */
+function cboxol_show_admin_bar_for_anonymous_users( $site_id ) {
+	// Flip the logic for better defaults.
+	return ! (bool) get_blog_option( $site_id, 'cboxol_hide_admin_bar_for_anonymous_users' );
+}
+
+/**
+ * Hides the admin bar for anonymous users, based on admin-configured setting.
+ *
+ * @since 1.3.0
+ */
+function cboxol_maybe_hide_admin_bar_for_anonymous_users() {
+	if ( cbox_is_main_site() ) {
+		show_admin_bar( true );
+		return;
+	}
+
+	if ( is_user_logged_in() ) {
+		show_admin_bar( true );
+		return;
+	}
+
+	if ( cboxol_show_admin_bar_for_anonymous_users( get_current_blog_id() ) ) {
+		show_admin_bar( true );
+	} else {
+		show_admin_bar( false );
+	}
+}
+add_action( 'init', 'cboxol_maybe_hide_admin_bar_for_anonymous_users' );
