@@ -88,11 +88,12 @@ function cboxol_group_search_breakup( $sql, $s, $r ) {
 
 		// Rebuild the 'name' and 'description' clause - borrowed from BP.
 		$searches      = array();
-		$leading_wild  = ( 'leading' == $wild || 'both' == $wild ) ? '%' : '';
-		$trailing_wild = ( 'trailing' == $wild || 'both' == $wild ) ? '%' : '';
+		$leading_wild  = ( 'leading' === $wild || 'both' === $wild ) ? '%' : '';
+		$trailing_wild = ( 'trailing' === $wild || 'both' === $wild ) ? '%' : '';
 		$wildcarded    = $leading_wild . bp_esc_like( $search ) . $trailing_wild;
 
 		foreach ( $search_columns as $search_column ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$searches[] = $wpdb->prepare( "g.$search_column LIKE %s", $wildcarded );
 		}
 
@@ -114,7 +115,6 @@ function cboxol_group_search_breakup( $sql, $s, $r ) {
 		$new_from = $s['from'] . " LEFT JOIN {$bp->groups->table_name_groupmeta} groupcontact ON ( groupcontact.group_id = g.id )";
 		$sql      = str_replace( $old_from, $new_from, $sql );
 	}
-	echo( $sql . ' ' );
 
 	return $sql;
 }
