@@ -426,3 +426,17 @@ function cboxol_get_course_group_type() {
 
 	return null;
 }
+
+/**
+ * Gets a list of IDs of all group faculty/contacts.
+ *
+ * @param int $group_id ID of the group.
+ * @return array
+ */
+function cboxol_get_all_group_contact_ids( $group_id ) {
+	$contact_ids = groups_get_groupmeta( $group_id, 'group_contact', false );
+	if ( ! $contact_ids ) {
+		$contact_ids = [];
+	}
+	return array_map( 'intval', $contact_ids );
+}
