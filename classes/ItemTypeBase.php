@@ -5,6 +5,14 @@ namespace CBOX\OL;
 class ItemTypeBase {
 	protected $post_type = '';
 
+	/**
+	 * BP item type taxonomy name.
+	 *
+	 * @since 1.3.0
+	 * @var string
+	 */
+	protected $taxonomy = '';
+
 	protected $data = array(
 		'slug'           => '',
 		'name'           => '',
@@ -13,6 +21,7 @@ class ItemTypeBase {
 		'is_enabled'     => true,
 		'order'          => 0,
 		'wp_post_id'     => 0,
+		'wp_term_id'     => 0,
 	);
 
 	// can_be_deleted and is_enabled have special logic, so can't be lumped in.
@@ -65,6 +74,10 @@ class ItemTypeBase {
 		return (int) $this->data['wp_post_id'];
 	}
 
+	public function get_wp_term_id() {
+		return (int) $this->data['wp_term_id'];
+	}
+
 	public function get_order() {
 		return (int) $this->data['order'];
 	}
@@ -106,6 +119,32 @@ class ItemTypeBase {
 
 		// WP post ID.
 		$this->set_wp_post_id( $post->ID );
+
+		$wp_term_id = get_post_meta( $post->ID, 'cboxol_bp_item_type_term_id', true );
+		if ( ! $wp_term_id ) {
+			// In legacy cases, the term may exist but may not be linked with the post.
+			$existing = get_term_by( 'slug', $this->get_slug(), $this->taxonomy );
+			if ( $existing ) {
+				$wp_term_id = $existing->term_id;
+			} else {
+				// If the term does not exist, it's likely brand-new.
+				$inserted = bp_insert_term(
+					$this->get_slug(),
+					bp_get_group_type_tax_name(),
+					array(
+						'slug' => $this->get_slug(),
+					)
+				);
+
+				if ( ! is_wp_error( $inserted ) ) {
+					$wp_term_id = $inserted['term_id'];
+				}
+			}
+
+			update_post_meta( $post->ID, 'cboxol_bp_item_type_term_id', $wp_term_id );
+		}
+
+		$this->set_wp_term_id( $wp_term_id );
 	}
 
 	public function save_to_wp_post() {
@@ -183,6 +222,10 @@ class ItemTypeBase {
 
 	protected function set_wp_post_id( $wp_post_id ) {
 		$this->data['wp_post_id'] = (int) $wp_post_id;
+	}
+
+	protected function set_wp_term_id( $wp_term_id ) {
+		$this->data['wp_term_id'] = (int) $wp_term_id;
 	}
 
 	/**

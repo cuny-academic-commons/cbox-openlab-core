@@ -18,6 +18,11 @@ class MemberType extends ItemTypeBase implements ItemType {
 		'can_create_courses',
 	);
 
+	public function __construct() {
+		$this->taxonomy = bp_get_member_type_tax_name();
+		parent::__construct();
+	}
+
 	public function get_selectable_types() {
 		// @todo Should validate types here (can't do on setup because it will trigger a loop).
 		return $this->data['selectable_types'];

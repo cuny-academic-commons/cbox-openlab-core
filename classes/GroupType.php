@@ -5,6 +5,14 @@ namespace CBOX\OL;
 class GroupType extends ItemTypeBase implements ItemType {
 	protected $post_type = 'cboxol_group_type';
 
+	/**
+	 * BP item type taxonomy name.
+	 *
+	 * @since 1.3.0
+	 * @var string
+	 */
+	protected $taxonomy = 'bp_group_type';
+
 	protected $defaults = array(
 		'can_be_cloned'                    => false,
 		'directory_filters'                => array(),
@@ -30,6 +38,11 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'supports_mol_link',
 		'supports_profile_column',
 	);
+
+	public function __construct() {
+		$this->taxonomy = bp_get_group_type_tax_name();
+		parent::__construct();
+	}
 
 	public static function get_instance_from_wp_post( \WP_Post $post ) {
 		$type = new self();

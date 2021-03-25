@@ -137,6 +137,7 @@ function cboxol_grouptypes_register_group_types() {
 				),
 				'has_directory'         => true,
 				'show_in_create_screen' => false,
+				'db_id'                 => $saved_type->get_wp_term_id(),
 			)
 		);
 	}
