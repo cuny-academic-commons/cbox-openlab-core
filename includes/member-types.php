@@ -49,6 +49,7 @@ function cboxol_membertypes_register_member_types() {
 					'singular_name' => $saved_type->get_label( 'singular' ),
 				),
 				'has_directory' => true,
+				'db_id'         => $saved_type->get_wp_term_id(),
 			)
 		);
 	}
