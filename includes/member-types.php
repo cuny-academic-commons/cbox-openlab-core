@@ -315,3 +315,39 @@ function cboxol_membertypes_process_change( $user_id ) {
 
 	bp_set_member_type( $user_id, $new_type );
 }
+
+/**
+ * Prevents built-in member type taxonomy terms from being edited in the UI.
+ *
+ * @param array  $caps    Required capabilities for this action.
+ * @param string $cap     Requested cap.
+ * @param int    $user_id ID of the user.
+ * @param array  $args    Arguments passed to user_can().
+ */
+function cboxol_prevent_member_type_edit( $caps, $cap, $user_id, $args ) {
+	if ( 'edit_term' !== $cap && 'delete_term' !== $cap ) {
+		return $caps;
+	}
+
+	if ( empty( $args[0] ) ) {
+		return $caps;
+	}
+
+	$term = get_term( $args[0], 'bp_member_type' );
+
+	if ( ! $term ) {
+		return $caps;
+	}
+
+	$cboxol_types = cboxol_get_member_types( [ 'enabled' => null ] );
+	$term_slug    = $term->slug;
+
+	if ( ! isset( $cboxol_types[ $term_slug ] ) ) {
+		return $caps;
+	}
+
+	$caps = [ 'do_not_allow' ];
+
+	return $caps;
+}
+add_filter( 'map_meta_cap', 'cboxol_prevent_member_type_edit', 10, 4 );
