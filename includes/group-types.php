@@ -440,3 +440,39 @@ function cboxol_get_all_group_contact_ids( $group_id ) {
 	}
 	return array_map( 'intval', $contact_ids );
 }
+
+/**
+ * Prevents built-in group type taxonomy terms from being edited in the UI.
+ *
+ * @param array  $caps    Required capabilities for this action.
+ * @param string $cap     Requested cap.
+ * @param int    $user_id ID of the user.
+ * @param array  $args    Arguments passed to user_can().
+ */
+function cboxol_prevent_group_type_edit( $caps, $cap, $user_id, $args ) {
+	if ( 'edit_term' !== $cap && 'delete_term' !== $cap ) {
+		return $caps;
+	}
+
+	if ( empty( $args[0] ) ) {
+		return $caps;
+	}
+
+	$term = get_term( $args[0], 'bp_group_type' );
+
+	if ( ! $term ) {
+		return $caps;
+	}
+
+	$cboxol_types = cboxol_get_group_types( [ 'enabled' => null ] );
+	$term_slug    = $term->slug;
+
+	if ( ! isset( $cboxol_types[ $term_slug ] ) ) {
+		return $caps;
+	}
+
+	$caps = [ 'do_not_allow' ];
+
+	return $caps;
+}
+add_filter( 'map_meta_cap', 'cboxol_prevent_group_type_edit', 10, 4 );
