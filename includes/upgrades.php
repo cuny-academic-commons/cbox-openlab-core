@@ -38,3 +38,9 @@ if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings123::FLAG, false ) ) {
 	$upgrade_group_type_settings_123 = new CBOX\OL\Upgrades\GroupTypeSettings123();
 	$registry->register( $upgrade_group_type_settings_123->id, $upgrade_group_type_settings_123 );
 }
+
+// v1.3.0 - Install Open + Cloneable badges.
+if ( ! get_option( CBOX\OL\Upgrades\OpenCloneableBadges::FLAG, false ) ) {
+	$open_cloneable_pages = new CBOX\OL\Upgrades\OpenCloneableBadges();
+	$registry->register( $open_cloneable_pages->id, $open_cloneable_pages );
+}
