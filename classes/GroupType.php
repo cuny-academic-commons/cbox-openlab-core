@@ -114,7 +114,6 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'create_clone_item',
 				'item_creation',
 				'create_item_help_text',
-				'clone_help_text',
 				'name_help_text',
 				'avatar_help_text',
 				'avatar_help_text_cant_decide',
@@ -218,7 +217,6 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'plural',
 				'create_clone_item',
 				'create_item_help_text',
-				'clone_help_text',
 				'item_creation',
 				'name_help_text',
 				'avatar_help_text',
@@ -345,9 +343,6 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 			'create_item_help_text'                  => array(
-				'value' => '',
-			),
-			'clone_help_text'                        => array(
 				'value' => '',
 			),
 			'name_help_text'                         => array(
@@ -542,11 +537,6 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug'        => 'create_item_help_text',
 				'label'       => __( 'Creation Explanatory Text', 'commons-in-a-box' ),
 				'description' => __( 'Displayed near the top of the creation screen.', 'commons-in-a-box' ),
-			),
-			'clone_help_text'                        => array(
-				'slug'        => 'clone_help_text',
-				'label'       => __( 'Clone Help Text', 'commons-in-a-box' ),
-				'description' => __( 'Used to clarify the cloning process during creation.', 'commons-in-a-box' ),
 			),
 			'name_help_text'                         => array(
 				'slug'        => 'name_help_text',
