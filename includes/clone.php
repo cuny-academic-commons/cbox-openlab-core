@@ -80,6 +80,7 @@ function openlab_get_clones_of_group( $group_id ) {
 
 	$clone_ids = wp_cache_get( $group_id, 'openlab_clones_of_group' );
 	if ( false === $clone_ids ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$clone_ids = $wpdb->get_col( $wpdb->prepare( "SELECT group_id FROM {$bp->groups->table_name_groupmeta} WHERE meta_key = 'clone_source_group_id' AND meta_value = %s", $group_id ) );
 
 		wp_cache_set( $group_id, $clone_ids, 'openlab_clones_of_group' );
