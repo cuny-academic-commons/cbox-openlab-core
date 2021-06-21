@@ -1559,7 +1559,11 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
 			break;
 
 		default:
-			$sidebar = reset( array_keys( $GLOBALS['wp_registered_sidebars'] ) );
+			$sidebar = null;
+			if ( isset( $GLOBALS['wp_registered_sidebars'] ) ) {
+				$sidebars = array_keys( $GLOBALS['wp_registered_sidebars'] );
+				$sidebar  = $sidebars[0];
+			}
 			break;
 	}
 
