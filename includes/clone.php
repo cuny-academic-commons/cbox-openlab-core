@@ -171,42 +171,102 @@ add_action( 'groups_before_delete_group', 'openlab_invalidate_ancestor_clone_cac
  */
 function openlab_get_group_clone_history_data( $group_id, $exclude_creator = null ) {
 	$source_ids = openlab_get_group_clone_history( $group_id );
-	$history    = array();
-	if ( ! $source_ids ) {
-		return $history;
-	}
 
-	$group_type = cboxol_get_group_group_type( $group_id );
-
+	$source_datas = array();
 	foreach ( $source_ids as $source_id ) {
-		$source_group = groups_get_group( $source_id );
-
-		$course_code = groups_get_groupmeta( $source_id, 'cboxol_course_code', true );
-
-		$history[] = array(
-			'group_id'           => $source_id,
-			'group_url'          => bp_get_group_permalink( $source_group ),
-			'group_name'         => $course_code ? $course_code : $group_type->get_label( 'singular' ),
-			'group_creator_id'   => $source_group->creator_id,
-			'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
-			'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
-		);
+		$source_datas[] = openlab_get_group_data_for_clone_history( $source_id );
 	}
 
 	// Trim exclude_creator groups.
-	if ( $history && null !== $exclude_creator ) {
+	if ( $source_datas && null !== $exclude_creator ) {
 		$exclude_creator = intval( $exclude_creator );
-		$source_count    = count( $history );
-		for ( $i = 0; $i >= $source_count; $i++ ) {
-			if ( $history[ $i ]['group_creator_id'] !== $exclude_creator ) {
+		$source_count    = count( $source_datas );
+		for ( $i = 0; $i < $source_count; $i++ ) {
+			if ( $source_datas[ $i ]['group_creator_id'] !== $exclude_creator ) {
 				continue;
 			}
 
-			unset( $history[ $i ] );
+			unset( $source_datas[ $i ] );
 		}
 	}
 
-	return $history;
+	return $source_datas;
+}
+
+/**
+ * Gets the formatted data for a group, for use in clone history.
+ *
+ * @since 1.3.0
+ *
+ * @param int $source_id
+ * @return array
+ */
+function openlab_get_group_data_for_clone_history( $source_id ) {
+	$source_group = groups_get_group( $source_id );
+
+	$course_code = groups_get_groupmeta( $source_id, 'cboxol_course_code' );
+	$group_type  = cboxol_get_group_group_type( $source_id );
+
+	$group_creators = cboxol_get_all_group_contact_ids( $source_id );
+
+	$admins = [];
+	foreach ( $group_creators as $group_admin_id ) {
+		$admins[] = [
+			'id'   => $group_admin_id,
+			'name' => bp_core_get_user_displayname( $group_admin_id ),
+			'url'  => bp_core_get_user_domain( $group_admin_id ),
+		];
+	};
+
+	$source_data = array(
+		'group_id'           => $source_id,
+		'group_url'          => bp_get_group_permalink( $source_group ),
+		'group_name'         => $course_code ? $course_code : $group_type->get_label( 'singular' ),
+		'group_admins'       => $admins,
+		'group_creator_id'   => $source_group->creator_id,
+		'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
+		'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
+	);
+
+	return $source_data;
+}
+
+/**
+ * Formats the clone history as unordered list items of structured links.
+ *
+ * Note that you need to provide the <ul> wrapper yourself.
+ *
+ * @since 1.3.0
+ */
+function openlab_format_group_clone_history_data_list( $history ) {
+	$credits_groups = array_map(
+		function( $clone_group ) {
+			$admin_names = array_map(
+				function( $admin ) {
+					if ( ! empty( $admin['url'] ) ) {
+						return sprintf(
+							'<a href="%s">%s</a>',
+							esc_attr( $admin['url'] ),
+							esc_html( $admin['name'] )
+						);
+					} else {
+						return $admin['name'];
+					}
+				},
+				$clone_group['group_admins']
+			);
+
+			return sprintf(
+				'<li><a href="%s">%s</a> by %s</li>',
+				esc_attr( $clone_group['group_url'] ),
+				esc_html( $clone_group['group_name'] ),
+				implode( ', ', $admin_names )
+			);
+		},
+		$history
+	);
+
+	return implode( "\n", $credits_groups );
 }
 
 /**
@@ -225,20 +285,9 @@ function openlab_get_group_clone_history_list( $group_id, $exclude_creator = nul
 		return $list;
 	}
 
-	$credits_groups = array_map(
-		function( $clone_group ) {
-			return sprintf(
-				'<li><a href="%s">%s</a> &mdash; <a href="%s">%s</a></li>',
-				esc_attr( $clone_group['group_url'] ),
-				esc_html( $clone_group['group_name'] ),
-				esc_attr( $clone_group['group_creator_url'] ),
-				esc_html( $clone_group['group_creator_name'] )
-			);
-		},
-		$history_data
-	);
+	$lis = openlab_format_group_clone_history_data_list( $history_data );
 
-	return '<ul class="group-credits">' . implode( "\n", $credits_groups ) . '</ul>';
+	return '<ul class="group-credits">' . $lis . '</ul>';
 }
 
 /**
