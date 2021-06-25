@@ -2,33 +2,37 @@
 	var $addNewButton, $emptyRow, $groupCreatorEditList;
 	var nextIndex = 0;
 
-	$(document).ready(function(){
-		$addNewMember = $( '#group-creator-add-new-member' );
-		$addNewNonMember = $( '#group-creator-add-new-non-member' );
-		$emptyRow = $( '#group-creator-empty-row' );
-		$groupCreatorEditList = $( '#group-creator-edit-list' );
+	$( document ).ready(
+		function(){
+			$addNewMember         = $( '#group-creator-add-new-member' );
+			$addNewNonMember      = $( '#group-creator-add-new-non-member' );
+			$emptyRow             = $( '#group-creator-empty-row' );
+			$groupCreatorEditList = $( '#group-creator-edit-list' );
 
-		$addNewMember.on(
-			'click',
-			function(e) {
-				e.preventDefault();
-				addNewRow( 'member' );
-			}
-		);
+			$addNewMember.on(
+				'click',
+				function(e) {
+					e.preventDefault();
+					addNewRow( 'member' );
+				}
+			);
 
-		$addNewNonMember.on(
-			'click',
-			function(e) {
-				e.preventDefault();
-				addNewRow( 'non-member' );
-			}
-		);
+			$addNewNonMember.on(
+				'click',
+				function(e) {
+					e.preventDefault();
+					addNewRow( 'non-member' );
+				}
+			);
 
-		$groupCreatorEditList.find( '.group-creator-form-entry' ).each( function( k, v ) {
-			initEntry( $( v ) );
-			nextIndex++;
-		} );
-	});
+			$groupCreatorEditList.find( '.group-creator-form-entry' ).each(
+				function( k, v ) {
+					initEntry( $( v ) );
+					nextIndex++;
+				}
+			);
+		}
+	);
 
 	function getNextIndex() {
 		nextIndex++;
@@ -50,7 +54,8 @@
 			}
 		);
 
-		$entryEl.find( '.member-login-autocomplete' ).autocomplete( {
+		$entryEl.find( '.member-login-autocomplete' ).autocomplete(
+			{
 				source: ajaxurl + '?action=openlab_group_creator_autocomplete',
 				minLength: 2,
 				select: function( event, ui ) {
@@ -67,7 +72,8 @@
 						100
 					);
 				}
-			} );
+			}
+		);
 
 		// If the field has value, then switch it to "preview" mode.
 		setUpPreviewMode( $entryEl );
@@ -124,31 +130,35 @@
 		var $newEntry = $emptyRow.children( '.group-creator-form-entry' ).clone();
 
 		var rowIndex = getNextIndex();
-		var rowId = 'creator' + rowIndex.toString();
+		var rowId    = 'creator' + rowIndex.toString();
 
 		$newEntry
-		  .find( '.creator-type .creator-type-' + type )
+			.find( '.creator-type .creator-type-' + type )
 			.prop( 'selected', 'selected' );
 
 		$newEntry
 			.find( 'label' )
-			.each( function( k, v ) {
-				var $theLabel = $(v);
-				var forProp = $theLabel.prop( 'for' );
-				$theLabel.prop( 'for', forProp.replace( '_nullcreator', rowId ) );
-			} );
+			.each(
+				function( k, v ) {
+					var $theLabel = $( v );
+					var forProp   = $theLabel.prop( 'for' );
+					$theLabel.prop( 'for', forProp.replace( '_nullcreator', rowId ) );
+				}
+			);
 
 		$newEntry
 			.find( 'input,select' )
-			.each( function( k, v ) {
-				var $theEl = $(v);
+			.each(
+				function( k, v ) {
+					var $theEl = $( v );
 
-				var idProp = $theEl.prop( 'id' );
-				$theEl.prop( 'id', idProp.replace( '_nullcreator', rowId ) );
+					var idProp = $theEl.prop( 'id' );
+					$theEl.prop( 'id', idProp.replace( '_nullcreator', rowId ) );
 
-				var nameProp = $theEl.prop( 'name' );
-				$theEl.prop( 'name', nameProp.replace( '_nullcreator', rowId ) );
-			} );
+					var nameProp = $theEl.prop( 'name' );
+					$theEl.prop( 'name', nameProp.replace( '_nullcreator', rowId ) );
+				}
+			);
 
 		initEntry( $newEntry );
 
@@ -160,11 +170,11 @@
 
 	function setUpPreviewMode( $entryEl ) {
 		var creatorTypeValue = $entryEl.find( '.creator-type' ).find( ':selected' ).val();
-		var isPreviewMode = false;
+		var isPreviewMode    = false;
 		switch ( creatorTypeValue ) {
 			case 'member' :
 				var $memberLogin = $entryEl.find( '.member-login' );
-				isPreviewMode = $memberLogin.val().length > 0 && $entryEl.find( '.member-display-name' ).val().length > 0;
+				isPreviewMode    = $memberLogin.val().length > 0 && $entryEl.find( '.member-display-name' ).val().length > 0;
 				break;
 
 			case 'non-member' :
@@ -179,9 +189,9 @@
 		var $previewEl = $( '<span></span>' );
 		switch ( creatorTypeValue ) {
 			case 'member' :
-				var memberLogin = $memberLogin.val();
+				var memberLogin       = $memberLogin.val();
 				var memberDisplayName = $entryEl.find( '.member-display-name' ).val();
-				var memberUrl = $entryEl.find( '.member-url' ).val();
+				var memberUrl         = $entryEl.find( '.member-url' ).val();
 
 				$previewEl.append( '<span class="fa fa-user"></span>' );
 

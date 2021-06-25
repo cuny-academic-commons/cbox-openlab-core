@@ -501,7 +501,7 @@ function openlab_group_creators_metabox() {
 
 	$additional_text = openlab_get_group_creators_additional_text( $group_id );
 
-	wp_enqueue_script( 'openlab-creators', CBOXOL_PLUGIN_URL . '/assets/js/creators.js', array( 'jquery-ui-autocomplete' ) );
+	wp_enqueue_script( 'openlab-creators', CBOXOL_PLUGIN_URL . '/assets/js/creators.js', array( 'jquery-ui-autocomplete' ), cboxol_get_asset_version(), true );
 
 	$member_icon     = '<span class="fa fa-user"></span>';
 	$non_member_icon = '<span class="fa fa-globe"></span>';
@@ -529,6 +529,7 @@ function openlab_group_creators_metabox() {
 						</ul>
 
 						<div class="group-creator-edit-list-add-new">
+							<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							<?php esc_html_e( 'Add a creator:', 'commons-in-a-box' ); ?> <button id="group-creator-add-new-member"><?php echo $member_icon; ?> <?php esc_html_e( 'Select an OpenLab member', 'commons-in-a-box' ); ?></button> <button id="group-creator-add-new-non-member"><?php echo $non_member_icon; ?> <?php esc_html_e( 'Enter the name of a non-member', 'commons-in-a-box' ); ?></button>
 						</div>
 
@@ -657,11 +658,11 @@ function openlab_group_creators_save( $group ) {
 	$nonce    = '';
 	$group_id = $group->id;
 
-	if ( isset( $_POST['openlab-creators-nonce'] ) ) {
-		$nonce = urldecode( $_POST['openlab-creators-nonce'] );
+	if ( ! isset( $_POST['openlab-creators-nonce'] ) ) {
+		return;
 	}
 
-	if ( ! wp_verify_nonce( $nonce, 'openlab_creators_' . $group_id ) ) {
+	if ( ! wp_verify_nonce( $_POST['openlab-creators-nonce'], 'openlab_creators_' . $group_id ) ) {
 		return;
 	}
 
@@ -759,16 +760,19 @@ function openlab_get_group_creators_additional_text( $group_id ) {
 function openlab_group_creator_autocomplete_cb() {
 	global $wpdb;
 
-	$term  = '';
+	$term = '';
 
+	// phpcs:disable WordPress.Security.NonceVerification
 	if ( isset( $_GET['term'] ) ) {
 		$term = urldecode( $_GET['term'] );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification
 
 	// Direct query for speed.
-	$bp    = buddypress();
-	$like  = $wpdb->esc_like( $term );
-	$found = $wpdb->get_results( "SELECT u.ID, u.display_name, u.user_nicename FROM $wpdb->users u WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' )" );
+	$like = '%' . $wpdb->esc_like( $term ) . '%';
+
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$found = $wpdb->get_results( $wpdb->prepare( "SELECT u.ID, u.display_name, u.user_nicename FROM $wpdb->users u WHERE ( u.display_name LIKE %s OR u.user_nicename LIKE %s )", $like, $like ) );
 
 	$retval = array();
 	foreach ( (array) $found as $u ) {
@@ -779,7 +783,7 @@ function openlab_group_creator_autocomplete_cb() {
 		);
 	}
 
-	echo json_encode( $retval );
+	echo wp_json_encode( $retval );
 	die();
 }
 add_action( 'wp_ajax_openlab_group_creator_autocomplete', 'openlab_group_creator_autocomplete_cb' );
