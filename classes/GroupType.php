@@ -211,6 +211,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'clone_credits_widget_description',
 				'shareable_content_widget_description',
 				'clone_this_group',
+				'add_to_portfolio',
+				'added_to_my_portfolio',
 			),
 			'default'   => array(
 				'singular',
@@ -496,6 +498,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 			'clone_this_group'                       => array(
+				'value' => '',
+			),
+			'add_to_portfolio'                       => array(
+				'value' => '',
+			),
+			'added_to_my_portfolio'                  => array(
 				'value' => '',
 			),
 		);
@@ -792,6 +800,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug'        => 'clone_this_group',
 				'label'       => __( 'Clone This Group', 'commons-in-a-box' ),
 				'description' => __( 'Used in the Shareable Content widget.', 'commons-in-a-box' ),
+			),
+			'add_to_portfolio'                       => array(
+				'slug'        => 'add_to_portfolio',
+				'label'       => __( 'Add to Portfolio', 'commons-in-a-box' ),
+				'description' => __( 'Used in the "Add to Portfolio" dialog on sites.', 'commons-in-a-box' ),
+			),
+			'added_to_my_portfolio'                  => array(
+				'slug'        => 'added_to_my_portfolio',
+				'label'       => __( 'Added to my Portfolio', 'commons-in-a-box' ),
+				'description' => __( 'Used in the "Add to Portfolio" dialog on sites.', 'commons-in-a-box' ),
 			),
 		);
 	}

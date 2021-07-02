@@ -50,3 +50,9 @@ if ( ! get_option( CBOX\OL\Upgrades\CreatorsData::FLAG, false ) ) {
 	$creators_data = new CBOX\OL\Upgrades\CreatorsData();
 	$registry->register( $creators_data->id, $creators_data );
 }
+
+// v1.3.0 - Add new group type strings.
+if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings130::FLAG, false ) ) {
+	$upgrade_group_type_settings_130 = new CBOX\OL\Upgrades\GroupTypeSettings130();
+	$registry->register( $upgrade_group_type_settings_130->id, $upgrade_group_type_settings_130 );
+}

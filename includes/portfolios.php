@@ -599,3 +599,28 @@ function openlab_remove_email_settings_from_portfolios() {
 }
 add_action( 'bp_group_header_meta', 'openlab_remove_email_settings_from_portfolios', 1 );
 
+/**
+ * Filters strings from openlab-portfolio to use strings defined in CBOX-OL admin.
+ *
+ * @since 1.3.0
+ *
+ * @param string $label
+ * @param string $type
+ * @return string
+ */
+function cboxol_filter_openlab_portfolio_label( $label, $type ) {
+	$portfolio_group_type = cboxol_get_portfolio_group_type();
+
+	if ( ! $portfolio_group_type || ! $portfolio_group_type->get_is_enabled() ) {
+		return $label;
+	}
+
+	$filtered_label = $portfolio_group_type->get_label( $type );
+	if ( ! $filtered_label ) {
+		return $label;
+	}
+
+	return $filtered_label;
+}
+add_filter( 'openlab_portfolio_get_label', 'cboxol_filter_openlab_portfolio_label', 10, 2 );
+

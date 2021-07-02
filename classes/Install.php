@@ -502,6 +502,8 @@ class Install {
 					'clone_credits_widget_description'     => __( 'A list of Portfolios that have contributed to your Portfolio.', 'commons-in-a-box' ),
 					'shareable_content_widget_description' => __( 'Provides a link for others to clone your Portfolio.', 'commons-in-a-box' ),
 					'clone_this_group'                     => __( 'Clone this Portfolio', 'commons-in-a-box' ),
+					'add_to_portfolio'                     => __( 'Add to Portfolio', 'commons-in-a-box' ),
+					'added_to_my_portfolio'                => __( 'Added to my Portfolio', 'commons-in-a-box' ),
 				),
 
 				'can_be_cloned'                    => false,
