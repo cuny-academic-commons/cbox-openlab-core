@@ -44,3 +44,9 @@ if ( ! get_option( CBOX\OL\Upgrades\OpenCloneableBadges::FLAG, false ) ) {
 	$open_cloneable_pages = new CBOX\OL\Upgrades\OpenCloneableBadges();
 	$registry->register( $open_cloneable_pages->id, $open_cloneable_pages );
 }
+
+// v1.3.0 - Fill 'Creators' data for existing groups.
+if ( ! get_option( CBOX\OL\Upgrades\CreatorsData::FLAG, false ) ) {
+	$creators_data = new CBOX\OL\Upgrades\CreatorsData();
+	$registry->register( $creators_data->id, $creators_data );
+}
