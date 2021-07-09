@@ -2199,3 +2199,19 @@ function cboxol_maybe_hide_admin_bar_for_anonymous_users() {
 	}
 }
 add_action( 'init', 'cboxol_maybe_hide_admin_bar_for_anonymous_users' );
+
+/**
+ * Loads License widget.
+ *
+ * @since 1.3.0
+ */
+function cboxol_register_license_widget() {
+	$widgets = [
+		'\CBOX\OL\Widget\License',
+	];
+
+	foreach ( $widgets as $widget ) {
+		register_widget( $widget );
+	}
+}
+add_action( 'widgets_init', 'cboxol_register_license_widget' );
