@@ -571,7 +571,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_group_categories() {
+	public function install_default_group_categories() {
 		$cats = array(
 			'academic'   => array(
 				'name'  => __( 'Academic', 'commons-in-a-box' ),
@@ -617,7 +617,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_academic_types() {
+	public function install_default_academic_types() {
 		$types = array(
 			'schools'     => array(
 				'name'         => __( 'Schools', 'commons-in-a-box' ),
@@ -733,7 +733,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_brand_pages() {
+	public function install_default_brand_pages() {
 		$admin_text = '<p>' . sprintf(
 			/* translators: link to Dashboard > Pages > About */
 			esc_html__( 'If you are the administrator, visit %s to modify this text.', 'commons-in-a-box' ),
@@ -815,7 +815,7 @@ class Install {
 	 *
 	 * @since 1.2.0
 	 */
-	protected function install_default_search() {
+	public function install_default_search() {
 		$page_id = wp_insert_post(
 			array(
 				'post_type'    => 'page',
@@ -834,7 +834,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_settings() {
+	public function install_default_settings() {
 		$brand_pages = cboxol_get_brand_pages();
 
 		update_site_option(
@@ -855,7 +855,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_widgets() {
+	public function install_default_widgets() {
 		openlab_register_sidebars();
 
 		require CBOXOL_PLUGIN_DIR . '/lib/cbox-widget-setter.php';
@@ -969,7 +969,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_nav_menus() {
+	public function install_default_nav_menus() {
 		// Main Menu.
 		$menu_name = wp_slash( __( 'Main Menu', 'commons-in-a-box' ) );
 		$menu_id   = wp_create_nav_menu( $menu_name );
@@ -1096,7 +1096,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_slides() {
+	public function install_default_slides() {
 		$slides = array(
 			array(
 				'title'   => __( 'Share Information Here', 'commons-in-a-box' ),
@@ -1169,7 +1169,7 @@ class Install {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function install_default_footer() {
+	public function install_default_footer() {
 		$left_heading = __( 'Welcome to CBOX OpenLab!', 'commons-in-a-box' );
 
 		/* translators: link to CBOX OpenLab documentation */

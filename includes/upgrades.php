@@ -9,6 +9,16 @@
 
 $registry = CBOX\Upgrades\Upgrade_Registry::get_instance();
 
+// v1.3.0 - Initial setup routine moved to upgrader.
+if ( ! get_option( CBOX\OL\Upgrades\InitConfig::FLAG, false ) ) {
+	// Legacy check.
+	$ver = get_site_option( 'cboxol_ver' );
+	if ( ! $ver ) {
+		$init_config = new CBOX\OL\Upgrades\InitConfig();
+		$registry->register( $init_config->id, $init_config );
+	}
+}
+
 // v1.2.0 - Upgrade nav menus.
 if ( ! get_option( CBOX\OL\Upgrades\NavMenus::FLAG, false ) ) {
 	$upgrade_nav_menus = new CBOX\OL\Upgrades\NavMenus();

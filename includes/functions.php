@@ -185,6 +185,7 @@ function cboxol_copyr( $source, $dest ) {
  * Detect whether CBOX-OL must install or upgrade, and run upgrader.
  */
 function cboxol_maybe_install() {
+	return;
 	if ( get_option( 'cboxol_installing' ) ) {
 		return;
 	}
