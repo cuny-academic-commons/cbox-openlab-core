@@ -9,31 +9,31 @@ class License extends WP_Widget {
 
 	public function __construct() {
 		$this->licenses = [
-			'by' => [
+			'by'           => [
 				'label' => __( 'Attribution (CC BY)', 'commons-in-a-box' ),
 				'url'   => 'https://creativecommons.org/licenses/by/4.0',
 			],
-			'by-sa' => [
+			'by-sa'        => [
 				'label' => __( 'Attribution-ShareAlike (CC BY-SA)', 'commons-in-a-box' ),
 				'url'   => 'https://creativecommons.org/licenses/by-sa/4.0',
 			],
-			'by-nd' => [
+			'by-nd'        => [
 				'label' => __( 'Attribution-NoDerivs (CC BY-ND)', 'commons-in-a-box' ),
 				'url'   => 'http://creativecommons.org/licenses/by-nd/4.0',
 			],
-			'by-nc' => [
+			'by-nc'        => [
 				'label' => __( 'Attribution-NonCommercial (CC BY-NC)', 'commons-in-a-box' ),
 				'url'   => 'http://creativecommons.org/licenses/by-nc/4.0',
 			],
-			'by-nc-sa' => [
+			'by-nc-sa'     => [
 				'label' => __( 'Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)', 'commons-in-a-box' ),
 				'url'   => 'http://creativecommons.org/licenses/by-nc-sa/4.0',
 			],
-			'by-nc-nd' => [
+			'by-nc-nd'     => [
 				'label' => __( 'Attribution-NonCommercial-NoDerivs (CC BY-NC-ND)', 'commons-in-a-box' ),
 				'url'   => 'http://creativecommons.org/licenses/by-nc-nd/4.0',
 			],
-			'cc-zero' => [
+			'cc-zero'      => [
 				'label' => __( 'Public Domain, CC0', 'commons-in-a-box' ),
 				'url'   => 'http://creativecommons.org/publicdomain/zero/1.0/',
 			],
@@ -53,12 +53,17 @@ class License extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
-		wp_enqueue_style( 'cboxol-license-widget', CBOXOL_PLUGIN_URL . '/assets/css/license-widget.css' );
+		wp_enqueue_style( 'cboxol-license-widget', CBOXOL_PLUGIN_URL . '/assets/css/license-widget.css', [], cboxol_get_asset_version() );
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['before_widget'];
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['before_title'];
+
 		echo esc_html( $instance['title'] );
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['after_title'];
 
 		$license_slug = $instance['license'];
@@ -85,7 +90,7 @@ class License extends WP_Widget {
 					// translators: 1. Link to site author; 2. Name of CC license
 					esc_html__( 'Unless otherwise noted, this site by %1$s has a Creative Commons %2$s license.', 'commons-in-a-box' ),
 					$author_text,
-					esc_html( $license_data['label'] ),
+					esc_html( $license_data['label'] )
 				)
 			);
 		} else {
@@ -98,7 +103,7 @@ class License extends WP_Widget {
 				sprintf(
 					// translators: Name of CC license
 					esc_html__( 'Unless otherwise noted, this site has a Creative Commons %s license.', 'commons-in-a-box' ),
-					esc_html( $license_data['label'] ),
+					esc_html( $license_data['label'] )
 				)
 			);
 		}
@@ -109,8 +114,10 @@ class License extends WP_Widget {
 			esc_html__( 'Learn more.', 'commons-in-a-box' )
 		);
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $text;
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['after_widget'];
 	}
 
@@ -128,22 +135,22 @@ class License extends WP_Widget {
 		?>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">Title:</label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'commons-in-a-box' ); ?></label>
 			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" value="<?php echo esc_attr( $r['title'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'author_name' ) ); ?>">Site Author:</label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'author_name' ) ); ?>"><?php esc_html_e( 'Site Author:', 'commons-in-a-box' ); ?></label>
 			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'author_name' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author_name' ) ); ?>" value="<?php echo esc_attr( $r['author_name'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'author_url' ) ); ?>">Site Author URL:</label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'author_url' ) ); ?>"><?php esc_html_e( 'Site Author URL:', 'commons-in-a-box' ); ?></label>
 			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'author_url' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'author_url' ) ); ?>" value="<?php echo esc_attr( $r['author_url'] ); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">Choose a License:</label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>"><?php esc_html_e( 'Choose a License:', 'commons-in-a-box' ); ?></label>
 			<select class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'license' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'license' ) ); ?>">
 				<?php foreach ( $this->licenses as $slug => $data ) : ?>
 					<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $slug, $r['license'] ); ?>><?php echo esc_html( $data['label'] ); ?></option>
