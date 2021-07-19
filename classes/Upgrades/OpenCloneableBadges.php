@@ -56,13 +56,13 @@ class OpenCloneableBadges extends Upgrade {
 	 * @param CBOX\Upgrades\Upgrade_Item $item Item.
 	 */
 	public function process( $item ) {
-		// Pull up a list of existing badges so that we can determine position.
+		// Open and Cloneable go first, so we bump all other badges up two positions.
 		$existing_badges = Badge::get();
-		$last_position   = 0;
 		foreach ( $existing_badges as $existing_badge ) {
-			if ( $existing_badge->get_position() > $last_position ) {
-				$last_position = $existing_badge->get_position();
-			}
+			$position = $existing_badge->get_position();
+
+			$existing_badge->set_position( $position + 2 );
+			$existing_badge->save();
 		}
 
 		$group_types = array_map(
@@ -76,7 +76,7 @@ class OpenCloneableBadges extends Upgrade {
 		$cloneable_badge->set_name( _x( 'Cloneable', 'Cloneable badge name', 'commons-in-a-box' ) );
 		$cloneable_badge->set_short_name( _x( 'Cloneable', 'Cloneable badge short name', 'commons-in-a-box' ) );
 		$cloneable_badge->set_link( '' );
-		$cloneable_badge->set_position( $last_position + 1 );
+		$cloneable_badge->set_position( 1 );
 		$cloneable_badge->set_group_types( $group_types );
 		$cloneable_badge->set_can_be_deleted( false );
 		$cloneable_badge->set_can_be_granted( false );
@@ -88,7 +88,7 @@ class OpenCloneableBadges extends Upgrade {
 		$open_badge->set_name( _x( 'Open', 'Open badge name', 'commons-in-a-box' ) );
 		$open_badge->set_short_name( _x( 'Open', 'Open badge short name', 'commons-in-a-box' ) );
 		$open_badge->set_link( '' );
-		$open_badge->set_position( $last_position + 2 );
+		$open_badge->set_position( 0 );
 		$open_badge->set_group_types( $group_types );
 		$open_badge->set_can_be_deleted( false );
 		$open_badge->set_can_be_granted( false );
