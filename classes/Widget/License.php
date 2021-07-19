@@ -69,6 +69,12 @@ class License extends WP_Widget {
 		$license_slug = $instance['license'];
 		$license_data = $this->licenses[ $license_slug ];
 
+		$learn_more_text = sprintf(
+			'<a href="%s">%s</a>',
+			esc_attr( $license_data['url'] ),
+			esc_html__( 'Learn more.', 'commons-in-a-box' )
+		);
+
 		if ( ! empty( $instance['author_name'] ) ) {
 			if ( ! empty( $instance['author_url'] ) ) {
 				$author_text = sprintf(
@@ -81,7 +87,7 @@ class License extends WP_Widget {
 			}
 
 			$text = sprintf(
-				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /><span class="screen-reader-text">%s</span></a><p class="cc-widget-text">%s</p>',
+				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /><span class="screen-reader-text">%s</span></a><p class="cc-widget-text">%s %s</p>',
 				esc_attr( $license_data['url'] ),
 				esc_attr( CBOXOL_PLUGIN_URL . '/assets/img/cc/' . $license_slug . '.png' ),
 				esc_attr( $license_data['label'] ),
@@ -91,11 +97,12 @@ class License extends WP_Widget {
 					esc_html__( 'Unless otherwise noted, this site by %1$s has a Creative Commons %2$s license.', 'commons-in-a-box' ),
 					$author_text,
 					esc_html( $license_data['label'] )
-				)
+				),
+				$learn_more_text
 			);
 		} else {
 			$text = sprintf(
-				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /><span class="screen-reader-text">%s</span></a><p class="cc-widget-text">%s</p>',
+				'<a class="cc-widget-icon-link" href="%s"><img src="%s" alt="%s" /><span class="screen-reader-text">%s</span></a><p class="cc-widget-text">%s %s</p>',
 				esc_attr( $license_data['url'] ),
 				esc_attr( CBOXOL_PLUGIN_URL . '/assets/img/cc/' . $license_slug . '.png' ),
 				esc_attr( $license_data['label'] ),
@@ -104,15 +111,10 @@ class License extends WP_Widget {
 					// translators: Name of CC license
 					esc_html__( 'Unless otherwise noted, this site has a Creative Commons %s license.', 'commons-in-a-box' ),
 					esc_html( $license_data['label'] )
-				)
+				),
+				$learn_more_text
 			);
 		}
-
-		$text .= sprintf(
-			'<a href="%s">%s</a>',
-			esc_attr( $license_data['url'] ),
-			esc_html__( 'Learn more.', 'commons-in-a-box' )
-		);
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $text;
