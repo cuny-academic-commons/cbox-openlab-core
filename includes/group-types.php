@@ -121,7 +121,7 @@ function cboxol_grouptypes_register_post_type() {
 }
 
 /**
- * Register member types with BuddyPress.
+ * Register group types with BuddyPress.
  */
 function cboxol_grouptypes_register_group_types() {
 	$saved_types = cboxol_get_group_types();

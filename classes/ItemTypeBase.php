@@ -130,7 +130,7 @@ class ItemTypeBase {
 				// If the term does not exist, it's likely brand-new.
 				$inserted = bp_insert_term(
 					$this->get_slug(),
-					bp_get_group_type_tax_name(),
+					$this->taxonomy,
 					array(
 						'slug' => $this->get_slug(),
 					)
