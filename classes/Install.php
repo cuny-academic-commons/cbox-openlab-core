@@ -877,6 +877,7 @@ class Install {
 		$open_badge->set_position( $last_position + 2 );
 		$open_badge->set_group_types( $group_types );
 		$open_badge->set_can_be_deleted( false );
+		$open_badge->set_can_be_granted( false );
 		$open_badge->save();
 
 		update_term_meta( $open_badge->get_id(), 'cboxol_is_open_badge', 1 );
@@ -888,6 +889,7 @@ class Install {
 		$cloneable_badge->set_position( $last_position + 1 );
 		$cloneable_badge->set_group_types( $group_types );
 		$cloneable_badge->set_can_be_deleted( false );
+		$cloneable_badge->set_can_be_granted( false );
 		$cloneable_badge->save();
 
 		update_term_meta( $cloneable_badge->get_id(), 'cboxol_is_cloneable_badge', 1 );
