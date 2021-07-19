@@ -870,17 +870,6 @@ class Install {
 			cboxol_get_group_types()
 		);
 
-		$cloneable_badge = new \OpenLab\Badges\Badge();
-		$cloneable_badge->set_name( _x( 'Cloneable', 'Cloneable badge name', 'commons-in-a-box' ) );
-		$cloneable_badge->set_short_name( _x( 'Cloneable', 'Cloneable badge short name', 'commons-in-a-box' ) );
-		$cloneable_badge->set_link( '' );
-		$cloneable_badge->set_position( $last_position + 1 );
-		$cloneable_badge->set_group_types( $group_types );
-		$cloneable_badge->set_can_be_deleted( false );
-		$cloneable_badge->save();
-
-		update_term_meta( $cloneable_badge->get_id(), 'cboxol_is_cloneable_badge', 1 );
-
 		$open_badge = new \OpenLab\Badges\Badge();
 		$open_badge->set_name( _x( 'Open', 'Open badge name', 'commons-in-a-box' ) );
 		$open_badge->set_short_name( _x( 'Open', 'Open badge short name', 'commons-in-a-box' ) );
@@ -891,6 +880,17 @@ class Install {
 		$open_badge->save();
 
 		update_term_meta( $open_badge->get_id(), 'cboxol_is_open_badge', 1 );
+
+		$cloneable_badge = new \OpenLab\Badges\Badge();
+		$cloneable_badge->set_name( _x( 'Cloneable', 'Cloneable badge name', 'commons-in-a-box' ) );
+		$cloneable_badge->set_short_name( _x( 'Cloneable', 'Cloneable badge short name', 'commons-in-a-box' ) );
+		$cloneable_badge->set_link( '' );
+		$cloneable_badge->set_position( $last_position + 1 );
+		$cloneable_badge->set_group_types( $group_types );
+		$cloneable_badge->set_can_be_deleted( false );
+		$cloneable_badge->save();
+
+		update_term_meta( $cloneable_badge->get_id(), 'cboxol_is_cloneable_badge', 1 );
 	}
 
 	/**
