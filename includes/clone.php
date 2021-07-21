@@ -491,7 +491,7 @@ function openlab_get_credits( $group_id ) {
 			if ( $creator_items ) {
 				$show_acknowledgements = true;
 
-				$credits_intro_text = sprintf( 'Acknowledgements: This %s was created by:', $group_type );
+				$credits_intro_text = __( 'Acknowledgements: Created by:', 'commons-in-a-box' );
 				$credits_markup     = implode( ', ', $creator_items );
 
 				$credits_chunks[] = [
@@ -501,10 +501,7 @@ function openlab_get_credits( $group_id ) {
 			}
 
 			if ( $clone_history ) {
-				$clone_intro_text = sprintf(
-					'It is based on the following %s(s)',
-					esc_html( $group_type )
-				);
+				$clone_intro_text = __( 'It is based on the following:', 'commons-in-a-box' );
 
 				$credits_chunks[] = [
 					'intro' => $clone_intro_text,
@@ -514,7 +511,7 @@ function openlab_get_credits( $group_id ) {
 		}
 	} else {
 		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
-		$credits_intro_text    = sprintf( 'Acknowledgements: This %s is based on the following %s(s):', $group_type, $group_type );
+		$credits_intro_text    = __( 'Acknowledgements: Based on the following:', 'commons-in-a-box' );
 
 		$credits_chunks[] = [
 			'intro' => $credits_intro_text,
@@ -530,7 +527,8 @@ function openlab_get_credits( $group_id ) {
 			$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 		} else {
 			$credits_intro_text    = sprintf(
-				'Acknowledgements: %s',
+				// translators: Acknowledgements text.
+				__( 'Acknowledgements: %s', 'commons-in-a-box' ),
 				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
 			);
 
