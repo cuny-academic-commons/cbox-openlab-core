@@ -393,7 +393,7 @@ add_action( 'shutdown', 'cboxol_flush_rewrite_rules_on_newly_created_sites' );
 function openlab_get_credits( $group_id ) {
 	$post_credits_markup = '';
 
-	$all_group_contacts = openlab_get_all_group_contact_ids( $group_id );
+	$all_group_contacts = cboxol_get_all_group_contact_ids( $group_id );
 	if ( count( $all_group_contacts ) <= 1 ) {
 		$exclude_creator = $all_group_contacts[0];
 	} else {
