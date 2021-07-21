@@ -401,7 +401,7 @@ function openlab_get_credits( $group_id ) {
 	}
 
 	// Remove items that have been deleted, or have incomplete values.
-    $clone_history = openlab_get_group_clone_history_data( $group_id );
+	$clone_history = openlab_get_group_clone_history_data( $group_id );
 
 	// Remove items that exactly match the credits of the current group.
 	$this_item_clone_data = openlab_get_group_data_for_clone_history( $group_id );
@@ -423,11 +423,11 @@ function openlab_get_credits( $group_id ) {
 		}
 	);
 
-	$has_non_member_creator   = false;
+	$has_non_member_creator = false;
 
 	$group_creators = openlab_get_group_creators( $group_id );
 	foreach ( $group_creators as $group_creator ) {
-		if ( 'non-member' == $group_creator['type'] ) {
+		if ( 'non-member' === $group_creator['type'] ) {
 			$has_non_member_creator = true;
 			break;
 		}
@@ -464,7 +464,7 @@ function openlab_get_credits( $group_id ) {
 			$creator_items = array_map(
 				function( $creator ) {
 					switch ( $creator['type'] ) {
-						case 'member' :
+						case 'member':
 							$user = get_user_by( 'slug', $creator['member-login'] );
 
 							if ( ! $user ) {
@@ -476,11 +476,9 @@ function openlab_get_credits( $group_id ) {
 								esc_attr( bp_core_get_user_domain( $user->ID ) ),
 								esc_html( bp_core_get_user_displayname( $user->ID ) )
 							);
-						break;
 
-						case 'non-member' :
+						case 'non-member':
 							return esc_html( $creator['non-member-name'] );
-						break;
 					}
 				},
 				$group_creators
@@ -510,8 +508,8 @@ function openlab_get_credits( $group_id ) {
 			}
 		}
 	} else {
-		$credits_markup        = openlab_format_group_clone_history_data_list( $clone_history );
-		$credits_intro_text    = __( 'Acknowledgements: Based on the following:', 'commons-in-a-box' );
+		$credits_markup     = openlab_format_group_clone_history_data_list( $clone_history );
+		$credits_intro_text = __( 'Acknowledgements: Based on the following:', 'commons-in-a-box' );
 
 		$credits_chunks[] = [
 			'intro' => $credits_intro_text,
