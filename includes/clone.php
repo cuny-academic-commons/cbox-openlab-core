@@ -524,7 +524,7 @@ function openlab_get_credits( $group_id ) {
 		if ( $credits_chunks ) {
 			$post_credits_markup = '<p>' . wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() ) . '</p>';
 		} else {
-			$credits_intro_text    = sprintf(
+			$credits_intro_text = sprintf(
 				// translators: Acknowledgements text.
 				__( 'Acknowledgements: %s', 'commons-in-a-box' ),
 				wp_kses( $additional_text, openlab_creators_additional_text_allowed_tags() )
