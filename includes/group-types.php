@@ -793,7 +793,9 @@ add_action( 'wp_ajax_openlab_group_creator_autocomplete', 'openlab_group_creator
  *
  * @param int $group_id
  */
-function openlab_save_group_creators_on_creation( $group_id ) {
+function openlab_save_group_creators_on_creation() {
+	$group_id = buddypress()->groups->new_group_id;
+
 	$creators = array_map(
 		function( $contact_id ) {
 			$username = bp_core_get_username( $contact_id );
@@ -811,4 +813,4 @@ function openlab_save_group_creators_on_creation( $group_id ) {
 
 	openlab_save_group_creators( $group_id, array_filter( $creators ) );
 }
-add_action( 'groups_create_group', 'openlab_save_group_creators_on_creation' );
+add_action( 'groups_create_group_step_save_site-details', 'openlab_save_group_creators_on_creation' );
