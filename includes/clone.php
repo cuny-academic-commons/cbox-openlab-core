@@ -207,15 +207,29 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 	$course_code = groups_get_groupmeta( $source_id, 'cboxol_course_code' );
 	$group_type  = cboxol_get_group_group_type( $source_id );
 
-	$group_creators = cboxol_get_all_group_contact_ids( $source_id );
+	$group_creators = openlab_get_group_creators( $source_id );
 
 	$admins = [];
-	foreach ( $group_creators as $group_admin_id ) {
-		$admins[] = [
-			'id'   => $group_admin_id,
-			'name' => bp_core_get_user_displayname( $group_admin_id ),
-			'url'  => bp_core_get_user_domain( $group_admin_id ),
-		];
+	foreach ( $group_creators as $group_creator ) {
+		switch ( $group_creator['type'] ) {
+			case 'member' :
+				$user = get_user_by( 'slug', $group_creator['member-login'] );
+
+				if ( $user ) {
+					$admins[] = [
+						'name' => bp_core_get_user_displayname( $user->ID ),
+						'url'  => bp_core_get_user_domain( $user->ID ),
+					];
+				}
+			break;
+
+			case 'non-member' :
+				$admins[] = [
+					'name' => $group_creator['non-member-name'],
+					'url'  => '',
+				];
+			break;
+		}
 	};
 
 	$source_data = array(
