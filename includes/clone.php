@@ -212,7 +212,7 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 	$admins = [];
 	foreach ( $group_creators as $group_creator ) {
 		switch ( $group_creator['type'] ) {
-			case 'member' :
+			case 'member':
 				$user = get_user_by( 'slug', $group_creator['member-login'] );
 
 				if ( $user ) {
@@ -221,14 +221,14 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 						'url'  => bp_core_get_user_domain( $user->ID ),
 					];
 				}
-			break;
+				break;
 
-			case 'non-member' :
+			case 'non-member':
 				$admins[] = [
 					'name' => $group_creator['non-member-name'],
 					'url'  => '',
 				];
-			break;
+				break;
 		}
 	};
 
