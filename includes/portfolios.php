@@ -113,13 +113,16 @@ function openlab_user_portfolio_site_is_local( $user_id = 0 ) {
 
 /**
  * Get the user id of a portfolio user from the portfolio group's id
+ *
+ * @param int $group_id
+ * @return bool
  */
 function openlab_get_user_id_from_portfolio_group_id( $group_id = 0 ) {
 	global $wpdb;
 
 	$user_id = $wpdb->get_var( $wpdb->prepare( "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = 'portfolio_group_id' AND meta_value = %s", $group_id ) );
 
-	return $user_id;
+	return (int) $user_id;
 }
 
 /**
