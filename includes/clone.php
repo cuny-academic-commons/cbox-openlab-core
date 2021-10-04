@@ -232,10 +232,12 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 		}
 	};
 
+	$group_type_label = ! is_wp_error( $group_type ) ?  $group_type->get_label( 'singular' ) : '';
+
 	$source_data = array(
 		'group_id'           => $source_id,
 		'group_url'          => bp_get_group_permalink( $source_group ),
-		'group_name'         => $course_code ? $course_code : $group_type->get_label( 'singular' ),
+		'group_name'         => $course_code ? $course_code : $group_type_label,
 		'group_admins'       => $admins,
 		'group_creator_id'   => $source_group->creator_id,
 		'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
