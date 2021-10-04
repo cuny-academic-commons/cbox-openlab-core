@@ -232,7 +232,7 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 		}
 	};
 
-	$group_type_label = ! is_wp_error( $group_type ) ?  $group_type->get_label( 'singular' ) : '';
+	$group_type_label = ! is_wp_error( $group_type ) ? $group_type->get_label( 'singular' ) : '';
 
 	$source_data = array(
 		'group_id'           => $source_id,
