@@ -149,18 +149,31 @@ function openlab_sitewide_header( $location = 'header' ) {
 }
 
 function openlab_sitewide_header_to_admin_and_group_sites() {
+	global $pagenow;
 
-	if ( get_current_blog_id() !== 1 || is_admin() ) {
-		?>
-
-		<nav class="navbar navbar-default oplb-bs navbar-location-oplb-bs visible-xs" role="navigation">
-			<?php openlab_sitewide_header(); ?>
-		</nav>
-
-		<?php
+	// No need to append on the main site.
+	if ( bp_is_root_blog() ) {
+		return;
 	}
-}
 
+	// We don't do this on the front end.
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	// Don't do this on widgets.php, which is where Legacy Widgets are served in an iframe.
+	if ( 'widgets.php' === $pagenow ) {
+		return;
+	}
+
+	?>
+
+	<nav class="navbar navbar-default oplb-bs navbar-location-oplb-bs visible-xs" role="navigation">
+		<?php openlab_sitewide_header(); ?>
+	</nav>
+
+	<?php
+}
 add_action( 'wp_footer', 'openlab_sitewide_header_to_admin_and_group_sites' );
 add_action( 'in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites' );
 
