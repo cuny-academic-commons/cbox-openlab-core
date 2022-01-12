@@ -1902,7 +1902,13 @@ add_action( 'wp_after_admin_bar_render', 'openlab_wrap_adminbar_bottom' );
  * Built on the main site, with markup stashed in a transient.
  */
 function openlab_network_footer() {
+	// No need for this if running openlab-theme.
 	if ( function_exists( 'openlab_site_footer' ) ) {
+		return;
+	}
+
+	// Don't add to Legacy Widget previews.
+	if ( ! empty( $_GET['legacy-widget-preview'] ) ) {
 		return;
 	}
 
