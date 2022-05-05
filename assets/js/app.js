@@ -9,6 +9,8 @@ Vue.use( Vuex )
 const store = new Vuex.Store(
 	{
 		state: {
+			academicTerms: {},
+			academicTermNames: {},
 			academicUnits: {},
 			academicUnitNames: {},
 			academicUnitTypes: {},
@@ -427,12 +429,12 @@ const store = new Vuex.Store(
 new Vue(
 	{
 		el: '#cboxol-admin',
-			store,
+		store,
 		components: {
 			app: CBOXOLAdmin
 		},
-			mounted() {
-				this.$store.commit( 'setUpConfig', CBOXOL_AppConfig )
+		mounted() {
+			this.$store.commit( 'setUpConfig', CBOXOL_AppConfig )
 		},
 		render: h => h( 'app' )
 	}

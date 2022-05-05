@@ -4,6 +4,7 @@
 
 <script>
 	import Vue from 'vue'
+	import AcademicTermsUI from './AcademicTermsUI.vue'
 	import AcademicUnitsUI from './AcademicUnitsUI.vue'
 	import GroupCategoriesUI from './GroupCategoriesUI.vue'
 	import Registration from './Registration.vue'
@@ -11,6 +12,7 @@
 
 	export default {
 		components: {
+			AcademicTermsUI,
 			AcademicUnitsUI,
 			GroupCategoriesUI,
 			Registration,

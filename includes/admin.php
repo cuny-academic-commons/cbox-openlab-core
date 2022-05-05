@@ -47,12 +47,22 @@ function cboxol_register_admin_menu() {
 
 	add_submenu_page(
 		cboxol_admin_slug(),
+		__( 'Academic Terms', 'commons-in-a-box' ),
+		__( 'Academic Terms', 'commons-in-a-box' ),
+		'manage_network_options',
+		cboxol_admin_slug( 'academic-terms' ),
+		'cboxol_academic_terms_admin_page',
+		5
+	);
+
+	add_submenu_page(
+		cboxol_admin_slug(),
 		__( 'Brand Settings', 'commons-in-a-box' ),
 		__( 'Brand Settings', 'commons-in-a-box' ),
 		'manage_network_options',
 		cboxol_admin_slug( 'brand-settings' ),
 		'cboxol_brand_settings_admin_page',
-		5
+		6
 	);
 
 	add_submenu_page(
@@ -62,7 +72,7 @@ function cboxol_register_admin_menu() {
 		'manage_network_options',
 		cboxol_admin_slug( 'communication-settings' ),
 		'cboxol_communication_settings_admin_page',
-		6
+		7
 	);
 }
 
@@ -87,6 +97,7 @@ function cboxol_register_assets() {
 				'action'                               => _x( 'Action', 'Header for Action column in admin tables', 'commons-in-a-box' ),
 				'add'                                  => _x( 'Add', '"Add" button text', 'commons-in-a-box' ),
 				'addEmailDomain'                       => __( 'Add email domain', 'commons-in-a-box' ),
+				'addNewAcademicTerm'                   => __( 'Add New Academic Term', 'commons-in-a-box' ),
 				'addNewAcademicUnit'                   => __( 'Add New Academic Unit', 'commons-in-a-box' ),
 				'addNewAcademicUnitTitle'              => __( 'Add New', 'commons-in-a-box' ),
 				'addNewCategory'                       => __( 'Add New Category', 'commons-in-a-box' ),
@@ -179,6 +190,9 @@ function cboxol_admin_slug( $parent_page = '' ) {
 		case 'academic-units':
 			return 'cbox-ol-academic-units';
 
+		case 'academic-terms':
+			return 'cbox-ol-academic-terms';
+
 		case 'communication-settings':
 			return 'cbox-ol-communication-settings';
 
@@ -203,6 +217,9 @@ function cboxol_admin_page_label( $page ) {
 
 		case 'academic-units':
 			return __( 'Academic Units', 'commons-in-a-box' );
+
+		case 'academic-terms':
+			return __( 'Academic Terms', 'commons-in-a-box' );
 	}
 }
 
@@ -427,6 +444,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 		case 'academic-units':
 			cboxol_academic_units_main_admin_page();
 			break;
+
+		case 'academic-terms':
+			cboxol_academic_terms_main_admin_page();
+			break;
 	}
 }
 
@@ -456,6 +477,11 @@ function cboxol_communication_settings_admin_page() {
 function cboxol_academic_units_admin_page() {
 	$current_section = '';
 	cboxol_admin_page( 'academic-units', $current_section );
+}
+
+function cboxol_academic_terms_admin_page() {
+	$current_section = '';
+	cboxol_admin_page( 'academic-terms', $current_section );
 }
 
 function cboxol_admin_page( $parent_page, $current_section ) {

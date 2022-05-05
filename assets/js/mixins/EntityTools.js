@@ -67,6 +67,12 @@ module.exports = {
 	methods: {
 		getEntityTypeProp: function( prop ) {
 			const schema = {
+				academicTerm: {
+					addNewPlaceholder: this.strings.addNewAcademicTerm,
+					apiRoute: 'academic-term',
+					itemsKey: 'academicTerms',
+					namesKey: 'academicTermNames'
+				},
 				academicUnitType: {
 					addNewPlaceholder: this.strings.addNewAcademicUnit,
 					apiRoute: 'academic-unit-type',
