@@ -26,7 +26,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-wp-i18n": "^1.0.2",
     "vue": "^2.5.21",
-    "vueify": "^2.0.1"
+    "vueify": "^9.4.1"
   },
   "scripts": {
     "build-js": "browserify -t vueify -e assets/js/app.js -o assets/js/build.js",
