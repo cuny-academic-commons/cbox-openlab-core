@@ -7,11 +7,13 @@
     "test": "tests"
   },
   "dependencies": {
+    "classnames": "^2.3.1",
     "es6-promise": "^4.2.5",
     "grunt-php-set-constant": "0.0.15",
     "isomorphic-fetch": "^3.0.0",
     "vue-template-compiler": "^2.5.21",
     "vue2-autocomplete-js": "0.0.4",
+    "vuedraggable": "^2.24.3",
     "vuex": "^2.5.0",
     "watchify": "^4.0.0"
   },

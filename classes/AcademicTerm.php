@@ -99,17 +99,18 @@ class AcademicTerm {
 	}
 
 	public function get_for_endpoint() {
-		$retval = array(
-			'name'         => $this->get_name(),
-			'slug'         => $this->get_slug(),
-			'settings'     => array(
-				'Order' => array(
-					'component' => 'Order',
-					'data'      => $this->get_order(),
-				),
-			),
+		// Get a fresh copy.
+		$post = get_post( $this->get_wp_post_id() );
+		if ( $post ) {
+			$item = self::get_instance_from_wp_post( $post );
+		} else {
+			$item = $this;
+		}
 
-			'id'           => $this->get_wp_post_id(),
+		$retval = array(
+			'name'         => $item->get_name(),
+			'slug'         => $item->get_slug(),
+			'id'           => $item->get_wp_post_id(),
 
 			'canBeDeleted' => true,
 			'isCollapsed'  => true,

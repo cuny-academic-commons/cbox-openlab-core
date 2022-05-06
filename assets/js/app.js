@@ -25,6 +25,7 @@ const store = new Vuex.Store(
 			memberTypes: [],
 			objectType: '',
 			registrationFormSettings: {},
+			saveInProgress: false,
 			signupCodes: {},
 			strings: CBOXOLStrings.strings,
 			subapp: '',
@@ -138,6 +139,23 @@ const store = new Vuex.Store(
 				)
 			},
 
+			submitEntityOrder( commit, payload ) {
+				let endpoint = CBOXOLStrings.endpointBase + 'entity-order/'
+
+				return fetch(
+					endpoint,
+					{
+						method: 'POST',
+						credentials: 'same-origin',
+						headers: {
+							'Content-Type': 'application/json',
+							'X-WP-Nonce': CBOXOLStrings.nonce
+						},
+						body: JSON.stringify( payload )
+					}
+				)
+			},
+
 			submitRegistrationFormSettings( commit, payload ) {
 				let endpoint = CBOXOLStrings.endpointBase + 'registration-form-settings/'
 
@@ -221,22 +239,21 @@ const store = new Vuex.Store(
 
 				newEntityNames.sort(
 					function( a, b ) {
-						if ( '_new' === a.substr( 0, 4 ) ) {
-							return -1
+						const item_a = state[ itemsKey ][ a ]
+						const item_b = state[ itemsKey ][ b ]
+
+						let order_a = 0
+						if ( item_a.hasOwnProperty( 'order' ) ) {
+							order_a = item_a.order
+						} else if ( item_a.hasOwnProperty( 'settings' ) && item_a.settings.hasOwnProperty( 'Order' ) ) {
+							order_a = item_a.settings.Order.data
 						}
 
-						let order_a
-						if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
-							order_a = state[ itemsKey ][ a ].order
-						} else {
-							order_a = state[ itemsKey ][ a ].settings.Order.data
-						}
-
-						let order_b
-						if ( state[ itemsKey ][ a ].hasOwnProperty( 'order' ) ) {
-							order_b = state[ itemsKey ][ b ].order
-						} else {
-							order_b = state[ itemsKey ][ b ].settings.Order.data
+						let order_b = 0
+						if ( item_b.hasOwnProperty( 'order' ) ) {
+							order_b = item_b.order
+						} else if ( item_b.hasOwnProperty( 'settings' ) && item_b.settings.hasOwnProperty( 'Order' ) ) {
+							order_b = item_b.settings.Order.data
 						}
 
 						order_a = parseInt( order_a )
@@ -331,6 +348,10 @@ const store = new Vuex.Store(
 				state[ itemsKey ][ slug ].settings.Order.data = value
 			},
 
+			setSaveInProgress( state, payload ) {
+				state.saveInProgress = !! payload.value
+			},
+
 			setSignupCode( state, payload ) {
 				const { key, signupCode } = payload
 				let newSignupCodes        = Object.assign( {}, state.signupCodes )
@@ -401,6 +422,11 @@ const store = new Vuex.Store(
 						state[ prop ] = payload[ prop ]
 					}
 				}
+			},
+
+			setEntityNames( state, payload ) {
+				const { namesKey, names } = payload
+				state[ namesKey ] = names
 			},
 
 			setUpEntityNames( state, payload ) {

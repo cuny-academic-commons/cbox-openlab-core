@@ -103,7 +103,13 @@ module.exports = {
 		},
 
 		getEntityProp: function( prop ) {
-			return this.$store.state[ this.itemsKey ][ this.slug ][ prop ]
+			const thisEntity = this.$store.state[ this.itemsKey ][ this.slug ]
+
+			if ( ! thisEntity ) {
+				return null
+			}
+
+			return thisEntity[ prop ]
 		},
 
 		setEntityProp: function( prop, value ) {
@@ -122,6 +128,26 @@ module.exports = {
 					value: value
 				}
 			)
+		},
+
+		updateEntityOrder: function() {
+			const thisObject = this
+
+			const orderedSlugs = this.$store.state[ this.namesKey ]
+
+			thisObject.$store.commit( 'setSaveInProgress', { value: true } )
+
+			const entities = thisObject.$store.state[ thisObject.itemsKey ]
+			const orderedIds = orderedSlugs.map( (entitySlug) => {
+				return entities[ entitySlug ].id
+			} )
+
+			thisObject.$store.dispatch( 'submitEntityOrder', {
+				entityType: thisObject.entityType,
+				orderedIds
+			} ).then( () => {
+				thisObject.$store.commit( 'setSaveInProgress', { value: false } )
+			} )
 		}
 	},
 

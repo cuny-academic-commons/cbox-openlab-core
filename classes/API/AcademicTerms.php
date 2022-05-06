@@ -84,7 +84,6 @@ class AcademicTerms extends WP_REST_Controller {
 
 	protected function create_update_helper( AcademicTerm $academic_term, $data ) {
 		$academic_term->set_name( $data['name'] );
-		$academic_term->set_order( $data['settings']['Order']['data'] );
 
 		$academic_term->save();
 

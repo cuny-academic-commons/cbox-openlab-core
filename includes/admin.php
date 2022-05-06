@@ -112,6 +112,7 @@ function cboxol_register_assets() {
 				'delete'                               => __( 'Delete', 'commons-in-a-box' ),
 				'deleteConfirm'                        => __( 'Are you sure you want to delete this content?', 'commons-in-a-box' ),
 				'domain'                               => _x( 'Domain', 'Domain from email domain whitelist', 'commons-in-a-box' ),
+				'dragToSort'                           => __( 'Drag to sort', 'commons-in-a-box' ),
 				'edit'                                 => __( 'Edit', 'commons-in-a-box' ),
 				'editing'                              => __( 'Editing', 'commons-in-a-box' ),
 				'emailDomainWhitelist'                 => __( 'Email Domain Whitelist', 'commons-in-a-box' ),

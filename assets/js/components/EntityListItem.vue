@@ -1,6 +1,8 @@
 <template>
 	<div v-bind:class="itemClass">
 		<div class="cboxol-entity-header">
+			<div v-if="isSortable" class="sortable-handle"><span class="screen-reader-text">{{ strings.dragToSort }}</span></div>
+
 			<div class="cboxol-entity-header-label">
 				{{ name }} <span class="entity-off" v-if="! isEnabled">{{ strings.off }}</span>
 			</div>
@@ -320,6 +322,10 @@
 							itemsKey: itemType.itemsKey,
 							namesKey: itemType.namesKey
 						} )
+
+						if ( itemType.isSortable ) {
+							itemType.updateEntityOrder()
+						}
 					} )
 				}
 			},
@@ -360,14 +366,34 @@
 
 						itemType.isModified = false
 
+						// If this is a new item, add it to the end of the entity list.
+						if ( '_new' === itemType.slug.substr( 0, 4 ) ) {
+							itemType.$store.commit( 'addEntity', {
+								item: data,
+								key: data,
+								itemsKey: itemType.itemsKey,
+								namesKey: itemType.namesKey
+							} )
+						}
+
 						itemType.setEntityProp( 'id', data.id )
 						itemType.$store.commit( 'orderEntities', {
 							itemsKey: itemType.itemsKey,
 							namesKey: itemType.namesKey
 						} )
 
-						itemType.isLoading = false
-						itemType.isCollapsed = true
+						if ( itemType.isSortable ) {
+							itemType.updateEntityOrder()
+						}
+
+						// Reset the dummy.
+						if ( '_new' === itemType.slug.substr( 0, 4 ) ) {
+							itemType.$store.commit( 'removeEntity', {
+								itemsKey: itemType.itemsKey,
+								namesKey: itemType.namesKey,
+								slug: itemType.slug
+							} )
+						}
 					} )
 			},
 		},
@@ -380,9 +406,9 @@
 
 		props: [
 			'entityType',
+			'isSortable',
 			'isToggleable',
 			'slug'
 		],
-
 	}
 </script>

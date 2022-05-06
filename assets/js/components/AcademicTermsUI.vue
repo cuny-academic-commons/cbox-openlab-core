@@ -1,6 +1,7 @@
 <template>
 	<EntityList
 		:canAddNew="canAddNew"
+		:isSortable="true"
 		:isToggleable="isToggleable"
 		:entityType="entityType"
 	/>
@@ -14,16 +15,11 @@
 			EntityList,
 		},
 
-		computed: {
-			groupCategoryNames() {
-//				return this.$store.state[ this.namesKey ]
-			}
-		},
-
 		data() {
 			return {
 				canAddNew: true,
 				entityType: 'academicTerm',
+				isSortable: false,
 				isToggleable: false,
 			}
 		},

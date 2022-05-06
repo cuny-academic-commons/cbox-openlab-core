@@ -47,10 +47,9 @@ function cboxol_academic_terms_main_admin_page() {
 	$dummy_data = $dummy->get_for_endpoint();
 
 	$app_config = array(
-		'subapp'            => 'AcademicTermsUI',
-		'objectType'        => 'member',
-		'academicTerms'     => $term_data,
-		'dummy'             => $dummy_data,
+		'subapp'        => 'AcademicTermsUI',
+		'academicTerms' => $term_data,
+		'dummy'         => $dummy_data,
 	);
 
 	?>

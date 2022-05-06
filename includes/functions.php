@@ -32,6 +32,9 @@ function openlab_rest_api_init() {
 	$registration_form_settings_endpoint = new \CBOX\OL\API\RegistrationFormSettings();
 	$registration_form_settings_endpoint->register_routes();
 
+	$entity_order_endpoint = new \CBOX\OL\API\EntityOrder();
+	$entity_order_endpoint->register_routes();
+
 	$group_categories_endpoint = new \CBOX\OL\API\GroupCategories();
 	$group_categories_endpoint->register_routes();
 
