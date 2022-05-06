@@ -56,3 +56,9 @@ if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings130::FLAG, false ) ) {
 	$upgrade_group_type_settings_130 = new CBOX\OL\Upgrades\GroupTypeSettings130();
 	$registry->register( $upgrade_group_type_settings_130->id, $upgrade_group_type_settings_130 );
 }
+
+// v1.4.0 - Migrate text-based Academic Terms to admin-configurable terms.
+if ( ! get_option( CBOX\OL\Upgrades\AcademicTerms140::FLAG, false ) ) {
+	$academic_terms_140 = new CBOX\OL\Upgrades\AcademicTerms140();
+	$registry->register( $academic_terms_140->id, $academic_terms_140 );
+}
