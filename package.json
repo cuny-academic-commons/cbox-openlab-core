@@ -33,6 +33,7 @@
   },
   "scripts": {
     "build-js": "browserify -t vueify -e assets/js/app.js -o assets/js/build.js",
+    "build-js:site-templates": "wp-scripts build assets/src/site-templates/site-templates.js",
     "watch-js": "watchify -v -t vueify -e assets/js/app.js -o assets/js/build.js",
     "watch-js:site-templates": "wp-scripts start assets/src/site-templates/site-templates.js"
   },
