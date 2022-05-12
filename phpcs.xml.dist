@@ -9,8 +9,10 @@
 	<exclude-pattern>/node_modules/*</exclude-pattern>
 
 	<!-- Exclude minified and built Javascript files. -->
+	<exclude-pattern>*.js</exclude-pattern>
 	<exclude-pattern>*.min.js</exclude-pattern>
 	<exclude-pattern>/assets/js/build.js</exclude-pattern>
+	<exclude-pattern>/build/</exclude-pattern>
 	<exclude-pattern>/dist/*</exclude-pattern>
 	<exclude-pattern>/assets/css/openlab-toolbar.css</exclude-pattern>
 
@@ -21,7 +23,7 @@
 	<exclude-pattern>lib/bp-customizable-group-categories/parts/*</exclude-pattern>
 
 	<!-- Iterate over all PHP files by default -->
-	<file>.</file>
+	<file>.*php</file>
 
 	<!-- Check for PHP cross-version compatibility. -->
 	<config name="testVersion" value="5.6-"/>

@@ -491,7 +491,13 @@ function cboxol_site_template_add_group_type_fields_to_term( $term ) {
 
 	$selected = cboxol_get_term_group_types( $term->term_id );
 
-	cboxol_load_site_template_view( 'admin/term-group-types.php', [ 'group_types' => $group_types, 'selected' => $selected ] );
+	cboxol_load_site_template_view(
+		'admin/term-group-types.php',
+		[
+			'group_types' => $group_types,
+			'selected'    => $selected,
+		]
+	);
 }
 add_action( 'cboxol_template_category_edit_form', 'cboxol_site_template_add_group_type_fields_to_term' );
 
@@ -624,7 +630,13 @@ function cboxol_render_template_picker() {
 	wp_enqueue_style( 'cboxol-site-template-picker-style' );
 	wp_enqueue_script( 'cboxol-site-template-picker-script' );
 
-	cboxol_load_site_template_view( 'template-picker.php', [ 'categories' => $categories, 'gloss' => $gloss ] );
+	cboxol_load_site_template_view(
+		'template-picker.php',
+		[
+			'categories' => $categories,
+			'gloss'      => $gloss,
+		]
+	);
 }
 add_action( 'openlab_after_group_site_markup', 'cboxol_render_template_picker' );
 

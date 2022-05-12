@@ -3,13 +3,13 @@
 namespace CBOX\OL;
 
 class AcademicTerm {
-	protected $data = array(
-		'labels'       => array(),
-		'order'        => null,
-		'name'         => null,
-		'slug'         => null,
-		'wp_post_id'   => null,
-	);
+	protected $data = [
+		'labels'     => [],
+		'order'      => null,
+		'name'       => null,
+		'slug'       => null,
+		'wp_post_id' => null,
+	];
 
 	/**
 	 * Save to the database.
@@ -19,12 +19,12 @@ class AcademicTerm {
 	public function save() {
 		$post_id = $this->get_wp_post_id();
 
-		$post_params = array(
+		$post_params = [
 			'menu_order'  => $this->get_order(),
 			'post_type'   => 'cboxol_acad_term',
 			'post_title'  => $this->get_name(),
 			'post_status' => 'publish',
-		);
+		];
 
 		if ( $post_id ) {
 			$post_params['ID'] = $post_id;

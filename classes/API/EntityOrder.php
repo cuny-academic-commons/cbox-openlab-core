@@ -49,7 +49,7 @@ class EntityOrder extends WP_REST_Controller {
 				'posts_per_page' => -1,
 				'post__in'       => $ordered_ids,
 				'orderby'        => 'post__in',
-			],
+			]
 		);
 
 		foreach ( $posts as $index => $post ) {

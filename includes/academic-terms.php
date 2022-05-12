@@ -197,7 +197,7 @@ function cboxol_get_tax_query_for_academic_term( $term_slug ) {
 			'taxonomy' => $taxonomy,
 			'terms'    => 'acad_term_' . $term_obj->get_wp_post_id(),
 			'field'    => 'slug',
-		]
+		],
 	];
 
 	return $tax_query;
