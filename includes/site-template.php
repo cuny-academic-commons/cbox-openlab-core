@@ -627,3 +627,45 @@ function cboxol_render_template_picker() {
 	cboxol_load_site_template_view( 'template-picker.php', [ 'categories' => $categories, 'gloss' => $gloss ] );
 }
 add_action( 'openlab_after_group_site_markup', 'cboxol_render_template_picker' );
+
+/**
+ * Site Templates settings panel under Group Settings.
+ *
+ * @since 1.4.0
+ */
+function cboxol_site_templates_admin_page() {
+	$templates_url = add_query_arg(
+		'post_type',
+		'cboxol_site_template',
+		admin_url( 'edit.php' )
+	);
+
+	$categories_url = add_query_arg(
+		[
+			'post_type' => 'cboxol_site_template',
+			'taxonomy'  => 'cboxol_template_category',
+		],
+		admin_url( 'edit-tags.php' )
+	);
+
+	$settings = [
+		[
+			'title'       => __( 'Site Templates', 'commons-in-a-box' ),
+			'url'         => $templates_url,
+			'description' => __( 'Create and manage site templates on the Site Templates admin page.', 'commons-in-a-box' ),
+		],
+		[
+			'title'       => __( 'Site Template Categories', 'commons-in-a-box' ),
+			'url'         => $categories_url,
+			'description' => __( 'Create and manage site template categories on the Site Template Categories admin page.', 'commons-in-a-box' ),
+		],
+	];
+
+	?>
+	<div class="cboxol-admin-content">
+		<p><?php esc_html_e( 'The Site Templates admin page allows the network administrator to create new site templates that can be assigned to different groups. When users create a new group with an associated site, they will see options to choose any of the site templates associated categories that are linked with that group type.', 'commons-in-a-box' ); ?></p>
+
+		<?php cboxol_communication_settings_markup( $settings ); ?>
+	</div>
+	<?php
+}
