@@ -46,8 +46,69 @@ function openlab_rest_api_init() {
 
 	$academic_units_endpoint = new \CBOX\OL\API\AcademicUnits();
 	$academic_units_endpoint->register_routes();
+
+	cboxol_register_rest_fields();
 }
 add_action( 'rest_api_init', 'openlab_rest_api_init' );
+
+/**
+ * Registers fields for endpoints.
+ *
+ * @since 1.4.0
+ */
+function cboxol_register_rest_fields() {
+	register_rest_field(
+		'cboxol_site_template',
+		'site_id',
+		[
+			'get_callback' => function( $object ) {
+				return (int) get_post_meta( $object['id'], '_template_site_id', true );
+			},
+			'schema'       => array(
+				'description' => __( 'Template site ID.', 'commons-in-a-box' ),
+				'type'        => 'integer',
+			),
+		]
+	);
+
+	register_rest_field(
+		'cboxol_site_template',
+		'image',
+		[
+			'get_callback' => function( $object ) {
+				return wp_get_attachment_image_url( $object['featured_media'], 'medium_large' );
+			},
+			'schema'       => array(
+				'description' => __( 'Template site image.', 'commons-in-a-box' ),
+				'type'        => 'string',
+			),
+		]
+	);
+
+	register_rest_field(
+		'cboxol_site_template',
+		'categories',
+		[
+			'get_callback' => function( $object ) {
+				$data = [];
+
+				foreach ( $object['template_category'] as $term_id ) {
+					$term   = get_term_by( 'id', $term_id, 'cboxol_template_category' );
+					$data[] = $term ? $term->name : '';
+				}
+
+				return $data;
+			},
+			'schema'       => array(
+				'description' => __( 'Template site categories.', 'commons-in-a-box' ),
+				'type'        => 'array',
+				'items'       => [
+					'type' => 'integer',
+				],
+			),
+		]
+	);
+}
 
 /**
  * Utility function for getting a default user id when none has been passed to the function

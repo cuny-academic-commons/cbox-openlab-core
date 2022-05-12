@@ -11,6 +11,7 @@
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'CBOXOL_PLUGIN_ROOT_FILE', __FILE__ );
 define( 'CBOXOL_PLUGIN_VER', '1.3.2-1642694899373' );
 define( 'CBOXOL_ASSET_VER', '1.3.2-1642694899373' );
 
@@ -46,6 +47,7 @@ function cboxol_init() {
 	require CBOXOL_PLUGIN_DIR . 'includes/communication-settings.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/profile-fields.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/search.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/site-template.php';
 
 	// @todo Better loading for these libraries.
 	require CBOXOL_PLUGIN_DIR . 'includes/portfolios.php';
