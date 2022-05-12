@@ -23,7 +23,7 @@
 	<exclude-pattern>lib/bp-customizable-group-categories/parts/*</exclude-pattern>
 
 	<!-- Iterate over all PHP files by default -->
-	<file>.*php</file>
+	<file>*.php</file>
 
 	<!-- Check for PHP cross-version compatibility. -->
 	<config name="testVersion" value="5.6-"/>
