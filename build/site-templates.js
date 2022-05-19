@@ -221,6 +221,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api */ "./assets/src/site-templates/api.js");
 /* harmony import */ var _site_template_picker_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./site-template-picker.scss */ "./assets/src/site-templates/site-template-picker.scss");
+var _window$CBOXOL_Group_;
+
 /**
  * Internal dependencies
  */
@@ -233,9 +235,12 @@ const templatePagination = document.querySelector('.site-template-pagination');
 const templateToClone = document.querySelector('[name="source_blog"]');
 const setupSiteToggle = document.querySelector('#set-up-site-toggle');
 const siteType = document.querySelectorAll('[name="new_or_old"]');
-const messages = window.SiteTemplatePicker.messages; // Cache default template. Usually it's group type site template.
+const messages = window.SiteTemplatePicker.messages;
+const defaultMap = window.SiteTemplatePicker.defaultMap;
+const currentGroupType = ((_window$CBOXOL_Group_ = window.CBOXOL_Group_Create) === null || _window$CBOXOL_Group_ === void 0 ? void 0 : _window$CBOXOL_Group_.new_group_type) || null; // Cache default template. Usually it's group type site template.
 
-const defaultTemplate = templateToClone.value || '0';
+const defaultTemplateForGroupType = currentGroupType && defaultMap.hasOwnProperty(currentGroupType) ? defaultMap[currentGroupType] : 0;
+const defaultTemplate = templateToClone.value || defaultTemplateForGroupType.toString();
 
 function renderTemplate(_ref) {
   let {
@@ -267,8 +272,6 @@ function updateTemplates(category, page) {
       prev,
       next
     } = _ref2;
-    // Restore template to default value.
-    templateToClone.value = defaultTemplate;
 
     if (!templates.length) {
       templatePicker.innerHTML = `<p>${messages.noResults}</p>`;
@@ -276,7 +279,9 @@ function updateTemplates(category, page) {
     }
 
     const compiled = templates.map(template => renderTemplate(template)).join('');
-    templatePicker.innerHTML = compiled;
+    templatePicker.innerHTML = compiled; // Restore template to default value.
+
+    setSelectedTemplateSiteId(defaultTemplate);
     updatePagination(prev, next);
   });
 }
@@ -285,7 +290,6 @@ function updatePagination(prev, next) {
   const prevBtn = templatePagination.querySelector('.prev');
   const nextBtn = templatePagination.querySelector('.next');
   const isVisible = templatePagination.classList.contains('hidden');
-  console.log(isVisible);
   const hide = !prev && !next && !isVisible; // Hide pagination if we have only one page.
 
   if (hide) {
@@ -317,7 +321,22 @@ function togglePanel() {
 
   templatePanel.classList.add('hidden'); // Restore template to default value.
 
-  templateToClone.value = defaultTemplate;
+  setSelectedTemplateSiteId(defaultTemplate);
+}
+
+function setSelectedTemplateSiteId(siteId) {
+  const templates = templatePicker.querySelectorAll('.site-template-component');
+  templates.forEach(template => {
+    const templateId = template.dataset.templateId;
+
+    if (templateId === siteId) {
+      template.classList.add('is-selected');
+    } else {
+      template.classList.remove('is-selected');
+    }
+  }); // Update input value for clone catcher method.
+
+  templateToClone.value = siteId;
 }
 
 templateCategories.addEventListener('change', function (event) {
@@ -330,23 +349,9 @@ templatePicker.addEventListener('click', function (event) {
 
   if (!target) {
     return;
-  } // Remove selection.
-
-
-  if (target.classList.contains('is-selected')) {
-    target.classList.remove('is-selected');
-    templateToClone.value = defaultTemplate;
-    return;
   }
 
-  const templates = this.querySelectorAll('.site-template-component');
-  const templateId = target.dataset.templateId; // Remove 'is-selected' marker for previously selected template.
-
-  templates.forEach(template => template.classList.remove('is-selected')); // Mark current template as selected.
-
-  target.classList.add('is-selected'); // Update input value for clone catcher method.
-
-  templateToClone.value = templateId;
+  setSelectedTemplateSiteId(target.dataset.templateId);
 });
 templatePicker.addEventListener('mouseover', function (event) {
   const template = event.target.closest('.site-template-component');
