@@ -47,6 +47,9 @@ function openlab_rest_api_init() {
 	$academic_units_endpoint = new \CBOX\OL\API\AcademicUnits();
 	$academic_units_endpoint->register_routes();
 
+	$sites_endpoint = new \CBOX\OL\API\Sites();
+	$sites_endpoint->register_routes();
+
 	cboxol_register_rest_fields();
 }
 add_action( 'rest_api_init', 'openlab_rest_api_init' );

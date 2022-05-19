@@ -21,6 +21,14 @@ function cboxol_register_site_template_assets() {
 		true
 	);
 
+	wp_register_script(
+		'cboxol-site-template-picker-admin-script',
+		plugins_url( 'build/site-templates-admin.js', CBOXOL_PLUGIN_ROOT_FILE ),
+		[ 'jquery', 'select-js' ],
+		CBOXOL_ASSET_VER,
+		true
+	);
+
 	$all_categories = get_terms(
 		[
 			'taxonomy'   => 'cboxol_template_category',
@@ -50,6 +58,15 @@ function cboxol_register_site_template_assets() {
 				'loading'   => esc_html__( 'Loading Templates...', 'commons-in-a-box' ),
 				'noResults' => esc_html__( 'No templates were found.', 'commons-in-a-box' ),
 			],
+		]
+	);
+
+	wp_localize_script(
+		'cboxol-site-template-picker-admin-script',
+		'SiteTemplatePickerAdmin',
+		[
+			'endpoint' => rest_url( 'cboxol/v1/sites' ),
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
 		]
 	);
 }
@@ -193,8 +210,17 @@ function cboxol_register_site_template_meta_boxes() {
 
 	add_meta_box(
 		'template-description',
-		__( 'Description', 'cboxol-site-template-picker' ),
+		__( 'Description', 'commons-in-a-box' ),
 		'cboxol_render_site_template_description',
+		'cboxol_site_template',
+		'normal',
+		'core'
+	);
+
+	add_meta_box(
+		'template-site',
+		__( 'Template Site', 'commons-in-a-box' ),
+		'cboxol_render_template_site',
 		'cboxol_site_template',
 		'normal',
 		'core'
@@ -209,6 +235,38 @@ function cboxol_register_site_template_meta_boxes() {
  */
 function cboxol_render_site_template_description( $post ) {
 	cboxol_load_site_template_view( 'admin/description.php', [ 'description' => $post->post_excerpt ] );
+}
+
+/**
+ * Render callback for the Template Site metabox.
+ *
+ * @param \WP_Post $post
+ * @return void
+ */
+function cboxol_render_template_site( $post ) {
+	$site_id = (int) get_post_meta( $post->ID, '_template_site_id', true );
+
+	$site_name = '';
+	$site_url  = '';
+	if ( $site_id ) {
+		$site = get_site( $site_id );
+		if ( $site ) {
+			$site_name = $site->blogname;
+			$site_url  = $site->siteurl;
+		}
+	}
+
+	wp_enqueue_script( 'cboxol-site-template-picker-admin-script' );
+
+	cboxol_load_site_template_view(
+		'admin/template-site.php',
+		[
+			'is_create' => 'auto-draft' === $post->post_status,
+			'site_id'   => $site_id,
+			'site_name' => $site_name,
+			'site_url'  => $site_url,
+		]
+	);
 }
 
 /**
@@ -269,6 +327,31 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 	$site_id = cboxol_create_site_for_template( $post_id, $slug, $name );
 }
 add_action( 'save_post', 'cboxol_create_site_template', 10, 2 );
+
+/**
+ * Saves the template site ID on template save.
+ */
+function cboxol_save_template_site_id( $post_id, \WP_Post $post ) {
+	if ( ! current_user_can( 'manage_network_options' ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['cboxol-template-site-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'cboxol-template-site', 'cboxol-template-site-nonce' );
+
+	$template_site_id = isset( $_POST['template-site-id'] ) ? intval( $_POST['template-site-id'] ) : null;
+
+	// Cannot be unset. This is important to avoid race conditions during the create process.
+	if ( ! $template_site_id ) {
+		return;
+	}
+
+	update_post_meta( $post->ID, '_template_site_id', $template_site_id );
+}
+add_action( 'save_post', 'cboxol_save_template_site_id', 15, 2 );
 
 /**
  * Creates a template site.
