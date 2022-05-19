@@ -320,3 +320,75 @@ function cboxol_get_main_site_id() {
 		return (int) get_current_site()->blog_id;
 	}
 }
+
+/**
+ * Get the current filter value out of GET parameters.
+ */
+function openlab_get_current_filter( $param ) {
+	$value = '';
+
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
+	switch ( $param ) {
+		case 'school':
+			if ( isset( $_GET['school'] ) ) {
+				$value_raw           = wp_unslash( $_GET['school'] );
+				$schools_and_offices = array_merge( openlab_get_school_list(), openlab_get_office_list() );
+
+				if ( 'school_all' === $value_raw ) {
+					$value = 'school_all';
+				} elseif ( isset( $schools_and_offices[ $value_raw ] ) ) {
+					$value = $value_raw;
+				}
+			}
+			break;
+
+		case 'group_types':
+			$value = isset( $_GET['group_types'] ) ? wp_unslash( $_GET['group_types'] ) : [];
+			break;
+
+		case 'usertype':
+			if ( isset( $_GET['usertype'] ) ) {
+				$user_types    = array_merge( openlab_valid_user_types(), [ 'user_type_all' ] );
+				$user_type_raw = wp_unslash( $_GET['usertype'] );
+				if ( in_array( $user_type_raw, $user_types, true ) ) {
+					$value = $user_type_raw;
+				}
+			}
+			break;
+
+		case 'order':
+			$whitelist = [ 'alphabetical', 'newest', 'active' ];
+			$value     = isset( $_GET['order'] ) && in_array( $_GET['order'], $whitelist, true ) ? $_GET['order'] : 'active';
+			break;
+
+		case 'open':
+			$value = ! empty( $_GET['is_open'] );
+			break;
+
+		case 'cloneable':
+			$value = ! empty( $_GET['is_cloneable'] );
+			break;
+
+		case 'badges':
+			$value = isset( $_GET['badges'] ) ? array_map( 'intval', $_GET['badges'] ) : [];
+			break;
+
+		case 'group-types':
+			$group_types = isset( $_GET['group-types'] ) ? $_GET['group-types'] : [];
+			$value       = array_filter(
+				wp_unslash( $group_types ),
+				function( $slug ) {
+					$type = cboxol_get_group_type( $slug );
+					return ! is_wp_error( $type );
+				}
+			);
+			break;
+
+		default:
+			$value = isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : '';
+			break;
+	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+	return $value;
+}
