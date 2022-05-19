@@ -97,6 +97,7 @@ function cboxol_register_site_template_post_type() {
 			'query_var'            => false,
 			'delete_with_user'     => false,
 			'menu_position'        => null,
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 			'menu_icon'            => 'data:image/svg+xml;base64,' . base64_encode( '<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path fill="black" d="M15 37.95Q13.8 37.95 12.9 37.05Q12 36.15 12 34.95V6.95Q12 5.75 12.9 4.85Q13.8 3.95 15 3.95H37Q38.2 3.95 39.1 4.85Q40 5.75 40 6.95V34.95Q40 36.15 39.1 37.05Q38.2 37.95 37 37.95ZM9 43.95Q7.8 43.95 6.9 43.05Q6 42.15 6 40.95V10.8H9V40.95Q9 40.95 9 40.95Q9 40.95 9 40.95H32.7V43.95Z"/></svg>' ),
 			'show_in_rest'         => true,
 			'rest_base'            => 'site-templates',
@@ -255,6 +256,8 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 
 	// Use timestamp as a hash to ensure uniqueness.
 	$slug = sprintf( 'site-template-%s-%s', $post->post_name, time() );
+
+	// translators: Template name.
 	$name = sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), esc_html( $post->post_title ) );
 
 	$site_id = cboxol_create_site_for_template( $post_id, $slug, $name );

@@ -83,7 +83,7 @@ class SiteTemplates140 extends Upgrade {
 
 		$general_category = get_term_by( 'name', $term_name, 'cboxol_template_category' );
 		if ( ! $general_category ) {
-			$inserted = wp_insert_term( $term_name,	'cboxol_template_category' );
+			$inserted = wp_insert_term( $term_name, 'cboxol_template_category' );
 
 			add_term_meta( $inserted['term_id'], 'cboxol_group_type', $group_type->get_slug() );
 

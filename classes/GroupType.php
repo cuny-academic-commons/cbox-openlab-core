@@ -99,10 +99,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$template = get_post( $template_id );
 
 		return [
-			'siteId'    => $site_id,
-			'name'      => $template->post_title,
-			'url'       => get_home_url( $site_id ),
-			'adminUrl'  => get_admin_url( $site_id ),
+			'siteId'   => $site_id,
+			'name'     => $template->post_title,
+			'url'      => get_home_url( $site_id ),
+			'adminUrl' => get_admin_url( $site_id ),
 		];
 	}
 
@@ -141,7 +141,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 						'taxonomy' => 'cboxol_template_category',
 						'terms'    => $category_ids,
 						'field'    => 'term_id',
-					]
+					],
 				],
 			]
 		);
@@ -882,6 +882,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$template_id = wp_insert_post(
 			[
 				'post_type'   => 'cboxol_site_template',
+				// translators: Group type label.
 				'post_title'  => sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), $this->get_name() ),
 				'post_status' => 'publish',
 			]
@@ -894,6 +895,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$template_post = get_post( $template_id );
 
 		$slug = sanitize_title_with_dashes( _x( 'site-template', 'Prefix for template site URL slug', 'commons-in-a-box' ) ) . '-' . $this->get_slug() . '-' . time();
+
+		// translators: Group type label
 		$name = sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), $this->get_name() );
 
 		$site_id = cboxol_create_site_for_template( $template_id, $slug, $name );
@@ -918,9 +921,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 		}
 
 		// No category exists, so we create one.
+		// translators: Group type label
 		$term_name = sprintf( __( 'General: %s', 'commons-in-a-box' ), $this->get_label( 'plural' ) );
 
-		$inserted = wp_insert_term( $term_name,	'cboxol_template_category' );
+		$inserted = wp_insert_term( $term_name, 'cboxol_template_category' );
 
 		add_term_meta( $inserted['term_id'], 'cboxol_group_type', $this->get_slug() );
 
