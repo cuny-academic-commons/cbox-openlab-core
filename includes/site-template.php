@@ -227,8 +227,8 @@ function cboxol_load_site_template_view( $name = '', array $data = [] ) {
 /**
  * Create associated template site.
  *
- * @param int $post_id   The site template ID.
- * @param \WP_Post $post The site template object.
+ * @param int      $post_id The site template ID.
+ * @param \WP_Post $post    The site template object.
  * @return void
  */
 function cboxol_create_site_template( $post_id, \WP_Post $post ) {
@@ -254,7 +254,22 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 	}
 
 	// Use timestamp as a hash to ensure uniqueness.
-	$slug            = sprintf( 'site-template-%s-%s', $post->post_name, time() );
+	$slug = sprintf( 'site-template-%s-%s', $post->post_name, time() );
+	$name = sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), esc_html( $post->post_title ) );
+
+	$site_id = cboxol_create_site_for_template( $post_id, $slug, $name );
+}
+add_action( 'save_post', 'cboxol_create_site_template', 10, 2 );
+
+/**
+ * Creates a template site.
+ *
+ * @param int    $template_id
+ * @param string $slug
+ * @param string $name
+ * @return int $site_id
+ */
+function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 	$current_network = get_network();
 
 	if ( is_subdomain_install() ) {
@@ -272,7 +287,7 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 			'path'    => $path,
 			'user_id' => get_current_user_id(),
 			/* translators: Site template name */
-			'title'   => sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), esc_html( $post->post_title ) ),
+			'title'   => $name,
 		]
 	);
 
@@ -328,12 +343,13 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 	restore_current_blog();
 
 	// Save template ID for syncing.
-	update_site_meta( $site_id, '_site_template_id', $post_id );
+	update_site_meta( $site_id, '_site_template_id', $template_id );
 
 	// Save template site ID for syncing.
-	update_post_meta( $post_id, '_template_site_id', $site_id );
+	update_post_meta( $template_id, '_template_site_id', $site_id );
+
+	return $site_id;
 }
-add_action( 'save_post', 'cboxol_create_site_template', 10, 2 );
 
 /**
  * Set template site status as "Deleted".

@@ -879,26 +879,52 @@ class GroupType extends ItemTypeBase implements ItemType {
 	}
 
 	public function create_template_site( $settings ) {
-		$current_network = get_network();
+		$template_id = wp_insert_post(
+			[
+				'post_type'   => 'cboxol_site_template',
+				'post_title'  => sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), $this->get_name() ),
+				'post_status' => 'publish',
+			]
+		);
 
-		// Use timestamp as a hash to ensure uniqueness.
-		$slug = sprintf( 'site-template-%s-%s', $this->get_slug(), time() );
-		if ( is_subdomain_install() ) {
-			$site_domain = preg_replace( '|^www\.|', '', $current_network->domain );
-			$domain      = $slug . '.' . $site_domain;
-			$path        = '/';
-		} else {
-			$domain = $current_network->domain;
-			$path   = $current_network->path . $slug . '/';
+		if ( ! $template_id || is_wp_error( $template_id ) ) {
+			return false;
 		}
 
-		$site_id = wpmu_create_blog(
-			$domain,
-			$path,
-			// translators: Group type name
-			sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), $this->get_name() ),
-			get_current_user_id()
+		$template_post = get_post( $template_id );
+
+		$slug = sanitize_title_with_dashes( _x( 'site-template', 'Prefix for template site URL slug', 'commons-in-a-box' ) ) . '-' . $this->get_slug() . '-' . time();
+		$name = sprintf( __( 'Site Template - %s', 'commons-in-a-box' ), $this->get_name() );
+
+		$site_id = cboxol_create_site_for_template( $template_id, $slug, $name );
+
+		// Try to use an existing category.
+		$template_categories = get_terms(
+			[
+				'taxonomy'   => 'cboxol_template_category',
+				'hide_empty' => false,
+			]
 		);
+
+		$the_category_id = null;
+		if ( $template_categories ) {
+			foreach ( $template_categories as $template_category ) {
+				$category_group_types = cboxol_get_term_group_types( $template_category->term_id );
+				if ( in_array( $this->get_slug(), $category_group_types, true ) ) {
+					$the_category_id = $template_category->term_id;
+					break;
+				}
+			}
+		}
+
+		// No category exists, so we create one.
+		$term_name = sprintf( __( 'General: %s', 'commons-in-a-box' ), $this->get_label( 'plural' ) );
+
+		$inserted = wp_insert_term( $term_name,	'cboxol_template_category' );
+
+		add_term_meta( $inserted['term_id'], 'cboxol_group_type', $this->get_slug() );
+
+		wp_set_post_terms( $template_id, [ $inserted['term_id'] ], 'cboxol_template_category' );
 
 		if ( ! $site_id ) {
 			return;
@@ -946,86 +972,43 @@ class GroupType extends ItemTypeBase implements ItemType {
 				}
 			}
 		}
+		_b( $created_page_ids );
 
-		$menu_name = wp_slash( __( 'Main Menu', 'commons-in-a-box' ) );
-		$menu_id   = wp_create_nav_menu( $menu_name );
+		// Try to place the newly create pages in the main menu.
+		if ( $created_page_ids ) {
+			$nav_menu_ids = [];
 
-		$nav_menu_ids = array();
+			$locations = get_theme_mod( 'nav_menu_locations' );
 
-		// Create custom menu items.
-		$group_menu_item_id = wp_update_nav_menu_item(
-			$menu_id,
-			0,
-			array(
-				'menu-item-title'   => __( 'Group Home', 'cbox-openlab-core' ),
-				'menu-item-url'     => home_url( '/group-profile' ),
-				'menu-item-status'  => 'publish',
-				'menu-item-type'    => 'custom',
-				'menu-item-classes' => 'group-profile-link',
-			)
-		);
+			if ( ! empty( $locations['primary'] ) ) {
+				$menu_id = $locations['primary'];
 
-		$home_menu_item_id = wp_update_nav_menu_item(
-			$menu_id,
-			0,
-			array(
-				'menu-item-title'   => __( 'Home', 'cbox-openlab-core' ),
-				'menu-item-url'     => home_url( '/' ),
-				'menu-item-status'  => 'publish',
-				'menu-item-type'    => 'custom',
-				'menu-item-classes' => 'home',
-			)
-		);
+				foreach ( $created_page_ids as $page_slug => $created_page_id ) {
+					$page = get_post( $created_page_id );
 
-		// Store flag for injected custom menu items
-		add_term_meta(
-			$menu_id,
-			'cboxol_custom_menus',
-			array(
-				'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
-				'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
-			),
-			true
-		);
+					$parent_nav_item_id = 0;
+					if ( ! empty( $page->post_parent ) && isset( $nav_menu_ids[ $page->post_parent ] ) ) {
+						$parent_nav_item_id = $nav_menu_ids[ $page->post_parent ];
+					}
 
-		// In the absence of created pages, put a menu in place with 'Sample Page'.
-		if ( ! $created_page_ids ) {
-			$sample_page = get_page_by_path( __( 'sample-page', 'commons-in-a-box' ) );
-			if ( $sample_page ) {
-				$created_page_ids = array(
-					'sample-page' => $sample_page->ID,
-				);
+					$nav_menu_item_id = wp_update_nav_menu_item(
+						$menu_id,
+						0,
+						array(
+							'menu-item-object-id' => $created_page_id,
+							'menu-item-object'    => 'page',
+							'menu-item-parent-id' => $parent_nav_item_id,
+							'menu-item-type'      => 'post_type',
+							'menu-item-classes'   => $page->post_name,
+							'menu-item-url'       => get_permalink( $page ),
+							'menu-item-status'    => 'publish',
+						)
+					);
+
+					$nav_menu_ids[ $created_page_id ] = $nav_menu_item_id;
+				}
 			}
 		}
-
-		foreach ( $created_page_ids as $page_slug => $created_page_id ) {
-			$page = get_post( $created_page_id );
-
-			$parent_nav_item_id = 0;
-			if ( ! empty( $page->post_parent ) && isset( $nav_menu_ids[ $page->post_parent ] ) ) {
-				$parent_nav_item_id = $nav_menu_ids[ $page->post_parent ];
-			}
-
-			$nav_menu_item_id = wp_update_nav_menu_item(
-				$menu_id,
-				0,
-				array(
-					'menu-item-object-id' => $created_page_id,
-					'menu-item-object'    => 'page',
-					'menu-item-parent-id' => $parent_nav_item_id,
-					'menu-item-type'      => 'post_type',
-					'menu-item-classes'   => $page->post_name,
-					'menu-item-url'       => get_permalink( $page ),
-					'menu-item-status'    => 'publish',
-				)
-			);
-
-			$nav_menu_ids[ $created_page_id ] = $nav_menu_item_id;
-		}
-
-		$locations            = get_theme_mod( 'nav_menu_locations' );
-		$locations['primary'] = $menu_id;
-		set_theme_mod( 'nav_menu_locations', $locations );
 
 		restore_current_blog();
 
