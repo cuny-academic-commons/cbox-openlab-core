@@ -13,9 +13,13 @@ const templateToClone = document.querySelector( '[name="source_blog"]' );
 const setupSiteToggle = document.querySelector( '#set-up-site-toggle' );
 const siteType = document.querySelectorAll( '[name="new_or_old"]' );
 const messages = window.SiteTemplatePicker.messages;
+const defaultMap = window.SiteTemplatePicker.defaultMap;
+const currentGroupType = window.CBOXOL_Group_Create?.new_group_type || null
+
 
 // Cache default template. Usually it's group type site template.
-const defaultTemplate = templateToClone.value || '0';
+const defaultTemplateForGroupType = currentGroupType && defaultMap.hasOwnProperty( currentGroupType ) ? defaultMap[ currentGroupType ] : 0
+const defaultTemplate = templateToClone.value || defaultTemplateForGroupType.toString();
 
 function renderTemplate( { id, title, excerpt, image, categories } ) {
 	return `
@@ -39,8 +43,6 @@ function updateTemplates( category, page ) {
 	templatePicker.innerHTML = `<p>${ messages.loading }</p>`;
 
 	getSiteTemplates( category, page ).then( ( { templates, prev, next } ) => {
-		// Restore template to default value.
-		templateToClone.value = defaultTemplate;
 
 		if ( ! templates.length ) {
 			templatePicker.innerHTML = `<p>${ messages.noResults }</p>`;
@@ -49,6 +51,9 @@ function updateTemplates( category, page ) {
 
 		const compiled = templates.map( ( template ) => renderTemplate( template ) ).join('');
 		templatePicker.innerHTML = compiled;
+
+		// Restore template to default value.
+		setSelectedTemplateSiteId( defaultTemplate )
 
 		updatePagination( prev, next );
 	} );
@@ -59,7 +64,6 @@ function updatePagination( prev, next ) {
 	const nextBtn = templatePagination.querySelector( '.next' );
 
 	const isVisible = templatePagination.classList.contains( 'hidden' );
-	console.log(isVisible)
 	const hide = ! prev && ! next && ! isVisible;
 
 	// Hide pagination if we have only one page.
@@ -91,7 +95,24 @@ function togglePanel( display = false ) {
 	templatePanel.classList.add( 'hidden' );
 
 	// Restore template to default value.
-	templateToClone.value = defaultTemplate;
+	setSelectedTemplateSiteId( defaultTemplate )
+}
+
+function setSelectedTemplateSiteId( siteId ) {
+	const templates = templatePicker.querySelectorAll( '.site-template-component' );
+
+	templates.forEach( ( template ) => {
+		const templateId = template.dataset.templateId;
+
+		if ( templateId === siteId ) {
+			template.classList.add( 'is-selected' )
+		} else {
+			template.classList.remove( 'is-selected' )
+		}
+	} )
+
+	// Update input value for clone catcher method.
+	templateToClone.value = siteId;
 }
 
 templateCategories.addEventListener( 'change', function( event ) {
@@ -109,24 +130,7 @@ templatePicker.addEventListener( 'click', function( event ) {
 		return;
 	}
 
-	// Remove selection.
-	if ( target.classList.contains( 'is-selected' ) ) {
-		target.classList.remove( 'is-selected' );
-		templateToClone.value = defaultTemplate;
-		return;
-	}
-
-	const templates = this.querySelectorAll( '.site-template-component' );
-	const templateId = target.dataset.templateId;
-
-	// Remove 'is-selected' marker for previously selected template.
-	templates.forEach( ( template ) => template.classList.remove( 'is-selected' ) );
-
-	// Mark current template as selected.
-	target.classList.add( 'is-selected' );
-
-	// Update input value for clone catcher method.
-	templateToClone.value = templateId;
+	setSelectedTemplateSiteId( target.dataset.templateId )
 } );
 
 templatePicker.addEventListener( 'mouseover', function( event ) {

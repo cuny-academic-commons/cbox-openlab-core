@@ -33,6 +33,11 @@ function cboxol_register_site_template_assets() {
 		$category_map[ $cat->term_id ] = cboxol_get_term_group_types( $cat->term_id );
 	}
 
+	$default_template_map = [];
+	foreach ( cboxol_get_group_types() as $group_type ) {
+		$default_template_map[ $group_type->get_slug() ] = $group_type->get_template_site_id();
+	}
+
 	wp_localize_script(
 		'cboxol-site-template-picker-script',
 		'SiteTemplatePicker',
@@ -40,6 +45,7 @@ function cboxol_register_site_template_assets() {
 			'endpoint'    => rest_url( 'wp/v2/site-templates' ),
 			'perPage'     => 6,
 			'categoryMap' => $category_map,
+			'defaultMap'  => $default_template_map,
 			'messages'    => [
 				'loading'   => esc_html__( 'Loading Templates...', 'commons-in-a-box' ),
 				'noResults' => esc_html__( 'No templates were found.', 'commons-in-a-box' ),
