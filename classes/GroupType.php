@@ -63,24 +63,25 @@ class GroupType extends ItemTypeBase implements ItemType {
 		);
 
 		return array(
-			'id'           => $this->get_wp_post_id(),
-			'isCollapsed'  => true,
-			'isCourse'     => $this->get_is_course(),
-			'isPortfolio'  => $this->get_is_portfolio(),
-			'isEnabled'    => $this->get_is_enabled(),
-			'isLoading'    => false,
-			'isModified'   => false,
-			'canBeDeleted' => $this->get_can_be_deleted(),
-			'settings'     => array(
+			'id'             => $this->get_wp_post_id(),
+			'isCollapsed'    => true,
+			'isCourse'       => $this->get_is_course(),
+			'isPortfolio'    => $this->get_is_portfolio(),
+			'isEnabled'      => $this->get_is_enabled(),
+			'isLoading'      => false,
+			'isModified'     => false,
+			'canBeDeleted'   => $this->get_can_be_deleted(),
+			'settings'       => array(
 				'Order' => array(
 					'component' => 'Order',
 					'data'      => $this->get_order(),
 				),
 			),
-			'name'         => $this->get_name(),
-			'slug'         => $this->get_slug(),
-			'labels'       => $this->get_labels(),
-			'templateSite' => $this->get_template_site_info(),
+			'name'           => $this->get_name(),
+			'slug'           => $this->get_slug(),
+			'labels'         => $this->get_labels(),
+			'siteTemplates'  => $this->get_site_templates(),
+			'siteTemplateId' => $this->get_template_site_id(),
 		);
 	}
 
@@ -92,15 +93,69 @@ class GroupType extends ItemTypeBase implements ItemType {
 		return (int) $this->data['template_site_id'];
 	}
 
-	public function get_template_site_info() {
-		$site_id = $this->get_template_site_id();
+	public function get_template_site_info( $template_id ) {
+		$site_id = (int) get_post_meta( $template_id, '_template_site_id', true );
 
-		return array(
-			'siteId'   => $site_id,
-			'name'     => get_site_option( $site_id, 'blogname' ),
-			'url'      => get_home_url( $site_id ),
-			'adminUrl' => get_admin_url( $site_id ),
+		$template = get_post( $template_id );
+
+		return [
+			'siteId'    => $site_id,
+			'name'      => $template->post_title,
+			'url'       => get_home_url( $site_id ),
+			'adminUrl'  => get_admin_url( $site_id ),
+		];
+	}
+
+	public function get_site_template_categories() {
+		return get_terms(
+			[
+				'taxonomy'   => 'cboxol_template_category',
+				'number'     => 0,
+				'hide_empty' => false,
+				'meta_query' => [
+					[
+						'key'   => 'cboxol_group_type',
+						'value' => $this->get_slug(),
+					],
+				],
+			]
 		);
+	}
+
+	public function get_site_templates() {
+		$site_template_categories = $this->get_site_template_categories();
+		if ( $site_template_categories ) {
+			$category_ids = wp_list_pluck( $site_template_categories, 'term_id' );
+		} else {
+			$category_ids = [ 0 ];
+		}
+
+		$site_template_posts = get_posts(
+			[
+				'post_type'      => 'cboxol_site_template',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'orderby'        => 'name',
+				'tax_query'      => [
+					[
+						'taxonomy' => 'cboxol_template_category',
+						'terms'    => $category_ids,
+						'field'    => 'term_id',
+					]
+				],
+			]
+		);
+
+		$this_object = $this;
+
+		$site_templates = array_map(
+			function( $template ) use ( $this_object ) {
+				return $this_object->get_template_site_info( $template->ID );
+			},
+			$site_template_posts
+		);
+
+		return $site_templates;
 	}
 
 	/**
@@ -304,6 +359,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$wp_post_id = $this->get_wp_post_id();
 
 		update_post_meta( $wp_post_id, 'cboxol_group_type_directory_filters', $this->get_directory_filters() );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_template_site_id', $this->get_template_site_id() );
 	}
 
 	public static function get_dummy() {

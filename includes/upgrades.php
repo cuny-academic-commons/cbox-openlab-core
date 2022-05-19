@@ -62,3 +62,9 @@ if ( ! get_option( CBOX\OL\Upgrades\AcademicTerms140::FLAG, false ) ) {
 	$academic_terms_140 = new CBOX\OL\Upgrades\AcademicTerms140();
 	$registry->register( $academic_terms_140->id, $academic_terms_140 );
 }
+
+// v1.4.0 - Create Site Template objects for legacy group-type site templates.
+if ( ! get_option( CBOX\OL\Upgrades\SiteTemplates140::FLAG, false ) ) {
+	$site_templates_140 = new CBOX\OL\Upgrades\SiteTemplates140();
+	$registry->register( $site_templates_140->id, $site_templates_140 );
+}

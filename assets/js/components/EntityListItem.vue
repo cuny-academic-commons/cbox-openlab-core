@@ -102,6 +102,47 @@
 				</div>
 			</div>
 
+			<!-- durrrrr -->
+			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.template }}</h3>
+
+				<p>{{ strings.templateSiteDescription }} <a v-bind:href="siteTemplatesAdminUrl">{{ strings.templateSiteAdminDescription }}</a></p>
+
+				<div class="site-templates-list">
+					<div class="site-templates-list-item site-templates-list-header">
+						<div class="site-template-radio">
+							&nbsp;
+						</div>
+
+						<div class="site-template-name">
+							{{ strings.templates }}
+						</div>
+
+						<div class="site-template-links">
+							{{ strings.links }}
+						</div>
+
+					</div>
+
+					<div v-for="siteTemplate in entityData.siteTemplates" class="site-templates-list-item">
+						<div class="site-template-radio">
+							<input type="radio" v-model="siteTemplateId" v-bind:value="siteTemplate.siteId" v-bind:id="'site-template-' + siteTemplate.siteId" />
+						</div>
+
+						<div class="site-template-name">
+							<label v-bind:for="'site-template-' + siteTemplate.siteId">
+								{{ siteTemplate.name }}
+							</label>
+						</div>
+
+						<div class="site-template-links">
+							<a v-bind:href="siteTemplate.adminUrl">{{ strings.templateDashboardLink }}</a> | <a v-bind:href="siteTemplate.url">{{ strings.templateViewLink }}</a>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
@@ -112,18 +153,6 @@
 						v-bind:labelSlug="label.slug"
 					></type-label>
 				</div>
-			</div>
-
-			<!-- durrrrr -->
-			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
-				<h3 class="cboxol-entity-content-section-header">{{ strings.template }}</h3>
-
-				<p>{{ strings.templateSiteDescription }}</p>
-
-				<div class="cboxol-template-site-links">
-					<a v-bind:href="templateAdminUrl">{{ strings.templateDashboardLink }}</a> | <a v-bind:href="templateUrl">{{ strings.templateViewLink }}</a>
-				</div>
-
 			</div>
 
 			<div class="cboxol-entity-submit">
@@ -251,6 +280,16 @@
 				return ( this.entityData.hasOwnProperty('isCourse') && this.entityData.isCourse ) || ( this.entityData.hasOwnProperty('isPortfolio') && this.entityData.isPortfolio )
 			},
 
+			siteTemplateId: {
+				get() {
+					return this.entityData.siteTemplateId
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'siteTemplateId', value )
+				}
+			},
+
 			supportsAssociatedWithMemberTypes() {
 				return this.itemsKey === 'academicUnitTypes'
 			},
@@ -263,18 +302,12 @@
 				return this.itemsKey === 'academicUnitTypes'
 			},
 
+			siteTemplatesAdminUrl() {
+				return window.CBOXOLStrings.siteTemplatesAdminUrl
+			},
+
 			supportsParent() {
 				return this.entityData.hasOwnProperty( 'parent' )
-			},
-
-			templateUrl() {
-				const templateSite = this.getEntityProp( 'templateSite' )
-				return templateSite.url
-			},
-
-			templateAdminUrl() {
-				const templateSite = this.getEntityProp( 'templateSite' )
-				return templateSite.adminUrl
 			},
 
 			typeSupportsDeletion() {
@@ -293,6 +326,10 @@
 
 			getElId: function( base ) {
 				return this.slug + '-' . base
+			},
+
+			isDefaultTemplate: ( siteId ) => {
+				return siteId === this.entityData.siteTemplate
 			},
 
 			onDeleteClick: function( event ) {
@@ -365,6 +402,7 @@
 						}
 
 						itemType.isModified = false
+						itemType.isLoading = false
 
 						// If this is a new item, add it to the end of the entity list.
 						if ( '_new' === itemType.slug.substr( 0, 4 ) ) {
@@ -409,6 +447,6 @@
 			'isSortable',
 			'isToggleable',
 			'slug'
-		],
+		]
 	}
 </script>

@@ -103,6 +103,10 @@ class ItemTypes extends WP_REST_Controller {
 			$type->set_selectable_types( $type_data['settings']['MayChangeMemberTypeTo']['data']['selectableTypes'] );
 		}
 
+		if ( 'group' === $object_type ) {
+			$type->set_template_site_id( $type_data['siteTemplateId'] );
+		}
+
 		$type->save();
 
 		$retval   = $type->get_for_endpoint();

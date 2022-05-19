@@ -222,6 +222,33 @@ a .action-arrow {
 	padding-right: 20px;
 }
 
+.site-templates-list {
+	border: 1px solid #eaeaea;
+	border-radius: 2px;
+}
+
+.site-templates-list-item {
+	display: flex;
+	padding: 8px 16px;
+}
+
+.site-templates-list-header {
+	font-weight: 700;
+}
+
+.site-templates-list-item:nth-child(even) {
+	background: #ccc;
+}
+
+.site-template-radio {
+	flex: 0 0 30px;
+}
+
+.site-template-name {
+	flex: 0 0 40%;
+}
+
+
 /** Registration */
 
 .registration-section {

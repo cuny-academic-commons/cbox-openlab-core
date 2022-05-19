@@ -89,9 +89,10 @@ function cboxol_register_assets() {
 		'cbox-ol-app',
 		'CBOXOLStrings',
 		array(
-			'nonce'        => wp_create_nonce( 'wp_rest' ),
-			'endpointBase' => home_url( '/wp-json/cboxol/v1/' ),
-			'strings'      => array(
+			'nonce'                 => wp_create_nonce( 'wp_rest' ),
+			'endpointBase'          => home_url( '/wp-json/cboxol/v1/' ),
+			'siteTemplatesAdminUrl' => admin_url( 'edit.php?post_type=cboxol_site_template' ),
+			'strings'               => array(
 				'academicUnitNameLabel'                => _x( 'Name', '"Name" label for adding new academic units', 'commons-in-a-box' ),
 				'academicUnitParentLegend'             => __( 'Define a parent/child relationship to indicate which category from the parent Academic Unit Type this new category should be associated with.', 'commons-in-a-box' ),
 				'action'                               => _x( 'Action', 'Header for Action column in admin tables', 'commons-in-a-box' ),
@@ -124,6 +125,7 @@ function cboxol_register_assets() {
 				'group'                                => _x( 'Group', 'Column header for signup code table', 'commons-in-a-box' ),
 				'itemTypeNameLabel'                    => _x( 'Name', 'item type Name label', 'commons-in-a-box' ),
 				'labels'                               => _x( 'Labels', 'subheader for item type labels', 'commons-in-a-box' ),
+				'links'                                => _x( 'Links', 'column header for template site settings section', 'commons-in-a-box' ),
 				'mayCreateCoursesLegend'               => __( 'Members may create courses', 'commons-in-a-box' ),
 
 				// @todo This probably will not translate.
@@ -156,9 +158,11 @@ function cboxol_register_assets() {
 				'signUpCode'                           => __( 'Signup Code', 'commons-in-a-box' ),
 				'signUpCodes'                          => __( 'Sign Up Codes', 'commons-in-a-box' ),
 				'signUpCodesLegend'                    => __( 'Registration codes let you restrict access to specific member account types (e.g faculty, staff, student). Each code can be associated with a group, so that users registering with the code will automatically be added to the group when their registration is complete. These account codes do not allow users to bypass the Email Domain Whitelist above.', 'commons-in-a-box' ),
-				'template'                             => _x( 'Template', 'subheader for template site settings section', 'commons-in-a-box' ),
+				'template'                             => _x( 'Default Template', 'subheader for template site settings section', 'commons-in-a-box' ),
+				'templates'                            => _x( 'Templates', 'column header for template site settings section', 'commons-in-a-box' ),
 				'templateDashboardLink'                => _x( 'Dashboard', 'template site dashboard link', 'commons-in-a-box' ),
-				'templateSiteDescription'              => __( 'When a group of this type creates a site, default settings and data will be copied from the group type\'s template site. Use the links below to view and configure the template site.', 'commons-in-a-box' ),
+				'templateSiteDescription'              => __( 'When a group of this type creates a site, default settings and data will be copied from the group type\'s template site. Below, choose the default template associated with this group type and use the links to view and configure the template site.', 'commons-in-a-box' ),
+				'templateSiteAdminDescription'         => __( 'You can create additional templates in Site Templates', 'commons-in-a-box' ),
 				'templateViewLink'                     => _x( 'View Template', 'template site view link', 'commons-in-a-box' ),
 				'thisGroupTypeIsDesignedForCourses'    => __( 'Note: This Group Type is designed for Courses.', 'commons-in-a-box' ),
 				'thisGroupTypeIsDesignedForPortfolios' => __( 'Note: This Group Type is designed for Portfolios.', 'commons-in-a-box' ),
