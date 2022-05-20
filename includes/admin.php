@@ -177,10 +177,6 @@ function cboxol_register_assets() {
 	wp_enqueue_style( 'cbox-ol-admin' );
 }
 
-function cboxol_admin_about_page() {
-	echo 'This is the about page.';
-}
-
 function cboxol_admin_slug( $parent_page = '' ) {
 	switch ( $parent_page ) {
 		case 'member-settings':
