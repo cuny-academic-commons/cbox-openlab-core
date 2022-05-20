@@ -120,6 +120,22 @@ class SiteTemplates140 extends Upgrade {
 
 		wp_set_post_terms( $template_id, [ $general_category->term_id ], 'cboxol_template_category' );
 
+		// Lazy technique.
+		$default_category_id = cboxol_get_default_site_template_category_id();
+		if ( ! $default_category_id ) {
+			$inserted = wp_insert_term( _x( 'General', 'Name for general site template category', 'commons-in-a-box' ), 'cboxol_template_category' );
+
+			if ( is_wp_error( $inserted ) ) {
+				return;
+			}
+
+			foreach ( cboxol_get_group_types() as $group_type ) {
+				add_term_meta( $inserted['term_id'], 'cboxol_group_type', $group_type->get_slug() );
+			}
+
+			update_option( 'cboxol_default_site_template_category', $inserted['term_id'] );
+		}
+
 		return true;
 	}
 

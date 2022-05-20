@@ -29,6 +29,14 @@ function cboxol_register_site_template_assets() {
 		true
 	);
 
+	wp_register_script(
+		'cboxol-site-templates-default-category',
+		plugins_url( 'build/site-templates-default-category.js', CBOXOL_PLUGIN_ROOT_FILE ),
+		[],
+		CBOXOL_ASSET_VER,
+		true
+	);
+
 	$all_categories = get_terms(
 		[
 			'taxonomy'   => 'cboxol_template_category',
@@ -67,6 +75,14 @@ function cboxol_register_site_template_assets() {
 		[
 			'endpoint' => rest_url( 'cboxol/v1/sites' ),
 			'nonce'    => wp_create_nonce( 'wp_rest' ),
+		]
+	);
+
+	wp_localize_script(
+		'cboxol-site-templates-default-category',
+		'SiteTemplatesDefaultCategory',
+		[
+			'defaultCategoryId' => cboxol_get_default_site_template_category_id()
 		]
 	);
 }
@@ -198,6 +214,23 @@ function cboxol_register_site_template_category_taxonomy() {
 	);
 }
 add_action( 'init', 'cboxol_register_site_template_category_taxonomy', 15 );
+
+/**
+ * Load the 'default category' script on post-new.php.
+ */
+function cboxol_load_default_site_template_category_script( $hook ) {
+	if ( 'post-new.php' !== $hook ) {
+		return;
+	}
+
+	$screen = get_current_screen();
+	if ( ! $screen || 'cboxol_site_template' !== $screen->post_type ) {
+		return;
+	}
+
+	wp_enqueue_script( 'cboxol-site-templates-default-category' );
+}
+add_action( 'admin_enqueue_scripts', 'cboxol_load_default_site_template_category_script' );
 
 /**
  * Handle post type specific metaboxes.
@@ -508,6 +541,17 @@ function cboxol_get_template_site_id( $template_id ) {
  */
 function cboxol_get_term_group_types( $term_id ) {
 	return (array) get_term_meta( $term_id, 'cboxol_group_type', false );
+}
+
+/**
+ * Gets the default site template category ID.
+ *
+ * @since 1.4.0
+ *
+ * @return int
+ */
+function cboxol_get_default_site_template_category_id() {
+	return (int) get_option( 'cboxol_default_site_template_category' );
 }
 
 /**

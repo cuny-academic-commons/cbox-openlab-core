@@ -33,9 +33,9 @@
   },
   "scripts": {
     "build-js": "browserify -t vueify -e assets/js/app.js -o assets/js/build.js",
-    "build-js:site-templates": "wp-scripts build assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js",
+    "build-js:site-templates": "wp-scripts build assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js assets/src/site-templates-default-category.js",
     "watch-js": "watchify -v -t vueify -e assets/js/app.js -o assets/js/build.js",
-    "watch-js:site-templates": "wp-scripts start assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js"
+    "watch-js:site-templates": "wp-scripts start assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js assets/src/site-templates-default-category.js"
   },
   "repository": {
     "type": "git",

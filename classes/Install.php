@@ -39,6 +39,7 @@ class Install {
 		$this->install_default_member_types();
 		$this->install_default_group_types();
 		$this->install_default_group_categories();
+		$this->install_default_site_template_category();
 		$this->install_default_academic_types();
 		$this->install_default_brand_pages();
 		$this->install_default_search();
@@ -611,6 +612,25 @@ class Install {
 			$c->set_group_types( $cat['types'] );
 			$c->save();
 		}
+	}
+
+	/**
+	 * Install default 'General' site template category.
+	 *
+	 * @since 1.4.0
+	 */
+	protected function install_default_site_template_category() {
+		$inserted = wp_insert_term( _x( 'General', 'Name for general site template category', 'commons-in-a-box' ), 'cboxol_template_category' );
+
+		if ( is_wp_error( $inserted ) ) {
+			return;
+		}
+
+		foreach ( cboxol_get_group_types() as $group_type ) {
+			add_term_meta( $inserted['term_id'], 'cboxol_group_type', $group_type->get_slug() );
+		}
+
+		update_option( 'cboxol_default_site_template_category', $inserted['term_id'] );
 	}
 
 	/**
