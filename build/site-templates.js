@@ -56,7 +56,7 @@ async function getSiteTemplates(category) {
   const totalPages = Number(response.headers.get('X-WP-TotalPages'));
   const templates = items.map(item => {
     return {
-      id: item.site_id,
+      id: item.id,
       title: item.title.rendered,
       excerpt: item.excerpt.rendered,
       image: item.image,
@@ -240,18 +240,19 @@ const defaultMap = window.SiteTemplatePicker.defaultMap;
 const currentGroupType = ((_window$CBOXOL_Group_ = window.CBOXOL_Group_Create) === null || _window$CBOXOL_Group_ === void 0 ? void 0 : _window$CBOXOL_Group_.new_group_type) || null; // Cache default template. Usually it's group type site template.
 
 const defaultTemplateForGroupType = currentGroupType && defaultMap.hasOwnProperty(currentGroupType) ? defaultMap[currentGroupType] : 0;
-const defaultTemplate = templateToClone.value || defaultTemplateForGroupType.toString();
+const defaultTemplate = defaultTemplateForGroupType ? defaultTemplateForGroupType.toString() : templateToClone.value;
 
 function renderTemplate(_ref) {
   let {
     id,
+    siteId,
     title,
     excerpt,
     image,
     categories
   } = _ref;
   return `
-	<button type="button" class="site-template-component" data-template-id="${id}">
+	<button type="button" class="site-template-component" data-template-id="${id}" data-template-site-id="${siteId}">
 		<div class="site-template-component__image">
 			${image ? `<img src="${image}" alt="${title}">` : `<svg fill="currentColor" width="24" height="24" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>`}
 			<div class="site-template-component__description">${excerpt}</div>
@@ -281,7 +282,7 @@ function updateTemplates(category, page) {
     const compiled = templates.map(template => renderTemplate(template)).join('');
     templatePicker.innerHTML = compiled; // Restore template to default value.
 
-    setSelectedTemplateSiteId(defaultTemplate);
+    setSelectedTemplateId(defaultTemplate);
     updatePagination(prev, next);
   });
 }
@@ -321,22 +322,21 @@ function togglePanel() {
 
   templatePanel.classList.add('hidden'); // Restore template to default value.
 
-  setSelectedTemplateSiteId(defaultTemplate);
+  setSelectedTemplateId(defaultTemplate);
 }
 
-function setSelectedTemplateSiteId(siteId) {
+function setSelectedTemplateId(selectedId) {
   const templates = templatePicker.querySelectorAll('.site-template-component');
   templates.forEach(template => {
     const templateId = template.dataset.templateId;
 
-    if (templateId === siteId) {
+    if (templateId === selectedId) {
       template.classList.add('is-selected');
+      templateToClone.value = template.dataset.templateSiteId;
     } else {
       template.classList.remove('is-selected');
     }
-  }); // Update input value for clone catcher method.
-
-  templateToClone.value = siteId;
+  });
 }
 
 templateCategories.addEventListener('change', function (event) {
@@ -351,7 +351,7 @@ templatePicker.addEventListener('click', function (event) {
     return;
   }
 
-  setSelectedTemplateSiteId(target.dataset.templateId);
+  setSelectedTemplateId(target.dataset.templateId);
 });
 templatePicker.addEventListener('mouseover', function (event) {
   const template = event.target.closest('.site-template-component');
