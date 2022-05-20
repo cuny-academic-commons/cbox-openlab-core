@@ -155,10 +155,27 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		$site_templates = array_map(
 			function( $template ) use ( $this_object ) {
-				return $this_object->get_template_site_info( $template->ID );
+				return $this_object->get_site_template_info( $template->ID );
 			},
 			$site_template_posts
 		);
+
+		/*
+		 * Special case: If the current template is not in an associated category
+		 * (ie it was unlinked somehow) it should be included in the list.
+		 */
+		$list_has_linked_template = false;
+		$linked_site_template_id  = $this->get_site_template_id();
+		foreach ( $site_templates as $site_template ) {
+			if ( $linked_site_template_id === $site_template['id'] ) {
+				$list_has_linked_template = true;
+				break;
+			}
+		}
+
+		if ( ! $list_has_linked_template ) {
+			$site_templates[] = $this->get_site_template_info( $linked_site_template_id );
+		}
 
 		return $site_templates;
 	}
