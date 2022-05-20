@@ -24,7 +24,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'supports_course_information'      => false,
 		'supports_mol_link'                => false,
 		'supports_profile_column'          => false,
-		'template_site_id'                 => 0,
+		'site_template_id'                 => 0,
 	);
 
 	protected $boolean_props = array(
@@ -49,7 +49,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$type->set_up_instance_from_wp_post( $post );
 
 		$type->set_directory_filters( get_post_meta( $post->ID, 'cboxol_group_type_directory_filters', true ) );
-		$type->set_template_site_id( get_post_meta( $post->ID, 'cboxol_group_type_template_site_id', true ) );
+		$type->set_site_template_id( get_post_meta( $post->ID, 'cboxol_group_type_site_template_id', true ) );
 
 		return $type;
 	}
@@ -90,15 +90,20 @@ class GroupType extends ItemTypeBase implements ItemType {
 	}
 
 	public function get_template_site_id() {
-		return (int) $this->data['template_site_id'];
+		return cboxol_get_template_site_id( $this->get_site_template_id() );
+	}
+
+	public function get_site_template_id() {
+		return (int) $this->data['site_template_id'];
 	}
 
 	public function get_template_site_info( $template_id ) {
-		$site_id = (int) get_post_meta( $template_id, '_template_site_id', true );
+		$site_id = cboxol_get_template_site_id( $template_id );
 
 		$template = get_post( $template_id );
 
 		return [
+			'id'       => $template_id,
 			'siteId'   => $site_id,
 			'name'     => $template->post_title,
 			'url'      => get_home_url( $site_id ),
@@ -359,7 +364,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$wp_post_id = $this->get_wp_post_id();
 
 		update_post_meta( $wp_post_id, 'cboxol_group_type_directory_filters', $this->get_directory_filters() );
-		update_post_meta( $wp_post_id, 'cboxol_group_type_template_site_id', $this->get_template_site_id() );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_site_template_id', $this->get_site_template_id() );
 	}
 
 	public static function get_dummy() {
@@ -874,8 +879,23 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$this->data['directory_filters'] = $directory_filters;
 	}
 
+	/**
+	 * Deprecated.
+	 *
+	 * @deprecated 1.4.0
+	 */
 	public function set_template_site_id( $template_site_id ) {
-		$this->data['template_site_id'] = (int) $template_site_id;
+		_deprecated_function( __METHOD__, '1.4.0', 'GroupType::get_site_template_id()' );
+		return null;
+	}
+
+	/**
+	 * Sets the site template ID for this group type.
+	 *
+	 * @param int $site_template_id
+	 */
+	public function set_site_template_id( $site_template_id ) {
+		$this->data['site_template_id'] = (int) $site_template_id;
 	}
 
 	public function create_template_site( $settings ) {
@@ -976,7 +996,6 @@ class GroupType extends ItemTypeBase implements ItemType {
 				}
 			}
 		}
-		_b( $created_page_ids );
 
 		// Try to place the newly create pages in the main menu.
 		if ( $created_page_ids ) {
@@ -1016,7 +1035,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		restore_current_blog();
 
-		update_post_meta( $this->get_wp_post_id(), 'cboxol_group_type_template_site_id', $site_id );
-		$this->set_template_site_id( $site_id );
+		update_post_meta( $this->get_wp_post_id(), 'cboxol_group_type_site_template_id', $template_id );
+
+		$this->set_site_template_id( $template_id );
 	}
 }

@@ -16,14 +16,14 @@ const messages = window.SiteTemplatePicker.messages;
 const defaultMap = window.SiteTemplatePicker.defaultMap;
 const currentGroupType = window.CBOXOL_Group_Create?.new_group_type || null
 
-
 // Cache default template. Usually it's group type site template.
 const defaultTemplateForGroupType = currentGroupType && defaultMap.hasOwnProperty( currentGroupType ) ? defaultMap[ currentGroupType ] : 0
-const defaultTemplate = templateToClone.value || defaultTemplateForGroupType.toString();
 
-function renderTemplate( { id, title, excerpt, image, categories } ) {
+const defaultTemplate = defaultTemplateForGroupType ? defaultTemplateForGroupType.toString() : templateToClone.value
+
+function renderTemplate( { id, siteId, title, excerpt, image, categories } ) {
 	return `
-	<button type="button" class="site-template-component" data-template-id="${ id }">
+	<button type="button" class="site-template-component" data-template-id="${ id }" data-template-site-id="${ siteId }">
 		<div class="site-template-component__image">
 			${ image
 				? `<img src="${ image }" alt="${ title }">`
@@ -53,7 +53,7 @@ function updateTemplates( category, page ) {
 		templatePicker.innerHTML = compiled;
 
 		// Restore template to default value.
-		setSelectedTemplateSiteId( defaultTemplate )
+		setSelectedTemplateId( defaultTemplate )
 
 		updatePagination( prev, next );
 	} );
@@ -95,24 +95,23 @@ function togglePanel( display = false ) {
 	templatePanel.classList.add( 'hidden' );
 
 	// Restore template to default value.
-	setSelectedTemplateSiteId( defaultTemplate )
+	setSelectedTemplateId( defaultTemplate )
 }
 
-function setSelectedTemplateSiteId( siteId ) {
+function setSelectedTemplateId( selectedId ) {
 	const templates = templatePicker.querySelectorAll( '.site-template-component' );
 
 	templates.forEach( ( template ) => {
 		const templateId = template.dataset.templateId;
 
-		if ( templateId === siteId ) {
+		if ( templateId === selectedId ) {
 			template.classList.add( 'is-selected' )
+
+			templateToClone.value = template.dataset.templateSiteId;
 		} else {
 			template.classList.remove( 'is-selected' )
 		}
 	} )
-
-	// Update input value for clone catcher method.
-	templateToClone.value = siteId;
 }
 
 templateCategories.addEventListener( 'change', function( event ) {
@@ -130,7 +129,7 @@ templatePicker.addEventListener( 'click', function( event ) {
 		return;
 	}
 
-	setSelectedTemplateSiteId( target.dataset.templateId )
+	setSelectedTemplateId( target.dataset.templateId )
 } );
 
 templatePicker.addEventListener( 'mouseover', function( event ) {

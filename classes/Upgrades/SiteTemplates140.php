@@ -72,7 +72,7 @@ class SiteTemplates140 extends Upgrade {
 		$type_post  = get_post( $type_id );
 		$group_type = GroupType::get_instance_from_wp_post( $type_post );
 
-		$template_site_id = $group_type->get_template_site_id();
+		$legacy_site_id = get_post_meta( $type_id, 'cboxol_group_type_template_site_id', true );
 
 		// Ensure that we have a 'General' category.
 		// translators: term name
@@ -98,7 +98,7 @@ class SiteTemplates140 extends Upgrade {
 		// This should never happen unless the install process is run late.
 		$existing_templates = $group_type->get_site_templates();
 		foreach ( $existing_templates as $existing_template ) {
-			if ( $template_site_id === $existing_template['siteId'] ) {
+			if ( $legacy_site_id === $existing_template['siteId'] ) {
 				return false;
 			}
 		}
@@ -106,7 +106,7 @@ class SiteTemplates140 extends Upgrade {
 		$template_id = wp_insert_post(
 			[
 				'post_type'   => 'cboxol_site_template',
-				'post_title'  => get_blog_option( $template_site_id, 'blogname' ),
+				'post_title'  => get_blog_option( $legacy_site_id, 'blogname' ),
 				'post_status' => 'publish',
 			]
 		);
@@ -115,7 +115,8 @@ class SiteTemplates140 extends Upgrade {
 			return false;
 		}
 
-		update_post_meta( $template_id, '_template_site_id', $template_site_id );
+		update_post_meta( $template_id, '_template_site_id', $legacy_site_id );
+		update_post_meta( $type_id, 'cboxol_group_type_site_template_id', $template_id );
 
 		wp_set_post_terms( $template_id, [ $general_category->term_id ], 'cboxol_template_category' );
 

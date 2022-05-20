@@ -43,7 +43,7 @@ function cboxol_register_site_template_assets() {
 
 	$default_template_map = [];
 	foreach ( cboxol_get_group_types() as $group_type ) {
-		$default_template_map[ $group_type->get_slug() ] = $group_type->get_template_site_id();
+		$default_template_map[ $group_type->get_slug() ] = $group_type->get_site_template_id();
 	}
 
 	wp_localize_script(
@@ -244,7 +244,7 @@ function cboxol_render_site_template_description( $post ) {
  * @return void
  */
 function cboxol_render_template_site( $post ) {
-	$site_id = (int) get_post_meta( $post->ID, '_template_site_id', true );
+	$site_id = cboxol_get_template_site_id( $post->ID );
 
 	$site_name = '';
 	$site_url  = '';
@@ -313,7 +313,7 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 		return;
 	}
 
-	$site_id = (int) get_post_meta( $post_id, '_template_site_id', true );
+	$site_id = cboxol_get_template_site_id( $post_id );
 	if ( $site_id ) {
 		return;
 	}
@@ -458,7 +458,7 @@ function cboxol_delete_site_template( $post_id ) {
 		return;
 	}
 
-	$site_id = (int) get_post_meta( $post_id, '_template_site_id', true );
+	$site_id = cboxol_get_template_site_id( $post_id );
 
 	// Bail if template has no associated site.
 	if ( ! $site_id ) {
@@ -489,6 +489,16 @@ function cboxol_site_template_category_updated_messages( $messages ) {
 	return $messages;
 }
 add_filter( 'term_updated_messages', 'cboxol_site_template_category_updated_messages' );
+
+/**
+ * Gets the site ID associated with a template.
+ *
+ * @param int $template_id
+ * @return int
+ */
+function cboxol_get_template_site_id( $template_id ) {
+	return (int) get_post_meta( $template_id, '_template_site_id', true );
+}
 
 /**
  * Gets the group types associated with a term.

@@ -39,7 +39,7 @@ export async function getSiteTemplates( category, page = 1 ) {
 
 	const templates = items.map( ( item ) => {
 		return {
-			id: item.site_id,
+			id: item.id,
 			title: item.title.rendered,
 			excerpt: item.excerpt.rendered,
 			image: item.image,
