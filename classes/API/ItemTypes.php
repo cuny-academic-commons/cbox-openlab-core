@@ -104,7 +104,7 @@ class ItemTypes extends WP_REST_Controller {
 		}
 
 		if ( 'group' === $object_type ) {
-			$type->set_template_site_id( $type_data['siteTemplateId'] );
+			$type->set_site_template_id( $type_data['siteTemplateId'] );
 		}
 
 		$type->save();

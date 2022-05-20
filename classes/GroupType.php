@@ -81,7 +81,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 			'slug'           => $this->get_slug(),
 			'labels'         => $this->get_labels(),
 			'siteTemplates'  => $this->get_site_templates(),
-			'siteTemplateId' => $this->get_template_site_id(),
+			'siteTemplateId' => $this->get_site_template_id(),
 		);
 	}
 
@@ -97,7 +97,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		return (int) $this->data['site_template_id'];
 	}
 
-	public function get_template_site_info( $template_id ) {
+	public function get_site_template_info( $template_id ) {
 		$site_id = cboxol_get_template_site_id( $template_id );
 
 		$template = get_post( $template_id );

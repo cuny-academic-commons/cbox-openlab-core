@@ -126,11 +126,12 @@
 
 					<div v-for="siteTemplate in entityData.siteTemplates" class="site-templates-list-item">
 						<div class="site-template-radio">
-							<input type="radio" v-model="siteTemplateId" v-bind:value="siteTemplate.siteId" v-bind:id="'site-template-' + siteTemplate.siteId" />
+
+							<input type="radio" v-model="siteTemplateId" v-bind:value="siteTemplate.id" v-bind:id="'site-template-' + siteTemplate.id" />
 						</div>
 
 						<div class="site-template-name">
-							<label v-bind:for="'site-template-' + siteTemplate.siteId">
+							<label v-bind:for="'site-template-' + siteTemplate.id">
 								{{ siteTemplate.name }}
 							</label>
 						</div>
