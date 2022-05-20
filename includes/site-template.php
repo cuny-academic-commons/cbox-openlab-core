@@ -82,7 +82,7 @@ function cboxol_register_site_template_assets() {
 		'cboxol-site-templates-default-category',
 		'SiteTemplatesDefaultCategory',
 		[
-			'defaultCategoryId' => cboxol_get_default_site_template_category_id()
+			'defaultCategoryId' => cboxol_get_default_site_template_category_id(),
 		]
 	);
 }
