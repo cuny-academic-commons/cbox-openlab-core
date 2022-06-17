@@ -94,6 +94,10 @@ add_action( 'init', 'cboxol_register_site_template_assets', 20 );
  * @return void
  */
 function cboxol_register_site_template_post_type() {
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
 	register_post_type(
 		'cboxol_site_template',
 		[
