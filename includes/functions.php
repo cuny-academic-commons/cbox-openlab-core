@@ -387,6 +387,18 @@ function openlab_get_current_filter( $param ) {
 			);
 			break;
 
+		case 'sort':
+			$default = 'active';
+
+			$value = isset( $_GET['sort'] ) ? wp_unslash( $_GET['sort'] ) : $default;
+
+			$allowed = [ 'newest', 'alphabetical', 'active' ];
+			if ( ! in_array( $value, $allowed, true ) ) {
+				$value = $default;
+			}
+
+			break;
+
 		default:
 			$value = isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : '';
 			break;
