@@ -183,7 +183,6 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		$site_templates = array_filter( $site_templates );
 
-
 		return $site_templates;
 	}
 
