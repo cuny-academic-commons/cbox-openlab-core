@@ -102,6 +102,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		$template = get_post( $template_id );
 
+		if ( ! $site_id || ! $template ) {
+			return null;
+		}
+
 		return [
 			'id'       => $template_id,
 			'siteId'   => $site_id,
@@ -176,6 +180,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 		if ( ! $list_has_linked_template ) {
 			$site_templates[] = $this->get_site_template_info( $linked_site_template_id );
 		}
+
+		$site_templates = array_filter( $site_templates );
+
 
 		return $site_templates;
 	}
