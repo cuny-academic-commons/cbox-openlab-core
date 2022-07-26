@@ -1158,7 +1158,7 @@ exports.default = {
 				itemsKey: itemType.itemsKey,
 				slug: itemType.slug
 			}).then(itemType.checkStatus).then(itemType.parseJSON, itemType.ajaxError).then(function (data) {
-				if ('_new' === itemType.slug.substr(0, 4) && 'academicUnitType' === itemType.entityType) {
+				if ('_new' === itemType.slug.substr(0, 4) && ('academicUnitType' === itemType.entityType || 'academicTerm' === itemType.entityType)) {
 					window.onbeforeunload = null;
 					window.location.reload();
 					return;
@@ -1214,7 +1214,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-6e83156a", __vue__options__)
   } else {
-    hotAPI.reload("data-v-6e83156a", __vue__options__)
+    hotAPI.rerender("data-v-6e83156a", __vue__options__)
   }
 })()}
 },{"../mixins/AjaxTools.js":28,"../mixins/EntityTools.js":29,"../mixins/i18nTools.js":31,"./OnOffSwitch.vue":12,"./TypeLabel.vue":17,"./settings/AcademicUnits.vue":21,"./settings/AssociatedGroupTypeCheckboxes.vue":22,"./settings/AssociatedTypeDropdowns.vue":24,"./settings/MayChangeMemberTypeTo.vue":25,"./settings/MayCreateCourses.vue":26,"./settings/Order.vue":27,"vue":80,"vue-hot-reload-api":79}],9:[function(require,module,exports){

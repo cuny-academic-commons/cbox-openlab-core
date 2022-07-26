@@ -396,7 +396,7 @@
 					.then( itemType.checkStatus )
 					.then( itemType.parseJSON, itemType.ajaxError )
 					.then( function( data ) {
-						if ( '_new' === itemType.slug.substr( 0, 4 ) && 'academicUnitType' === itemType.entityType ) {
+						if ( '_new' === itemType.slug.substr( 0, 4 ) && ( 'academicUnitType' === itemType.entityType || 'academicTerm' === itemType.entityType ) ) {
 							window.onbeforeunload = null
 							window.location.reload()
 							return
