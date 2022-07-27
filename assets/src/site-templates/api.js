@@ -44,6 +44,7 @@ export async function getSiteTemplates( category, page = 1 ) {
 			excerpt: item.excerpt.rendered,
 			image: item.image,
 			categories: item.categories,
+			siteId: item.site_id
 		};
 	} );
 
