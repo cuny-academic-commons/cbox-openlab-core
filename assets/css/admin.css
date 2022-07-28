@@ -357,3 +357,7 @@ a .action-arrow {
 .cboxol-communication-settings > li {
 	margin: 1rem 0;
 }
+
+#template-site .select2-container {
+	max-width: 100%;
+}
