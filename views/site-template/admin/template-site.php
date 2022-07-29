@@ -15,7 +15,7 @@ if ( $site_id ) {
 <label class="screen-reader-text" for="template-site-id"><?php esc_html_e( 'Template Site', 'cboxol-site-template-picker' ); ?></label>
 
 <p class="description">
-	<?php esc_html_e( 'Below you can select an existing site whose settings and content will be copied to new sites when using this template.', 'commons-in-a-box' ); ?>
+	<?php esc_html_e( 'Below you can select an existing site whose settings and content will be copied to new sites when using this template.', 'commons-in-a-box' ); ?>&nbsp;
 
 	<?php if ( $is_create ) : ?>
 		<?php esc_html_e( 'If no site is selected, a new site will be created automatically to serve as the template.', 'commons-in-a-box' ); ?>
