@@ -829,7 +829,7 @@ function cboxol_site_templates_admin_page() {
 
 	?>
 	<div class="cboxol-admin-content">
-		<p><?php esc_html_e( 'The Site Templates admin page allows the network administrator to create new site templates that can be assigned to different groups. When users create a new group with an associated site, they will see options to choose any of the site templates associated categories that are linked with that group type.', 'commons-in-a-box' ); ?></p>
+		<p><?php esc_html_e( 'The Site Templates admin page allows the network administrator to create new site templates that can be assigned to different group types. Site Template Categories serve as the method for linking Site Templates to Group Types. When users create a new group with an associated site, they will see options to choose any of the site templates that have associated categories linked with that group type.', 'commons-in-a-box' ); ?></p>
 
 		<?php cboxol_communication_settings_markup( $settings ); ?>
 	</div>
