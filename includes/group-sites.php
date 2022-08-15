@@ -965,7 +965,7 @@ add_filter( 'bp_blogs_get_blogs', 'openlab_filter_groupblogs_from_my_sites', 10,
  * returns whether the current user can view the site.
  */
 function cboxol_site_can_be_viewed( $group_id = null ) {
-	global $user_ID;
+	global $user_ID, $wpdb;
 
 	// External sites can always be viewed
 	if ( openlab_get_external_site_url_by_group_id() ) {
@@ -981,11 +981,12 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
 
 	if ( $wds_bp_group_site_id ) {
 		$blog_private = get_blog_option( $wds_bp_group_site_id, 'blog_public' );
+		$blog_prefix  = $wpdb->get_blog_prefix( $wds_bp_group_site_id );
 
 		switch ( $blog_private ) {
 			case '-3':
 				if ( is_user_logged_in() ) {
-					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
+					$user_capabilities = get_user_meta( $user_ID, $blog_prefix . 'capabilities', true );
 					if ( isset( $user_capabilities['administrator'] ) ) {
 						$blog_public = true;
 					}
@@ -994,7 +995,7 @@ function cboxol_site_can_be_viewed( $group_id = null ) {
 
 			case '-2':
 				if ( is_user_logged_in() ) {
-					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
+					$user_capabilities = get_user_meta( $user_ID, $blog_prefix . 'capabilities', true );
 					if ( '' !== $user_capabilities ) {
 						$blog_public = true;
 					}
