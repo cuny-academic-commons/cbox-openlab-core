@@ -325,8 +325,9 @@ a .action-arrow {
 	clear: none;
 }
 
+.academic-unit-list .column-posts,
 .academic-unit-list .column-parent {
-	width: 80px;
+	display: none;
 }
 
 .widefat td.academic-unit-edit {
