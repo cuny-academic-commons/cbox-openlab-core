@@ -1908,6 +1908,7 @@ function openlab_network_footer() {
 	}
 
 	// Don't add to Legacy Widget previews.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( ! empty( $_GET['legacy-widget-preview'] ) ) {
 		return;
 	}
