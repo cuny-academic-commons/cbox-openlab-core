@@ -177,7 +177,7 @@ function openlab_sitewide_header_to_admin_and_group_sites() {
 add_action( 'wp_footer', 'openlab_sitewide_header_to_admin_and_group_sites' );
 add_action( 'in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites' );
 
-function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location ) {
+function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location = '' ) {
 	$mobile_mup = '';
 
 	$button_sr_text = esc_html__( 'Open Search', 'commons-in-a-box' );
