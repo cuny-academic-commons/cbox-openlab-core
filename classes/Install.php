@@ -1222,7 +1222,7 @@ class Install {
 			);
 
 			$attachment_id = wp_insert_attachment( $attachment, $sideloaded['file'] );
-			$attach_data   = wp_generate_attachment_metadata( $attachment_id, $sideloaded );
+			$attach_data   = wp_generate_attachment_metadata( $attachment_id, $sideloaded['file'] );
 			wp_update_attachment_metadata( $attachment_id, $attach_data );
 
 			set_post_thumbnail( $slide_id, $attachment_id );
