@@ -11,6 +11,7 @@
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'CBOXOL_PLUGIN_ROOT_FILE', __FILE__ );
 define( 'CBOXOL_PLUGIN_VER', '1.3.4-1668100162324' );
 define( 'CBOXOL_ASSET_VER', '1.3.4-1668100162324' );
 
