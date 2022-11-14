@@ -23,6 +23,11 @@ function cboxol_init() {
 		return;
 	}
 
+	// Abort loading if commons-in-a-box is not active.
+	if ( ! function_exists( 'cbox_is_main_site' ) ) {
+		return;
+	}
+
 	require dirname( __FILE__ ) . '/autoload.php';
 
 	require CBOXOL_PLUGIN_DIR . 'includes/functions.php';
