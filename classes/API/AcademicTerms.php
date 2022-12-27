@@ -58,6 +58,8 @@ class AcademicTerms extends WP_REST_Controller {
 
 		$academic_term = new AcademicTerm();
 
+		$academic_term->calculate_default_order();
+
 		return $this->create_update_helper( $academic_term, $data );
 	}
 

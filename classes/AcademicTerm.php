@@ -157,4 +157,24 @@ class AcademicTerm {
 	public function set_wp_post_id( $wp_post_id ) {
 		$this->data['wp_post_id'] = $wp_post_id;
 	}
+
+	/**
+	 * Calculate the default order for an item.
+	 *
+	 * The default order should be one more than the existing max.
+	 */
+	public function calculate_default_order() {
+		$existing_terms = cboxol_get_academic_terms();
+
+		// Should already be sorted by order, but we will iterate to be sure.
+		$max_order = 0;
+		foreach ( $existing_terms as $existing_term ) {
+			$term_order = $existing_term->get_order();
+			if ( $term_order > $max_order ) {
+				$max_order = $term_order;
+			}
+		}
+
+		$this->set_order( $max_order );
+	}
 }
