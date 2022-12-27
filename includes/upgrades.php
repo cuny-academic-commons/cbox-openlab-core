@@ -68,3 +68,9 @@ if ( ! get_option( CBOX\OL\Upgrades\SiteTemplates140::FLAG, false ) ) {
 	$site_templates_140 = new CBOX\OL\Upgrades\SiteTemplates140();
 	$registry->register( $site_templates_140->id, $site_templates_140 );
 }
+
+// v1.4.0 - Mirror blogname to blogmeta.
+if ( ! get_option( CBOX\OL\Upgrades\Blogname140::FLAG, false ) ) {
+	$blogname_140 = new CBOX\OL\Upgrades\Blogname140();
+	$registry->register( $blogname_140->id, $blogname_140 );
+}
