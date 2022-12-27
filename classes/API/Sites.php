@@ -105,7 +105,7 @@ class Sites extends WP_REST_Controller {
 						'key'     => 'blogname',
 						'value'   => $search_terms,
 						'compare' => 'LIKE',
-					]
+					],
 				],
 			]
 		);
