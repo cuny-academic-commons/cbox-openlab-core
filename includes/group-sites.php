@@ -205,6 +205,31 @@ function openlab_get_group_site_url( $group_id = false ) {
 }
 
 /**
+ * Save the blogname in wp_blogmeta at site initialization.
+ *
+ * @since 1.4.0
+ *
+ * @param WP_Site $site Site object.
+ */
+function cboxol_save_blogname_to_blogmeta_at_site_initialization( $site ) {
+	update_site_meta( $site->blog_id, 'blogname', $site->blogname );
+}
+add_action( 'wp_initialize_site', 'cboxol_save_blogname_to_blogmeta_at_site_initialization' );
+
+/**
+ * Save the blogname in wp_blogmeta at options update.
+ *
+ * @since 1.4.0
+ *
+ * @param string $old_value Old blogname.
+ * @param string $value     New blogname.
+ */
+function cboxol_save_blogname_to_blogmeta_at_options_update( $old_value, $value ) {
+	update_site_meta( get_current_blog_id(), 'blogname', $value );
+}
+add_action( 'update_option_blogname', 'cboxol_save_blogname_to_blogmeta_at_options_update', 10, 2 );
+
+/**
  * Save group extras, including group blog creation.
  *
  * @todo Split up.
