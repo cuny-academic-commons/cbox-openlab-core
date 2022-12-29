@@ -111,6 +111,12 @@ class AcademicTerm {
 			'name'         => $item->get_name(),
 			'slug'         => $item->get_slug(),
 			'id'           => $item->get_wp_post_id(),
+			'settings'     => array(
+				'Order' => array(
+					'component' => 'Order',
+					'data'      => $this->get_order(),
+				),
+			),
 
 			'canBeDeleted' => true,
 			'isCollapsed'  => true,
