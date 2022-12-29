@@ -175,6 +175,6 @@ class AcademicTerm {
 			}
 		}
 
-		$this->set_order( $max_order );
+		$this->set_order( $max_order + 1 );
 	}
 }
