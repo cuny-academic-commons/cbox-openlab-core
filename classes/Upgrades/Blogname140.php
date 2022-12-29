@@ -41,7 +41,6 @@ class Blogname140 extends Upgrade {
 
 		// No way to get this raw value in API?
 		$site_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->blogs}" );
-		_b( $site_ids );
 
 		foreach ( $site_ids as $site_id ) {
 			$this->push( new Upgrade_Item( $site_id, array( 'site_id' => $site_id ) ) );
