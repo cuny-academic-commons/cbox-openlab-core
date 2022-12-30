@@ -768,6 +768,12 @@ function cboxol_render_template_picker() {
 		return;
 	}
 
+	// Don't display template picker if the group already has an associated site.
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( $site_id ) {
+		return;
+	}
+
 	$categories = $group_type->get_site_template_categories();
 
 	// If there are no valid categories, then there's nothing to show.
