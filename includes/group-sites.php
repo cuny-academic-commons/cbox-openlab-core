@@ -570,7 +570,6 @@ function openlab_group_blog_activity( $activity ) {
 
 	return $activity;
 }
-
 add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
 
 /**
@@ -731,7 +730,7 @@ add_action(
  * Always choose the more private of the two settings: group + blog_public.
  */
 function cboxol_set_groupblog_activity_hide_sitewide( $activity ) {
-	if ( 'new_blog_post' !== $activity->type ) {
+	if ( 'new_blog_post' !== $activity->type && 'new_blog_comment' !== $activity->type ) {
 		return;
 	}
 
