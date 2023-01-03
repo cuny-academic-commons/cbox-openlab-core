@@ -179,8 +179,7 @@ class MemberType extends ItemTypeBase implements ItemType {
 		$dummy = new self();
 
 		foreach ( $dummy->get_label_types() as $label_type => $label_labels ) {
-			$label_labels['value'] = '';
-			$dummy->set_label( $label_type, $label_labels );
+			$dummy->set_label( $label_type, '' );
 		}
 
 		return $dummy;
