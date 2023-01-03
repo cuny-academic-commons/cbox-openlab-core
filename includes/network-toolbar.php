@@ -1913,6 +1913,14 @@ function openlab_network_footer() {
 		return;
 	}
 
+	// Don't add to Legacy Widget previews, redux.
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		global $wp;
+		if ( false !== strpos( $wp->request, 'widget-types' ) ) {
+			return;
+		}
+	}
+
 	$footer = get_site_transient( 'cboxol_network_footer' );
 
 	if ( ! $footer ) {
