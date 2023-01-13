@@ -394,7 +394,7 @@ function cboxol_academic_term_process_change_for_group( $group ) {
 function cboxol_shim_academic_term_tax_query_for_bp_groups( $sql, $sql_array, $params ) {
 	global $wpdb;
 
-	$current_term = openlab_get_current_filter( 'term' );
+	$current_term = cboxol_get_current_filter( 'term' );
 	if ( ! $current_term ) {
 		return $sql;
 	}
