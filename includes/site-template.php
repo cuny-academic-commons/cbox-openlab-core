@@ -769,8 +769,9 @@ function cboxol_render_template_picker() {
 	}
 
 	// Don't display template picker if the group already has an associated site.
-	$site_id = openlab_get_site_id_by_group_id( $group_id );
-	if ( $site_id ) {
+	$site_id       = openlab_get_site_id_by_group_id( $group_id );
+	$external_site = openlab_get_external_site_url_by_group_id( $group_id );
+	if ( $site_id || $external_site ) {
 		return;
 	}
 
