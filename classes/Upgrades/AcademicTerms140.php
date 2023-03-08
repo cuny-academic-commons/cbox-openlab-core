@@ -65,7 +65,7 @@ class AcademicTerms140 extends Upgrade {
 	public function process( $item ) {
 		$group_id = $item->get_value( 'group_id' );
 
-		$legacy_term = openlab_get_group_term( $group_id );
+		$legacy_term = groups_get_groupmeta( $group_id, 'openlab_term', true );
 		if ( ! $legacy_term ) {
 			return true;
 		}
