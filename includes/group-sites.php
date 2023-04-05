@@ -1782,6 +1782,7 @@ function cboxol_copy_blog_page( $group_id ) {
 
 			$skip_options = array(
 				'admin_email',
+				'astra_partials_config_cache', // #433
 				'blogname',
 				'cboxol_initial_rewrite_flush',
 				'cron',
