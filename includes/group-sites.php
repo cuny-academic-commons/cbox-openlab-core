@@ -1801,6 +1801,15 @@ function cboxol_copy_blog_page( $group_id ) {
 				"{$wpdb->base_prefix}{$src_id}_user_roles",
 			);
 
+			/**
+			 * Filters the options that should be skipped when a new site is generated from a template.
+			 *
+			 * @since 1.4.1
+			 *
+			 * @param array Option names.
+			 */
+			$skip_options = apply_filters( 'cboxol_template_skip_options', $skip_options );
+
 			// new blog stuff
 			if ( $options ) {
 				switch_to_blog( $new_id );
