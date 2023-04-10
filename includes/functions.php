@@ -216,6 +216,14 @@ function cboxol_copyr( $source, $dest ) {
 		return;
 	}
 
+	global $wp_filesystem;
+
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		include_once ABSPATH . '/wp-admin/includes/file.php';
+	}
+
+	WP_Filesystem();
+
 	// Check for symlinks
 	if ( is_link( $source ) ) {
 		return symlink( readlink( $source ), $dest );
@@ -223,12 +231,12 @@ function cboxol_copyr( $source, $dest ) {
 
 	// Simple copy for a file
 	if ( is_file( $source ) ) {
-		return copy( $source, $dest );
+		return $wp_filesystem->copy( $source, $dest );
 	}
 
 	// Make destination directory
 	if ( ! is_dir( $dest ) ) {
-		mkdir( $dest );
+		wp_mkdir_p( $dest );
 	}
 
 	// Loop through the folder
