@@ -306,10 +306,6 @@ class OpenLab_Admin_Bar {
 		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
 		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
 
-		// Enqueue styles
-		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
-		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
-
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
 
@@ -1691,44 +1687,6 @@ HTML;
 		return $body_class;
 	}
 
-	public function enqueue_styles() {
-		global $wpdb;
-
-		$root_blog_id = bp_get_root_blog_id();
-		$ver          = cboxol_get_asset_version();
-
-		// getting the theme folder for the main site
-		$main_site_theme = get_blog_option( $root_blog_id, 'template' );
-
-		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), $ver, 'all' );
-		wp_enqueue_style( 'google-open-sans' );
-
-		$openlab_theme_link = home_url( 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
-		$openlab_theme_link = set_url_scheme( $openlab_theme_link );
-
-		// making sure dashicons fire up for front end
-		if ( ! is_admin() ) {
-			wp_register_style( 'dashicons', home_url() . '/wp-includes/css/dashicons.min.css', array(), $ver );
-			wp_enqueue_style( 'dashicons' );
-		}
-
-		// registering font-awesome here so it can be used on the admin bar and on the main site
-		wp_register_style( 'font-awesome', $openlab_theme_link, array(), $ver, 'all' );
-		wp_enqueue_style( 'font-awesome' );
-		//custom admin bar styles
-
-		$adminbar_custom_url = CBOXOL_PLUGIN_URL . '/assets/css/admin-bar-custom.css';
-		$adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
-
-		$color_scheme = openlab_get_color_scheme();
-
-		$openlab_toolbar_url = content_url( '/themes/openlab-theme/css/color-schemes/toolbar-' . $color_scheme . '.css' );
-		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
-
-		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), $ver );
-		wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), $ver );
-	}
-
 	public function adminbar_special_body_class( $classes ) {
 
 		$classes[] = 'adminbar-special';
@@ -1954,3 +1912,48 @@ function openlab_network_nav_items() {
 
 	return $items;
 }
+
+/**
+ * Enqueues global header/footer styles.
+ *
+ * This is done outside the admin bar class, for sites where the toolbar does not display.
+ */
+function cboxol_enqueue_global_styles() {
+	global $wpdb;
+
+	$root_blog_id = bp_get_root_blog_id();
+	$ver          = cboxol_get_asset_version();
+
+	// getting the theme folder for the main site
+	$main_site_theme = get_blog_option( $root_blog_id, 'template' );
+
+	wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), $ver, 'all' );
+	wp_enqueue_style( 'google-open-sans' );
+
+	$openlab_theme_link = home_url( 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
+	$openlab_theme_link = set_url_scheme( $openlab_theme_link );
+
+	// making sure dashicons fire up for front end
+	if ( ! is_admin() ) {
+		wp_register_style( 'dashicons', home_url() . '/wp-includes/css/dashicons.min.css', array(), $ver );
+		wp_enqueue_style( 'dashicons' );
+	}
+
+	// registering font-awesome here so it can be used on the admin bar and on the main site
+	wp_register_style( 'font-awesome', $openlab_theme_link, array(), $ver, 'all' );
+	wp_enqueue_style( 'font-awesome' );
+	//custom admin bar styles
+
+	$adminbar_custom_url = CBOXOL_PLUGIN_URL . '/assets/css/admin-bar-custom.css';
+	$adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
+
+	$color_scheme = openlab_get_color_scheme();
+
+	$openlab_toolbar_url = content_url( '/themes/openlab-theme/css/color-schemes/toolbar-' . $color_scheme . '.css' );
+	$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
+
+	wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), $ver );
+	wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), $ver );
+}
+add_action( 'wp_enqueue_scripts', 'cboxol_enqueue_global_styles' );
+add_action( 'admin_enqueue_scripts', 'cboxol_enqueue_global_styles' );
