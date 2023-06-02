@@ -37,7 +37,7 @@ if ( $site_id ) {
 			esc_html__( 'The currently selected Template Site is: %1$s - %2$s | %3$s', 'commons-in-a-box' ),
 			'<strong>' . esc_html( $site_name ) . '</strong>',
 			sprintf( '<a href="%s">%s</a>', esc_url( $site_url ), esc_html__( 'View', 'commons-in-a-box' ) ),
-			sprintf( '<a href="%s">%s</a>', get_admin_url( $site_id ), esc_html__( 'Dashboard', 'commons-in-a-box' ) )
+			sprintf( '<a href="%s">%s</a>', esc_url( get_admin_url( $site_id ) ), esc_html__( 'Dashboard', 'commons-in-a-box' ) )
 		);
 		?>
 	</p>
