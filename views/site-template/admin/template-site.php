@@ -10,9 +10,10 @@ if ( $site_id ) {
 } else {
 	$option_name = '';
 }
+
 ?>
 
-<label class="screen-reader-text" for="template-site-id"><?php esc_html_e( 'Template Site', 'cboxol-site-template-picker' ); ?></label>
+<label class="screen-reader-text" for="template-site-id"><?php esc_html_e( 'Template Site', 'commons-in-a-box' ); ?></label>
 
 <p class="description">
 	<?php esc_html_e( 'Below you can select an existing site whose settings and content will be copied to new sites when using this template.', 'commons-in-a-box' ); ?>&nbsp;
@@ -27,5 +28,19 @@ if ( $site_id ) {
 </select>
 
 <p><?php esc_html_e( 'To search, click into the dropdown and begin typing the name or URL of the desired site.', 'commons-in-a-box' ); ?></p>
+
+<?php if ( $site_id ) : ?>
+	<p>
+		<?php
+		echo sprintf(
+			// translators: 1. Name of currently selected Template Site, 2. View link for the site, 3. Dashboard link for the site
+			esc_html__( 'The currently selected Template Site is: %1$s - %2$s | %3$s', 'commons-in-a-box' ),
+			'<strong>' . esc_html( $site_name ) . '</strong>',
+			sprintf( '<a href="%s">%s</a>', esc_url( $site_url ), esc_html__( 'View', 'commons-in-a-box' ) ),
+			sprintf( '<a href="%s">%s</a>', get_admin_url( $site_id ), esc_html__( 'Dashboard', 'commons-in-a-box' ) )
+		);
+		?>
+	</p>
+<?php endif; ?>
 
 <?php wp_nonce_field( 'cboxol-template-site', 'cboxol-template-site-nonce', false ); ?>
