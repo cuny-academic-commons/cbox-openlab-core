@@ -1780,26 +1780,7 @@ function cboxol_copy_blog_page( $group_id ) {
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$options = $wpdb->get_results( $option_query );
 
-			$skip_options = array(
-				'admin_email',
-				'astra_partials_config_cache', // #433
-				'blogname',
-				'cboxol_initial_rewrite_flush',
-				'cron',
-				'db_version',
-				'doing_cron',
-				'fileupload_url',
-				'home',
-				'new_admin_email',
-				'nonce_salt',
-				'random_seed',
-				'rewrite_rules',
-				'secret',
-				'siteurl',
-				'upload_path',
-				'upload_url_path',
-				"{$wpdb->base_prefix}{$src_id}_user_roles",
-			);
+			$skip_options = cboxol_clone_options_to_skip( $src_id );
 
 			/**
 			 * Filters the options that should be skipped when a new site is generated from a template.
@@ -1876,6 +1857,57 @@ function cboxol_copy_blog_page( $group_id ) {
 	}
 
 	return $msg;
+}
+
+/**
+ * Returns a list of option names to be skipped when cloning a site.
+ *
+ * @since 1.5.0
+ *
+ * @param int $source_site_id If present, we will concatenate the 'user_roles' option key,
+ *                            to ensure that it also is omitted.
+ * @return string[]
+ */
+function cboxol_clone_options_to_skip( $source_site_id = null ) {
+	global $wpdb;
+
+	$options = [
+		'admin_email',
+		'astra_partials_config_cache', // #433
+		'blc_activation_enabled', // #443
+		'blc_installation_log', // #443
+		'blogname',
+		'cboxol_initial_rewrite_flush',
+		'cron',
+		'db_version',
+		'doing_cron',
+		'fileupload_url',
+		'home',
+		'new_admin_email',
+		'nonce_salt',
+		'random_seed',
+		'rewrite_rules',
+		'secret',
+		'siteurl',
+		'upload_path',
+		'upload_url_path',
+		'wsblc_options', // #443
+	];
+
+	if ( $source_site_id ) {
+		$options[] = $wpdb->get_blog_prefix( $source_site_id ) . 'user_roles';
+	}
+
+	/**
+	 * Filters the list of options to skip during clone.
+	 *
+	 * Third parties may add to this list to avoid issues with cloned options.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string[] $options Option names.
+	 */
+	return apply_filters( 'cboxol_clone_options_to_skip', $options );
 }
 
 /**
