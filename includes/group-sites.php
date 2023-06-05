@@ -1876,6 +1876,7 @@ function cboxol_clone_options_to_skip( $source_site_id = null ) {
 		'astra_partials_config_cache', // #433
 		'blc_activation_enabled', // #443
 		'blc_installation_log', // #443
+		'blc_options', // #443
 		'blogname',
 		'cboxol_initial_rewrite_flush',
 		'cron',
