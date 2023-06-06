@@ -10,6 +10,9 @@ add_action( 'groups_group_after_save', 'cboxol_grouptypes_save_group_type', 15 )
 // Group creation must always have a group_type.
 add_action( 'bp_actions', 'cboxol_enforce_group_type_on_creation' );
 
+// Update nav menu items when changing the name of a group type.
+add_action( 'save_post_cboxol_group_type', 'cboxol_update_nav_menu_items_on_group_type_name_change', 10, 2 );
+
 /**
  * Get a group type by group id
  *
@@ -814,3 +817,42 @@ function openlab_save_group_creators_on_creation() {
 	openlab_save_group_creators( $group_id, array_filter( $creators ) );
 }
 add_action( 'groups_create_group_step_save_site-details', 'openlab_save_group_creators_on_creation' );
+
+/**
+ * Updates the nav menu title corresponding to a group type whose name has just been changed.
+ *
+ * @since 1.5.0
+ *
+ * @param int     $post_id ID of the post.
+ * @param WP_Post $post    Post object.
+ */
+function cboxol_update_nav_menu_items_on_group_type_name_change( $post_id, $post ) {
+	$main_nav_menu = wp_get_nav_menu_object( __( 'Main Menu', 'commons-in-a-box' ) );
+	if ( ! $main_nav_menu ) {
+		return;
+	}
+
+	$group_type = \CBOX\OL\GroupType::get_instance_from_wp_post( $post );
+
+	$group_type_directory_uri = bp_get_group_type_directory_permalink( $group_type->get_slug() );
+
+	$main_nav_items = wp_get_nav_menu_items( $main_nav_menu->term_id );
+	foreach ( $main_nav_items as $main_nav_item ) {
+		if ( $group_type_directory_uri !== $main_nav_item->url ) {
+			continue;
+		}
+
+		if ( $group_type->get_name() === $main_nav_item->title ) {
+			continue;
+		}
+
+		wp_update_nav_menu_item(
+			$main_nav_menu->term_id,
+			$main_nav_item->ID,
+			[
+				'menu-item-title' => $group_type->get_name(),
+				'menu-item-url'   => $group_type_directory_uri,
+			]
+		);
+	}
+}
