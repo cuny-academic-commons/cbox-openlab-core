@@ -921,10 +921,10 @@ class Install {
 	 *
 	 * @since 1.3.0
 	 */
-	public function install_default_logos() {
+	protected function install_default_logos() {
 		$default_avatar_path = CBOXOL_PLUGIN_URL . 'assets/img/default-avatar-full.png';
 
-		$attachment_id = $this->create_attachment( $default_avatar_path );
+		$attachment_id = self::create_attachment( $default_avatar_path );
 
 		set_theme_mod( 'openlab_default_avatar', $attachment_id );
 	}
@@ -1321,7 +1321,7 @@ class Install {
 	 * @param int    $post_id   Optional. ID of the parent post of the attachment.
 	 * @return int ID of the attachment object.
 	 */
-	protected function create_attachment( $file_path, $post_id = null ) {
+	public static function create_attachment( $file_path, $post_id = null ) {
 		// Generate attachment and set as featured post.
 		$tmpfname = wp_tempnam( $file_path );
 		copy( $file_path, $tmpfname );

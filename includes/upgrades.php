@@ -74,3 +74,10 @@ if ( ! get_option( CBOX\OL\Upgrades\Blogname140::FLAG, false ) ) {
 	$blogname_140 = new CBOX\OL\Upgrades\Blogname140();
 	$registry->register( $blogname_140->id, $blogname_140 );
 }
+
+
+// v1.5.0 - Install a default avatar.
+if ( ! get_option( CBOX\OL\Upgrades\DefaultAvatar150::FLAG, false ) ) {
+	$default_avatar_150 = new CBOX\OL\Upgrades\DefaultAvatar150();
+	$registry->register( $default_avatar_150->id, $default_avatar_150 );
+}
