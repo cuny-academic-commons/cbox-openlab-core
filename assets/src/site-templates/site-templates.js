@@ -88,7 +88,11 @@ function updatePagination( prev, next ) {
 
 function togglePanel( display = false ) {
 	if ( display ) {
-		templatePanel.classList.remove( 'hidden' );
+		// Don't unhide if there's 0 or 1 templates to show.
+		const templates = templatePicker.querySelectorAll( '.site-template-component' );
+		if ( templates.length > 1 ) {
+			templatePanel.classList.remove( 'hidden' );
+		}
 		return;
 	}
 
