@@ -45,6 +45,7 @@ class Install {
 		$this->install_default_search();
 		$this->install_default_settings();
 		$this->install_default_badges();
+		$this->install_default_logos();
 
 		$this->install_default_widgets();
 		$this->install_default_nav_menus();
@@ -916,6 +917,19 @@ class Install {
 	}
 
 	/**
+	 * Installs default logos.
+	 *
+	 * @since 1.3.0
+	 */
+	public function install_default_logos() {
+		$default_avatar_path = CBOXOL_PLUGIN_URL . 'assets/img/default-avatar-full.png';
+
+		$attachment_id = $this->create_attachment( $default_avatar_path );
+
+		set_theme_mod( 'openlab_default_avatar', $attachment_id );
+	}
+
+	/**
 	 * Installs default widgets.
 	 *
 	 * @since 1.1.0
@@ -1296,5 +1310,51 @@ class Install {
 		 * @param string $default Stylesheet slug.
 		 */
 		return apply_filters( 'cboxol_site_template_default_theme', $default );
+	}
+
+	/**
+	 * Creates an attachment.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param string $file_path Path to the attachment file.
+	 * @param int    $post_id   Optional. ID of the parent post of the attachment.
+	 * @return int ID of the attachment object.
+	 */
+	protected function create_attachment( $file_path, $post_id = null ) {
+		// Generate attachment and set as featured post.
+		$tmpfname = wp_tempnam( $file_path );
+		copy( $file_path, $tmpfname );
+
+		$file = array(
+			'error'    => null,
+			'tmp_name' => $tmpfname,
+			'size'     => filesize( $file_path ),
+			'name'     => basename( $file_path ),
+		);
+
+		$overrides = array(
+			'test_form' => false,
+			'test_size' => false,
+		);
+
+		$sideloaded = wp_handle_sideload( $file, $overrides );
+
+		$attachment = array(
+			'post_mime_type' => $sideloaded['type'],
+			'post_title'     => basename( $tmpfname ),
+			'post_content'   => '',
+			'post_status'    => 'inherit',
+		);
+
+		if ( $post_id ) {
+			$attachment['post_parent'] = $post_id;
+		}
+
+		$attachment_id = wp_insert_attachment( $attachment, $sideloaded['file'] );
+		$attach_data   = wp_generate_attachment_metadata( $attachment_id, $sideloaded['file'] );
+		wp_update_attachment_metadata( $attachment_id, $attach_data );
+
+		return $attachment_id;
 	}
 }

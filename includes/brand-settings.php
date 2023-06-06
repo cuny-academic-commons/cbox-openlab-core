@@ -158,9 +158,16 @@ function cboxol_is_brand_page( $page_type, $post_id = null ) {
 /**
  * Default avatar.
  *
- * @return type
+ * openlab-theme uses a Customizer control to allow admins to set this value.
+ *
+ * @return string
  */
 function cboxol_default_avatar( $size = 'full' ) {
+	$saved = get_site_option( 'cboxol_default_avatar_' . $size );
+	if ( $saved ) {
+		return $saved;
+	}
+
 	$size_suffix = 'full' === $size ? '-full' : '-thumb';
 	return CBOXOL_PLUGIN_URL . 'assets/img/default-avatar' . $size_suffix . '.png';
 }
@@ -171,6 +178,7 @@ add_filter(
 		return cboxol_default_avatar( 'full' );
 	}
 );
+
 add_filter(
 	'bp_core_avatar_thumb',
 	function( $thumb ) {
