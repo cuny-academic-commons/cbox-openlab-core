@@ -12,7 +12,7 @@
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
-	padding: 0;
+	padding: 4px;
 	height: 250px;
 
 	&:focus {
@@ -21,8 +21,8 @@
 	}
 
 	&.is-selected {
-		outline: 3px solid #3858E9;
-		outline-offset: 1px;
+		border-color: #66afe9;
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
 	}
 
 	&.has-hover {
