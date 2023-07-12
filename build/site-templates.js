@@ -273,6 +273,9 @@ function updateTemplates(category, page) {
     // Restore template to default value.
     setSelectedTemplateId(defaultTemplate);
     updatePagination(prev, next);
+    if (templates.length > 1) {
+      togglePanel(true);
+    }
   });
 }
 function updatePagination(prev, next) {
@@ -375,7 +378,7 @@ if (setupSiteToggle) {
   setupSiteToggle.addEventListener('change', event => togglePanel(event.target.checked));
   if (setupSiteToggle.checked) {
     // Display the panel.
-    togglePanel(templatePanel.checked);
+    togglePanel(true);
   }
 } else {
   // If the setupSiteToggle doesn't exist, it means that sites are required for this group type.
