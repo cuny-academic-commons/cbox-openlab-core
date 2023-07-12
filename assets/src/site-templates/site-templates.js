@@ -56,6 +56,10 @@ function updateTemplates( category, page ) {
 		setSelectedTemplateId( defaultTemplate )
 
 		updatePagination( prev, next );
+
+		if ( templates.length > 1 ) {
+			togglePanel( true )
+		}
 	} );
 }
 
@@ -184,7 +188,7 @@ if ( setupSiteToggle ) {
 
 	if ( setupSiteToggle.checked ) {
 		// Display the panel.
-		togglePanel( templatePanel.checked );
+		togglePanel( true );
 	}
 } else {
 	// If the setupSiteToggle doesn't exist, it means that sites are required for this group type.
