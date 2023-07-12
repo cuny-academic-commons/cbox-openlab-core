@@ -58,7 +58,7 @@ function updateTemplates( category, page ) {
 		updatePagination( prev, next );
 
 		if ( templates.length > 1 ) {
-			togglePanel( true )
+			togglePanel( setupSiteToggle.checked )
 		}
 	} );
 }
