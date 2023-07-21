@@ -846,13 +846,25 @@ function cboxol_update_nav_menu_items_on_group_type_name_change( $post_id, $post
 			continue;
 		}
 
-		wp_update_nav_menu_item(
-			$main_nav_menu->term_id,
-			$main_nav_item->ID,
-			[
-				'menu-item-title' => $group_type->get_name(),
-				'menu-item-url'   => $group_type_directory_uri,
-			]
-		);
+		$menu_item = wp_setup_nav_menu_item( $main_nav_item );
+
+		$new_data = [
+			'menu-item-title' => $group_type->get_name(),
+			'menu-item-db-id' => $main_nav_item->ID,
+			'menu-item-object-id' => $menu_item->object_id,
+			'menu-item-object' => $menu_item->object,
+			'menu-item-parent-id' => $menu_item->menu_item_parent,
+			'menu-item-position' => $menu_item->menu_order,
+			'menu-item-type' => $menu_item->type,
+			'menu-item-url' => $menu_item->url,
+			'menu-item-description' => $menu_item->description,
+			'menu-item-attr-title' => $menu_item->attr_title,
+			'menu-item-target' => $menu_item->target,
+			'menu-item-classes' => implode(' ', $menu_item->classes),
+			'menu-item-xfn' => $menu_item->xfn,
+			'menu-item-status' => $menu_item->post_status,
+		];
+
+		wp_update_nav_menu_item( $main_nav_menu->term_id, $main_nav_item->ID, $new_data );
 	}
 }
