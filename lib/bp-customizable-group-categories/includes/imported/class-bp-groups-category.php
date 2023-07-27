@@ -66,8 +66,8 @@ if ( ! class_exists( 'BPCGC_Groups_Tag' ) ) :
 			add_action( 'groups_group_settings_edited', array( $this, 'group_changed_visibility' ), 1 );
 			add_action( 'groups_delete_group', array( $this, 'remove_relationships' ), 1 );
 
-			add_filter( 'bp_groups_get_paged_groups_sql', array( $this, 'parse_select' ), 10, 3 );
-			add_filter( 'bp_groups_get_total_groups_sql', array( $this, 'parse_total' ), 10, 3 );
+			add_filter( 'bp_groups_get_paged_groups_sql', array( $this, 'parse_select' ), 5, 3 );
+			add_filter( 'bp_groups_get_total_groups_sql', array( $this, 'parse_total' ), 5, 3 );
 			add_filter( 'bp_get_total_group_count', array( $this, 'total_group_count' ), 10, 1 );
 			add_filter( 'bp_get_total_group_count_for_user', array( $this, 'total_group_count_for_user' ), 10, 2 );
 		}
