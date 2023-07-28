@@ -5,15 +5,15 @@
  * Description:     Core functionality for CBOX-OpenLab
  * Text Domain:     cbox-openlab-core
  * Domain Path:     /languages
- * Version:         1.4.0
+ * Version:         1.5.0-beta1
  * Network:         true
  */
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_ROOT_FILE', __FILE__ );
-define( 'CBOXOL_PLUGIN_VER', '1.4.0-beta3-1673628876792' );
-define( 'CBOXOL_ASSET_VER', '1.4.0-beta3-1673628876792' );
+define( 'CBOXOL_PLUGIN_VER', '1.5.0-beta1-1690568506808' );
+define( 'CBOXOL_ASSET_VER', '1.5.0-beta1-1690568506808' );
 
 // @todo Organize this in a meaningful way.
 function cboxol_init() {
