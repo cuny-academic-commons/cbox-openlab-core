@@ -8,6 +8,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'BPCGC_Groups_Tag' ) ) :
 
 	class BPCGC_Groups_Tag {
+		/**
+		 * Tax query.
+		 *
+		 * @var array
+		 */
+		public $tax_query = array();
+
+		/**
+		 * Term.
+		 *
+		 * @var object|int
+		 */
+		public $term = 0;
 
 		/**
 		 * Setup BP_Groups_Tag.
@@ -19,14 +32,13 @@ if ( ! class_exists( 'BPCGC_Groups_Tag' ) ) :
 		 * @static
 		 */
 		public static function start() {
+			static $instance;
 
-			$bp = buddypress();
-
-			if ( empty( $bp->groups->tag ) ) {
-				$bp->groups->tag = new self();
+			if ( empty( $instance ) ) {
+				$instance = new self();
 			}
 
-			return $bp->groups->tag;
+			return $instance;
 		}
 
 		/**
