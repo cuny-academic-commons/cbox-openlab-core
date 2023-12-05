@@ -48,6 +48,34 @@ class Bp_Customizable_Group_Categories {
 	protected $plugin_name;
 
 	/**
+	 * Basename.
+	 *
+	 * @var string
+	 */
+	public $basename;
+
+	/**
+	 * WP version.
+	 *
+	 * @var string
+	 */
+	public $wp_version;
+
+	/**
+	 * File.
+	 *
+	 * @var string
+	 */
+	public $file;
+
+	/**
+	 * Domain.
+	 *
+	 * @var string
+	 */
+	public $domain;
+
+	/**
 	 * The current version of the plugin.
 	 *
 	 * @since    1.0.0
