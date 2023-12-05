@@ -2129,10 +2129,36 @@ function cboxol_get_nav_menu_items() {
  * @return void
  */
 function cboxol_wp_nav_menu_meta_box() {
+	// Only add meta box panel to group sites or group-type templates.
 	$is_group_site = (bool) openlab_get_group_id_by_blog_id( get_current_blog_id() );
 
-	// Only add meta box panel to group sites.
+	// This check involves a switch back to the main site, so we try to avoid it.
+	$is_group_type_template = false;
 	if ( ! $is_group_site ) {
+		$current_site_id = get_current_blog_id();
+
+		$switched = false;
+		if ( ! cbox_is_main_site() ) {
+			switch_to_blog( cbox_get_main_site_id() );
+			$switched = true;
+		}
+
+		$group_types            = cboxol_get_group_types();
+		foreach ( $group_types as $group_type ) {
+			$template_id      = $group_type->get_site_template_id();
+			$template_site_id = cboxol_get_template_site_id( $template_id );
+			if ( $template_site_id === $current_site_id ) {
+				$is_group_type_template = true;
+				break;
+			}
+		}
+
+		if ( $switched ) {
+			restore_current_blog();
+		}
+	}
+
+	if ( ! $is_group_site && ! $is_group_type_template ) {
 		return;
 	}
 
