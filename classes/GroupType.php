@@ -94,7 +94,50 @@ class GroupType extends ItemTypeBase implements ItemType {
 	}
 
 	public function get_site_template_id() {
-		return (int) $this->data['site_template_id'];
+		$site_template_id = null;
+
+		/*
+		 * Before returning the saved value, make sure the template exists
+		 * and is associated with a category linked to this group type.
+		 */
+		$saved_site_template_is_valid = false;
+		$saved_template_id            = $this->data['site_template_id'];
+		if ( $saved_template_id ) {
+			// Valid site templates must be published.
+			$site_template_post = get_post( $saved_template_id );
+			if ( $site_template_post && 'publish' === $site_template_post->post_status ) {
+				// Check that it's in a category linked to this group type.
+				$site_template_categories = wp_get_post_terms(
+					$saved_template_id,
+					'cboxol_template_category',
+					[
+						'fields' => 'ids',
+					]
+				);
+
+				$group_type_template_categories   = $this->get_site_template_categories();
+				$group_type_template_category_ids = wp_list_pluck( $group_type_template_categories, 'term_id' );
+
+				foreach ( $site_template_categories as $site_template_category ) {
+					if ( in_array( $site_template_category, $group_type_template_category_ids, true ) ) {
+						$saved_site_template_is_valid = true;
+						break;
+					}
+				}
+			}
+		}
+
+		if ( $saved_site_template_is_valid ) {
+			return $saved_template_id;
+		}
+
+		// Fall back on the first available.
+		$templates = $this->get_site_templates( true );
+		if ( $templates ) {
+			return $templates[0]['id'];
+		}
+
+		return 0;
 	}
 
 	public function get_site_template_info( $template_id ) {
@@ -131,7 +174,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		);
 	}
 
-	public function get_site_templates() {
+	public function get_site_templates( $raw = false ) {
 		$site_template_categories = $this->get_site_template_categories();
 		if ( $site_template_categories ) {
 			$category_ids = wp_list_pluck( $site_template_categories, 'term_id' );
@@ -163,6 +206,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 			},
 			$site_template_posts
 		);
+
+		if ( $raw ) {
+			return $site_templates;
+		}
 
 		/*
 		 * Special case: If the current template is not in an associated category
