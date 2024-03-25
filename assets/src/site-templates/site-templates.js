@@ -61,7 +61,30 @@ function updateTemplates( category, page ) {
 			const toggleStatus = setupSiteToggle ? setupSiteToggle.checked : true
 			togglePanel( toggleStatus )
 		}
+
+		maybeShowCategoryDropdown();
 	} );
+}
+
+/**
+ * Category dropdown should be hidden if there's only one category in it.
+ */
+function maybeShowCategoryDropdown() {
+	const siteTemplateCategoriesWrapper = document.querySelector( '.site-template-categories' );
+
+	let categoryCount = 0;
+	const siteTemplateCategories = siteTemplateCategoriesWrapper.querySelectorAll( 'option' );
+	for ( const category of siteTemplateCategories ) {
+		if ( category.value !== '0' ) {
+			categoryCount++
+		}
+	}
+
+	if ( categoryCount <= 1 ) {
+		siteTemplateCategoriesWrapper.classList.add( 'hidden' );
+	} else {
+		siteTemplateCategoriesWrapper.classList.remove( 'hidden' );
+	}
 }
 
 function updatePagination( prev, next ) {
