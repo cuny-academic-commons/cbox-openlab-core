@@ -81,3 +81,9 @@ if ( ! get_option( CBOX\OL\Upgrades\DefaultAvatar150::FLAG, false ) ) {
 	$default_avatar_150 = new CBOX\OL\Upgrades\DefaultAvatar150();
 	$registry->register( $default_avatar_150->id, $default_avatar_150 );
 }
+
+// v1.6.0 - Modify group type settings.
+if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings160::FLAG, false ) ) {
+	$upgrade_group_type_settings_160 = new CBOX\OL\Upgrades\GroupTypeSettings160();
+	$registry->register( $upgrade_group_type_settings_160->id, $upgrade_group_type_settings_160 );
+}

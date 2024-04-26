@@ -463,7 +463,7 @@ class Install {
 					'create_clone_item'                    => __( 'Create Portfolio', 'commons-in-a-box' ),
 					'item_creation'                        => __( 'Portfolio Creation', 'commons-in-a-box' ),
 					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'commons-in-a-box' ),
-					'name_help_text'                       => __( 'The suggested Portfolio Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.', 'commons-in-a-box' ),
+					'name_help_text'                       => __( 'Choose a name for your Portfolio. You may use your name ("Jane Smith\'s Portfolio"), or any descriptive title you\'d like.', 'commons-in-a-box' ),
 					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'commons-in-a-box' ),
 					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'commons-in-a-box' ),
 					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your portfolio.', 'commons-in-a-box' ),

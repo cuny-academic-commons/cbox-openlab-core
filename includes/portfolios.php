@@ -161,27 +161,6 @@ function openlab_suggest_portfolio_path( $user_id = null ) {
 	return $slug;
 }
 
-/**
- * Ensure that a suggested name is included in the Name input of the creation screen
- */
-function openlab_bp_get_new_group_name( $name ) {
-	$portfolio_group_type = cboxol_get_portfolio_group_type();
-
-	if ( ! $portfolio_group_type ) {
-		return $name;
-	}
-
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( cboxol_is_portfolio() || ( ! empty( $_GET['group_type'] ) && $portfolio_group_type->get_slug() === $_GET['group_type'] ) ) {
-		if ( '' === $name ) {
-			$name = openlab_suggest_portfolio_name();
-		}
-	}
-
-	return $name;
-}
-add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
-
 /** Group Portfolios *********************************************************/
 
 /**
