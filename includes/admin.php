@@ -177,6 +177,47 @@ function cboxol_register_assets() {
 	wp_enqueue_style( 'cbox-ol-admin' );
 }
 
+/**
+ * Registers assets needed for the block editor across all sites.
+ *
+ * @since 1.6.0
+ *
+ * @return void
+ */
+function cboxol_register_block_assets() {
+	$blocks_dir        = CBOXOL_PLUGIN_URL . 'build/';
+	$blocks_asset_file = include CBOXOL_PLUGIN_DIR . 'build/blocks.asset.php';
+
+	// Replace "wp-blockEditor" with "wp-block-editor".
+	$blocks_asset_file['dependencies'] = array_replace(
+		$blocks_asset_file['dependencies'],
+		array_fill_keys(
+			array_keys( $blocks_asset_file['dependencies'], 'wp-blockEditor', true ),
+			'wp-block-editor'
+		)
+	);
+
+	wp_enqueue_script(
+		'cboxol-block-editor',
+		CBOXOL_PLUGIN_URL . 'build/blocks.js',
+		$blocks_asset_file['dependencies'],
+		$blocks_asset_file['version'],
+		true
+	);
+
+	$blog_public = (int) get_option( 'blog_public' );
+
+	wp_add_inline_script(
+		'cboxol-block-editor',
+		'const openlabBlocksPostVisibility = ' . wp_json_encode(
+			[
+				'siteIsPublic' => $blog_public >= 0,
+			]
+		) . ';'
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'cboxol_register_block_assets' );
+
 function cboxol_admin_slug( $parent_page = '' ) {
 	switch ( $parent_page ) {
 		case 'member-settings':
