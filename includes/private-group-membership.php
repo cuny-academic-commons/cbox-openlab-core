@@ -172,6 +172,8 @@ function openlab_update_group_membership_privacy( $user_id, $group_id, $is_priva
 		);
 	}
 
+	openlab_update_group_activity_privacy( $user_id, $group_id, $is_private );
+
 	return (bool) $success;
 }
 
