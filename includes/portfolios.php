@@ -442,6 +442,20 @@ function openlab_portfolio_list_group_display() {
 
 	$portfolio_data = openlab_get_group_member_portfolios();
 
+	// Hide private-member portfolios from non-members.
+	if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+		$group_private_members = [];
+	} else {
+		$group_private_members = openlab_get_private_members_of_group( $group->id );
+	}
+
+	$portfolio_data = array_filter(
+		$portfolio_data,
+		function( $portfolio ) use ( $group_private_members ) {
+			return ! in_array( $portfolio['user_id'], $group_private_members, true );
+		}
+	);
+
 	// No member of the group has a portfolio
 	if ( empty( $portfolio_data ) ) {
 		return;

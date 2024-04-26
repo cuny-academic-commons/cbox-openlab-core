@@ -77,6 +77,7 @@ function cboxol_register_admin_menu() {
 }
 
 function cboxol_register_assets() {
+	// @todo Should these be loaded on all sites in the network?
 	wp_register_script(
 		'cbox-ol-app',
 		CBOXOL_PLUGIN_URL . 'assets/js/build.js',

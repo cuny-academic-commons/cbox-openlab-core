@@ -87,3 +87,9 @@ if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings160::FLAG, false ) ) {
 	$upgrade_group_type_settings_160 = new CBOX\OL\Upgrades\GroupTypeSettings160();
 	$registry->register( $upgrade_group_type_settings_160->id, $upgrade_group_type_settings_160 );
 }
+
+// v1.6.0 - Create membership privacy table.
+if ( ! get_option( CBOX\OL\Upgrades\MembershipPrivacy160::FLAG, false ) ) {
+	$membership_privacy_160 = new CBOX\OL\Upgrades\MembershipPrivacy160();
+	$registry->register( $membership_privacy_160->id, $membership_privacy_160 );
+}

@@ -42,6 +42,7 @@ function cboxol_init() {
 		}
 		require CBOXOL_PLUGIN_DIR . 'includes/group-types.php';
 		require CBOXOL_PLUGIN_DIR . 'includes/group-sites.php';
+		require CBOXOL_PLUGIN_DIR . 'includes/private-group-membership.php';
 	}
 
 	require CBOXOL_PLUGIN_DIR . 'includes/brand-settings.php';
