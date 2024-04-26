@@ -2887,3 +2887,99 @@ function openlab_get_invisible_post_ids( $blog_id = null ) {
 
 	return $post_ids[ $blog_id ];
 }
+
+/**
+ * Ensure that the "existing activity ID" query in bp_activity_post_type_publish() finds hidden items.
+ *
+ * Otherwise a duplicate activity item is created.
+ */
+add_filter(
+	'bp_before_activity_get_parse_args',
+	function( $args ) {
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+		$db        = debug_backtrace();
+		$do_filter = false;
+		foreach ( $db as $_db ) {
+			if ( 'bp_activity_post_type_publish' === $_db['function'] ) {
+				$do_filter = true;
+				break;
+			}
+		}
+
+		if ( $do_filter ) {
+			$args['show_hidden'] = true;
+		}
+
+		return $args;
+	}
+);
+
+/**
+ * Sets hide_sitewide flag for posts that have been posted via the REST API.
+ *
+ * When a post is created via the REST API, as is the case when composing with
+ * the Block Editor, postmeta such as openlab_post_visibility is not set until
+ * after the post is created. As such, it's not available when BP creates the
+ * activity item.
+ */
+function openlab_modify_hide_sitewide_for_non_public_rest_posts( $post_id ) {
+	// Get activity item associated with this blog post.
+	$activity = bp_activity_get(
+		[
+			'show_hidden' => true,
+			'filter'      => [
+				'action'       => 'new_blog_post',
+				'object'       => 'groups',
+				'primary_id'   => openlab_get_group_id_by_blog_id( get_current_blog_id() ),
+				'secondary_id' => $post_id,
+			],
+		]
+	);
+
+	if ( empty( $activity['activities'] ) ) {
+		return;
+	}
+
+	$activity = $activity['activities'][0];
+
+	openlab_toggle_hide_sitewide_for_post_visibility( $activity->id );
+}
+add_action( 'wp_after_insert_post', 'openlab_modify_hide_sitewide_for_non_public_rest_posts' );
+
+/**
+ * Toggle hide_sitewide on activity linked to posts that have custom openlab_post_visibility.
+ *
+ * @since 1.6.0
+ *
+ * @param int $activity_id Activity ID.
+ * @return void
+ */
+function openlab_toggle_hide_sitewide_for_post_visibility( $activity_id ) {
+	$activity = new BP_Activity_Activity( $activity_id );
+	if ( in_array( $activity->type, [ 'new_blog_post', 'new_blog_comment' ], true ) ) {
+		if ( 'new_blog_post' === $activity->type ) {
+			$post_id = (int) $activity->secondary_item_id;
+		} else {
+			$comment = get_comment( $activity->secondary_item_id );
+			$post_id = (int) $comment->comment_post_ID;
+		}
+
+		// For safety, we only switch to hide_sitewide, never back again.
+		$post_visibility = get_post_meta( $post_id, 'openlab_post_visibility', true );
+		global $wpdb;
+		if ( ! $activity->hide_sitewide && in_array( $post_visibility, [ 'members-only', 'group-members-only' ], true ) ) {
+			$cloned_activity = new BP_Activity_Activity( $activity_id );
+
+			// This is the only reliable way to take precedence over other hooks.
+			add_action(
+				'bp_activity_before_save',
+				function( $activity_object ) {
+					$activity_object->hide_sitewide = 1;
+				},
+				99999
+			);
+
+			$saved = $cloned_activity->save();
+		}
+	}
+}

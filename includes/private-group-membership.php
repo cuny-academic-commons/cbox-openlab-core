@@ -262,3 +262,48 @@ function openlab_update_group_activity_privacy( $user_id, $group_id, $is_private
 		bp_activity_clear_cache_for_deleted_activity( $activity_ids );
 	}
 }
+
+/**
+ * Flips an activity to hide_sitewide for private memberships.
+ *
+ * Operates on a single activity item.
+ *
+ * @since 1.6.0
+ *
+ * @param int $activity_id Activity ID.
+ * @return void
+ */
+function openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id ) {
+	$activity = new BP_Activity_Activity( $activity_id );
+	if ( $activity->hide_sitewide ) {
+		return;
+	}
+
+	$activity->hide_sitewide = 1;
+
+	$saved = $activity->save();
+
+	bp_activity_update_meta( $activity_id, 'openlab_private_membership_activity_toggled', 1 );
+}
+
+/**
+ * Trigger the toggling of hide_sitewide on activity posting.
+ *
+ * Wrapped here so that we don't have to have a weird function signature
+ * for openlab_toggle_hide_sitewide_for_private_membership_activity().
+ */
+add_action(
+	'bp_activity_add',
+	function( $r, $activity_id ) {
+		if ( 'groups' === $r['component'] ) {
+			$user_private_memberships = openlab_get_user_private_membership( $r['user_id'] );
+			if ( in_array( (int) $r['item_id'], $user_private_memberships, true ) ) {
+				openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id );
+			}
+		}
+
+		openlab_toggle_hide_sitewide_for_post_visibility( $activity_id );
+	},
+	100,
+	2
+);
