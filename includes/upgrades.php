@@ -93,3 +93,9 @@ if ( ! get_option( CBOX\OL\Upgrades\MembershipPrivacy160::FLAG, false ) ) {
 	$membership_privacy_160 = new CBOX\OL\Upgrades\MembershipPrivacy160();
 	$registry->register( $membership_privacy_160->id, $membership_privacy_160 );
 }
+
+// v1.6.0 - Install Accessibility brand page.
+if ( ! get_option( CBOX\OL\Upgrades\AccessibilityBrandPage160::FLAG, false ) ) {
+	$accessibility_brand_page_160 = new CBOX\OL\Upgrades\AccessibilityBrandPage160();
+	$registry->register( $accessibility_brand_page_160->id, $accessibility_brand_page_160 );
+}

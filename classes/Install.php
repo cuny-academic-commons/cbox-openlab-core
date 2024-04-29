@@ -772,6 +772,10 @@ class Install {
 				'post_title'   => __( 'About', 'commons-in-a-box' ),
 				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'commons-in-a-box' ) . '</p>' . $admin_text,
 			),
+			'accessibility'  => array(
+				'post_title'   => __( 'Accessibility', 'commons-in-a-box' ),
+				'post_content' => cboxol_get_default_accessibility_brand_page_content(),
+			),
 			'help'           => array(
 				'post_title'   => __( 'Help', 'commons-in-a-box' ),
 				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'commons-in-a-box' ) . '</p>' . $admin_text,
