@@ -40,6 +40,10 @@ class Bp_Customizable_Group_Categories_Admin {
 	 */
 	private $version;
 
+	public $admin_menu;
+	public $admin_submenu;
+	public $admin_submenu_sort;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *

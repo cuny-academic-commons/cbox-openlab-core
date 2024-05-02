@@ -88,6 +88,11 @@ class Bp_Customizable_Group_Categories {
 	 */
 	public $params;
 
+	public $wp_version;
+	public $domain;
+	public $file;
+	public $basename;
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
