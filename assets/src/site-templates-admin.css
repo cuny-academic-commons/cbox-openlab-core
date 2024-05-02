@@ -7,21 +7,14 @@
 	padding-bottom: 30px !important;
 }
 
-.cboxol-drag-placeholder {
-    background-color: #f0f0f0; /* Light gray background for the placeholder */
-    border: 1px dashed #ccc; /* Dashed border for the placeholder */
-}
-
 .cboxol-dragging {
-    opacity: 0.5; /* Make the dragging row semi-transparent */
+	opacity: 0.5;
 }
 
 .cboxol-just-dropped {
-	/* Light green */
 	background-color: #f0fff0 !important;
 }
 
-/* Smooth transitions for color changes */
 tr {
-    transition: background-color 0.5s;
+	transition: background-color 0.5s;
 }
