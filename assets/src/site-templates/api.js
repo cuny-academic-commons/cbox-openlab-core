@@ -23,7 +23,8 @@ export async function getSiteTemplates( category, page = 1 ) {
 	const query = buildQueryString( {
 		_fields: [ 'id', 'title', 'excerpt', 'featured_media', 'template_category', 'site_id', 'image', 'categories' ],
 		template_category: templateCategory,
-		order: 'desc',
+		orderby: 'menu_order',
+		order: 'asc',
 		per_page: Number( perPage ),
 		page,
 	} );

@@ -29,6 +29,13 @@ function cboxol_register_site_template_assets() {
 		true
 	);
 
+	wp_register_style(
+		'cboxol-site-template-picker-admin-style',
+		plugins_url( 'build/site-templates-admin.css', CBOXOL_PLUGIN_ROOT_FILE ),
+		[],
+		CBOXOL_ASSET_VER
+	);
+
 	wp_register_script(
 		'cboxol-site-templates-default-category',
 		plugins_url( 'build/site-templates-default-category.js', CBOXOL_PLUGIN_ROOT_FILE ),
@@ -842,3 +849,95 @@ function cboxol_site_templates_admin_page() {
 	</div>
 	<?php
 }
+
+/**
+ * Enqueue site-templates-admin JS on the site-templates admin page.
+ *
+ * @since 1.6.0
+ *
+ * @return void
+ */
+function cboxol_enqueue_site_templates_admin_scripts_on_edit() {
+	if ( get_current_screen()->post_type === 'cboxol_site_template' ) {
+		wp_enqueue_script( 'cboxol-site-template-picker-admin-script' );
+		wp_enqueue_style( 'cboxol-site-template-picker-admin-style' );
+	}
+}
+add_action( 'admin_enqueue_scripts', 'cboxol_enqueue_site_templates_admin_scripts_on_edit' );
+
+/**
+ * AJAX handler for site template drag-and-drop reordering.
+ *
+ * @since 1.6.0
+ *
+ * @return void
+ */
+function cboxol_site_templates_handle_post_order_update() {
+	check_ajax_referer( 'wp_rest', 'security' );
+
+	if ( ! current_user_can( 'edit_cboxol_site_templates' ) ) {
+		return;
+	}
+
+	if ( ! isset( $_POST['order'] ) ) {
+		wp_send_json_error( __( 'No order data found.', 'commons-in-a-box' ) );
+	}
+
+	$order_data = json_decode( stripslashes( $_POST['order'] ), true );
+
+	foreach ( $order_data as $item ) {
+		$item_order = isset( $item['position'] ) ? (int) $item['position'] : 0;
+		$item_id    = isset( $item['id'] ) ? (int) $item['id'] : 0;
+
+		if ( ! $item_order || ! $item_id ) {
+			continue;
+		}
+
+		wp_update_post(
+			[
+				'ID'         => $item_id,
+				'menu_order' => $item_order,
+			]
+		);
+	}
+
+	wp_send_json_success( __( 'Post order updated successfully.', 'commons-in-a-box' ) );
+}
+add_action( 'wp_ajax_cboxol_update_site_template_order', 'cboxol_site_templates_handle_post_order_update' );
+
+/**
+ * On edit.php?post_type=cboxol_site_template, force sort order by menu_order.
+ *
+ * @since 1.6.0
+ *
+ * @param \WP_Query $query
+ * @return void
+ */
+function cboxol_site_templates_force_order_by_menu_order( $query ) {
+	if ( ! is_admin() || ! $query->is_main_query() ) {
+		return;
+	}
+
+	if ( 'cboxol_site_template' !== $query->get( 'post_type' ) ) {
+		return;
+	}
+
+	$query->set( 'orderby', 'menu_order' );
+	$query->set( 'order', 'ASC' );
+}
+add_action( 'pre_get_posts', 'cboxol_site_templates_force_order_by_menu_order' );
+
+/**
+ * In the REST API, allow cboxol_site_template requests to have orderby=menu_order.
+ *
+ * @since 1.6.0
+ *
+ * @param array           $params
+ * @param \WP_REST_Request $request
+ * @return array
+ */
+function cboxol_site_templates_rest_api_allow_orderby_menu_order( $params, $request ) {
+	$params['orderby']['enum'][] = 'menu_order';
+	return $params;
+}
+add_filter( 'rest_cboxol_site_template_collection_params', 'cboxol_site_templates_rest_api_allow_orderby_menu_order', 10, 2 );

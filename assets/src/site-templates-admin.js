@@ -1,3 +1,7 @@
+/* global ajaxurl, jQuery */
+
+import './site-templates-admin.css'
+
 (function($){
 	const { endpoint, nonce } = window.SiteTemplatePickerAdmin
 
@@ -7,7 +11,7 @@
 				ajax: {
 					url: endpoint + '?_wpnonce=' + nonce,
 					dataType: 'json',
-					data: function (params) {
+					data: (params) => {
 						const query = {
 							search: params.term,
 							page: params.page || 1
@@ -22,4 +26,77 @@
 	$(document).on( 'select2:open', () => {
 		document.querySelector( '.select2-search__field').focus()
 	})
+
+	document.addEventListener('DOMContentLoaded', function() {
+		const postsList = document.querySelectorAll('.wp-list-table tbody tr');
+		let draggedItem = null;
+
+		postsList.forEach(post => {
+			post.draggable = true;
+
+			post.addEventListener('dragstart', (e) => {
+				draggedItem = e.target;
+				e.dataTransfer.effectAllowed = 'move';
+				e.dataTransfer.setData('text/html', draggedItem);
+				e.target.classList.add('cboxol-dragging');
+			}, false);
+
+			post.addEventListener('dragover', (e) => {
+				e.preventDefault();
+				e.dataTransfer.dropEffect = 'move';
+
+				const hoverTarget = e.target.tagName === 'TR' ? e.target : e.target.closest('tr');
+				hoverTarget.classList.add( 'cboxol-dragover' );
+				hoverTarget.addEventListener('dragleave', () => {
+					hoverTarget.classList.remove( 'cboxol-dragover' );
+				})
+			}, false);
+
+			post.addEventListener('drop', (e) => {
+				const dropTarget = e.target.tagName === 'TR' ? e.target : e.target.closest('tr');
+
+				if ( draggedItem !== dropTarget ) {
+					draggedItem.parentNode.insertBefore(draggedItem, dropTarget.nextSibling || dropTarget);
+					updatePostOrder();
+
+					draggedItem.classList.add( 'cboxol-just-dropped' )
+					setTimeout(() => {
+						draggedItem.classList.remove( 'cboxol-just-dropped' )
+					}, 1000)
+				}
+
+				// remove cbxol-dragover class from all tr elements
+				document.querySelectorAll( 'tr' ).forEach( el => {
+					el.classList.remove('cboxol-dragover')
+					el.classList.remove('cboxol-dragging')
+				} );
+			}, false);
+		});
+
+	});
+
+	function updatePostOrder() {
+		const posts = document.querySelectorAll('.wp-list-table tbody tr');
+		const orderData = Array.from(posts).map((post, index) => {
+			const postId = post.id.replace('post-', '');
+			return {
+				id: postId,
+				position: index + 1
+			};
+		});
+
+		const params = new URLSearchParams();
+		params.append('order', JSON.stringify(orderData));
+		params.append('security', nonce);
+
+		fetch(ajaxurl + '?action=cboxol_update_site_template_order', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: params
+		}).then(response => response.json())
+		  .then(data => console.log('Order updated', data))
+		  .catch(error => console.error('Error updating order:', error));
+	}
 }(jQuery))
