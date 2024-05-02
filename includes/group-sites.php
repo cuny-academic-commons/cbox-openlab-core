@@ -16,6 +16,10 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 		return 0;
 	}
 
+	if ( empty( $bp->groups->table_name_groupmeta ) ) {
+		return 0;
+	}
+
 	$group_id = wp_cache_get( $blog_id, 'site_group_ids' );
 
 	if ( false === $group_id ) {
