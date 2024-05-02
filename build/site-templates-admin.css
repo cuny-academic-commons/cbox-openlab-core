@@ -1,0 +1,1 @@
+.wp-list-table tr[draggable=true]{cursor:move}.cboxol-dragover{background-color:#aaa!important;padding-bottom:30px!important}.cboxol-drag-placeholder{background-color:#f0f0f0;border:1px dashed #ccc}.cboxol-dragging{opacity:.5}.cboxol-just-dropped{background-color:#f0fff0!important}tr{transition:background-color .5s}
