@@ -18,3 +18,21 @@
 tr {
 	transition: background-color 0.5s;
 }
+
+.template-visibility-radios > legend {
+	font-size: 1.2em;
+	font-weight: 700;
+}
+
+.template-visibility-radios legend {
+	margin-bottom: .5em;
+}
+
+.template-visibility-suboptions {
+	margin: .5em 0;
+	padding: 0 0 0 20px;
+}
+
+.template-visibility-suboptions label {
+	padding-left: 3px;
+}

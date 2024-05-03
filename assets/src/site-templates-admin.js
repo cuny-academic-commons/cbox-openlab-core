@@ -27,6 +27,26 @@ import './site-templates-admin.css'
 		document.querySelector( '.select2-search__field').focus()
 	})
 
+	const visibilityRadios = document.querySelectorAll('.template-visibility-radios input[type="radio"]');
+	console.log(visibilityRadios)
+
+	const setVisibilitySuboptionsVisibility = () => {
+		visibilityRadios.forEach(radio => {
+			const controlsId = radio.getAttribute('aria-controls');
+			const isSuboptionVisible = 'yes' === radio.value && radio.checked || 'no' === radio.value && ! radio.checked;
+
+			const suboptions = document.getElementById( controlsId )
+			if ( suboptions ) {
+				suboptions.style.display = isSuboptionVisible ? 'block' : 'none';
+			}
+		})
+	}
+	setVisibilitySuboptionsVisibility()
+
+	visibilityRadios.forEach(radio => {
+		radio.addEventListener('change', setVisibilitySuboptionsVisibility)
+	})
+
 	document.addEventListener('DOMContentLoaded', function() {
 		const postsList = document.querySelectorAll('.wp-list-table tbody tr');
 		let draggedItem = null;
