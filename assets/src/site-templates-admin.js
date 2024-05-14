@@ -28,7 +28,6 @@ import './site-templates-admin.css'
 	})
 
 	const visibilityRadios = document.querySelectorAll('.template-visibility-radios input[type="radio"]');
-	console.log(visibilityRadios)
 
 	const setVisibilitySuboptionsVisibility = () => {
 		visibilityRadios.forEach(radio => {
@@ -46,6 +45,30 @@ import './site-templates-admin.css'
 	visibilityRadios.forEach(radio => {
 		radio.addEventListener('change', setVisibilitySuboptionsVisibility)
 	})
+
+	const academicUnitCheckboxes = document.querySelectorAll( '#template-visibility-suboptions-academic-unit input[type="checkbox"]' );
+	const academicUnitCheckboxArray = [ ...academicUnitCheckboxes ];
+
+	// When an Academic Unit checkbox is checked, check and disable descendant checkboxes.
+	const academicUnitClickHandler = (e) => {
+		const checkbox = e.target;
+		const slug = checkbox.dataset.slug;
+		const isChecked = checkbox.checked;
+
+		const toggleChildren = (parentSlug, toggleState) => {
+			const children = academicUnitCheckboxArray.filter( child => child.dataset.parent === parentSlug );
+			children.forEach( child => {
+				child.checked = toggleState;
+				toggleChildren( child.dataset.slug, toggleState );
+			} )
+		}
+
+		toggleChildren( slug, isChecked );
+	}
+
+	academicUnitCheckboxes.forEach( checkbox => {
+		checkbox.addEventListener( 'click', academicUnitClickHandler )
+	} )
 
 	document.addEventListener('DOMContentLoaded', function() {
 		const postsList = document.querySelectorAll('.wp-list-table tbody tr');

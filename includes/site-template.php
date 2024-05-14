@@ -333,11 +333,16 @@ function cboxol_render_template_visibility( $post ) {
 	$limit_by_member_types = cboxol_is_template_visibility_limited_by_member_type( $post->ID );
 	$selected_member_types = cboxol_get_template_member_types( $post->ID );
 
+	$limit_by_academic_units = cboxol_is_template_visibility_limited_by_academic_unit( $post->ID );
+	$selected_academic_units = cboxol_get_template_academic_units( $post->ID );
+
 	cboxol_load_site_template_view(
 		'admin/visibility.php',
 		[
-			'limit_by_member_types' => $limit_by_member_types,
-			'selected_member_types' => $selected_member_types,
+			'limit_by_member_types'   => $limit_by_member_types,
+			'selected_member_types'   => $selected_member_types,
+			'limit_by_academic_units' => $limit_by_academic_units,
+			'selected_academic_units' => $selected_academic_units,
 		]
 	);
 }
@@ -377,6 +382,45 @@ function cboxol_get_template_member_types( $template_id ) {
 }
 
 /**
+ * Determines the academic units that a template is limited to.
+ *
+ * @since 1.6.0
+ *
+ * @param int $template_id The site template ID.
+ * @return \CBOX\OL\AcademicUnit[]
+ */
+function cboxol_get_template_academic_units( $template_id ) {
+	$selected_academic_units = (array) get_post_meta( $template_id, 'cboxol_template_academic_unit' );
+
+	$units = [];
+	foreach ( $selected_academic_units as $post_id ) {
+		$post = get_post( $post_id );
+		if ( ! $post || 'cboxol_acadunit' !== $post->post_type ) {
+			continue;
+		}
+
+		$unit = cboxol_get_academic_unit( $post->post_name );
+		if ( $unit ) {
+			$units[ $post_id ] = $unit;
+		}
+	}
+
+	return $units;
+}
+
+/**
+ * Determines whether a template's visibility is limited to specific academic units.
+ *
+ * @since 1.6.0
+ *
+ * @param int $template_id The site template ID.
+ * @return bool
+ */
+function cboxol_is_template_visibility_limited_by_academic_unit( $template_id ) {
+	return (bool) get_post_meta( $template_id, 'cboxol_limit_template_by_academic_unit', true );
+}
+
+/**
  * Saves visibility data on template save.
  *
  * @since 1.6.0
@@ -396,6 +440,7 @@ function cboxol_save_template_visibility( $post_id, \WP_Post $post ) {
 
 	check_admin_referer( 'cboxol-template-visibility', 'cboxol-template-visibility-nonce' );
 
+	// Member types.
 	$limit_by_member_types = isset( $_POST['template-visibility-limit-by-member-type'] ) && 'yes' === $_POST['template-visibility-limit-by-member-type'];
 
 	if ( $limit_by_member_types ) {
@@ -416,6 +461,30 @@ function cboxol_save_template_visibility( $post_id, \WP_Post $post ) {
 
 	foreach ( $selected_member_types as $slug ) {
 		add_post_meta( $post->ID, 'cboxol_template_member_type', $slug );
+	}
+
+	// Academic units.
+	$limit_by_academic_units = isset( $_POST['template-visibility-limit-by-academic-unit'] ) && 'yes' === $_POST['template-visibility-limit-by-academic-unit'];
+
+	if ( $limit_by_academic_units ) {
+		update_post_meta( $post->ID, 'cboxol_limit_template_by_academic_unit', 1 );
+	} else {
+		delete_post_meta( $post->ID, 'cboxol_limit_template_by_academic_unit' );
+	}
+
+	$selected_academic_units = isset( $_POST['template-visibility-limit-to-academic-unit'] ) ? array_map( 'sanitize_text_field', $_POST['template-visibility-limit-to-academic-unit'] ) : [];
+	$selected_academic_units = array_filter(
+		$selected_academic_units,
+		function( $post_id ) {
+			$post = get_post( $post_id );
+			return $post && 'cboxol_acadunit' === $post->post_type;
+		}
+	);
+
+	delete_post_meta( $post->ID, 'cboxol_template_academic_unit' );
+
+	foreach ( $selected_academic_units as $selected_academic_unit_id ) {
+		add_post_meta( $post->ID, 'cboxol_template_academic_unit', $selected_academic_unit_id );
 	}
 }
 add_action( 'save_post', 'cboxol_save_template_visibility', 15, 2 );
@@ -1088,8 +1157,52 @@ function cboxol_site_templates_rest_api_restrict_visibility( $args, $request ) {
 		}
 	}
 
+	$academic_unit_meta_query = [
+		'relation'  => 'OR',
+		'all_types' => [
+			[
+				'key'     => 'cboxol_limit_template_by_academic_unit',
+				'compare' => 'NOT EXISTS',
+			],
+		],
+	];
+
+	$allowed_academic_units = [ 0 ];
+	$current_group_id       = $request->get_param( 'group_id' );
+	if ( $current_group_id ) {
+		// Get the group's academic units.
+		$group_units = cboxol_get_object_academic_units(
+			[
+				'object_type' => 'group',
+				'object_id'   => $current_group_id,
+			]
+		);
+
+		if ( $group_units ) {
+			$group_unit_ids = array_map(
+				function( $unit ) {
+					return $unit->get_wp_post_id();
+				},
+				$group_units
+			);
+
+			$academic_unit_meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_academic_unit',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_academic_unit',
+					'value' => $group_unit_ids,
+				],
+			];
+		}
+	}
+
 	$meta_query   = isset( $args['meta_query'] ) ? $args['meta_query'] : [];
 	$meta_query[] = $member_type_meta_query;
+	$meta_query[] = $academic_unit_meta_query;
 
 	$args['meta_query'] = $meta_query;
 
@@ -1160,8 +1273,34 @@ function cboxol_site_templates_manage_custom_columns( $column_name, $post_id ) {
 				$member_types_text = __( 'All', 'commons-in-a-box' );
 			}
 
+			$limit_by_academic_units = cboxol_is_template_visibility_limited_by_academic_unit( $post_id );
+			$selected_academic_units = cboxol_get_template_academic_units( $post_id );
+
+			if ( $limit_by_academic_units ) {
+				$academic_unit_labels = array_map(
+					function( $post_id ) {
+						$post = get_post( $post_id );
+						if ( ! $post || 'cboxol_acadunit' !== $post->post_type ) {
+							return '';
+						}
+
+						$unit = cboxol_get_academic_unit( $post->post_name );
+						return $unit ? $unit->get_name() : '';
+					},
+					array_keys( $selected_academic_units )
+				);
+
+				$academic_units_text = implode( ', ', array_filter( $academic_unit_labels ) );
+			} else {
+				$academic_units_text = __( 'All', 'commons-in-a-box' );
+			}
+
 			// translators: Member type labels.
-			echo esc_html( sprintf( __( 'Member Types: %s', 'commons-in-a-box' ), $member_types_text ) );
+			echo wp_kses_post( sprintf( __( 'Member Types: %s', 'commons-in-a-box' ), '<span class="visibility-values">' . $member_types_text . '</span>' ) );
+			echo '<br />';
+
+			// translators: Academic unit labels.
+			echo wp_kses_post( sprintf( __( 'Academic Units: %s', 'commons-in-a-box' ), '<span class="visibility-values">' . $academic_units_text . '</span>' ) );
 
 			break;
 	}

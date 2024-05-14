@@ -15,6 +15,7 @@ const siteType = document.querySelectorAll( '[name="new_or_old"]' );
 const messages = window.SiteTemplatePicker.messages;
 const defaultMap = window.SiteTemplatePicker.defaultMap;
 const currentGroupType = window.CBOXOL_Group_Create?.new_group_type || null
+const groupId = document.querySelector( '[name="group_id"]' ).value
 
 // Cache default template. Usually it's group type site template.
 const defaultTemplateForGroupType = currentGroupType && defaultMap.hasOwnProperty( currentGroupType ) ? defaultMap[ currentGroupType ] : 0
@@ -42,7 +43,7 @@ function renderTemplate( { id, siteId, title, excerpt, image, categories } ) {
 function updateTemplates( category, page ) {
 	templatePicker.innerHTML = `<p>${ messages.loading }</p>`;
 
-	getSiteTemplates( category, page ).then( ( { templates, prev, next } ) => {
+	getSiteTemplates( category, page, groupId ).then( ( { templates, prev, next } ) => {
 
 		if ( ! templates.length ) {
 			templatePicker.innerHTML = `<p>${ messages.noResults }</p>`;
