@@ -79,9 +79,12 @@ import './site-templates-admin.css'
 
 			post.addEventListener('dragstart', (e) => {
 				draggedItem = e.target;
+				if ( draggedItem.tagName !== 'TR' ) {
+					draggedItem = draggedItem.closest('tr');
+				}
 				e.dataTransfer.effectAllowed = 'move';
 				e.dataTransfer.setData('text/html', draggedItem);
-				e.target.classList.add('cboxol-dragging');
+				draggedItem.classList.add('cboxol-dragging');
 			}, false);
 
 			post.addEventListener('dragover', (e) => {
@@ -139,7 +142,7 @@ import './site-templates-admin.css'
 			},
 			body: params
 		}).then(response => response.json())
-		  .then(data => console.log('Order updated', data))
+		  .then(() => {})
 		  .catch(error => console.error('Error updating order:', error));
 	}
 }(jQuery))
