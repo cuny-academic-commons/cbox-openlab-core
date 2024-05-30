@@ -97,10 +97,6 @@ function cboxol_register_site_template_assets() {
 			'categoryMap'             => $category_map,
 			'courseGroupTypeSlug'     => cboxol_get_course_group_type()->get_slug(),
 			'courseCreateMemberTypes' => array_keys( $member_types_allowed_to_create_courses ),
-			'strings'                 => [
-				// translators: %1$s: group type name, %2$s: member type name.
-				'courseTemplateMessage' => __( 'This template is limited to groups of type %1$s, which can be created only by members of type %2$s. Other options have been disabled.', 'commons-in-a-box' ),
-			],
 		]
 	);
 
