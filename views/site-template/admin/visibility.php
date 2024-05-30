@@ -112,8 +112,19 @@ foreach ( $academic_unit_types as $academic_unit_type ) {
 		<fieldset class="template-visibility-suboptions" id="template-visibility-suboptions-member-type">
 			<legend><?php esc_html_e( 'This template will be available only to users belonging to the member types selected below:', 'commons-in-a-box' ); ?></legend>
 			<?php foreach ( $all_member_types as $member_type ) : ?>
-				<label><input type="checkbox" name="template-visibility-limit-to-member-types[]" value="<?php echo esc_attr( $member_type->get_slug() ); ?>" <?php checked( isset( $selected_member_types[ $member_type->get_slug() ] ) ); ?> /> <?php echo esc_html( $member_type->get_name() ); ?></label><br />
+				<label><input type="checkbox" class="template-visibility-limit-to-member-types" name="template-visibility-limit-to-member-types[]" value="<?php echo esc_attr( $member_type->get_slug() ); ?>" <?php checked( isset( $selected_member_types[ $member_type->get_slug() ] ) ); ?> /> <?php echo esc_html( $member_type->get_name() ); ?></label><br />
 			<?php endforeach; ?>
+
+			<div class="template-visibility-limit-to-member-types-message">
+				<?php
+				printf(
+					/* translators: 1: group type name, 2: member type name */
+					esc_html__( 'Note: This template is limited to groups of type %1$s, which can be created only by members of type %2$s. Other options have been disabled.', 'commons-in-a-box' ),
+					'<span class="group-type-names">' . esc_html( cboxol_get_course_group_type()->get_name() ) . '</span>',
+					'<span class="member-type-names"></span>'
+				);
+				?>
+			</div>
 		</fieldset>
 
 		<label><input type="radio" name="template-visibility-limit-by-member-type" id="template-visibility-limit-by-member-type-no" value="no" aria-controls="template-visibility-suboptions-member-type" <?php checked( ! $limit_by_member_types ); ?> /> <?php esc_html_e( 'Allow for all member types', 'commons-in-a-box' ); ?></label>

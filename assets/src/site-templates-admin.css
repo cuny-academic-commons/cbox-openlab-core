@@ -52,3 +52,12 @@ tr {
 .cboxol-academic-unit-visibility-selector h3 {
 	font-size: 1.2em;
 }
+
+.template-visibility-limit-to-member-types-message {
+	display: none;
+	margin-top: 1em;
+}
+
+.template-visibility-limit-to-member-types-message span {
+	font-weight: 700;
+}

@@ -1,4 +1,4 @@
-/* global ajaxurl, jQuery */
+/* global ajaxurl, jQuery, SiteTemplatePickerAdmin */
 
 import './site-templates-admin.css'
 
@@ -26,6 +26,12 @@ import './site-templates-admin.css'
 	$(document).on( 'select2:open', () => {
 		document.querySelector( '.select2-search__field').focus()
 	})
+
+	const templateCategoryCheckboxes = document.querySelectorAll( '#cboxol_template_categorychecklist input[type="checkbox"]' );
+	calculateAllowedMemberTypeRestrictionsByGroupType();
+	templateCategoryCheckboxes.forEach( checkbox => {
+		checkbox.addEventListener( 'change', calculateAllowedMemberTypeRestrictionsByGroupType );
+	} );
 
 	const visibilityRadios = document.querySelectorAll('.template-visibility-radios input[type="radio"]');
 
@@ -143,6 +149,65 @@ import './site-templates-admin.css'
 			body: params
 		}).then(response => response.json())
 		  .then(() => {})
-		  .catch(error => console.error('Error updating order:', error));
+		  .catch(() => {});
+	}
+
+	function calculateAllowedMemberTypeRestrictionsByGroupType() {
+		const {
+			categoryMap,
+			courseCreateMemberTypes,
+			courseGroupTypeSlug,
+			lang
+		} = SiteTemplatePickerAdmin;
+
+		if ( ! categoryMap ) {
+			return;
+		}
+
+		const checkedCategories = Array.from( templateCategoryCheckboxes ).filter( checkbox => checkbox.checked ).map( checkbox => checkbox.value );
+
+		let allowedGroupTypes = [];
+		checkedCategories.forEach( category => {
+			const groupTypes = categoryMap[category];
+			if ( groupTypes ) {
+				allowedGroupTypes = allowedGroupTypes.concat( groupTypes );
+			}
+		} );
+
+		// Remove duplicates
+		allowedGroupTypes = [ ...new Set( allowedGroupTypes ) ];
+
+		// We only restrict if there's a single allowed group type, and it's the courseGroupTypeSlug.
+		const restrict = allowedGroupTypes.length === 1 && allowedGroupTypes[0] === courseGroupTypeSlug;
+
+		const limitToMemberTypeCheckboxes = document.querySelectorAll( 'input.template-visibility-limit-to-member-types' );
+		const messageContainer = document.querySelector( '.template-visibility-limit-to-member-types-message' );
+
+		if ( restrict ) {
+			// Get the labels of the member types that can create courses from the limitToMemberTypeCheckboxes.
+			const allowedMemberTypeLabels = [ ...limitToMemberTypeCheckboxes ]
+				.filter( checkbox => courseCreateMemberTypes.includes( checkbox.value ) )
+				.map( checkbox => checkbox.labels[0].textContent );
+
+			const listFormatter = new Intl.ListFormat( lang, { style: 'long', type: 'conjunction' } );
+			const formattedList = listFormatter.format( allowedMemberTypeLabels );
+
+			// Show the message.
+			messageContainer.style.display = 'block';
+			messageContainer.querySelector( '.member-type-names' ).textContent = formattedList;
+
+			// Disable all but those in allowedGroupTypes.
+			limitToMemberTypeCheckboxes.forEach( checkbox => {
+				checkbox.disabled = ! courseCreateMemberTypes.includes( checkbox.value );
+			} );
+		} else {
+			// Hide the message.
+			messageContainer.style.display = 'none';
+
+			// Enable all checkboxes.
+			limitToMemberTypeCheckboxes.forEach( checkbox => {
+				checkbox.disabled = false;
+			} );
+		}
 	}
 }(jQuery))

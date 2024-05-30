@@ -61,6 +61,16 @@ function cboxol_register_site_template_assets() {
 		$default_template_map[ $group_type->get_slug() ] = $group_type->get_site_template_id();
 	}
 
+	$member_types_allowed_to_create_courses = array_filter(
+		cboxol_get_member_types(),
+		function( $member_type ) {
+			return $member_type->get_can_create_courses();
+		}
+	);
+
+	$locale = get_locale();
+	$lang   = substr( $locale, 0, 2 );
+
 	wp_localize_script(
 		'cboxol-site-template-picker-script',
 		'SiteTemplatePicker',
@@ -81,8 +91,16 @@ function cboxol_register_site_template_assets() {
 		'cboxol-site-template-picker-admin-script',
 		'SiteTemplatePickerAdmin',
 		[
-			'endpoint' => rest_url( 'cboxol/v1/sites' ),
-			'nonce'    => wp_create_nonce( 'wp_rest' ),
+			'endpoint'                => rest_url( 'cboxol/v1/sites' ),
+			'nonce'                   => wp_create_nonce( 'wp_rest' ),
+			'lang'                    => $lang,
+			'categoryMap'             => $category_map,
+			'courseGroupTypeSlug'     => cboxol_get_course_group_type()->get_slug(),
+			'courseCreateMemberTypes' => array_keys( $member_types_allowed_to_create_courses ),
+			'strings'                 => [
+				// translators: %1$s: group type name, %2$s: member type name.
+				'courseTemplateMessage' => __( 'This template is limited to groups of type %1$s, which can be created only by members of type %2$s. Other options have been disabled.', 'commons-in-a-box' ),
+			],
 		]
 	);
 
