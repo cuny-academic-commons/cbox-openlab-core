@@ -28,10 +28,12 @@ import './site-templates-admin.css'
 	})
 
 	const templateCategoryCheckboxes = document.querySelectorAll( '#cboxol_template_categorychecklist input[type="checkbox"]' );
-	calculateAllowedMemberTypeRestrictionsByGroupType();
-	templateCategoryCheckboxes.forEach( checkbox => {
-		checkbox.addEventListener( 'change', calculateAllowedMemberTypeRestrictionsByGroupType );
-	} );
+	if ( templateCategoryCheckboxes.length ) {
+		calculateAllowedMemberTypeRestrictionsByGroupType();
+		templateCategoryCheckboxes.forEach( checkbox => {
+			checkbox.addEventListener( 'change', calculateAllowedMemberTypeRestrictionsByGroupType );
+		} );
+	}
 
 	const visibilityRadios = document.querySelectorAll('.template-visibility-radios input[type="radio"]');
 
