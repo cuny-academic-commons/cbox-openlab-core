@@ -482,6 +482,12 @@ function openlab_portfolio_list_group_display() {
 		return false;
 	}
 
+	// In a course, display only to members.
+	$group_type = cboxol_get_group_group_type( $group->id );
+	if ( ! is_wp_error( $group_type ) && $group_type->get_is_course() && ! groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
 	$portfolio_data = openlab_get_group_member_portfolios();
 
 	// Hide private-member portfolios from non-members.
