@@ -212,7 +212,7 @@ function cboxol_register_block_assets() {
 		'cboxol-block-editor',
 		'const openlabBlocksPostVisibility = ' . wp_json_encode(
 			[
-				'siteIsPublic' => $blog_public >= 0,
+				'blogPublic' => $blog_public,
 			]
 		) . ';'
 	);
