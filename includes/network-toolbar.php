@@ -1096,6 +1096,7 @@ HTML;
 				);
 
 				$avatar_alt_text = sprintf(
+					/* translators: %s: user display name */
 					__( 'Profile picture of %s', 'commons-in-a-box' ),
 					bp_core_get_user_displayname( bp_get_activity_user_id() )
 				);
