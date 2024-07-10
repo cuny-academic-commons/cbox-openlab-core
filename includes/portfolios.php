@@ -566,7 +566,13 @@ function openlab_get_portfolio_creation_url() {
 		return '';
 	}
 
-	return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?group_type=portfolio&new=true';
+	return add_query_arg(
+		[
+			'group_type' => 'portfolio',
+			'new'        => 'true',
+		],
+		bp_groups_get_create_url( [ 'group-details' ] )
+	);
 }
 
 /**

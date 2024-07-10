@@ -131,7 +131,7 @@ function openlab_sitewide_header( $location = 'header' ) {
 		<div class="container-fluid">
 			<div class="navbar-header clearfix">
 				<header class="menu-title pull-left">
-					<a href="<?php echo esc_attr( bp_get_root_domain() ); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'commons-in-a-box' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
+					<a href="<?php echo esc_attr( bp_get_root_url() ); ?>" title="<?php echo esc_attr( _x( 'Home', 'Home page banner link title', 'commons-in-a-box' ) ); ?>" style="background-image: url('<?php echo esc_url( $logo_url ); ?>');"><span class="screen-reader-text"><?php bp_site_name(); ?></span></a>
 				</header>
 				<div class="pull-right search">
 					<div class="search-trigger-wrapper">
@@ -191,7 +191,7 @@ function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location = '' ) {
 HTML;
 	}
 
-	$form_action = trailingslashit( bp_get_root_domain() );
+	$form_action = trailingslashit( bp_get_root_url() );
 	$nonce       = wp_create_nonce( 'bp_search_form' );
 
 	$sr_text            = esc_html__( 'Search', 'commons-in-a-box' );
@@ -452,7 +452,7 @@ HTML;
 			array(
 				'id'    => 'openlab',
 				'title' => bp_get_option( 'blogname' ),
-				'href'  => bp_get_root_domain(),
+				'href'  => bp_get_root_url(),
 				'meta'  => array(
 					'tabindex' => 90,
 					'class'    => 'admin-bar-menu hidden-xs main-logo-menu',
@@ -479,7 +479,7 @@ HTML;
 				'parent' => $parent,
 				'id'     => 'home-' . $parent,
 				'title'  => esc_html__( 'Home', 'commons-in-a-box' ),
-				'href'   => bp_get_root_domain(),
+				'href'   => bp_get_root_url(),
 				'meta'   => array(
 					'class' => 'mobile-no-hover',
 				),
@@ -1508,7 +1508,7 @@ HTML;
 			array(
 				'parent' => 'top-secondary',
 				'id'     => 'top-logout',
-				'href'   => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
+				'href'   => add_query_arg( 'redirect_to', bp_get_root_url(), wp_logout_url() ),
 				'title'  => 'Log Out',
 				'meta'   => array(
 					'class' => 'bold',
@@ -1601,7 +1601,7 @@ HTML;
 		$wp_admin_bar->add_menu(
 			array(
 				'id'   => 'logout',
-				'href' => add_query_arg( 'redirect_to', bp_get_root_domain(), wp_logout_url() ),
+				'href' => add_query_arg( 'redirect_to', bp_get_root_url(), wp_logout_url() ),
 			)
 		);
 	}

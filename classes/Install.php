@@ -1108,7 +1108,7 @@ class Install {
 				array(
 					'menu-item-title'   => __( 'Calendar', 'commons-in-a-box' ),
 					'menu-item-classes' => 'sitewide-calendar',
-					'menu-item-url'     => trailingslashit( bp_get_root_domain() ) . 'calendar/',
+					'menu-item-url'     => trailingslashit( bp_get_root_url() ) . 'calendar/',
 					'menu-item-status'  => 'publish',
 				)
 			);
