@@ -54,7 +54,6 @@ class AccessibilityBrandPage160 extends Upgrade {
 	 * @param CBOX\Upgrades\Upgrade_Item $item Item.
 	 */
 	public function process( $item ) {
-		_b( $item );
 		$site_id = $item->get_value( 'site_id' );
 
 		switch_to_blog( $site_id );
