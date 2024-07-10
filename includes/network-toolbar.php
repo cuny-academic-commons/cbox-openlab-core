@@ -546,7 +546,7 @@ HTML;
 					'parent' => 'mobile-centered',
 					'id'     => 'my-openlab-mobile',
 					'title'  => $howdy . $howdy_small,
-					'href'   => bp_loggedin_user_domain(),
+					'href'   => bp_loggedin_user_url(),
 					'meta'   => array(
 						'class' => 'visible-xs',
 					),
@@ -568,7 +568,7 @@ HTML;
 			array(
 				'id'    => 'my-openlab',
 				'title' => esc_html__( 'My Profile', 'commons-in-a-box' ) . ' <span class="fa fa-caret-down" aria-hidden="true"></span>',
-				'href'  => bp_loggedin_user_domain(),
+				'href'  => bp_loggedin_user_url(),
 				'meta'  => array(
 					'class'    => 'admin-bar-menu',
 					'tabindex' => 0,
@@ -686,8 +686,8 @@ HTML;
 			array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-profile',
-				'title'  => 'My Profile',
-				'href'   => bp_loggedin_user_domain(),
+				'title'  => __( 'My Profile', 'commons-in-a-box' ),
+				'href'   => bp_loggedin_user_url(),
 				'meta'   => array(
 					'class' => 'admin-bar-menu-item mobile-no-hover',
 				),
@@ -698,8 +698,8 @@ HTML;
 			array(
 				'parent' => 'my-openlab',
 				'id'     => 'my-settings',
-				'title'  => 'My Settings',
-				'href'   => trailingslashit( bp_loggedin_user_domain() . 'settings' ),
+				'title'  => __( 'My Settings', 'commons-in-a-box' ),
+				'href'   => bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_settings_slug() ] ) ),
 				'meta'   => array(
 					'class' => 'admin-bar-menu-item mobile-no-hover',
 				),
@@ -733,8 +733,9 @@ HTML;
 				array(
 					'parent' => 'my-openlab',
 					'id'     => 'my-friends',
-					'title'  => 'My Friends ' . $request_count,
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() ),
+					// translators: %s is the number of friend requests
+					'title'  => sprintf( __( 'My Friends %s', 'commons-in-a-box' ), $request_count ),
+					'href'   => bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_friends_slug() ] ) ),
 					'meta'   => array(
 						'class' => 'admin-bar-menu-item mobile-no-hover',
 					),
@@ -748,8 +749,9 @@ HTML;
 				array(
 					'parent' => 'my-openlab',
 					'id'     => 'my-messages',
-					'title'  => sprintf( 'My Messages %s', $messages_count ),
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
+					// translators: %s is the number of unread messages
+					'title'  => sprintf( __( 'My Messages %s', 'commons-in-a-box' ), $messages_count ),
+					'href'   => bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_messages_slug() ] ) ),
 					'meta'   => array(
 						'class' => 'admin-bar-menu-item mobile-no-hover',
 					),
@@ -764,8 +766,9 @@ HTML;
 				array(
 					'parent' => 'my-openlab',
 					'id'     => 'my-invitations',
-					'title'  => sprintf( 'My Invitations %s', $invite_count ),
-					'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() . '/invites' ),
+					// translators: %s is the number of invitations
+					'title'  => sprintf( __( 'My Invitations %s', 'commons-in-a-box' ), $invite_count ),
+					'href'   => bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_groups_slug(), 'invites' ] ) ),
 					'meta'   => array(
 						'class' => 'admin-bar-menu-item mobile-no-hover',
 					),
@@ -894,7 +897,7 @@ HTML;
 
 				$title = 'Invitations';
 		if ( ! empty( $invites['groups'] ) ) {
-			$title .= '<span class="see-all pull-right"><a class="regular" href="' . trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) . '/invites">See All Invites</a></span>';
+			$title .= '<span class="see-all pull-right"><a class="regular" href="' . esc_attr( bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_groups_slug(), 'invites' ] ) ) ) . '">' . __( 'See All Invites', 'commons-in-a-box' ) . '</a></span>';
 		}
 		// "Invitations" title
 		$wp_admin_bar->add_node(
@@ -998,7 +1001,7 @@ HTML;
 
 				if ( $messages_counter < 5 ) {
 					// avatar
-					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_core_get_user_url( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $messages_template->thread->last_sender_id,
 							'object'  => 'member',
@@ -1011,7 +1014,7 @@ HTML;
 					$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt( bp_get_message_thread_subject(), 30 ) . '</a>';
 
 					// last sender
-					$title .= '<span class="last-sender"><a href="' . bp_core_get_user_domain( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></span></p>';
+					$title .= '<span class="last-sender"><a href="' . bp_core_get_user_url( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></span></p>';
 
 					// date and time
 					$title .= '<p class="message-excerpt">' . bp_format_time( strtotime( $messages_template->thread->last_message_date ) ) . '<br />';
@@ -1053,8 +1056,8 @@ HTML;
 			array(
 				'parent' => 'messages',
 				'id'     => 'messages-more',
-				'title'  => '<span class="see-all">See All Messages</span>',
-				'href'   => trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ),
+				'title'  => '<span class="see-all">' . __( 'See All Messages', 'commons-in-a-box' ) . '</span>',
+				'href'   => trailingslashit( bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_messages_slug() ] ) ) ),
 				'meta'   => array(
 					'class' => 'menu-bottom-link',
 				),
@@ -1126,9 +1129,10 @@ HTML;
 			}
 		}
 
-		$link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
 		if ( bp_is_active( 'groups' ) ) {
-			$link .= trailingslashit( bp_get_groups_slug() );
+			$link = bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_activity_slug(), bp_get_groups_slug() ] ) );
+		} else {
+			$link = bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_activity_slug() ] ) );
 		}
 
 		// "Go to Inbox" Makes sense that users should always see this

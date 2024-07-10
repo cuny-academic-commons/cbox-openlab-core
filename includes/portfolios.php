@@ -624,7 +624,7 @@ add_action( 'groups_before_delete_group', 'openlab_delete_portfolio' );
  * After portfolio delete, redirect to user profile page
  */
 function openlab_delete_portfolio_redirect() {
-	bp_core_redirect( bp_loggedin_user_domain() );
+	bp_core_redirect( bp_loggedin_user_url() );
 }
 
 /**
@@ -634,7 +634,7 @@ function openlab_enforce_one_portfolio_per_person() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['group_type'] ) && 'portfolio' === $_GET['group_type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 		bp_core_add_message( sprintf( 'You already have %s', openlab_get_portfolio_label( 'leading_a=1' ) ), 'error' );
-		bp_core_redirect( bp_loggedin_user_domain() );
+		bp_core_redirect( bp_loggedin_user_url() );
 	}
 }
 add_action( 'bp_actions', 'openlab_enforce_one_portfolio_per_person', 1 );
