@@ -584,7 +584,7 @@ HTML;
 
 		$hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle direct-toggle network-menu" data-target="#wp-admin-bar-network-menu-mobile .ab-sub-wrapper" data-plusheight="19">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only"><?php esc_html_e( 'Toggle navigation', 'commons-in-a-box' ); ?></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -603,7 +603,8 @@ HTML;
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'network-menu-mobile',
-				'title' => 'My OpenLab <span class="fa fa-caret-down" aria-hidden="true"></span>',
+				// translators: down caret element
+				'title' => sprintf( __( 'My OpenLab %s', 'commons-in-a-box' ), '<span class="fa fa-caret-down" aria-hidden="true"></span>' ),
 				'meta'  => array(
 					'class'    => 'visible-xs mobile-menu admin-bar-menu',
 					'tabindex' => 0,
@@ -622,7 +623,7 @@ HTML;
 
 		$hamburger = <<<HTML
                     <button type="button" class="navbar-toggle mobile-toggle direct-toggle mol-menu" data-target="#wp-admin-bar-my-openlab .ab-sub-wrapper" data-plusheight="19">
-                        <span class="sr-only">Toggle navigation</span>
+                        <span class="sr-only"><?php esc_html_e( 'Toggle navigation', 'commons-in-a-box' ); ?></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -648,6 +649,7 @@ HTML;
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'my-account',
+				// translators: display name of logged-in user
 				'title' => sprintf( 'Hi, %s', $bp->loggedin_user->userdata->display_name ),
 				'meta'  => array(),
 			)
@@ -878,7 +880,7 @@ HTML;
 				array(
 					'parent' => 'invites',
 					'id'     => 'friend-requests-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>No new friendship requests.</p></div></div>',
+					'title'  => '<div class="row"><div class="col-sm-24"><p>' . __( 'No new friendship requests.', 'commons-in-a-box' ) . '</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-no-items nav-content-item',
 					),
@@ -1038,7 +1040,7 @@ HTML;
 				array(
 					'parent' => 'messages',
 					'id'     => 'messages-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>No new messages.</p></div></div>',
+					'title'  => '<div class="row"><div class="col-sm-24"><p>' . __( 'No new messages.', 'commons-in-a-box' ) . '</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-content-item nav-no-items',
 					),
