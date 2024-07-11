@@ -10,8 +10,6 @@
 	content: normal;
 }
 
-#wpadminbar a:focus,
-#wpadminbar a:active,
 #wpadminbar input[type="text"],
 #wpadminbar input[type="password"],
 #wpadminbar input[type="number"],
