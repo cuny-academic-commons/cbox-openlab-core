@@ -611,7 +611,7 @@ function openlab_creator_form_entry( $settings ) {
 		$user = get_user_by( 'slug', $r['member-login'] );
 		if ( $user ) {
 			$member_display_name = bp_core_get_user_displayname( $user->ID );
-			$member_url          = bp_core_get_user_url( $user->ID );
+			$member_url          = bp_members_get_user_url( $user->ID );
 		}
 	}
 
@@ -782,7 +782,7 @@ function openlab_group_creator_autocomplete_cb() {
 		$retval[] = array(
 			'label' => sprintf( '%s (%s)', esc_html( $u->display_name ), esc_html( $u->user_nicename ) ),
 			'value' => esc_attr( $u->user_nicename ),
-			'url'   => bp_core_get_user_url( $u->ID ),
+			'url'   => bp_members_get_user_url( $u->ID ),
 		);
 	}
 

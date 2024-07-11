@@ -1001,7 +1001,7 @@ HTML;
 
 				if ( $messages_counter < 5 ) {
 					// avatar
-					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_core_get_user_url( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_members_get_user_url( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $messages_template->thread->last_sender_id,
 							'object'  => 'member',
@@ -1014,7 +1014,7 @@ HTML;
 					$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt( bp_get_message_thread_subject(), 30 ) . '</a>';
 
 					// last sender
-					$title .= '<span class="last-sender"><a href="' . bp_core_get_user_url( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></span></p>';
+					$title .= '<span class="last-sender"><a href="' . bp_members_get_user_url( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></span></p>';
 
 					// date and time
 					$title .= '<p class="message-excerpt">' . bp_format_time( strtotime( $messages_template->thread->last_message_date ) ) . '<br />';
