@@ -854,7 +854,7 @@ HTML;
 				$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_member_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 					array(
 						'item_id' => bp_get_member_user_id(),
-						'object'  => 'member',
+						'object'  => 'user',
 						'type'    => 'full',
 						'html'    => false,
 					)
@@ -1004,7 +1004,7 @@ HTML;
 					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_members_get_user_url( $messages_template->thread->last_sender_id ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $messages_template->thread->last_sender_id,
-							'object'  => 'member',
+							'object'  => 'user',
 							'type'    => 'full',
 							'html'    => false,
 						)
@@ -1094,7 +1094,7 @@ HTML;
 				$avatar_url = bp_core_fetch_avatar(
 					array(
 						'item_id' => bp_get_activity_user_id(),
-						'object'  => 'member',
+						'object'  => 'user',
 						'type'    => 'full',
 						'html'    => false,
 					)
@@ -1576,7 +1576,7 @@ HTML;
 		$user_info = '<div class="row"><div class="col-sm-8"><div class="item-avatar"><a href="' . $profile_url . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 			array(
 				'item_id' => $user_id,
-				'object'  => 'member',
+				'object'  => 'user',
 				'type'    => 'full',
 				'html'    => false,
 			)
