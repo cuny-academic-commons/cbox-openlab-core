@@ -214,6 +214,13 @@ function cboxol_default_group_avatar_img( $html ) {
 }
 add_filter( 'bp_core_fetch_avatar', 'cboxol_default_group_avatar_img' );
 
+add_filter(
+	'bp_core_avatar_gravatar_default',
+	function( $default ) {
+		return cboxol_default_avatar( 'full' );
+	}
+);
+
 /**
  * Default content for Accessibility page.
  *
