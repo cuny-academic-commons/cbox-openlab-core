@@ -199,6 +199,10 @@ add_filter(
  * @return string
  */
 function cboxol_default_get_group_avatar( $url, $params ) {
+	if ( 'group' !== $params['object'] ) {
+		return $url;
+	}
+
 	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
 		$url = cboxol_default_avatar( 'full' );
 	}
