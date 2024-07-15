@@ -47,6 +47,8 @@ class Install {
 		$this->install_default_badges();
 		$this->install_default_logos();
 
+		$this->install_custom_tables();
+
 		$this->install_default_widgets();
 		$this->install_default_nav_menus();
 		$this->install_default_slides();
@@ -931,6 +933,17 @@ class Install {
 		$attachment_id = self::create_attachment( $default_avatar_path );
 
 		set_theme_mod( 'openlab_default_avatar', $attachment_id );
+	}
+
+	/**
+	 * Installs custom tables.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return void
+	 */
+	protected function install_custom_tables() {
+		openlab_create_private_membership_table();
 	}
 
 	/**
