@@ -322,7 +322,7 @@ function openlab_filter_docs_query_to_exclude_private_group_members( $args, $doc
 
 	$group_id = $docs_query->query_args['group_id'];
 
-	if ( bp_current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+	if ( bp_current_user_can( 'view_private_members_of_group', $group_id ) ) {
 		return $args;
 	}
 
