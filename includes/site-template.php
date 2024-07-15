@@ -87,18 +87,21 @@ function cboxol_register_site_template_assets() {
 		]
 	);
 
-	wp_localize_script(
-		'cboxol-site-template-picker-admin-script',
-		'SiteTemplatePickerAdmin',
-		[
-			'endpoint'                => rest_url( 'cboxol/v1/sites' ),
-			'nonce'                   => wp_create_nonce( 'wp_rest' ),
-			'lang'                    => $lang,
-			'categoryMap'             => $category_map,
-			'courseGroupTypeSlug'     => cboxol_get_course_group_type()->get_slug(),
-			'courseCreateMemberTypes' => array_keys( $member_types_allowed_to_create_courses ),
-		]
-	);
+	$course_group_type = cboxol_get_course_group_type();
+	if ( $course_group_type ) {
+		wp_localize_script(
+			'cboxol-site-template-picker-admin-script',
+			'SiteTemplatePickerAdmin',
+			[
+				'endpoint'                => rest_url( 'cboxol/v1/sites' ),
+				'nonce'                   => wp_create_nonce( 'wp_rest' ),
+				'lang'                    => $lang,
+				'categoryMap'             => $category_map,
+				'courseGroupTypeSlug'     => cboxol_get_course_group_type()->get_slug(),
+				'courseCreateMemberTypes' => array_keys( $member_types_allowed_to_create_courses ),
+			]
+		);
+	}
 
 	wp_localize_script(
 		'cboxol-site-templates-default-category',
