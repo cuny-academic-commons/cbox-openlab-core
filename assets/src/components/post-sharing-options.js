@@ -39,8 +39,8 @@ const PostSharingOptions = ({}) => {
 		},
 		{
 			value: 'members-only',
-			label: __( 'Logged-in users only', 'commons-in-a-box' ),
-			info: __( 'Only logged-in users can see this post. This will override the Public visibility setting above.', 'commons-in-a-box' )
+			label: __( 'Logged-in community members only', 'commons-in-a-box' ),
+			info: __( 'Only logged-in members of the community can see this post.', 'commons-in-a-box' )
 		}
 	]
 
