@@ -100,8 +100,9 @@ class NavMenus extends Upgrade {
 
 		switch_to_blog( $site_id );
 
-		$locations = get_theme_mod( 'nav_menu_locations' );
-		$menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
+		$locations       = get_theme_mod( 'nav_menu_locations' );
+		$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
+		$menu_id         = isset( $locations[ $primary_nav_key ] ) ? (int) $locations[ $primary_nav_key ] : 0;
 
 		if ( ! $menu_id ) {
 			restore_current_blog();

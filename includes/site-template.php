@@ -665,8 +665,9 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 		true
 	);
 
-	$locations            = get_theme_mod( 'nav_menu_locations' );
-	$locations['primary'] = $menu_id;
+	$primary_nav_key               = cboxol_get_theme_primary_nav_menu_location();
+	$locations                     = get_theme_mod( 'nav_menu_locations' );
+	$locations[ $primary_nav_key ] = $menu_id;
 	set_theme_mod( 'nav_menu_locations', $locations );
 
 	restore_current_blog();

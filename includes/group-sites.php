@@ -1820,9 +1820,10 @@ function cboxol_copy_blog_page( $group_id ) {
 				}
 
 				// Updated custom nav menu items
-				$locations = get_theme_mod( 'nav_menu_locations' );
-				$menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
-				$nav_items = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
+				$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
+				$locations       = get_theme_mod( 'nav_menu_locations' );
+				$menu_id         = isset( $locations[ $primary_nav_key ] ) ? (int) $locations[ $primary_nav_key ] : 0;
+				$nav_items       = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
 
 				if ( $menu_id && ! empty( $nav_items ) ) {
 					$group_type = cboxol_get_group_group_type( $group_id );
@@ -2125,6 +2126,32 @@ function cboxol_get_nav_menu_items() {
 	}
 
 	return $items;
+}
+
+/**
+ * Determine a theme's primary nav menu location.
+ *
+ * Uses a heuristic based on naming conventions, and falls back on the first available.
+ *
+ * @since 1.6.0
+ *
+ * @return string|null
+ */
+function cboxol_get_theme_primary_nav_menu_location() {
+	$keys_to_check = [ 'primary', 'main', 'header', 'top' ];
+
+	$locations = get_nav_menu_locations();
+	if ( ! $locations ) {
+		return null;
+	}
+
+	foreach ( $keys_to_check as $key ) {
+		if ( isset( $locations[ $key ] ) ) {
+			return $key;
+		}
+	}
+
+	return key( $locations );
 }
 
 /**
