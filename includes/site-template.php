@@ -1159,7 +1159,7 @@ function cboxol_site_templates_rest_api_restrict_visibility( $args, $request ) {
 	if ( is_user_logged_in() ) {
 		$current_member_type = cboxol_get_user_member_type( bp_loggedin_user_id() );
 
-		if ( $current_member_type ) {
+		if ( $current_member_type && ! is_wp_error( $current_member_type ) ) {
 			$member_type_meta_query['limited_types'] = [
 				'relation' => 'AND',
 				[
