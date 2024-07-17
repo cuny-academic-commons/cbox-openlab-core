@@ -233,7 +233,7 @@ add_filter(
  * @return string
  */
 function cboxol_get_default_accessibility_brand_page_content() {
-	return '<p>' . esc_html__( 'This page can be used to provide information about accessibility. We have provided a template that you can modify to meet the needs of your community (for instance, you may prefer to link to instructional materials created by your institution). Questions about accessibility on Commons In A Box OpenLab? Join the discussion on the Community Hub.', 'commons-in-a-box' ) . '</p>' .
+	return '<p>' . esc_html__( 'This page can be used to provide information about accessibility. We have provided a template that you can modify to meet the needs of your community (for instance, you may prefer to link to instructional materials created by your institution). Questions about accessibility on Commons In A Box OpenLab? Join the <a href="https://cboxopenlab.org/groups/the-hub/forum/">discussion on the Community Hub</a>.', 'commons-in-a-box' ) . '</p>' .
 	'<p>' . esc_html__( 'If you are the administrator, visit Dashboard > Pages to modify this text.', 'commons-in-a-box' ) . '</p>' .
 
 	'<h2>' . esc_html__( 'What is accessibility?', 'commons-in-a-box' ) . '</h2>' .
