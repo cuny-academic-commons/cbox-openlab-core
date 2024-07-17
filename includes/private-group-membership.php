@@ -68,6 +68,14 @@ function openlab_get_private_members_of_group( $group_id, $exclude_self = true )
 
 	$private_member_ids = array_map( 'intval', $private_member_ids );
 
+	// Verify that these are in fact members of the group.
+	$private_member_ids = array_filter(
+		$private_member_ids,
+		function( $user_id ) use ( $group_id ) {
+			return groups_is_user_member( $user_id, $group_id );
+		}
+	);
+
 	$members[ $group_id ] = $private_member_ids;
 
 	if ( $exclude_self ) {
