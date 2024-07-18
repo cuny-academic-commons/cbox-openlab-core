@@ -491,3 +491,30 @@ function cboxol_filter_avatar_html( $html, $args ) {
 	return $html;
 }
 add_filter( 'bp_core_fetch_avatar', 'cboxol_filter_avatar_html', 10, 2 );
+
+/**
+ * Set order and labels for xprofile visibility levels.
+ *
+ * @since 1.6.0
+ *
+ * @param array $levels Visibility levels.
+ * @return array
+ */
+function cboxol_filter_xprofile_visibility_levels( $levels ) {
+	// Reorder.
+	$order = [ 'public', 'loggedin', 'friends', 'adminsonly' ];
+
+	$ordered_levels = [];
+	foreach ( $order as $level ) {
+		if ( isset( $levels[ $level ] ) ) {
+			$ordered_levels[ $level ] = $levels[ $level ];
+		}
+	}
+
+	if ( isset( $levels['loggedin'] ) ) {
+		$ordered_levels['loggedin']['label'] = __( 'All Community Members', 'commons-in-a-box' );
+	}
+
+	return $ordered_levels;
+}
+add_filter( 'bp_xprofile_get_visibility_levels', 'cboxol_filter_xprofile_visibility_levels' );
