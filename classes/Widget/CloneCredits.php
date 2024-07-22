@@ -27,8 +27,7 @@ class CloneCredits extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$group    = groups_get_group( $group_id );
-		$history  = openlab_get_group_clone_history_data( $group_id );
-		$history  = openlab_get_group_clone_history_list( $history );
+		$history  = openlab_get_group_clone_history_list( $group_id, $group->creator_id );
 
 		// phpcs:ignore WordPress.Security.EscapeOutput
 		echo $args['before_widget'];
