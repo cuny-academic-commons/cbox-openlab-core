@@ -81,3 +81,21 @@ if ( ! get_option( CBOX\OL\Upgrades\DefaultAvatar150::FLAG, false ) ) {
 	$default_avatar_150 = new CBOX\OL\Upgrades\DefaultAvatar150();
 	$registry->register( $default_avatar_150->id, $default_avatar_150 );
 }
+
+// v1.6.0 - Modify group type settings.
+if ( ! get_option( CBOX\OL\Upgrades\GroupTypeSettings160::FLAG, false ) ) {
+	$upgrade_group_type_settings_160 = new CBOX\OL\Upgrades\GroupTypeSettings160();
+	$registry->register( $upgrade_group_type_settings_160->id, $upgrade_group_type_settings_160 );
+}
+
+// v1.6.0 - Create membership privacy table.
+if ( ! get_option( CBOX\OL\Upgrades\MembershipPrivacy160::FLAG, false ) ) {
+	$membership_privacy_160 = new CBOX\OL\Upgrades\MembershipPrivacy160();
+	$registry->register( $membership_privacy_160->id, $membership_privacy_160 );
+}
+
+// v1.6.0 - Install Accessibility brand page.
+if ( ! get_option( CBOX\OL\Upgrades\AccessibilityBrandPage160::FLAG, false ) ) {
+	$accessibility_brand_page_160 = new CBOX\OL\Upgrades\AccessibilityBrandPage160();
+	$registry->register( $accessibility_brand_page_160->id, $accessibility_brand_page_160 );
+}

@@ -8,19 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'BPCGC_Groups_Tag' ) ) :
 
 	class BPCGC_Groups_Tag {
-		/**
-		 * Tax query.
-		 *
-		 * @var array
-		 */
-		public $tax_query = array();
-
-		/**
-		 * Term.
-		 *
-		 * @var object|int
-		 */
-		public $term = 0;
+		public $term;
+		public $tax_query;
 
 		/**
 		 * Setup BP_Groups_Tag.

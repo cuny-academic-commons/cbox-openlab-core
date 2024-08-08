@@ -15,6 +15,7 @@ const siteType = document.querySelectorAll( '[name="new_or_old"]' );
 const messages = window.SiteTemplatePicker.messages;
 const defaultMap = window.SiteTemplatePicker.defaultMap;
 const currentGroupType = window.CBOXOL_Group_Create?.new_group_type || null
+const groupId = document.querySelector( '[name="group_id"]' ).value
 
 // Cache default template. Usually it's group type site template.
 const defaultTemplateForGroupType = currentGroupType && defaultMap.hasOwnProperty( currentGroupType ) ? defaultMap[ currentGroupType ] : 0
@@ -42,7 +43,7 @@ function renderTemplate( { id, siteId, title, excerpt, image, categories } ) {
 function updateTemplates( category, page ) {
 	templatePicker.innerHTML = `<p>${ messages.loading }</p>`;
 
-	getSiteTemplates( category, page ).then( ( { templates, prev, next } ) => {
+	getSiteTemplates( category, page, groupId ).then( ( { templates, prev, next } ) => {
 
 		if ( ! templates.length ) {
 			templatePicker.innerHTML = `<p>${ messages.noResults }</p>`;
@@ -61,7 +62,30 @@ function updateTemplates( category, page ) {
 			const toggleStatus = setupSiteToggle ? setupSiteToggle.checked : true
 			togglePanel( toggleStatus )
 		}
+
+		maybeShowCategoryDropdown();
 	} );
+}
+
+/**
+ * Category dropdown should be hidden if there's only one category in it.
+ */
+function maybeShowCategoryDropdown() {
+	const siteTemplateCategoriesWrapper = document.querySelector( '.site-template-categories' );
+
+	let categoryCount = 0;
+	const siteTemplateCategories = siteTemplateCategoriesWrapper.querySelectorAll( 'option' );
+	for ( const category of siteTemplateCategories ) {
+		if ( category.value !== '0' ) {
+			categoryCount++
+		}
+	}
+
+	if ( categoryCount <= 1 ) {
+		siteTemplateCategoriesWrapper.classList.add( 'hidden' );
+	} else {
+		siteTemplateCategoriesWrapper.classList.remove( 'hidden' );
+	}
 }
 
 function updatePagination( prev, next ) {

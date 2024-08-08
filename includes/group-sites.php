@@ -16,6 +16,10 @@ function openlab_get_group_id_by_blog_id( $blog_id ) {
 		return 0;
 	}
 
+	if ( empty( $bp->groups->table_name_groupmeta ) ) {
+		return 0;
+	}
+
 	$group_id = wp_cache_get( $blog_id, 'site_group_ids' );
 
 	if ( false === $group_id ) {
@@ -1816,9 +1820,10 @@ function cboxol_copy_blog_page( $group_id ) {
 				}
 
 				// Updated custom nav menu items
-				$locations = get_theme_mod( 'nav_menu_locations' );
-				$menu_id   = isset( $locations['primary'] ) ? (int) $locations['primary'] : 0;
-				$nav_items = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
+				$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
+				$locations       = get_theme_mod( 'nav_menu_locations' );
+				$menu_id         = isset( $locations[ $primary_nav_key ] ) ? (int) $locations[ $primary_nav_key ] : 0;
+				$nav_items       = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
 
 				if ( $menu_id && ! empty( $nav_items ) ) {
 					$group_type = cboxol_get_group_group_type( $group_id );
@@ -2124,6 +2129,32 @@ function cboxol_get_nav_menu_items() {
 	}
 
 	return $items;
+}
+
+/**
+ * Determine a theme's primary nav menu location.
+ *
+ * Uses a heuristic based on naming conventions, and falls back on the first available.
+ *
+ * @since 1.6.0
+ *
+ * @return string|null
+ */
+function cboxol_get_theme_primary_nav_menu_location() {
+	$keys_to_check = [ 'primary', 'main', 'header', 'top' ];
+
+	$locations = get_nav_menu_locations();
+	if ( ! $locations ) {
+		return null;
+	}
+
+	foreach ( $keys_to_check as $key ) {
+		if ( isset( $locations[ $key ] ) ) {
+			return $key;
+		}
+	}
+
+	return key( $locations );
 }
 
 /**
@@ -2724,4 +2755,265 @@ function openlab_convert_chars_for_email( $text ) {
 	);
 
 	return strtr( $string, $conv );
+}
+
+/** Post Visibility **************************************************/
+
+/**
+ * Registers openlab_post_visibility meta field.
+ *
+ * @return void
+ */
+function openlab_register_post_visibility_meta() {
+	register_meta(
+		'post',
+		'openlab_post_visibility',
+		[
+			'single'            => true,
+			'type'              => 'string',
+			'description'       => __( 'Visibility of the post.', 'commons-in-a-box' ),
+			'show_in_rest'      => true,
+			'auth_callback'     => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'sanitize_callback' => function( $value ) {
+				return sanitize_text_field( $value );
+			},
+		]
+	);
+}
+add_action( 'init', 'openlab_register_post_visibility_meta', 20 );
+
+/**
+ * Single-post access control for openlab_post_visibility.
+ *
+ * @return void
+ */
+function openlab_post_visibility_access_control() {
+	$queried_object = get_queried_object();
+	if ( ! is_a( $queried_object, 'WP_Post' ) ) {
+		return;
+	}
+
+	$post_visibility = get_post_meta( $queried_object->ID, 'openlab_post_visibility', true );
+
+	// Logged-in members only.
+	if ( 'members-only' === $post_visibility ) {
+		// If the user is logged in, allow access.
+		if ( is_user_logged_in() ) {
+			return;
+		}
+
+		// If the user is not logged in, redirect to the login page.
+		wp_safe_redirect( wp_login_url( get_permalink( $queried_object->ID ) ) );
+		exit;
+	}
+
+	if ( 'group-members-only' === $post_visibility ) {
+		$redirect = null;
+		if ( ! is_user_logged_in() ) {
+			$redirect = wp_login_url( get_permalink( $queried_object->ID ) );
+		} else {
+			$current_site_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+			if ( $current_site_group_id && ! groups_is_user_member( get_current_user_id(), $current_site_group_id ) ) {
+				$redirect = home_url();
+			}
+		}
+
+		if ( $redirect ) {
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+	}
+
+	// If no visibility is set, or some other value exists, fall through and allow access.
+}
+add_action( 'template_redirect', 'openlab_post_visibility_access_control' );
+
+/**
+ * Remove posts from queries according to openlab_post_visibility settings.
+ *
+ * @param WP_Query $query Query object.
+ * @return void
+ */
+function openlab_post_visibility_query_filter( $query ) {
+	// Don't perform the query on singular posts, which are handled by template_redirect logic.
+	if ( $query->is_singular() && $query->is_main_query() ) {
+		return;
+	}
+
+	$invisible_post_ids = openlab_get_invisible_post_ids();
+	if ( ! $invisible_post_ids ) {
+		return;
+	}
+
+	// We will run a separate query and pass posts to post__in.
+	$post__not_in = $query->get( 'post__not_in' );
+	if ( ! is_array( $post__not_in ) ) {
+		$post__not_in = [];
+	}
+
+	$post__not_in = array_merge( $post__not_in, $invisible_post_ids );
+	$query->set( 'post__not_in', $post__not_in );
+}
+add_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+
+/**
+ * Gets a list of post IDs that are not visible to the current user.
+ *
+ * @param int $blog_id Blog ID. Defaults to current blog.
+ * @return array
+ */
+function openlab_get_invisible_post_ids( $blog_id = null ) {
+	static $post_ids = [];
+
+	if ( null === $blog_id ) {
+		$blog_id = get_current_blog_id();
+	}
+
+	if ( ! isset( $post_ids[ $blog_id ] ) ) {
+		// If there's no associated group ID, there's no visibility settings.
+		$current_site_group_id = openlab_get_group_id_by_blog_id( $blog_id );
+		if ( ! $current_site_group_id ) {
+			$post_ids[ $blog_id ] = [];
+			return $post_ids[ $blog_id ];
+		}
+
+		// If the user is a super admin or a group member, allow access to all posts.
+		if ( is_super_admin() || groups_is_user_member( get_current_user_id(), $current_site_group_id ) ) {
+			$post_ids[ $blog_id ] = [];
+			return $post_ids[ $blog_id ];
+		}
+
+		// If we've gotten here, the current user is not a group member.
+		$invisible_settings = [ 'group-members-only' ];
+
+		if ( ! is_user_logged_in() ) {
+			$invisible_settings[] = 'members-only';
+		}
+
+		$switched = false;
+		if ( get_current_blog_id() !== $blog_id ) {
+			switch_to_blog( $blog_id );
+			$switched = true;
+		}
+
+		remove_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+		$post_ids[ $blog_id ] = get_posts(
+			[
+				'post_type'   => 'any',
+				'post_status' => 'any',
+				'fields'      => 'ids',
+				'meta_query'  => [
+					[
+						'key'   => 'openlab_post_visibility',
+						'value' => $invisible_settings,
+					],
+				],
+			]
+		);
+		add_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+
+		if ( $switched ) {
+			restore_current_blog();
+		}
+	}
+
+	return $post_ids[ $blog_id ];
+}
+
+/**
+ * Ensure that the "existing activity ID" query in bp_activity_post_type_publish() finds hidden items.
+ *
+ * Otherwise a duplicate activity item is created.
+ */
+add_filter(
+	'bp_before_activity_get_parse_args',
+	function( $args ) {
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+		$db        = debug_backtrace();
+		$do_filter = false;
+		foreach ( $db as $_db ) {
+			if ( 'bp_activity_post_type_publish' === $_db['function'] ) {
+				$do_filter = true;
+				break;
+			}
+		}
+
+		if ( $do_filter ) {
+			$args['show_hidden'] = true;
+		}
+
+		return $args;
+	}
+);
+
+/**
+ * Sets hide_sitewide flag for posts that have been posted via the REST API.
+ *
+ * When a post is created via the REST API, as is the case when composing with
+ * the Block Editor, postmeta such as openlab_post_visibility is not set until
+ * after the post is created. As such, it's not available when BP creates the
+ * activity item.
+ */
+function openlab_modify_hide_sitewide_for_non_public_rest_posts( $post_id ) {
+	// Get activity item associated with this blog post.
+	$activity = bp_activity_get(
+		[
+			'show_hidden' => true,
+			'filter'      => [
+				'action'       => 'new_blog_post',
+				'object'       => 'groups',
+				'primary_id'   => openlab_get_group_id_by_blog_id( get_current_blog_id() ),
+				'secondary_id' => $post_id,
+			],
+		]
+	);
+
+	if ( empty( $activity['activities'] ) ) {
+		return;
+	}
+
+	$activity = $activity['activities'][0];
+
+	openlab_toggle_hide_sitewide_for_post_visibility( $activity->id );
+}
+add_action( 'wp_after_insert_post', 'openlab_modify_hide_sitewide_for_non_public_rest_posts' );
+
+/**
+ * Toggle hide_sitewide on activity linked to posts that have custom openlab_post_visibility.
+ *
+ * @since 1.6.0
+ *
+ * @param int $activity_id Activity ID.
+ * @return void
+ */
+function openlab_toggle_hide_sitewide_for_post_visibility( $activity_id ) {
+	$activity = new BP_Activity_Activity( $activity_id );
+	if ( in_array( $activity->type, [ 'new_blog_post', 'new_blog_comment' ], true ) ) {
+		if ( 'new_blog_post' === $activity->type ) {
+			$post_id = (int) $activity->secondary_item_id;
+		} else {
+			$comment = get_comment( $activity->secondary_item_id );
+			$post_id = (int) $comment->comment_post_ID;
+		}
+
+		// For safety, we only switch to hide_sitewide, never back again.
+		$post_visibility = get_post_meta( $post_id, 'openlab_post_visibility', true );
+		global $wpdb;
+		if ( ! $activity->hide_sitewide && in_array( $post_visibility, [ 'members-only', 'group-members-only' ], true ) ) {
+			$cloned_activity = new BP_Activity_Activity( $activity_id );
+
+			// This is the only reliable way to take precedence over other hooks.
+			add_action(
+				'bp_activity_before_save',
+				function( $activity_object ) {
+					$activity_object->hide_sitewide = 1;
+				},
+				99999
+			);
+
+			$saved = $cloned_activity->save();
+		}
+	}
 }

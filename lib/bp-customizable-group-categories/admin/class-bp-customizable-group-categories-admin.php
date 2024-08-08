@@ -40,6 +40,10 @@ class Bp_Customizable_Group_Categories_Admin {
 	 */
 	private $version;
 
+	public $admin_menu;
+	public $admin_submenu;
+	public $admin_submenu_sort;
+
 	/**
 	 * Admin menu hook name.
 	 *

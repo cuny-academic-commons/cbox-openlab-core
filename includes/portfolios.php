@@ -112,6 +112,48 @@ function openlab_user_portfolio_site_is_local( $user_id = 0 ) {
 }
 
 /**
+ * Should the user's portfolio link be shown on the user's profile?
+ *
+ * @since 1.6.0
+ *
+ * @param int $user_id
+ * @return bool
+ */
+function openlab_show_portfolio_link_on_user_profile( $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = bp_displayed_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	$show_raw = get_user_meta( $user_id, 'show_portfolio_link_on_user_profile', true );
+
+	if ( '' === $show_raw ) {
+		$show = true;
+	} else {
+		$show = '1' === $show_raw;
+	}
+
+	return (bool) $show;
+}
+
+/**
+ * Save the setting of whether the user's portfolio link should be shown on the user's profile.
+ *
+ * @since 1.6.0
+ *
+ * @param int $user_id The user ID.
+ * @param bool $show Whether to show the portfolio link.
+ */
+function openlab_save_show_portfolio_link_on_user_profile( $user_id, $show ) {
+	$save_value = $show ? '1' : '0';
+
+	update_user_meta( $user_id, 'show_portfolio_link_on_user_profile', $save_value );
+}
+
+/**
  * Get the user id of a portfolio user from the portfolio group's id
  *
  * @param int $group_id
@@ -160,27 +202,6 @@ function openlab_suggest_portfolio_path( $user_id = null ) {
 
 	return $slug;
 }
-
-/**
- * Ensure that a suggested name is included in the Name input of the creation screen
- */
-function openlab_bp_get_new_group_name( $name ) {
-	$portfolio_group_type = cboxol_get_portfolio_group_type();
-
-	if ( ! $portfolio_group_type ) {
-		return $name;
-	}
-
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( cboxol_is_portfolio() || ( ! empty( $_GET['group_type'] ) && $portfolio_group_type->get_slug() === $_GET['group_type'] ) ) {
-		if ( '' === $name ) {
-			$name = openlab_suggest_portfolio_name();
-		}
-	}
-
-	return $name;
-}
-add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
 
 /** Group Portfolios *********************************************************/
 
@@ -461,7 +482,27 @@ function openlab_portfolio_list_group_display() {
 		return false;
 	}
 
+	// In a course, display only to members.
+	$group_type = cboxol_get_group_group_type( $group->id );
+	if ( ! is_wp_error( $group_type ) && $group_type->get_is_course() && ! groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
 	$portfolio_data = openlab_get_group_member_portfolios();
+
+	// Hide private-member portfolios from non-members.
+	if ( current_user_can( 'view_private_members_of_group', $group->id ) ) {
+		$group_private_members = [];
+	} else {
+		$group_private_members = openlab_get_private_members_of_group( $group->id );
+	}
+
+	$portfolio_data = array_filter(
+		$portfolio_data,
+		function( $portfolio ) use ( $group_private_members ) {
+			return ! in_array( $portfolio['user_id'], $group_private_members, true );
+		}
+	);
 
 	// No member of the group has a portfolio
 	if ( empty( $portfolio_data ) ) {
@@ -525,7 +566,13 @@ function openlab_get_portfolio_creation_url() {
 		return '';
 	}
 
-	return bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details/?group_type=portfolio&new=true';
+	return add_query_arg(
+		[
+			'group_type' => 'portfolio',
+			'new'        => 'true',
+		],
+		bp_groups_get_create_url( [ 'group-details' ] )
+	);
 }
 
 /**
@@ -577,7 +624,7 @@ add_action( 'groups_before_delete_group', 'openlab_delete_portfolio' );
  * After portfolio delete, redirect to user profile page
  */
 function openlab_delete_portfolio_redirect() {
-	bp_core_redirect( bp_loggedin_user_domain() );
+	bp_core_redirect( bp_loggedin_user_url() );
 }
 
 /**
@@ -587,7 +634,7 @@ function openlab_enforce_one_portfolio_per_person() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( bp_is_active( 'groups' ) && bp_is_group_creation_step( 'group-details' ) && isset( $_GET['group_type'] ) && 'portfolio' === $_GET['group_type'] && openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 		bp_core_add_message( sprintf( 'You already have %s', openlab_get_portfolio_label( 'leading_a=1' ) ), 'error' );
-		bp_core_redirect( bp_loggedin_user_domain() );
+		bp_core_redirect( bp_loggedin_user_url() );
 	}
 }
 add_action( 'bp_actions', 'openlab_enforce_one_portfolio_per_person', 1 );

@@ -29,6 +29,13 @@ function cboxol_register_site_template_assets() {
 		true
 	);
 
+	wp_register_style(
+		'cboxol-site-template-picker-admin-style',
+		plugins_url( 'build/site-templates-admin.css', CBOXOL_PLUGIN_ROOT_FILE ),
+		[],
+		CBOXOL_ASSET_VER
+	);
+
 	wp_register_script(
 		'cboxol-site-templates-default-category',
 		plugins_url( 'build/site-templates-default-category.js', CBOXOL_PLUGIN_ROOT_FILE ),
@@ -54,11 +61,22 @@ function cboxol_register_site_template_assets() {
 		$default_template_map[ $group_type->get_slug() ] = $group_type->get_site_template_id();
 	}
 
+	$member_types_allowed_to_create_courses = array_filter(
+		cboxol_get_member_types(),
+		function( $member_type ) {
+			return $member_type->get_can_create_courses();
+		}
+	);
+
+	$locale = get_locale();
+	$lang   = substr( $locale, 0, 2 );
+
 	wp_localize_script(
 		'cboxol-site-template-picker-script',
 		'SiteTemplatePicker',
 		[
 			'endpoint'    => rest_url( 'wp/v2/site-templates' ),
+			'nonce'       => wp_create_nonce( 'wp_rest' ),
 			'perPage'     => 6,
 			'categoryMap' => $category_map,
 			'defaultMap'  => $default_template_map,
@@ -69,14 +87,21 @@ function cboxol_register_site_template_assets() {
 		]
 	);
 
-	wp_localize_script(
-		'cboxol-site-template-picker-admin-script',
-		'SiteTemplatePickerAdmin',
-		[
-			'endpoint' => rest_url( 'cboxol/v1/sites' ),
-			'nonce'    => wp_create_nonce( 'wp_rest' ),
-		]
-	);
+	$course_group_type = cboxol_get_course_group_type();
+	if ( $course_group_type ) {
+		wp_localize_script(
+			'cboxol-site-template-picker-admin-script',
+			'SiteTemplatePickerAdmin',
+			[
+				'endpoint'                => rest_url( 'cboxol/v1/sites' ),
+				'nonce'                   => wp_create_nonce( 'wp_rest' ),
+				'lang'                    => $lang,
+				'categoryMap'             => $category_map,
+				'courseGroupTypeSlug'     => cboxol_get_course_group_type()->get_slug(),
+				'courseCreateMemberTypes' => array_keys( $member_types_allowed_to_create_courses ),
+			]
+		);
+	}
 
 	wp_localize_script(
 		'cboxol-site-templates-default-category',
@@ -262,6 +287,15 @@ function cboxol_register_site_template_meta_boxes() {
 		'normal',
 		'core'
 	);
+
+	add_meta_box(
+		'template-visibility',
+		__( 'Template Visibility', 'commons-in-a-box' ),
+		'cboxol_render_template_visibility',
+		'cboxol_site_template',
+		'normal',
+		'core'
+	);
 }
 
 /**
@@ -305,6 +339,172 @@ function cboxol_render_template_site( $post ) {
 		]
 	);
 }
+
+/**
+ * Render callback for the Template Visibility metabox.
+ *
+ * @param \WP_Post $post
+ * @return void
+ */
+function cboxol_render_template_visibility( $post ) {
+	$limit_by_member_types = cboxol_is_template_visibility_limited_by_member_type( $post->ID );
+	$selected_member_types = cboxol_get_template_member_types( $post->ID );
+
+	$limit_by_academic_units = cboxol_is_template_visibility_limited_by_academic_unit( $post->ID );
+	$selected_academic_units = cboxol_get_template_academic_units( $post->ID );
+
+	cboxol_load_site_template_view(
+		'admin/visibility.php',
+		[
+			'limit_by_member_types'   => $limit_by_member_types,
+			'selected_member_types'   => $selected_member_types,
+			'limit_by_academic_units' => $limit_by_academic_units,
+			'selected_academic_units' => $selected_academic_units,
+		]
+	);
+}
+
+/**
+ * Determines whether a template's visibility is limited to specific member types.
+ *
+ * @since 1.6.0
+ *
+ * @param int $template_id The site template ID.
+ * @return bool
+ */
+function cboxol_is_template_visibility_limited_by_member_type( $template_id ) {
+	return (bool) get_post_meta( $template_id, 'cboxol_limit_template_by_member_type', true );
+}
+
+/**
+ * Determines the member types that a template is limited to.
+ *
+ * @since 1.6.0
+ *
+ * @param int $template_id The site template ID.
+ * @return \CBOX\OL\MemberType[]
+ */
+function cboxol_get_template_member_types( $template_id ) {
+	$selected_member_types = (array) get_post_meta( $template_id, 'cboxol_template_member_type' );
+
+	$types = [];
+	foreach ( $selected_member_types as $slug ) {
+		$type = cboxol_get_member_type( $slug );
+		if ( $type ) {
+			$types[ $slug ] = $type;
+		}
+	}
+
+	return $types;
+}
+
+/**
+ * Determines the academic units that a template is limited to.
+ *
+ * @since 1.6.0
+ *
+ * @param int $template_id The site template ID.
+ * @return \CBOX\OL\AcademicUnit[]
+ */
+function cboxol_get_template_academic_units( $template_id ) {
+	$selected_academic_units = (array) get_post_meta( $template_id, 'cboxol_template_academic_unit' );
+
+	$units = [];
+	foreach ( $selected_academic_units as $post_id ) {
+		$post = get_post( $post_id );
+		if ( ! $post || 'cboxol_acadunit' !== $post->post_type ) {
+			continue;
+		}
+
+		$unit = cboxol_get_academic_unit( $post->post_name );
+		if ( $unit ) {
+			$units[ $post_id ] = $unit;
+		}
+	}
+
+	return $units;
+}
+
+/**
+ * Determines whether a template's visibility is limited to specific academic units.
+ *
+ * @since 1.6.0
+ *
+ * @param int $template_id The site template ID.
+ * @return bool
+ */
+function cboxol_is_template_visibility_limited_by_academic_unit( $template_id ) {
+	return (bool) get_post_meta( $template_id, 'cboxol_limit_template_by_academic_unit', true );
+}
+
+/**
+ * Saves visibility data on template save.
+ *
+ * @since 1.6.0
+ *
+ * @param int      $post_id The site template ID.
+ * @param \WP_Post $post    The site template object.
+ * @return void
+ */
+function cboxol_save_template_visibility( $post_id, \WP_Post $post ) {
+	if ( ! current_user_can( 'manage_network_options' ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['cboxol-template-visibility-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'cboxol-template-visibility', 'cboxol-template-visibility-nonce' );
+
+	// Member types.
+	$limit_by_member_types = isset( $_POST['template-visibility-limit-by-member-type'] ) && 'yes' === $_POST['template-visibility-limit-by-member-type'];
+
+	if ( $limit_by_member_types ) {
+		update_post_meta( $post->ID, 'cboxol_limit_template_by_member_type', 1 );
+	} else {
+		delete_post_meta( $post->ID, 'cboxol_limit_template_by_member_type' );
+	}
+
+	$selected_member_types = isset( $_POST['template-visibility-limit-to-member-types'] ) ? array_map( 'sanitize_text_field', $_POST['template-visibility-limit-to-member-types'] ) : [];
+	$selected_member_types = array_filter(
+		$selected_member_types,
+		function( $slug ) {
+			return cboxol_get_member_type( $slug );
+		}
+	);
+
+	delete_post_meta( $post->ID, 'cboxol_template_member_type' );
+
+	foreach ( $selected_member_types as $slug ) {
+		add_post_meta( $post->ID, 'cboxol_template_member_type', $slug );
+	}
+
+	// Academic units.
+	$limit_by_academic_units = isset( $_POST['template-visibility-limit-by-academic-unit'] ) && 'yes' === $_POST['template-visibility-limit-by-academic-unit'];
+
+	if ( $limit_by_academic_units ) {
+		update_post_meta( $post->ID, 'cboxol_limit_template_by_academic_unit', 1 );
+	} else {
+		delete_post_meta( $post->ID, 'cboxol_limit_template_by_academic_unit' );
+	}
+
+	$selected_academic_units = isset( $_POST['template-visibility-limit-to-academic-unit'] ) ? array_map( 'sanitize_text_field', $_POST['template-visibility-limit-to-academic-unit'] ) : [];
+	$selected_academic_units = array_filter(
+		$selected_academic_units,
+		function( $post_id ) {
+			$post = get_post( $post_id );
+			return $post && 'cboxol_acadunit' === $post->post_type;
+		}
+	);
+
+	delete_post_meta( $post->ID, 'cboxol_template_academic_unit' );
+
+	foreach ( $selected_academic_units as $selected_academic_unit_id ) {
+		add_post_meta( $post->ID, 'cboxol_template_academic_unit', $selected_academic_unit_id );
+	}
+}
+add_action( 'save_post', 'cboxol_save_template_visibility', 15, 2 );
 
 /**
  * Render a view.
@@ -465,8 +665,9 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 		true
 	);
 
-	$locations            = get_theme_mod( 'nav_menu_locations' );
-	$locations['primary'] = $menu_id;
+	$primary_nav_key               = cboxol_get_theme_primary_nav_menu_location();
+	$locations                     = get_theme_mod( 'nav_menu_locations' );
+	$locations[ $primary_nav_key ] = $menu_id;
 	set_theme_mod( 'nav_menu_locations', $locations );
 
 	restore_current_blog();
@@ -842,3 +1043,284 @@ function cboxol_site_templates_admin_page() {
 	</div>
 	<?php
 }
+
+/**
+ * Enqueue site-templates-admin JS on the site-templates admin page.
+ *
+ * @since 1.6.0
+ *
+ * @return void
+ */
+function cboxol_enqueue_site_templates_admin_scripts_on_edit() {
+	if ( get_current_screen()->post_type === 'cboxol_site_template' ) {
+		wp_enqueue_script( 'cboxol-site-template-picker-admin-script' );
+		wp_enqueue_style( 'cboxol-site-template-picker-admin-style' );
+	}
+}
+add_action( 'admin_enqueue_scripts', 'cboxol_enqueue_site_templates_admin_scripts_on_edit' );
+
+/**
+ * AJAX handler for site template drag-and-drop reordering.
+ *
+ * @since 1.6.0
+ *
+ * @return void
+ */
+function cboxol_site_templates_handle_post_order_update() {
+	check_ajax_referer( 'wp_rest', 'security' );
+
+	if ( ! current_user_can( 'edit_cboxol_site_templates' ) ) {
+		return;
+	}
+
+	if ( ! isset( $_POST['order'] ) ) {
+		wp_send_json_error( __( 'No order data found.', 'commons-in-a-box' ) );
+	}
+
+	$order_data = json_decode( stripslashes( $_POST['order'] ), true );
+
+	foreach ( $order_data as $item ) {
+		$item_order = isset( $item['position'] ) ? (int) $item['position'] : 0;
+		$item_id    = isset( $item['id'] ) ? (int) $item['id'] : 0;
+
+		if ( ! $item_order || ! $item_id ) {
+			continue;
+		}
+
+		wp_update_post(
+			[
+				'ID'         => $item_id,
+				'menu_order' => $item_order,
+			]
+		);
+	}
+
+	wp_send_json_success( __( 'Post order updated successfully.', 'commons-in-a-box' ) );
+}
+add_action( 'wp_ajax_cboxol_update_site_template_order', 'cboxol_site_templates_handle_post_order_update' );
+
+/**
+ * On edit.php?post_type=cboxol_site_template, force sort order by menu_order.
+ *
+ * @since 1.6.0
+ *
+ * @param \WP_Query $query
+ * @return void
+ */
+function cboxol_site_templates_force_order_by_menu_order( $query ) {
+	if ( ! is_admin() || ! $query->is_main_query() ) {
+		return;
+	}
+
+	if ( 'cboxol_site_template' !== $query->get( 'post_type' ) ) {
+		return;
+	}
+
+	$query->set( 'orderby', 'menu_order' );
+	$query->set( 'order', 'ASC' );
+}
+add_action( 'pre_get_posts', 'cboxol_site_templates_force_order_by_menu_order' );
+
+/**
+ * In the REST API, allow cboxol_site_template requests to have orderby=menu_order.
+ *
+ * @since 1.6.0
+ *
+ * @param array           $params
+ * @param \WP_REST_Request $request
+ * @return array
+ */
+function cboxol_site_templates_rest_api_allow_orderby_menu_order( $params, $request ) {
+	$params['orderby']['enum'][] = 'menu_order';
+	return $params;
+}
+add_filter( 'rest_cboxol_site_template_collection_params', 'cboxol_site_templates_rest_api_allow_orderby_menu_order', 10, 2 );
+
+/**
+ * Modifies site template REST requests to restrict based on template visibility settings.
+ *
+ * @since 1.6.0
+ *
+ * @param array            $args    Array of query arguments.
+ * @param \WP_REST_Request $request The request object.
+ * @return array
+ */
+function cboxol_site_templates_rest_api_restrict_visibility( $args, $request ) {
+	$member_type_meta_query = [
+		'relation'  => 'OR',
+		'all_types' => [
+			[
+				'key'     => 'cboxol_limit_template_by_member_type',
+				'compare' => 'NOT EXISTS',
+			],
+		],
+	];
+
+	$allowed_member_types = [ 0 ];
+	if ( is_user_logged_in() ) {
+		$current_member_type = cboxol_get_user_member_type( bp_loggedin_user_id() );
+
+		if ( $current_member_type && ! is_wp_error( $current_member_type ) ) {
+			$member_type_meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_member_type',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_member_type',
+					'value' => $current_member_type->get_slug(),
+				],
+			];
+		}
+	}
+
+	$academic_unit_meta_query = [
+		'relation'  => 'OR',
+		'all_types' => [
+			[
+				'key'     => 'cboxol_limit_template_by_academic_unit',
+				'compare' => 'NOT EXISTS',
+			],
+		],
+	];
+
+	$allowed_academic_units = [ 0 ];
+	$current_group_id       = $request->get_param( 'group_id' );
+	if ( $current_group_id ) {
+		// Get the group's academic units.
+		$group_units = cboxol_get_object_academic_units(
+			[
+				'object_type' => 'group',
+				'object_id'   => $current_group_id,
+			]
+		);
+
+		if ( $group_units ) {
+			$group_unit_ids = array_map(
+				function( $unit ) {
+					return $unit->get_wp_post_id();
+				},
+				$group_units
+			);
+
+			$academic_unit_meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_academic_unit',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_academic_unit',
+					'value' => $group_unit_ids,
+				],
+			];
+		}
+	}
+
+	$meta_query   = isset( $args['meta_query'] ) ? $args['meta_query'] : [];
+	$meta_query[] = $member_type_meta_query;
+	$meta_query[] = $academic_unit_meta_query;
+
+	$args['meta_query'] = $meta_query;
+
+	return $args;
+}
+add_filter( 'rest_cboxol_site_template_query', 'cboxol_site_templates_rest_api_restrict_visibility', 10, 2 );
+
+/**
+ * Manages columns on Site Templates list table panel.
+ *
+ * @since 1.6.0
+ *
+ * @param array $columns Columns.
+ * @return array
+ */
+function cboxol_site_templates_manage_columns( $columns ) {
+	$columns_to_add = [
+		'visibility' => __( 'Visibility', 'commons-in-a-box' ),
+	];
+
+	// Insert before the 'date' column.
+	$column_keys = array_keys( $columns );
+	$date_index  = array_search( 'date', $column_keys, true );
+
+	$new_column_keys = array_merge(
+		array_slice( $column_keys, 0, $date_index, true ),
+		array_keys( $columns_to_add ),
+		array_slice( $column_keys, $date_index, null, true )
+	);
+
+	$new_columns = [];
+	foreach ( $new_column_keys as $key ) {
+		$column_value = isset( $columns_to_add[ $key ] ) ? $columns_to_add[ $key ] : $columns[ $key ];
+
+		$new_columns[ $key ] = $column_value;
+	}
+
+	return $new_columns;
+}
+add_filter( 'manage_edit-cboxol_site_template_columns', 'cboxol_site_templates_manage_columns' );
+
+/**
+ * Handles the content of custom columns on Site Templates list table panel.
+ *
+ * @since 1.6.0
+ *
+ * @param string $column_name Column name.
+ * @param int    $post_id     Post ID.
+ * @return void
+ */
+function cboxol_site_templates_manage_custom_columns( $column_name, $post_id ) {
+	switch ( $column_name ) {
+		case 'visibility':
+			$limit_by_member_types = cboxol_is_template_visibility_limited_by_member_type( $post_id );
+			$selected_member_types = cboxol_get_template_member_types( $post_id );
+
+			if ( $limit_by_member_types ) {
+				$member_type_labels = array_map(
+					function( $slug ) {
+						$type = cboxol_get_member_type( $slug );
+						return $type ? $type->get_label( 'singular' ) : '';
+					},
+					array_keys( $selected_member_types )
+				);
+
+				$member_types_text = implode( ', ', $member_type_labels );
+			} else {
+				$member_types_text = __( 'All', 'commons-in-a-box' );
+			}
+
+			$limit_by_academic_units = cboxol_is_template_visibility_limited_by_academic_unit( $post_id );
+			$selected_academic_units = cboxol_get_template_academic_units( $post_id );
+
+			if ( $limit_by_academic_units ) {
+				$academic_unit_labels = array_map(
+					function( $post_id ) {
+						$post = get_post( $post_id );
+						if ( ! $post || 'cboxol_acadunit' !== $post->post_type ) {
+							return '';
+						}
+
+						$unit = cboxol_get_academic_unit( $post->post_name );
+						return $unit ? $unit->get_name() : '';
+					},
+					array_keys( $selected_academic_units )
+				);
+
+				$academic_units_text = implode( ', ', array_filter( $academic_unit_labels ) );
+			} else {
+				$academic_units_text = __( 'All', 'commons-in-a-box' );
+			}
+
+			// translators: Member type labels.
+			echo wp_kses_post( sprintf( __( 'Member Types: %s', 'commons-in-a-box' ), '<span class="visibility-values">' . $member_types_text . '</span>' ) );
+			echo '<br />';
+
+			// translators: Academic unit labels.
+			echo wp_kses_post( sprintf( __( 'Academic Units: %s', 'commons-in-a-box' ), '<span class="visibility-values">' . $academic_units_text . '</span>' ) );
+
+			break;
+	}
+}
+add_action( 'manage_cboxol_site_template_posts_custom_column', 'cboxol_site_templates_manage_custom_columns', 10, 2 );

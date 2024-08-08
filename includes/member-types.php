@@ -352,3 +352,169 @@ function cboxol_prevent_member_type_edit( $caps, $cap, $user_id, $args ) {
 	return $caps;
 }
 add_filter( 'map_meta_cap', 'cboxol_prevent_member_type_edit', 10, 4 );
+
+/**
+ * Determines the avatar visibility level for the user.
+ *
+ * @since 1.6.0
+ *
+ * @param int $user_id ID of the user.
+ * @return string
+ */
+function cboxol_get_user_avatar_visibility( $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = bp_displayed_user_id();
+	}
+
+	$visibility = bp_get_user_meta( $user_id, 'avatar_visibility', true );
+	if ( ! $visibility ) {
+		$visibility = 'public';
+	}
+
+	return $visibility;
+}
+
+/**
+ * AJAX callback for updating avatar privacy.
+ *
+ * @since 1.6.0
+ *
+ * @return void
+ */
+function cboxol_ajax_update_avatar_privacy() {
+	check_ajax_referer( 'openlab_avatar_privacy', 'nonce' );
+
+	if ( ! isset( $_POST['user_id'] ) || ! isset( $_POST['visibility'] ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid request.', 'commons-in-a-box' ) ) );
+	}
+
+	$user_id    = (int) $_POST['user_id'];
+	$visibility = sanitize_text_field( $_POST['visibility'] );
+
+	$visibility_levels = bp_xprofile_get_visibility_levels();
+	if ( ! isset( $visibility_levels[ $visibility ] ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid visibility level.', 'commons-in-a-box' ) ) );
+	}
+
+	$is_my_profile = bp_loggedin_user_id() === $user_id;
+	if ( ! $is_my_profile && ! current_user_can( 'bp_moderate' ) ) {
+		wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'commons-in-a-box' ) ) );
+	}
+
+	bp_update_user_meta( $user_id, 'avatar_visibility', $visibility );
+}
+add_action( 'wp_ajax_openlab_avatar_privacy', 'cboxol_ajax_update_avatar_privacy' );
+
+/**
+ * Enforces avatar privacy settings.
+ *
+ * @since 1.6.0
+ *
+ * @param string $avatar_url Avatar URL.
+ * @param array  $args       Arguments passed to the avatar filter.
+ * @return string
+ */
+function cboxol_filter_avatar_url( $avatar_url, $args ) {
+	// BP only technically supports 'user' but we also sniff for 'member'.
+	if ( 'user' !== $args['object'] && 'member' !== $args['object'] ) {
+		return $avatar_url;
+	}
+
+	$visibility = cboxol_get_user_avatar_visibility( $args['item_id'] );
+
+	if ( 'public' === $visibility ) {
+		return $avatar_url;
+	}
+
+	// Users can always see their own avatar.
+	if ( bp_loggedin_user_id() === (int) $args['item_id'] ) {
+		return $avatar_url;
+	}
+
+	// Admins can always see all avatars.
+	if ( current_user_can( 'bp_moderate' ) ) {
+		return $avatar_url;
+	}
+
+	switch ( $visibility ) {
+		case 'loggedin':
+			// Logged-in users can see all avatars.
+			if ( is_user_logged_in() ) {
+				return $avatar_url;
+			}
+			break;
+
+		case 'friends':
+			// Friends can see each other's avatars.
+			if ( friends_check_friendship( bp_loggedin_user_id(), $args['item_id'] ) ) {
+				return $avatar_url;
+			}
+			break;
+
+		case 'private':
+		default:
+			// No one can see this avatar.
+			break;
+	}
+
+	$avatar_url = cboxol_default_avatar( $args['type'] );
+
+	return $avatar_url;
+}
+add_filter( 'bp_core_fetch_avatar_url', 'cboxol_filter_avatar_url', 10, 2 );
+
+/**
+ * Filters avatar img markup for privacy.
+ *
+ * @since 1.6.0
+ *
+ * @param string $html Avatar img markup.
+ * @param array  $args Arguments passed to the avatar filter.
+ * @return string
+ */
+function cboxol_filter_avatar_html( $html, $args ) {
+	// Get the avatar src from the img tag.
+	$src = '';
+	if ( preg_match( '/src="([^"]+)"/', $html, $matches ) ) {
+		$src = $matches[1];
+	}
+
+	if ( ! $src ) {
+		return $html;
+	}
+
+	$avatar_url = cboxol_filter_avatar_url( $src, $args );
+
+	// Replace the src in the img tag.
+	$html = preg_replace( '/src="([^"]+)"/', 'src="' . esc_url( $avatar_url ) . '"', $html );
+
+	return $html;
+}
+add_filter( 'bp_core_fetch_avatar', 'cboxol_filter_avatar_html', 10, 2 );
+
+/**
+ * Set order and labels for xprofile visibility levels.
+ *
+ * @since 1.6.0
+ *
+ * @param array $levels Visibility levels.
+ * @return array
+ */
+function cboxol_filter_xprofile_visibility_levels( $levels ) {
+	// Reorder.
+	$order = [ 'public', 'loggedin', 'friends', 'adminsonly' ];
+
+	$ordered_levels = [];
+	foreach ( $order as $level ) {
+		if ( isset( $levels[ $level ] ) ) {
+			$ordered_levels[ $level ] = $levels[ $level ];
+		}
+	}
+
+	if ( isset( $levels['loggedin'] ) ) {
+		$ordered_levels['loggedin']['label'] = __( 'All Community Members', 'commons-in-a-box' );
+	}
+
+	return $ordered_levels;
+}
+add_filter( 'bp_xprofile_get_visibility_levels', 'cboxol_filter_xprofile_visibility_levels' );

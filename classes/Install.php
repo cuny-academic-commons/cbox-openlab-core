@@ -47,6 +47,8 @@ class Install {
 		$this->install_default_badges();
 		$this->install_default_logos();
 
+		$this->install_custom_tables();
+
 		$this->install_default_widgets();
 		$this->install_default_nav_menus();
 		$this->install_default_slides();
@@ -228,11 +230,11 @@ class Install {
 					'group_site'                           => __( 'Course Site', 'commons-in-a-box' ),
 					'status_open'                          => __( 'This Course is OPEN.', 'commons-in-a-box' ),
 					'status_open_community_site'           => __( 'This Course is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_open_private_site'             => __( 'This Course is OPEN, but the corresponding Site is HIDDEN.', 'commons-in-a-box' ),
-					'status_private'                       => __( 'This Course is HIDDEN.', 'commons-in-a-box' ),
-					'status_private_community_site'        => __( 'This Course is HIDDEN, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_private_open_site'             => __( 'This Course is HIDDEN, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
-					'status_private_private_site'          => __( 'This Course is HIDDEN, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Course is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Course is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Course is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
 					'site_help_text'                       => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'commons-in-a-box' ),
 					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
 					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the course page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
@@ -301,11 +303,11 @@ class Install {
 					'group_site'                           => __( 'Project Site', 'commons-in-a-box' ),
 					'status_open'                          => __( 'This Project is OPEN.', 'commons-in-a-box' ),
 					'status_open_community_site'           => __( 'This Project is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_open_private_site'             => __( 'This Project is OPEN, but the corresponding Site is HIDDEN.', 'commons-in-a-box' ),
-					'status_private'                       => __( 'This Project is HIDDEN.', 'commons-in-a-box' ),
-					'status_private_community_site'        => __( 'This Project is HIDDEN, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_private_open_site'             => __( 'This Project is HIDDEN, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
-					'status_private_private_site'          => __( 'This Project is HIDDEN, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Project is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Project is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Project is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
 					'site_help_text'                       => __( 'Each project can also have an optional associated site. This is a WordPress site that all members of your project can access and contribute to.', 'commons-in-a-box' ),
 					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your project. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
 					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the project page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
@@ -374,11 +376,11 @@ class Install {
 					'group_site'                           => __( 'Club Site', 'commons-in-a-box' ),
 					'status_open'                          => __( 'This Club is OPEN.', 'commons-in-a-box' ),
 					'status_open_community_site'           => __( 'This Club is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_open_private_site'             => __( 'This Club is OPEN, but the corresponding Site is HIDDEN.', 'commons-in-a-box' ),
-					'status_private'                       => __( 'This Club is HIDDEN.', 'commons-in-a-box' ),
-					'status_private_community_site'        => __( 'This Club is HIDDEN, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_private_open_site'             => __( 'This Club is HIDDEN, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
-					'status_private_private_site'          => __( 'This Club is HIDDEN, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Club is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Club is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Club is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
 					'site_help_text'                       => __( 'Each club can also have an optional associated site. This is a WordPress site that all members of your club can access and contribute to.', 'commons-in-a-box' ),
 					'site_address_help_text'               => __( 'Take a moment to consider an address for the site associated with your club. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
 					'site_feed_check_help_text'            => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the club page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
@@ -463,7 +465,7 @@ class Install {
 					'create_clone_item'                    => __( 'Create Portfolio', 'commons-in-a-box' ),
 					'item_creation'                        => __( 'Portfolio Creation', 'commons-in-a-box' ),
 					'create_item_help_text'                => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'commons-in-a-box' ),
-					'name_help_text'                       => __( 'The suggested Portfolio Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.', 'commons-in-a-box' ),
+					'name_help_text'                       => __( 'Choose a name for your Portfolio. You may use your name ("Jane Smith\'s Portfolio"), or any descriptive title you\'d like.', 'commons-in-a-box' ),
 					'avatar_help_text'                     => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'commons-in-a-box' ),
 					'avatar_help_text_cant_decide'         => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'commons-in-a-box' ),
 					'url_help_text'                        => __( 'Choose a unique URL that will be the home for your portfolio.', 'commons-in-a-box' ),
@@ -482,11 +484,11 @@ class Install {
 					'my_portfolio_site'                    => __( 'My Portfolio Site', 'commons-in-a-box' ),
 					'status_open'                          => __( 'This Portfolio is OPEN.', 'commons-in-a-box' ),
 					'status_open_community_site'           => __( 'This Portfolio is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_open_private_site'             => __( 'This Portfolio is OPEN, but the corresponding Site is HIDDEN.', 'commons-in-a-box' ),
-					'status_private'                       => __( 'This Portfolio is HIDDEN.', 'commons-in-a-box' ),
-					'status_private_community_site'        => __( 'This Portfolio is HIDDEN, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
-					'status_private_open_site'             => __( 'This Portfolio is HIDDEN, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
-					'status_private_private_site'          => __( 'This Portfolio is HIDDEN, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+					'status_open_private_site'             => __( 'This Portfolio is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+					'status_private'                       => __( 'This Portfolio is PRIVATE.', 'commons-in-a-box' ),
+					'status_private_community_site'        => __( 'This Portfolio is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+					'status_private_open_site'             => __( 'This Portfolio is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+					'status_private_private_site'          => __( 'This Portfolio is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
 					'visit_portfolio_site'                 => __( 'Visit Portfolio Site', 'commons-in-a-box' ),
 					'visit_group_site'                     => __( 'Visit Portfolio Site', 'commons-in-a-box' ),
 					'site_help_text'                       => __( 'Each portfolio is associated with a WordPress site. The site is where portfolio owners display their work and accomplishments.', 'commons-in-a-box' ),
@@ -772,6 +774,10 @@ class Install {
 				'post_title'   => __( 'About', 'commons-in-a-box' ),
 				'post_content' => '<p>' . __( 'This page can contain an introduction to your site, institution, and/or organization.', 'commons-in-a-box' ) . '</p>' . $admin_text,
 			),
+			'accessibility'  => array(
+				'post_title'   => __( 'Accessibility', 'commons-in-a-box' ),
+				'post_content' => cboxol_get_default_accessibility_brand_page_content(),
+			),
 			'help'           => array(
 				'post_title'   => __( 'Help', 'commons-in-a-box' ),
 				'post_content' => '<p>' . __( 'This section can contain help and support documentation, as well as answers to frequently asked questions for your site\'s members and visitors.', 'commons-in-a-box' ) . '</p>' . $admin_text,
@@ -927,6 +933,17 @@ class Install {
 		$attachment_id = self::create_attachment( $default_avatar_path );
 
 		set_theme_mod( 'openlab_default_avatar', $attachment_id );
+	}
+
+	/**
+	 * Installs custom tables.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return void
+	 */
+	protected function install_custom_tables() {
+		openlab_create_private_membership_table();
 	}
 
 	/**
@@ -1104,7 +1121,7 @@ class Install {
 				array(
 					'menu-item-title'   => __( 'Calendar', 'commons-in-a-box' ),
 					'menu-item-classes' => 'sitewide-calendar',
-					'menu-item-url'     => trailingslashit( bp_get_root_domain() ) . 'calendar/',
+					'menu-item-url'     => trailingslashit( bp_get_root_url() ) . 'calendar/',
 					'menu-item-status'  => 'publish',
 				)
 			);

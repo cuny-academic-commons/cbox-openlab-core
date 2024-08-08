@@ -218,7 +218,7 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 				if ( $user ) {
 					$admins[] = [
 						'name' => bp_core_get_user_displayname( $user->ID ),
-						'url'  => bp_core_get_user_domain( $user->ID ),
+						'url'  => bp_members_get_user_url( $user->ID ),
 					];
 				}
 				break;
@@ -241,7 +241,7 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 		'group_admins'       => $admins,
 		'group_creator_id'   => $source_group->creator_id,
 		'group_creator_name' => bp_core_get_user_displayname( $source_group->creator_id ),
-		'group_creator_url'  => bp_core_get_user_domain( $source_group->creator_id ),
+		'group_creator_url'  => bp_members_get_user_url( $source_group->creator_id ),
 	);
 
 	return $source_data;
@@ -494,7 +494,7 @@ function openlab_get_credits( $group_id ) {
 
 							return sprintf(
 								'<a href="%s">%s</a>',
-								esc_attr( bp_core_get_user_domain( $user->ID ) ),
+								esc_attr( bp_members_get_user_url( $user->ID ) ),
 								esc_html( bp_core_get_user_displayname( $user->ID ) )
 							);
 

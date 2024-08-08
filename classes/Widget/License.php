@@ -131,7 +131,7 @@ class License extends WP_Widget {
 		$r = array_merge(
 			[
 				'author_name' => bp_core_get_user_displayname( get_current_user_id() ),
-				'author_url'  => bp_core_get_user_domain( get_current_user_id() ),
+				'author_url'  => bp_loggedin_user_url(),
 				'license'     => 'by-nc',
 				'title'       => __( 'License', 'commons-in-a-box' ),
 			],

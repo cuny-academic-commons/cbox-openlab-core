@@ -3,10 +3,10 @@
  */
 import { buildQueryString } from './util';
 
-const { endpoint, perPage, categoryMap } = window.SiteTemplatePicker;
+const { endpoint, nonce, perPage, categoryMap } = window.SiteTemplatePicker;
 const currentGroupType = window.CBOXOL_Group_Create.new_group_type;
 
-export async function getSiteTemplates( category, page = 1 ) {
+export async function getSiteTemplates( category, page = 1, groupId = 0 ) {
 	let templateCategory;
 
 	if ( ! category ) {
@@ -23,12 +23,20 @@ export async function getSiteTemplates( category, page = 1 ) {
 	const query = buildQueryString( {
 		_fields: [ 'id', 'title', 'excerpt', 'featured_media', 'template_category', 'site_id', 'image', 'categories' ],
 		template_category: templateCategory,
-		order: 'desc',
+		group_id: groupId,
+		orderby: 'menu_order',
+		order: 'asc',
 		per_page: Number( perPage ),
 		page,
+		_wpnonce: nonce,
 	} );
 
-	const response = await fetch( endpoint + '?' + query )
+	const response = await fetch(
+		endpoint + '?' + query,
+		{
+			credentials: 'include'
+		}
+	)
 	const items = await response.json();
 
 	if ( ! response.ok ) {

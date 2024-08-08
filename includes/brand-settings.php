@@ -45,6 +45,11 @@ function cboxol_get_brand_page_types() {
 			'settings_page_title'       => __( 'About Page', 'commons-in-a-box' ),
 			'settings_page_description' => __( 'This page can contain an introduction to your site, institution, and/or organization.', 'commons-in-a-box' ),
 		),
+		'accessibility'  => array(
+			'settings_page_title'       => __( 'Accessibility', 'commons-in-a-box' ),
+			'settings_page_description' => __( 'This page can contain information about the accessibility features of your site.', 'commons-in-a-box' ),
+			'parent'                    => 'about',
+		),
 		'help'           => array(
 			'settings_page_title'       => __( 'Help Page', 'commons-in-a-box' ),
 			'settings_page_description' => __( 'This section can contain help and support documentation and answers to frequently asked questions for your site’s members and visitors.', 'commons-in-a-box' ),
@@ -194,6 +199,10 @@ add_filter(
  * @return string
  */
 function cboxol_default_get_group_avatar( $url, $params ) {
+	if ( 'group' !== $params['object'] ) {
+		return $url;
+	}
+
 	if ( strstr( $url, 'default-avatar' ) || strstr( $url, 'wavatar' ) || strstr( $url, 'mystery-group.png' ) ) {
 		$url = cboxol_default_avatar( 'full' );
 	}
@@ -208,4 +217,45 @@ function cboxol_default_group_avatar_img( $html ) {
 	return str_replace( $bp_default, $ol_default, $html );
 }
 add_filter( 'bp_core_fetch_avatar', 'cboxol_default_group_avatar_img' );
+
+add_filter(
+	'bp_core_avatar_gravatar_default',
+	function( $default ) {
+		return cboxol_default_avatar( 'full' );
+	}
+);
+
+/**
+ * Default content for Accessibility page.
+ *
+ * @since 1.6.0
+ *
+ * @return string
+ */
+function cboxol_get_default_accessibility_brand_page_content() {
+	return '<p>' . esc_html__( 'This page can be used to provide information about accessibility. We have provided a template that you can modify to meet the needs of your community (for instance, you may prefer to link to instructional materials created by your institution). Questions about accessibility on Commons In A Box OpenLab? Join the <a href="https://cboxopenlab.org/groups/the-hub/forum/">discussion on the Community Hub</a>.', 'commons-in-a-box' ) . '</p>' .
+	'<p>' . esc_html__( 'If you are the administrator, visit Dashboard > Pages to modify this text.', 'commons-in-a-box' ) . '</p>' .
+
+	'<h2>' . esc_html__( 'What is accessibility?', 'commons-in-a-box' ) . '</h2>' .
+	'<p>' . esc_html__( 'Accessibility means ensuring that people with hearing, visual, motor, neurological, cognitive, and other disabilities can use and interact with websites, tools, and technologies and the materials they contain.', 'commons-in-a-box' ) . '</p>' .
+	'<p>' . esc_html__( 'This is important because everyone should have equal access to information, regardless of ability; in many countries, compliance with accessibility standards is required by law. Making websites and materials accessible also often makes them easier for everyone to use and understand.', 'commons-in-a-box' ) . '</p>' .
+	'<p>' . __( 'Want to learn more? The <a href="https://www.w3.org/">World Wide Web Consortium (W3C)</a>\'s <a href="https://www.w3.org/WAI/">Web Accessibility Initiative</a> provides a guide to <a href="https://www.w3.org/WAI/fundamentals/">web accessibility fundamentals</a>, including a helpful <a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/">introduction to accessibility</a>.', 'commons-in-a-box' ) . '</p>' .
+
+	'<h2>' . esc_html__( 'Making this site accessible', 'commons-in-a-box' ) . '</h2>' .
+	'<p>' . __( 'This site is powered by Commons In A Box OpenLab, which is <a href="https://commonsinabox.org/faqs/is-cbox-openlab-accessible-for-people-with-disabilities">designed to comply with the latest web accessibility standards</a>. Commons In A Box is built using WordPress and other software created by the WordPress community; see <a href="https://wordpress.org/about/accessibility/">WordPress\'s accessibility statement</a> for more information.', 'commons-in-a-box' ) . '</p>' .
+	'<p>' . esc_html__( 'The administrators of this site also work to ensure that any features and functionality added to the site (using WordPress plugins, themes, and custom code) also comply with accessibility standards.', 'commons-in-a-box' ) . '</p>' .
+
+	'<h2>' . esc_html__( 'Making your work accessible', 'commons-in-a-box' ) . '</h2>' .
+	'<p>' . esc_html__( 'Members of this site are also responsible for ensuring that their work is accessible. Before you share your work, take a few moments to make sure it is accessible to everyone:', 'commons-in-a-box' ) . '</p>' .
+	'<ul>' .
+		'<li>' . esc_html__( 'Make media accessible by adding descriptions (alt-text) to images and enabling captions for audio and video.', 'commons-in-a-box' ) . '</li>' .
+		'<li>' . esc_html__( 'Check that your text and documents are easy to read and comply with accessibility standards.', 'commons-in-a-box' ) . '</li>' .
+		'<li>' . esc_html__( 'Organize your materials to make them easy to follow.', 'commons-in-a-box' ) . '</li>' .
+	'</ul>' .
+
+	'<h2>' . esc_html__( 'Questions?', 'commons-in-a-box' ) . '</h2>' .
+	'<p>' . esc_html__( 'If you have any questions or concerns about accessibility on this site, contact us at [administrators: provide contact information here].', 'commons-in-a-box' ) . '</p>' .
+
+	'<p>' . __( 'Credits: This page uses content from the City Tech Library\'s "<a href="https://openlab.citytech.cuny.edu/accessibilitymodule/">Introduction to Accessibility</a>," the SUNY Oneonta OpenLab\'s "<a href="https://openlab.oneonta.edu/about/accessibility-in-openlab/">Accessibility in OpenLab</a>," and the W3C Web Accessibility Initiative\'s introduction to <a href="https://www.w3.org/WAI/fundamentals/">web accessibility fundamentals</a>.', 'commons-in-a-box' ) . '</p>';
+}
 
