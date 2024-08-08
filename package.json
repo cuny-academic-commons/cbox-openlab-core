@@ -1,6 +1,6 @@
 {
   "name": "cbox-openlab-core",
-  "version": "1.6.0",
+  "version": "1.7.0-alpha",
   "description": "Functionality plugin for the OpenLab package of Commons In A Box",
   "main": "assets/js/app.js",
   "directories": {
