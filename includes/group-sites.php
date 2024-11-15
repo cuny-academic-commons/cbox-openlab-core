@@ -531,7 +531,7 @@ function openlab_group_blog_activity( $activity ) {
 			__( '%1$s wrote a new blog post %2$s in the group %3$s', 'commons-in-a-box' ),
 			bp_core_get_userlink( $activity->user_id ),
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
-			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			'<a href="' . esc_url( bp_get_group_url( $group ) ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	} else {
 		$userlink = '';
@@ -545,7 +545,7 @@ function openlab_group_blog_activity( $activity ) {
 			__( '%1$s commented on %2$s in the group %3$s', 'commons-in-a-box' ),
 			$userlink,
 			'<a href="' . get_permalink( $post->ID ) . '">' . esc_html( $post->post_title ) . '</a>',
-			'<a href="' . bp_get_group_permalink( $group ) . '">' . esc_html( $group->name ) . '</a>'
+			'<a href="' . esc_url( bp_get_group_url( $group ) ) . '">' . esc_html( $group->name ) . '</a>'
 		);
 	}
 
@@ -1165,7 +1165,7 @@ function openlab_convert_feed_to_activity( $items = array(), $item_type = 'posts
 
 			$group           = groups_get_current_group();
 			$group_name      = $group->name;
-			$group_permalink = bp_get_group_permalink( $group );
+			$group_permalink = bp_get_group_url( $group );
 
 			$group_link = sprintf(
 				'<a href="%s">%s</a>',
@@ -1834,7 +1834,7 @@ function cboxol_copy_blog_page( $group_id ) {
 						$nav_items['group'],
 						array(
 							'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
-							'menu-item-url'      => bp_get_group_permalink( $group ),
+							'menu-item-url'      => bp_get_group_url( $group ),
 							'menu-item-status'   => 'publish',
 							'menu-item-position' => -2,
 							'menu-item-classes'  => 'group-profile-link',
@@ -2114,7 +2114,7 @@ function cboxol_get_nav_menu_items() {
 			'object_id'        => $group_id,
 			'object'           => 'custom',
 			'title'            => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
-			'url'              => bp_get_group_permalink( $group ),
+			'url'              => bp_get_group_url( $group ),
 			'slug'             => 'group-profile-link',
 			'type'             => 'custom',
 			'classes'          => [ 'group-profile-link' ],

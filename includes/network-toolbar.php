@@ -921,17 +921,17 @@ HTML;
 			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . esc_url( bp_get_group_url( $group ) ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $group->id,
 							'object'  => 'group',
 							'type'    => 'full',
 							'html'    => false,
 						)
-					) . '" alt="Profile picture of ' . stripslashes( $group->name ) . '"/></a></div></div>';
+					) . '" alt="Profile picture of ' . esc_attr( stripslashes( $group->name ) ) . '"/></a></div></div>';
 
 					// name link
-					$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $group ) . '">' . stripslashes( $group->name ) . '</a></p>';
+					$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . esc_url( bp_get_group_url( $group ) ) . '">' . esc_html( stripslashes( $group->name ) ) . '</a></p>';
 
 					// accept/reject buttons
 					$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'commons-in-a-box' ) . '</a></p></div></div>';

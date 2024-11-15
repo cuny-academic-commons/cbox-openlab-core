@@ -97,7 +97,7 @@ function openlab_user_portfolio_profile_url( $user_id = 0 ) {
 function openlab_get_user_portfolio_profile_url( $user_id = 0 ) {
 	$group_id    = openlab_get_user_portfolio_id( $user_id );
 	$profile_obj = groups_get_group( array( 'group_id' => $group_id ) );
-	return bp_get_group_permalink( $profile_obj );
+	return bp_get_group_url( $profile_obj );
 }
 
 /**
