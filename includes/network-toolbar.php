@@ -402,6 +402,9 @@ class OpenLab_Admin_Bar {
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
 			add_action( 'admin_bar_menu', array( $this, 'add_custom_edit_menu' ), 80 );
 
+			// Remove BP's bp-notifications item.
+			add_action( 'admin_bar_menu', [ $this, 'remove_bp_notifications_item' ], 100 );
+
 			//for cleanning up any plugin add ons
 			add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
 		} else {
@@ -1307,6 +1310,17 @@ HTML;
 				}
 			}
 		}
+	}
+
+	/**
+	 * Removes BP's 'bp-notifications' admin bar item.
+	 *
+	 * We show our notifications elsewhere in the toolbar.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar
+	 */
+	public function remove_bp_notifications_item( $wp_admin_bar ) {
+		$wp_admin_bar->remove_node( 'bp-notifications' );
 	}
 
 	/**
