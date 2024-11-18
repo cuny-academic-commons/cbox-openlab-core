@@ -399,11 +399,11 @@ class OpenLab_Admin_Bar {
 				add_action( 'admin_bar_menu', array( $this, 'add_custom_content_menu' ), 70 );
 			}
 
-						remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
-						add_action( 'admin_bar_menu', array( $this, 'add_custom_edit_menu' ), 80 );
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
+			add_action( 'admin_bar_menu', array( $this, 'add_custom_edit_menu' ), 80 );
 
-						//for cleanning up any plugin add ons
-						add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
+			//for cleanning up any plugin add ons
+			add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
 		} else {
 			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 30 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
