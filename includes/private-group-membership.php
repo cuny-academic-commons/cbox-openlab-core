@@ -331,7 +331,7 @@ function openlab_filter_docs_query_to_exclude_private_group_members( $args, $doc
 
 	$group_id = $docs_query->query_args['group_id'];
 
-	if ( bp_current_user_can( 'view_private_members_of_group', $group_id ) ) {
+	if ( bp_current_user_can( 'view_private_members_of_group', [ 'group_id' => $group_id ] ) ) {
 		return $args;
 	}
 
@@ -361,7 +361,15 @@ function openlab_filter_map_meta_cap_for_private_group_members( $caps, $cap, $us
 		return $caps;
 	}
 
-	$group_id = isset( $args[0] ) ? intval( $args[0] ) : bp_get_current_group_id();
+	// Due to confusing behavior by BuddyPress, $args can be nested in some cases.
+	if ( isset( $args['group_id'] ) ) {
+		$group_id = intval( $args['group_id'] );
+	} elseif ( isset( $args[0]['group_id'] ) ) {
+		$group_id = intval( $args[0]['group_id'] );
+	} else {
+		$group_id = bp_get_current_group_id();
+	}
+
 	if ( ! $group_id ) {
 		return $caps;
 	}
