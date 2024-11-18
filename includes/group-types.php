@@ -801,7 +801,7 @@ function openlab_save_group_creators_on_creation() {
 
 	$creators = array_map(
 		function( $contact_id ) {
-			$username = bp_core_get_username( $contact_id );
+			$username = bp_members_get_user_slug( $contact_id );
 			if ( ! $username ) {
 				return null;
 			}
