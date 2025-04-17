@@ -57,7 +57,7 @@ function openlab_get_private_members_of_group( $group_id, $exclude_self = true )
 
 	global $wpdb;
 
-	if ( ! empty( $members[ $group_id ] ) ) {
+	if ( array_key_exists( $member_id, $members ) ) {
 		$private_member_ids = $members[ $group_id ];
 	} else {
 		$table_name = openlab_get_private_membership_table_name();
