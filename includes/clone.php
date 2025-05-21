@@ -236,7 +236,7 @@ function openlab_get_group_data_for_clone_history( $source_id ) {
 
 	$source_data = array(
 		'group_id'           => $source_id,
-		'group_url'          => bp_get_group_permalink( $source_group ),
+		'group_url'          => bp_get_group_url( $source_group ),
 		'group_name'         => $course_code ? $course_code : $group_type_label,
 		'group_admins'       => $admins,
 		'group_creator_id'   => $source_group->creator_id,

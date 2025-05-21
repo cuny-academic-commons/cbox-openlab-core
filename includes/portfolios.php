@@ -97,7 +97,7 @@ function openlab_user_portfolio_profile_url( $user_id = 0 ) {
 function openlab_get_user_portfolio_profile_url( $user_id = 0 ) {
 	$group_id    = openlab_get_user_portfolio_id( $user_id );
 	$profile_obj = groups_get_group( array( 'group_id' => $group_id ) );
-	return bp_get_group_permalink( $profile_obj );
+	return bp_get_group_url( $profile_obj );
 }
 
 /**
@@ -491,7 +491,7 @@ function openlab_portfolio_list_group_display() {
 	$portfolio_data = openlab_get_group_member_portfolios();
 
 	// Hide private-member portfolios from non-members.
-	if ( current_user_can( 'view_private_members_of_group', $group->id ) ) {
+	if ( current_user_can( 'view_private_members_of_group', [ 'group_id' => $group->id ] ) ) {
 		$group_private_members = [];
 	} else {
 		$group_private_members = openlab_get_private_members_of_group( $group->id );
