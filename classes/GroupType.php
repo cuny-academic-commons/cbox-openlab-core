@@ -21,7 +21,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'is_course'                        => false,
 		'is_portfolio'                     => false,
 		'available_privacy_options'        => [ 'public', 'private', 'hidden' ],
+		'available_site_privacy_options'   => [ '1', '0', '-1', '-2', '-3' ],
 		'default_privacy_option'           => 'public',
+		'default_site_privacy_option'      => '1',
 		'requires_site'                    => false,
 		'supports_course_information'      => false,
 		'supports_mol_link'                => false,
@@ -53,7 +55,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$type->set_directory_filters( get_post_meta( $post->ID, 'cboxol_group_type_directory_filters', true ) );
 		$type->set_site_template_id( get_post_meta( $post->ID, 'cboxol_group_type_site_template_id', true ) );
 		$type->set_available_privacy_options( get_post_meta( $post->ID, 'cboxol_group_type_available_privacy_options', true ) );
+		$type->set_available_site_privacy_options( get_post_meta( $post->ID, 'cboxol_group_type_available_site_privacy_options', true ) );
 		$type->set_default_privacy_option( get_post_meta( $post->ID, 'cboxol_group_type_default_privacy_option', true ) );
+		$type->set_default_site_privacy_option( get_post_meta( $post->ID, 'cboxol_group_type_default_site_privacy_option', true ) );
 
 		return $type;
 	}
@@ -67,27 +71,29 @@ class GroupType extends ItemTypeBase implements ItemType {
 		);
 
 		return array(
-			'availablePrivacyOptions' => $this->get_available_privacy_options(),
-			'defaultPrivacyOption'    => $this->get_default_privacy_option(),
-			'id'                      => $this->get_wp_post_id(),
-			'isCollapsed'             => true,
-			'isCourse'                => $this->get_is_course(),
-			'isPortfolio'             => $this->get_is_portfolio(),
-			'isEnabled'               => $this->get_is_enabled(),
-			'isLoading'               => false,
-			'isModified'              => false,
-			'canBeDeleted'            => $this->get_can_be_deleted(),
-			'settings'                => array(
+			'availablePrivacyOptions'     => $this->get_available_privacy_options(),
+			'availableSitePrivacyOptions' => $this->get_available_site_privacy_options(),
+			'defaultPrivacyOption'        => $this->get_default_privacy_option(),
+			'defaultSitePrivacyOption'    => $this->get_default_site_privacy_option(),
+			'id'                          => $this->get_wp_post_id(),
+			'isCollapsed'                 => true,
+			'isCourse'                    => $this->get_is_course(),
+			'isPortfolio'                 => $this->get_is_portfolio(),
+			'isEnabled'                   => $this->get_is_enabled(),
+			'isLoading'                   => false,
+			'isModified'                  => false,
+			'canBeDeleted'                => $this->get_can_be_deleted(),
+			'settings'                    => array(
 				'Order' => array(
 					'component' => 'Order',
 					'data'      => $this->get_order(),
 				),
 			),
-			'name'                    => $this->get_name(),
-			'slug'                    => $this->get_slug(),
-			'labels'                  => $this->get_labels(),
-			'siteTemplates'           => $this->get_site_templates(),
-			'siteTemplateId'          => $this->get_site_template_id(),
+			'name'                        => $this->get_name(),
+			'slug'                        => $this->get_slug(),
+			'labels'                      => $this->get_labels(),
+			'siteTemplates'               => $this->get_site_templates(),
+			'siteTemplateId'              => $this->get_site_template_id(),
 		);
 	}
 
@@ -113,6 +119,23 @@ class GroupType extends ItemTypeBase implements ItemType {
 	}
 
 	/**
+	 * Gets the available site privacy options.
+	 *
+	 * @return array
+	 */
+	public function get_available_site_privacy_options() {
+		$possible_options = [ '1', '0', '-1', '-2', '-3' ];
+
+		$available_privacy_options = $this->data['available_site_privacy_options'];
+
+		if ( ! is_array( $available_privacy_options ) ) {
+			$available_privacy_options = $possible_options;
+		}
+
+		return array_intersect( $available_privacy_options, $possible_options );
+	}
+
+	/**
 	 * Gets the default privacy option.
 	 *
 	 * @return string
@@ -125,6 +148,21 @@ class GroupType extends ItemTypeBase implements ItemType {
 		}
 
 		return $this->data['default_privacy_option'];
+	}
+
+	/**
+	 * Gets the default site privacy option.
+	 *
+	 * @return string
+	 */
+	public function get_default_site_privacy_option() {
+		$available_privacy_options = $this->get_available_site_privacy_options();
+
+		if ( ! in_array( $this->data['default_site_privacy_option'], $available_privacy_options, true ) ) {
+			return reset( $available_privacy_options );
+		}
+
+		return $this->data['default_site_privacy_option'];
 	}
 
 	public function get_template_site_id() {
@@ -427,7 +465,9 @@ class GroupType extends ItemTypeBase implements ItemType {
 		update_post_meta( $wp_post_id, 'cboxol_group_type_directory_filters', $this->get_directory_filters() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_site_template_id', $this->get_site_template_id() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_available_privacy_options', $this->get_available_privacy_options() );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_available_site_privacy_options', $this->get_available_site_privacy_options() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_default_privacy_option', $this->get_default_privacy_option() );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_default_site_privacy_option', $this->get_default_site_privacy_option() );
 	}
 
 	public static function get_dummy() {
@@ -953,6 +993,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 	}
 
 	/**
+	 * Sets the available site privacy options.
+	 *
+	 * @param array $available_site_privacy_options
+	 * @return void
+	 */
+	public function set_available_site_privacy_options( $available_site_privacy_options ) {
+		$this->data['available_site_privacy_options'] = $available_site_privacy_options;
+	}
+
+	/**
 	 * Sets the default privacy option.
 	 *
 	 * @param string $default_privacy_option
@@ -960,6 +1010,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 	 */
 	public function set_default_privacy_option( $default_privacy_option ) {
 		$this->data['default_privacy_option'] = $default_privacy_option;
+	}
+
+	/**
+	 * Sets the default site privacy option.
+	 *
+	 * @param string $default_site_privacy_option
+	 * @return void
+	 */
+	public function set_default_site_privacy_option( $default_site_privacy_option ) {
+		$this->data['default_site_privacy_option'] = $default_site_privacy_option;
 	}
 
 	/**

@@ -232,6 +232,25 @@
 							</label>
 						</div>
 				</fieldset>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupHomeAvailableOptionsHeading }}</h4>
+
+				<p>{{ strings.groupHomeAvailableOptionsDescription }}</p>
+
+				<div
+					v-for="[ value, text ] in allSiteBlogPublicOptions"
+					:key="value"
+					class="cboxol-group-type-site-privacy-level"
+				>
+					<label>
+						<input
+							type="checkbox"
+							:value="value"
+							v-model="selectedSitePrivacyOptions"
+							:name="`group-selected-site-privacy-options-${slug}`"
+						> <span>{{ text }}</span>
+					</label>
+				</div>
 			</div>
 
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
@@ -290,6 +309,16 @@
 		computed: {
 			addNewPlaceholder() {
 				return this.getEntityTypeProp( 'addNewPlaceholder' )
+			},
+
+			allSiteBlogPublicOptions() {
+				return new Map([
+					[  '1', this.strings.groupSiteBlogPublic1 ],
+					[  '0', this.strings.groupSiteBlogPublic0 ],
+					[ '-1', this.strings.groupSiteBlogPublicNegative1 ],
+					[ '-2', this.strings.groupSiteBlogPublicNegative2 ],
+					[ '-3', this.strings.groupSiteBlogPublicNegative3 ]
+				]);
 			},
 
 			entityData() {
@@ -394,6 +423,28 @@
 				}, []);
 
 				return sortedOptions;
+			},
+
+			selectedSitePrivacyOptions: {
+				get() {
+					const rawOptions = this.entityData.availableSitePrivacyOptions || [];
+					// These are numeric strings and should be ordered in descending order.
+					const optionOrder = [ '1', '0', '-1', '-2', '-3' ];
+
+					// Sort the options based on the order defined in optionOrder
+					const sortedOptions = optionOrder.reduce((acc, option) => {
+						if (rawOptions.includes(option.toString())) {
+							acc.push(option);
+						}
+						return acc;
+					}, []);
+
+					return sortedOptions;
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'availableSitePrivacyOptions', value )
+				}
 			},
 
 			defaultPrivacy: {

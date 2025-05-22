@@ -376,3 +376,17 @@ a .action-arrow {
 .cboxol-group-type-default-radio {
 	margin-top: 12px;
 }
+
+.cboxol-group-type-site-privacy-level {
+	margin-bottom: 12px;
+}
+
+.cboxol-group-type-site-privacy-level label {
+	align-items: center;
+	display: flex;
+	gap: 8px;
+}
+
+.cboxol-group-type-site-privacy-level label span {
+	max-width: 700px;
+}

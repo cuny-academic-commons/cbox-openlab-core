@@ -137,6 +137,13 @@ function cboxol_register_assets() {
 				'groupHomeAvailableOptionsDescription' => __( 'Below you can choose the privacy settings for the Group Home that will be available for group admins to choose when they create a new group or edit its settings.', 'commons-in-a-box' ),
 				'groupHomeDefaultOptionHeading'        => __( 'Group Home: Default Option', 'commons-in-a-box' ),
 				'groupHomeDefaultOptionDescription'    => __( 'Choose the setting from those selected above that will be the default during group creation:', 'commons-in-a-box' ),
+				'groupSiteAvailableOptionsHeading'     => __( 'Group Site: Available Options', 'commons-in-a-box' ),
+				'groupSiteAvailableOptionsDescription' => __( 'Below you can choose the privacy settings for the Group Site that will be available for group admins to choose when they create a new group or edit its settings. ', 'commons-in-a-box' ),
+				'groupSiteBlogPublic1'                 => __( 'Allow search engines to index this site. The site will show up in web search results.', 'commons-in-a-box' ),
+				'groupSiteBlogPublic0'                 => __( 'Ask search engines not to index this site. The site should not show up in web search results. Note: This option will NOT block access to the site. It is up to search engines to honor your request.', 'commons-in-a-box' ),
+				'groupSiteBlogPublicNegative1'         => __( 'I would like the site to be visible only to members of this community.', 'commons-in-a-box' ),
+				'groupSiteBlogPublicNegative2'         => __( 'I would like the site to be visible to community members with a role on the associated site.', 'commons-in-a-box' ),
+				'groupSiteBlogPublicNegative3'         => __( 'I would like my site to be visible only to those members with an administrator role on the associated site.', 'commons-in-a-box' ),
 				'hidden'                               => _x( 'Hidden', 'group privacy level', 'commons-in-a-box' ),
 				'itemTypeNameLabel'                    => _x( 'Name', 'item type Name label', 'commons-in-a-box' ),
 				'labels'                               => _x( 'Labels', 'subheader for item type labels', 'commons-in-a-box' ),
@@ -188,6 +195,35 @@ function cboxol_register_assets() {
 			),
 		)
 	);
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( $group_id ) {
+		$group_type = cboxol_get_group_group_type( $group_id );
+		if ( $group_type && ! is_wp_error( $group_type ) ) {
+			wp_register_script(
+				'cboxol-options-reading',
+				CBOXOL_PLUGIN_URL . 'assets/js/options-reading.js',
+				[],
+				cboxol_get_asset_version(),
+				true
+			);
+
+			wp_add_inline_script(
+				'cboxol-options-reading',
+				'const cboxolOptionsReading = ' . wp_json_encode(
+					array(
+						'availableSitePrivacyOptions' => $group_type->get_available_site_privacy_options(),
+					)
+				) . ';',
+				'before'
+			);
+		}
+
+		$screen = get_current_screen();
+		if ( $screen && 'options-reading' === $screen->id ) {
+			wp_enqueue_script( 'cboxol-options-reading' );
+		}
+	}
 
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css', array(), cboxol_get_asset_version() );
 	// @todo More specific.
