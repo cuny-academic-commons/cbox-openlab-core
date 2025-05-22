@@ -362,3 +362,13 @@ a .action-arrow {
 #template-site .select2-container {
 	max-width: 100%;
 }
+
+.cboxol-group-type-privacy-level label {
+	font-weight: bold;
+}
+
+.cboxol-group-type-privacy-level ul {
+	list-style-type: circle;
+	padding-left: 30px;
+	margin-bottom: 16px;
+}

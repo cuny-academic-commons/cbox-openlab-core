@@ -447,6 +447,12 @@ const store = new Vuex.Store(
 				const { itemsKey, slug } = payload
 
 				state[ itemsKey ][ slug ].isCollapsed = ! state[ itemsKey ][ slug ].isCollapsed
+			},
+
+			updateEntityPrivacyOptions( state, { key, slug, options } ) {
+				if ( state[ key ] && state[ key ][ slug ] ) {
+					Vue.set( state[ key ][ slug ], 'availablePrivacyOptions', options );
+				}
 			}
 		}
 	}

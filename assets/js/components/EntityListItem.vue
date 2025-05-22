@@ -144,6 +144,74 @@
 				</div>
 			</div>
 
+			<div class="cboxol-entity-content-section item-type-default-privacy-settings">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.defaultPrivacySettings }}</h3>
+
+				<p>{{ strings.defaultPrivacySettingsDescription }}</p>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupHomeAvailableOptionsHeading }}</h4>
+
+				<p>{{ strings.groupHomeAvailableOptionsDescription }}</p>
+
+				<fieldset>
+					<legend class="screen-reader-text">{{ strings.groupHomeAvailableOptions }}</legend>
+
+					<div class="cboxol-group-type-privacy-level">
+						<label>
+							<input
+								type="checkbox"
+								value="public"
+								:checked="selectedPrivacyOptions.includes('public')"
+								@change="togglePrivacy('public')"
+							>
+							{{ strings.public }}
+						</label>
+
+						<ul>
+							<li>{{ strings.groupContentIsPublic }}</li>
+							<li>{{ strings.groupDirectoryIsPublic }}</li>
+							<li>{{ strings.groupJoiningIsPublic }} </li>
+						</ul>
+					</div>
+
+					<div class="cboxol-group-type-privacy-level">
+						<label>
+							<input
+								type="checkbox"
+								value="private"
+								:checked="selectedPrivacyOptions.includes('private')"
+								@change="togglePrivacy('private')"
+							>
+							Private
+						</label>
+
+						<ul>
+							<li>{{ strings.groupContentIsPrivate }}</li>
+							<li>{{ strings.groupDirectoryIsPublic }}</li>
+							<li>{{ strings.groupJoiningIsPrivate }}</li>
+						</ul>
+					</div>
+
+					<div class="cboxol-group-type-privacy-level">
+						<label>
+							<input
+								type="checkbox"
+								value="hidden"
+								:checked="selectedPrivacyOptions.includes('hidden')"
+								@change="togglePrivacy('hidden')"
+							>
+							Hidden
+						</label>
+
+						<ul>
+							<li>{{ strings.groupContentIsPrivate }}</li>
+							<li>{{ strings.groupDirectoryIsPrivate }}</li>
+							<li>{{ strings.groupJoiningInviteOnly }}</li>
+						</ul>
+					</div>
+				</fieldset>
+			</div>
+
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
@@ -291,6 +359,10 @@
 				}
 			},
 
+			selectedPrivacyOptions() {
+				return this.entityData.availablePrivacyOptions || [];
+			},
+
 			supportsAssociatedWithMemberTypes() {
 				return this.itemsKey === 'academicUnitTypes'
 			},
@@ -331,6 +403,25 @@
 
 			isDefaultTemplate: ( siteId ) => {
 				return siteId === this.entityData.siteTemplate
+			},
+
+			togglePrivacy(option) {
+				this.isModified = true;
+
+				const current = this.selectedPrivacyOptions.slice(); // shallow copy
+
+				const index = current.indexOf(option);
+				if (index > -1) {
+					current.splice(index, 1); // remove
+				} else {
+					current.push(option); // add
+				}
+
+				this.$store.commit( 'updateEntityPrivacyOptions', {
+					key: this.itemsKey,
+					slug: this.slug,
+					options: current
+				} );
 			},
 
 			onDeleteClick: function( event ) {

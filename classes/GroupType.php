@@ -20,6 +20,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'enable_site_by_default'           => false,
 		'is_course'                        => false,
 		'is_portfolio'                     => false,
+		'available_privacy_options'        => [ 'public', 'private', 'hidden' ],
 		'requires_site'                    => false,
 		'supports_course_information'      => false,
 		'supports_mol_link'                => false,
@@ -50,6 +51,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		$type->set_directory_filters( get_post_meta( $post->ID, 'cboxol_group_type_directory_filters', true ) );
 		$type->set_site_template_id( get_post_meta( $post->ID, 'cboxol_group_type_site_template_id', true ) );
+		$type->set_available_privacy_options( get_post_meta( $post->ID, 'cboxol_group_type_available_privacy_options', true ) );
 
 		return $type;
 	}
@@ -63,30 +65,48 @@ class GroupType extends ItemTypeBase implements ItemType {
 		);
 
 		return array(
-			'id'             => $this->get_wp_post_id(),
-			'isCollapsed'    => true,
-			'isCourse'       => $this->get_is_course(),
-			'isPortfolio'    => $this->get_is_portfolio(),
-			'isEnabled'      => $this->get_is_enabled(),
-			'isLoading'      => false,
-			'isModified'     => false,
-			'canBeDeleted'   => $this->get_can_be_deleted(),
-			'settings'       => array(
+			'availablePrivacyOptions' => $this->get_available_privacy_options(),
+			'id'                      => $this->get_wp_post_id(),
+			'isCollapsed'             => true,
+			'isCourse'                => $this->get_is_course(),
+			'isPortfolio'             => $this->get_is_portfolio(),
+			'isEnabled'               => $this->get_is_enabled(),
+			'isLoading'               => false,
+			'isModified'              => false,
+			'canBeDeleted'            => $this->get_can_be_deleted(),
+			'settings'                => array(
 				'Order' => array(
 					'component' => 'Order',
 					'data'      => $this->get_order(),
 				),
 			),
-			'name'           => $this->get_name(),
-			'slug'           => $this->get_slug(),
-			'labels'         => $this->get_labels(),
-			'siteTemplates'  => $this->get_site_templates(),
-			'siteTemplateId' => $this->get_site_template_id(),
+			'name'                    => $this->get_name(),
+			'slug'                    => $this->get_slug(),
+			'labels'                  => $this->get_labels(),
+			'siteTemplates'           => $this->get_site_templates(),
+			'siteTemplateId'          => $this->get_site_template_id(),
 		);
 	}
 
 	public function get_directory_filters() {
 		return $this->data['directory_filters'];
+	}
+
+	/**
+	 * Gets the available privacy options.
+	 *
+	 * @return array
+	 */
+	public function get_available_privacy_options() {
+		$possible_options = [ 'public', 'private', 'hidden' ];
+
+		$available_privacy_options = $this->data['available_privacy_options'];
+
+		if ( ! is_array( $available_privacy_options ) ) {
+			$available_privacy_options = $possible_options;
+		}
+
+		return array_intersect( $available_privacy_options, $possible_options );
 	}
 
 	public function get_template_site_id() {
@@ -388,6 +408,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		update_post_meta( $wp_post_id, 'cboxol_group_type_directory_filters', $this->get_directory_filters() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_site_template_id', $this->get_site_template_id() );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_available_privacy_options', $this->get_available_privacy_options() );
 	}
 
 	public static function get_dummy() {
@@ -900,6 +921,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	public function set_directory_filters( $directory_filters ) {
 		$this->data['directory_filters'] = $directory_filters;
+	}
+
+	/**
+	 * Sets the available privacy options.
+	 *
+	 * @param array $available_privacy_options
+	 * @return void
+	 */
+	public function set_available_privacy_options( $available_privacy_options ) {
+		$this->data['available_privacy_options'] = $available_privacy_options;
 	}
 
 	/**
