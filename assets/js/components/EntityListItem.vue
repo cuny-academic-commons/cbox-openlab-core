@@ -233,9 +233,9 @@
 						</div>
 				</fieldset>
 
-				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupHomeAvailableOptionsHeading }}</h4>
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupSiteAvailableOptionsHeading }}</h4>
 
-				<p>{{ strings.groupHomeAvailableOptionsDescription }}</p>
+				<p>{{ strings.groupSiteAvailableOptionsDescription }}</p>
 
 				<div
 					v-for="[ value, text ] in allSiteBlogPublicOptions"
@@ -251,6 +251,29 @@
 						> <span>{{ text }}</span>
 					</label>
 				</div>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupSiteDefaultOptionHeading }}</h4>
+
+				<fieldset>
+					<legend>{{ strings.groupSiteDefaultOptionDescription }}</legend>
+						<div
+							v-for="option in selectedSitePrivacyOptions"
+							:key="option"
+							class="cboxol-group-type-default-radio"
+						>
+							<label>
+								<input
+									type="radio"
+									:value="option"
+									v-model="defaultSitePrivacy"
+									:name="`group-site-default-privacy-${slug}`"
+									:checked="defaultSitePrivacy === option"
+								>
+								{{ sitePrivacyLabel( option ) }}
+							</label>
+						</div>
+				</fieldset>
+
 			</div>
 
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
@@ -458,6 +481,17 @@
 				}
 			},
 
+			defaultSitePrivacy: {
+				get() {
+					return this.entityData.defaultSitePrivacyOption || '';
+				},
+				set( value ) {
+					this.isSiteDefaultDirty = true
+					this.isModified = true
+					this.setEntityProp( 'defaultSitePrivacyOption', value )
+				}
+			},
+
 			supportsAssociatedWithMemberTypes() {
 				return this.itemsKey === 'academicUnitTypes'
 			},
@@ -486,7 +520,9 @@
 		data() {
 			return {
 				originalDefault: '',
-				isDefaultDirty: false
+				originalSiteDefault: '',
+				isDefaultDirty: false,
+				isSiteDefaultDirty: false
 			};
 		},
 
@@ -516,6 +552,10 @@
 				};
 
 				return labels[option] || option;
+			},
+
+			sitePrivacyLabel( option ) {
+				return this.allSiteBlogPublicOptions.get( String( option ) ) || '';
 			},
 
 			togglePrivacy(option) {
@@ -650,6 +690,7 @@
 		mounted() {
 			// Capture the initial default when the component mounts
 			this.originalDefault = this.defaultPrivacy;
+			this.originalSiteDefault = this.defaultSitePrivacy;
 		},
 
 		props: [
@@ -685,7 +726,33 @@
 				},
 				deep: false,
 				immediate: true
-			}
+			},
+			selectedSitePrivacyOptions: {
+				handler( newOptions ) {
+					const currentDefault = this.defaultSitePrivacy;
+					const original = this.originalSiteDefault;
+
+					const currentIsValid = newOptions.includes( currentDefault );
+					const originalIsValid = newOptions.includes( original );
+
+					// Case 1: current default is invalid
+					if ( ! currentIsValid ) {
+						// Prefer restoring original if valid and user hasn't changed anything
+						if ( originalIsValid && ! this.isSiteDefaultDirty ) {
+							this.setEntityProp( 'defaultSitePrivacyOption', original );
+						} else {
+							this.setEntityProp( 'defaultSitePrivacyOption', newOptions[0] || '' );
+						}
+					}
+
+					// Case 2: current is valid, but original just became valid again
+					else if ( originalIsValid && ! this.isSiteDefaultDirty && currentDefault !== original ) {
+						this.setEntityProp( 'defaultSitePrivacyOption', original );
+					}
+				},
+				deep: false,
+				immediate: true
+			},
 		}
 	}
 </script>

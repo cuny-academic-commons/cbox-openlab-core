@@ -144,6 +144,8 @@ function cboxol_register_assets() {
 				'groupSiteBlogPublicNegative1'         => __( 'I would like the site to be visible only to members of this community.', 'commons-in-a-box' ),
 				'groupSiteBlogPublicNegative2'         => __( 'I would like the site to be visible to community members with a role on the associated site.', 'commons-in-a-box' ),
 				'groupSiteBlogPublicNegative3'         => __( 'I would like my site to be visible only to those members with an administrator role on the associated site.', 'commons-in-a-box' ),
+				'groupSiteDefaultOptionHeading'        => __( 'Group Site: Default Option', 'commons-in-a-box' ),
+				'groupSiteDefaultOptionDescription'    => __( 'Choose the setting from those selected above that will be the default during group creation:', 'commons-in-a-box' ),
 				'hidden'                               => _x( 'Hidden', 'group privacy level', 'commons-in-a-box' ),
 				'itemTypeNameLabel'                    => _x( 'Name', 'item type Name label', 'commons-in-a-box' ),
 				'labels'                               => _x( 'Labels', 'subheader for item type labels', 'commons-in-a-box' ),
