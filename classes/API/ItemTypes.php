@@ -106,6 +106,7 @@ class ItemTypes extends WP_REST_Controller {
 		if ( 'group' === $object_type ) {
 			$type->set_site_template_id( $type_data['siteTemplateId'] );
 			$type->set_available_privacy_options( $type_data['availablePrivacyOptions'] );
+			$type->set_default_privacy_option( $type_data['defaultPrivacyOption'] );
 		}
 
 		$type->save();

@@ -182,7 +182,7 @@
 								:checked="selectedPrivacyOptions.includes('private')"
 								@change="togglePrivacy('private')"
 							>
-							Private
+							{{ strings.private }}
 						</label>
 
 						<ul>
@@ -200,7 +200,7 @@
 								:checked="selectedPrivacyOptions.includes('hidden')"
 								@change="togglePrivacy('hidden')"
 							>
-							Hidden
+							{{ strings.hidden }}
 						</label>
 
 						<ul>
@@ -209,6 +209,28 @@
 							<li>{{ strings.groupJoiningInviteOnly }}</li>
 						</ul>
 					</div>
+				</fieldset>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupHomeDefaultOptionHeading }}</h4>
+
+				<fieldset>
+					<legend>{{ strings.groupHomeDefaultOptionDescription }}</legend>
+						<div
+							v-for="option in selectedPrivacyOptions"
+							:key="option"
+							class="cboxol-group-type-default-radio"
+						>
+							<label>
+								<input
+									type="radio"
+									:value="option"
+									v-model="defaultPrivacy"
+									:name="`group-default-privacy-${slug}`"
+									:checked="defaultPrivacy === option"
+								>
+								{{ privacyLabel(option) }}
+							</label>
+						</div>
 				</fieldset>
 			</div>
 
@@ -360,7 +382,29 @@
 			},
 
 			selectedPrivacyOptions() {
-				return this.entityData.availablePrivacyOptions || [];
+				const rawOptions = this.entityData.availablePrivacyOptions || [];
+				const optionOrder = [ 'public', 'private', 'hidden' ];
+
+				// Sort the options based on the order defined in optionOrder
+				const sortedOptions = optionOrder.reduce((acc, option) => {
+					if (rawOptions.includes(option)) {
+						acc.push(option);
+					}
+					return acc;
+				}, []);
+
+				return sortedOptions;
+			},
+
+			defaultPrivacy: {
+				get() {
+					return this.entityData.defaultPrivacyOption || '';
+				},
+				set( value ) {
+					this.isDefaultDirty = true
+					this.isModified = true
+					this.setEntityProp( 'defaultPrivacyOption', value )
+				}
 			},
 
 			supportsAssociatedWithMemberTypes() {
@@ -388,6 +432,13 @@
 			}
 		},
 
+		data() {
+			return {
+				originalDefault: '',
+				isDefaultDirty: false
+			};
+		},
+
 		methods: {
 			onAccordionClick: function( event ) {
 				event.preventDefault()
@@ -403,6 +454,17 @@
 
 			isDefaultTemplate: ( siteId ) => {
 				return siteId === this.entityData.siteTemplate
+			},
+
+			privacyLabel( option ) {
+				// Customize labels however you want, or localize from `this.strings`
+				const labels = {
+					public: this.strings.public,
+					private: this.strings.private,
+					hidden: this.strings.hidden
+				};
+
+				return labels[option] || option;
 			},
 
 			togglePrivacy(option) {
@@ -534,11 +596,45 @@
 			i18nTools
 		],
 
+		mounted() {
+			// Capture the initial default when the component mounts
+			this.originalDefault = this.defaultPrivacy;
+		},
+
 		props: [
 			'entityType',
 			'isSortable',
 			'isToggleable',
 			'slug'
-		]
+		],
+
+		watch: {
+			selectedPrivacyOptions: {
+				handler( newOptions ) {
+					const currentDefault = this.defaultPrivacy;
+					const original = this.originalDefault;
+
+					const currentIsValid = newOptions.includes( currentDefault );
+					const originalIsValid = newOptions.includes( original );
+
+					// Case 1: current default is invalid
+					if ( ! currentIsValid ) {
+						// Prefer restoring original if valid and user hasn't changed anything
+						if ( originalIsValid && ! this.isDefaultDirty ) {
+							this.setEntityProp( 'defaultPrivacyOption', original );
+						} else {
+							this.setEntityProp( 'defaultPrivacyOption', newOptions[0] || '' );
+						}
+					}
+
+					// Case 2: current is valid, but original just became valid again
+					else if ( originalIsValid && ! this.isDefaultDirty && currentDefault !== original ) {
+						this.setEntityProp( 'defaultPrivacyOption', original );
+					}
+				},
+				deep: false,
+				immediate: true
+			}
+		}
 	}
 </script>
