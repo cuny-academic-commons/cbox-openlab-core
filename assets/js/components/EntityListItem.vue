@@ -273,7 +273,6 @@
 							</label>
 						</div>
 				</fieldset>
-
 			</div>
 
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
