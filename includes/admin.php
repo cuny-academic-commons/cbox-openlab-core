@@ -363,6 +363,9 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 
 				case 'invitations':
 					return _x( 'Invitations', 'Communication Settings admin label', 'commons-in-a-box' );
+
+				case 'member-communications':
+					return _x( 'Member Communications', 'Communication Settings admin label', 'commons-in-a-box' );
 			}
 
 			break;
@@ -492,6 +495,11 @@ function cboxol_get_admin_tabs( $parent_page ) {
 					'name'  => 'invitations',
 					'label' => cboxol_admin_subpage_label( 'communication-settings', 'invitations' ),
 				),
+				'2' => array(
+					'href'  => add_query_arg( 'cboxol-section', 'member-communications', $base ),
+					'name'  => 'member-communications',
+					'label' => cboxol_admin_subpage_label( 'communication-settings', 'member-communications' ),
+				),
 			);
 	}
 
@@ -549,6 +557,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 
 				case 'invitations':
 					cboxol_communication_admin_page_invitations();
+					break;
+
+				case 'member-communications':
+					cboxol_communication_admin_page_member_communications();
 					break;
 			}
 			break;

@@ -390,3 +390,29 @@ a .action-arrow {
 .cboxol-group-type-site-privacy-level label span {
 	max-width: 700px;
 }
+
+.cboxol-dashboard-panel-example {
+	width: 100%;
+	max-width: 1000px;
+}
+
+.dashboard-panel-settings-form.feature-disabled table {
+	opacity: .7;
+}
+
+.dashboard-panel-settings-form label {
+	font-weight: normal;
+}
+
+.dashboard-panel-settings-form .editor-wrap {
+	max-width: 600px;
+}
+
+.cboxol-dashboard-panel-single-panel-settings {
+	margin-bottom: 20px;
+}
+
+.cboxol-dashboard-panel-single-panel-settings h4 {
+	font-size: 1.2em;
+	margin-bottom: 0;
+}

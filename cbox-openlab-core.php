@@ -48,6 +48,7 @@ function cboxol_init() {
 	require CBOXOL_PLUGIN_DIR . 'includes/brand-settings.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/academic-terms.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/academic-units.php';
+	require CBOXOL_PLUGIN_DIR . 'includes/dashboard-panel.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/related-links.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/registration.php';
 	require CBOXOL_PLUGIN_DIR . 'includes/communication-settings.php';
