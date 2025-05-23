@@ -1308,7 +1308,7 @@ class Install {
 
 		foreach ( $preferred as $p ) {
 			// Take the first one available.
-			if ( wp_get_theme( $preferred )->exists() ) {
+			if ( wp_get_theme( $p )->exists() ) {
 				$default = $p;
 				break;
 			}
