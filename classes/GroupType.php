@@ -1085,13 +1085,20 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 		// No category exists, so we create one.
 		// translators: Group type label
-		$term_name = sprintf( __( 'General: %s', 'commons-in-a-box' ), $this->get_label( 'plural' ) );
+		if ( ! $the_category_id ) {
+			$term_name = sprintf( __( 'General: %s', 'commons-in-a-box' ), $this->get_label( 'plural' ) );
 
-		$inserted = wp_insert_term( $term_name, 'cboxol_template_category' );
+			$inserted = wp_insert_term( $term_name, 'cboxol_template_category' );
 
-		add_term_meta( $inserted['term_id'], 'cboxol_group_type', $this->get_slug() );
+			if ( ! is_wp_error( $inserted ) && ! empty( $inserted['term_id'] ) ) {
+				$the_category_id = $inserted['term_id'];
+			}
+		}
 
-		wp_set_post_terms( $template_id, [ $inserted['term_id'] ], 'cboxol_template_category' );
+		if ( $the_category_id ) {
+			add_term_meta( $the_category_id, 'cboxol_group_type', $this->get_slug() );
+			wp_set_post_terms( $template_id, [ $the_category_id ], 'cboxol_template_category' );
+		}
 
 		if ( ! $site_id ) {
 			return;
