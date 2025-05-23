@@ -5,7 +5,7 @@
  * @since 1.7.0
  */
 
-namespace CBOXL\OL\DashboardPanel;
+namespace CBOX\OL\DashboardPanel;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.

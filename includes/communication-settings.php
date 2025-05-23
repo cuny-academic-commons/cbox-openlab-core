@@ -98,7 +98,7 @@ function cboxol_communication_admin_page_member_communications() {
 		true
 	);
 
-	$dashboard_panel_settings = CBOX\OL\DashboardPanel\get_settings();
+	$dashboard_panel_settings = \CBOX\OL\DashboardPanel\get_dashboard_panel_settings();
 
 	$panels = [
 		'panel_1' => __( 'Left panel', 'commons-in-a-box' ),
