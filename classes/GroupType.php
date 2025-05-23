@@ -263,7 +263,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 	}
 
 	/**
-	 * Overridden here because we filter based on group type.
+	 * Gets the group type labels.
+	 *
+	 * Overridden here because we filter based on group type. We also fall back on
+	 * default values for default group types, if available.
+	 *
+	 * @return array
 	 */
 	public function get_labels() {
 		$map = array(
@@ -286,6 +291,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'privacy_help_text_byrequest_membership',
 				'privacy_help_text_private_directory',
 				'privacy_help_text_invited_membership',
+				'allow_joining_private_label',
+				'allow_joining_public_label',
+				'privacy_membership_settings_private',
+				'privacy_membership_settings_public',
 				'group_details',
 				'my_groups',
 				'course_information',
@@ -342,6 +351,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'privacy_help_text_byrequest_membership',
 				'privacy_help_text_private_directory',
 				'privacy_help_text_invited_membership',
+				'allow_joining_private_label',
+				'allow_joining_public_label',
+				'privacy_membership_settings_private',
+				'privacy_membership_settings_public',
 				'group_details',
 				'my_portfolio',
 				'my_portfolio_site',
@@ -392,6 +405,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'privacy_help_text_byrequest_membership',
 				'privacy_help_text_private_directory',
 				'privacy_help_text_invited_membership',
+				'allow_joining_private_label',
+				'allow_joining_public_label',
+				'privacy_membership_settings_private',
+				'privacy_membership_settings_public',
 				'group_details',
 				'my_groups',
 				'group_site',
@@ -504,6 +521,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 	 */
 	public function get_label_types() {
 		return array(
+			'allow_joining_private_label'            => array(
+				'value' => '',
+			),
+			'allow_joining_public_label'             => array(
+				'value' => '',
+			),
 			'course_code'                            => array(
 				'value' => '',
 			),
@@ -562,6 +585,12 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'value' => '',
 			),
 			'privacy_help_text_invited_membership'   => array(
+				'value' => '',
+			),
+			'privacy_membership_settings_private'    => array(
+				'value' => '',
+			),
+			'privacy_membership_settings_public'     => array(
 				'value' => '',
 			),
 			'group_home'                             => array(
@@ -689,6 +718,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	public function get_label_types_info() {
 		return array(
+			'allow_joining_private_label'            => array(
+				'slug'        => 'allow_joining_private_label',
+				'label'       => __( 'Allow Joining Private Label', 'commons-in-a-box' ),
+				'description' => __( 'The label for the "Allow Joining Private" checkbox in Membership Settings.', 'commons-in-a-box' ),
+			),
+			'allow_joining_public_label'             => array(
+				'slug'        => 'allow_joining_public_label',
+				'label'       => __( 'Allow Joining Public Label', 'commons-in-a-box' ),
+				'description' => __( 'The label for the "Allow Joining Public" checkbox in Membership Settings.', 'commons-in-a-box' ),
+			),
 			'course_code'                            => array(
 				'slug'        => 'course_code',
 				'label'       => _x( 'Course Code', 'Group Type label', 'commons-in-a-box' ),
@@ -788,6 +827,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 				'slug'        => 'privacy_help_text_invited_membership',
 				'label'       => __( 'Privacy Help Text - Membership By Invitation', 'commons-in-a-box' ),
 				'description' => __( 'Describes membership requirements for groups can only be joined by invitation.', 'commons-in-a-box' ),
+			),
+			'privacy_membership_settings_private'    => array(
+				'slug'        => 'privacy_membership_settings_private',
+				'label'       => __( 'Privacy Membership Settings: Private', 'commons-in-a-box' ),
+				'description' => __( 'Describes the "Private" option for membership settings.', 'commons-in-a-box' ),
+			),
+			'privacy_membership_settings_public'     => array(
+				'slug'        => 'privacy_membership_settings_public',
+				'label'       => __( 'Privacy Membership Settings: Public', 'commons-in-a-box' ),
+				'description' => __( 'Describes the "Public" option for membership settings.', 'commons-in-a-box' ),
 			),
 			'group_home'                             => array(
 				'slug'        => 'group_home',
