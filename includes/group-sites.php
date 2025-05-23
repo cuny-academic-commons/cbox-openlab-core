@@ -2140,7 +2140,7 @@ function cboxol_get_nav_menu_items() {
 function cboxol_get_theme_primary_nav_menu_location() {
 	$keys_to_check = [ 'primary', 'main', 'header', 'top' ];
 
-	$locations = get_nav_menu_locations();
+	$locations = get_registered_nav_menus();
 	if ( ! $locations ) {
 		return null;
 	}

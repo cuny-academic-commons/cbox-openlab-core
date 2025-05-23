@@ -1151,10 +1151,11 @@ class GroupType extends ItemTypeBase implements ItemType {
 		if ( $created_page_ids ) {
 			$nav_menu_ids = [];
 
-			$locations = get_theme_mod( 'nav_menu_locations' );
+			$locations       = get_nav_menu_locations();
+			$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
 
-			if ( ! empty( $locations['primary'] ) ) {
-				$menu_id = $locations['primary'];
+			if ( ! empty( $locations[ $primary_nav_key ] ) ) {
+				$menu_id = $locations[ $primary_nav_key ];
 
 				foreach ( $created_page_ids as $page_slug => $created_page_id ) {
 					$page = get_post( $created_page_id );

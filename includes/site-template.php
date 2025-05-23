@@ -627,48 +627,53 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 	switch_to_blog( $site_id );
 
 	// Create default menu items.
-	$menu_name = wp_slash( __( 'Main Menu', 'commons-in-a-box' ) );
-	$menu_id   = wp_create_nav_menu( $menu_name );
+	// If the theme has no nav menu locations, this is likely a block theme.
+	// Only classic themes are currently supported for this feature.
+	$menu_locations  = get_registered_nav_menus();
+	$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
+	if ( $menu_locations && isset( $menu_locations[ $primary_nav_key ] ) ) {
+		$menu_name = wp_slash( __( 'Main Menu', 'commons-in-a-box' ) );
+		$menu_id   = wp_create_nav_menu( $menu_name );
 
-	$group_menu_item_id = wp_update_nav_menu_item(
-		$menu_id,
-		0,
-		array(
-			'menu-item-title'   => __( 'Group Home', 'commons-in-a-box' ),
-			'menu-item-url'     => home_url( '/group-profile' ),
-			'menu-item-status'  => 'publish',
-			'menu-item-type'    => 'custom',
-			'menu-item-classes' => 'group-profile-link',
-		)
-	);
+		$group_menu_item_id = wp_update_nav_menu_item(
+			$menu_id,
+			0,
+			array(
+				'menu-item-title'   => __( 'Group Home', 'commons-in-a-box' ),
+				'menu-item-url'     => home_url( '/group-profile' ),
+				'menu-item-status'  => 'publish',
+				'menu-item-type'    => 'custom',
+				'menu-item-classes' => 'group-profile-link',
+			)
+		);
 
-	$home_menu_item_id = wp_update_nav_menu_item(
-		$menu_id,
-		0,
-		array(
-			'menu-item-title'   => __( 'Home', 'commons-in-a-box' ),
-			'menu-item-url'     => home_url( '/' ),
-			'menu-item-status'  => 'publish',
-			'menu-item-type'    => 'custom',
-			'menu-item-classes' => 'home',
-		)
-	);
+		$home_menu_item_id = wp_update_nav_menu_item(
+			$menu_id,
+			0,
+			array(
+				'menu-item-title'   => __( 'Home', 'commons-in-a-box' ),
+				'menu-item-url'     => home_url( '/' ),
+				'menu-item-status'  => 'publish',
+				'menu-item-type'    => 'custom',
+				'menu-item-classes' => 'home',
+			)
+		);
 
-	// Store flag for injected custom menu items
-	add_term_meta(
-		$menu_id,
-		'cboxol_custom_menus',
-		array(
-			'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
-			'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
-		),
-		true
-	);
+		// Store flag for injected custom menu items
+		add_term_meta(
+			$menu_id,
+			'cboxol_custom_menus',
+			array(
+				'group' => is_wp_error( $group_menu_item_id ) ? 0 : $group_menu_item_id,
+				'home'  => is_wp_error( $home_menu_item_id ) ? 0 : $home_menu_item_id,
+			),
+			true
+		);
 
-	$primary_nav_key               = cboxol_get_theme_primary_nav_menu_location();
-	$locations                     = get_theme_mod( 'nav_menu_locations' );
-	$locations[ $primary_nav_key ] = $menu_id;
-	set_theme_mod( 'nav_menu_locations', $locations );
+		$locations                     = get_nav_menu_locations();
+		$locations[ $primary_nav_key ] = $menu_id;
+		set_theme_mod( 'nav_menu_locations', $locations );
+	}
 
 	restore_current_blog();
 
