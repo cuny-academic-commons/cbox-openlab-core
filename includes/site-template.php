@@ -615,7 +615,6 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 			'domain'  => $domain,
 			'path'    => $path,
 			'user_id' => get_current_user_id(),
-			/* translators: Site template name */
 			'title'   => $name,
 		]
 	);

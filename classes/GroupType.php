@@ -434,19 +434,33 @@ class GroupType extends ItemTypeBase implements ItemType {
 			$type_labels = $map['default'];
 		}
 
-		// this is a real mess
 		$retval     = array();
 		$label_info = $this->get_label_types_info();
-		foreach ( $this->data['labels'] as $label_slug => $label_value ) {
-			if ( in_array( $label_slug, $type_labels, true ) ) {
-				$label_data          = $label_info[ $label_slug ];
-				$label_data['value'] = $label_value;
 
-				$retval[ $label_slug ] = $label_data;
+		$default_labels_for_group_type = self::get_group_type_default_labels( $this->get_slug() );
+
+		foreach ( $label_info as $label_slug => $label_data ) {
+			if ( ! in_array( $label_slug, $type_labels, true ) ) {
+				continue;
 			}
+
+			// Value - prefer stored value, fall back on default for this group type.
+			$label_value = '';
+			if ( isset( $this->data['labels'][ $label_slug ] ) ) {
+				$label_value = $this->data['labels'][ $label_slug ];
+			} elseif ( isset( $default_labels_for_group_type[ $label_slug ] ) ) {
+				$label_value = $default_labels_for_group_type[ $label_slug ];
+			}
+
+			$retval[ $label_slug ] = array(
+				'slug'        => $label_slug,
+				'label'       => $label_data['label'],
+				'description' => $label_data['description'],
+				'value'       => $label_value,
+			);
 		}
 
-		// this continues to be a real mess
+		// Sort based on the order in the array above.
 		$sorted = array();
 		foreach ( $type_labels as $value ) {
 			if ( ! empty( $retval[ $value ] ) ) {
@@ -1084,8 +1098,8 @@ class GroupType extends ItemTypeBase implements ItemType {
 		}
 
 		// No category exists, so we create one.
-		// translators: Group type label
 		if ( ! $the_category_id ) {
+			// translators: Group type label
 			$term_name = sprintf( __( 'General: %s', 'commons-in-a-box' ), $this->get_label( 'plural' ) );
 
 			$inserted = wp_insert_term( $term_name, 'cboxol_template_category' );
@@ -1189,5 +1203,272 @@ class GroupType extends ItemTypeBase implements ItemType {
 		update_post_meta( $this->get_wp_post_id(), 'cboxol_group_type_site_template_id', $template_id );
 
 		$this->set_site_template_id( $template_id );
+	}
+
+	/**
+	 * List of all default labels for all default group types.
+	 *
+	 * @return array
+	 */
+	public static function get_all_group_type_default_labels() {
+		return [
+			'course'    => array(
+				'singular'                               => __( 'Course', 'commons-in-a-box' ),
+				'plural'                                 => __( 'Courses', 'commons-in-a-box' ),
+				'allow_joining_private_label'            => __( 'Allow any community member to request membership to this private course', 'commons-in-a-box' ),
+				'allow_joining_public_label'             => __( 'Allow any community member to join this public course', 'commons-in-a-box' ),
+				'create_clone_item'                      => __( 'Create/Clone Course', 'commons-in-a-box' ),
+				'item_creation'                          => __( 'Course Creation', 'commons-in-a-box' ),
+				'create_item_help_text'                  => __( 'Set up the name, URL, avatar, and other settings and permissions for your course. These settings affect the course home, discussion, docs, and files.', 'commons-in-a-box' ),
+				'name_help_text'                         => __( 'Please choose your course name carefully. A clear name will make it easier for others to find your course. We recommend keeping the name under 50 characters.', 'commons-in-a-box' ),
+				'avatar_help_text'                       => __( 'Upload an image to use as an avatar for this course. The image will be shown on the course home page, and in search results.', 'commons-in-a-box' ),
+				'avatar_help_text_cant_decide'           => __( 'Can\'t decide? You can upload a photo once the course is created.', 'commons-in-a-box' ),
+				'url_help_text'                          => __( 'Choose a unique URL that will be the home for your course.', 'commons-in-a-box' ),
+				'privacy_help_text'                      => __( 'These settings affect how others view your course.', 'commons-in-a-box' ),
+				'privacy_help_text_new'                  => __( 'You may change these settings later in the course settings.', 'commons-in-a-box' ),
+				'privacy_help_text_public_content'       => __( 'Course and related content and activity, including the membership list, will be visible to the public.', 'commons-in-a-box' ),
+				'privacy_help_text_public_directory'     => __( 'Course will be listed in the "Courses" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_public_membership'    => __( 'Any community member may join this course.', 'commons-in-a-box' ),
+				'privacy_help_text_private_content'      => __( 'Course content and activity, including the membership list, will only be visible to members of the course.', 'commons-in-a-box' ),
+				'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this course.', 'commons-in-a-box' ),
+				'privacy_help_text_private_directory'    => __( 'Course will NOT be listed in the "Courses" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_invited_membership'   => __( 'Only community members who are invited may join this course.', 'commons-in-a-box' ),
+				'privacy_membership_settings_private'    => __( 'By default, any community member can request membership in a private course. Uncheck the box below to remove the "Request Membership" button from the Course Profile. When the box is unchecked, course membership will be by invitation only.', 'commons-in-a-box' ),
+				'privacy_membership_settings_public'     => __( 'By default, a public course may be joined by any community member. Uncheck the box below to remove the "Join Course" button from the Course Profile. When the box is unchecked, membership will be by invitation only.', 'commons-in-a-box' ),
+				'group_details'                          => __( 'Course Details', 'commons-in-a-box' ),
+				'my_groups'                              => __( 'My Courses', 'commons-in-a-box' ),
+				'course_code'                            => __( 'Course Code', 'commons-in-a-box' ),
+				'course_information'                     => __( 'Course Information', 'commons-in-a-box' ),
+				'course_information_description'         => __( 'The following fields are not required, but including this information will make it easier for others to find your Course.', 'commons-in-a-box' ),
+				'section_code'                           => __( 'Section Code', 'commons-in-a-box' ),
+				'group_site'                             => __( 'Course Site', 'commons-in-a-box' ),
+				'status_open'                            => __( 'This Course is OPEN.', 'commons-in-a-box' ),
+				'status_open_community_site'             => __( 'This Course is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_open_private_site'               => __( 'This Course is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+				'status_private'                         => __( 'This Course is PRIVATE.', 'commons-in-a-box' ),
+				'status_private_community_site'          => __( 'This Course is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_private_open_site'               => __( 'This Course is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+				'status_private_private_site'            => __( 'This Course is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+				'site_help_text'                         => __( 'Each course can also have an optional associated site. This is a WordPress site that all members of your course can access and contribute to.', 'commons-in-a-box' ),
+				'site_address_help_text'                 => __( 'Take a moment to consider an address for the site associated with your course. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+				'site_feed_check_help_text'              => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the course page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+				'visit_group_site'                       => __( 'Visit Course Site', 'commons-in-a-box' ),
+				'group_home'                             => __( 'Course Home', 'commons-in-a-box' ),
+				'settings_help_text_discussion'          => __( 'These settings enable or disable the discussion forum on your course home page.', 'commons-in-a-box' ),
+				'settings_help_text_calendar'            => __( 'These settings determine who can create an event for your course calendar and for the community-wide calendar.', 'commons-in-a-box' ),
+				'settings_help_text_calendar_members'    => __( 'Any course member may connect events to this course.', 'commons-in-a-box' ),
+				'settings_help_text_calendar_admins'     => __( 'Only administrators and moderators may connect events to this course.', 'commons-in-a-box' ),
+				'settings_help_text_relatedlinks'        => __( 'These settings enable or disable the related links list display on your course home page.', 'commons-in-a-box' ),
+				'settings_help_text_portfoliolist'       => __( 'These settings enable or disable the member portfolio list display on your course home page.', 'commons-in-a-box' ),
+				'settings_help_text_sharing'             => __( 'This setting enables other faculty to clone your Course. If enabled, other faculty can reuse, remix, transform, and build upon the material in this course. Attribution to original Course authors will be included.', 'commons-in-a-box' ),
+				'invite_members_to_group'                => __( 'Invite Members to Course', 'commons-in-a-box' ),
+				'invite_community_members_to_group'      => __( 'Invite Community Members to Course', 'commons-in-a-box' ),
+				'search_for_members_to_invite_to_group'  => __( 'Search for Community Members to invite to your course', 'commons-in-a-box' ),
+				'group_contact'                          => __( 'Faculty', 'commons-in-a-box' ),
+				'group_contact_help_text'                => __( 'By default, you are the sole faculty member associated with this Course. You may add or remove faculty once your Course has more members.', 'commons-in-a-box' ),
+				'group_discussion'                       => __( 'Course Discussion', 'commons-in-a-box' ),
+				'clone_credits_widget_description'       => __( 'A list of Courses that have contributed to your Course.', 'commons-in-a-box' ),
+				'shareable_content_widget_description'   => __( 'Provides a link for others to clone your Course.', 'commons-in-a-box' ),
+				'clone_this_group'                       => __( 'Clone this Course', 'commons-in-a-box' ),
+			),
+			'project'   => array(
+				'singular'                               => __( 'Project', 'commons-in-a-box' ),
+				'plural'                                 => __( 'Projects', 'commons-in-a-box' ),
+				'allow_joining_private_label'            => __( 'Allow any community member to request membership to this private project', 'commons-in-a-box' ),
+				'allow_joining_public_label'             => __( 'Allow any community member to join this public project', 'commons-in-a-box' ),
+				'create_clone_item'                      => __( 'Create Project', 'commons-in-a-box' ),
+				'item_creation'                          => __( 'Project Creation', 'commons-in-a-box' ),
+				'create_item_help_text'                  => __( 'Set up the name, URL, avatar, and other settings and permissions for your project. These settings affect the project home, discussion, docs, and files.', 'commons-in-a-box' ),
+				'name_help_text'                         => __( 'Please choose your project name carefully. A clear name will make it easier for others to find your project. We recommend keeping the name under 50 characters.', 'commons-in-a-box' ),
+				'avatar_help_text'                       => __( 'Upload an image to use as an avatar for this project. The image will be shown on the project home page, and in search results.', 'commons-in-a-box' ),
+				'avatar_help_text_cant_decide'           => __( 'Can\'t decide? You can upload a photo once the project is created.', 'commons-in-a-box' ),
+				'url_help_text'                          => __( 'Choose a unique URL that will be the home for your project.', 'commons-in-a-box' ),
+				'privacy_help_text'                      => __( 'These settings affect how others view your project.', 'commons-in-a-box' ),
+				'privacy_help_text_new'                  => __( 'You may change these settings later in the project settings.', 'commons-in-a-box' ),
+				'privacy_help_text_public_content'       => __( 'Project and related content and activity, including the membership list, will be visible to the public.', 'commons-in-a-box' ),
+				'privacy_help_text_public_directory'     => __( 'Project will be listed in the "Projects" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_public_membership'    => __( 'Any community member may join this project.', 'commons-in-a-box' ),
+				'privacy_help_text_private_content'      => __( 'Project content and activity, including the membership list, will only be visible to members of the project.', 'commons-in-a-box' ),
+				'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this project.', 'commons-in-a-box' ),
+				'privacy_help_text_private_directory'    => __( 'Project will NOT be listed in the "Projects" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_invited_membership'   => __( 'Only community members who are invited may join this project.', 'commons-in-a-box' ),
+				'privacy_membership_settings_private'    => __( 'By default, any community member can request membership in a private project. Uncheck the box below to remove the "Request Membership" button from the Project Profile. When the box is unchecked, project membership will be by invitation only.', 'commons-in-a-box' ),
+				'privacy_membership_settings_public'     => __( 'By default, a public project may be joined by any community member. Uncheck the box below to remove the "Join Project" button from the Project Profile. When the box is unchecked, membership will be by invitation only.', 'commons-in-a-box' ),
+				'group_details'                          => __( 'Project Details', 'commons-in-a-box' ),
+				'my_groups'                              => __( 'My Projects', 'commons-in-a-box' ),
+				'group_site'                             => __( 'Project Site', 'commons-in-a-box' ),
+				'status_open'                            => __( 'This Project is OPEN.', 'commons-in-a-box' ),
+				'status_open_community_site'             => __( 'This Project is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_open_private_site'               => __( 'This Project is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+				'status_private'                         => __( 'This Project is PRIVATE.', 'commons-in-a-box' ),
+				'status_private_community_site'          => __( 'This Project is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_private_open_site'               => __( 'This Project is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+				'status_private_private_site'            => __( 'This Project is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+				'site_help_text'                         => __( 'Each project can also have an optional associated site. This is a WordPress site that all members of your project can access and contribute to.', 'commons-in-a-box' ),
+				'site_address_help_text'                 => __( 'Take a moment to consider an address for the site associated with your project. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+				'site_feed_check_help_text'              => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the project page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+				'visit_group_site'                       => __( 'Visit Project Site', 'commons-in-a-box' ),
+				'group_home'                             => __( 'Project Home', 'commons-in-a-box' ),
+				'settings_help_text_discussion'          => __( 'These settings enable or disable the discussion forum on your project home page.', 'commons-in-a-box' ),
+				'settings_help_text_calendar'            => __( 'These settings determine who can create an event for your project calendar and for the community-wide calendar.', 'commons-in-a-box' ),
+				'settings_help_text_calendar_members'    => __( 'Any project member may connect events to this project.', 'commons-in-a-box' ),
+				'settings_help_text_calendar_admins'     => __( 'Only administrators and moderators may connect events to this project.', 'commons-in-a-box' ),
+				'settings_help_text_relatedlinks'        => __( 'These settings enable or disable the related links list display on your project home page.', 'commons-in-a-box' ),
+				'settings_help_text_portfoliolist'       => __( 'These settings enable or disable the member portfolio list display on your project home page.', 'commons-in-a-box' ),
+				'settings_help_text_sharing'             => __( 'This setting enables other members to clone your Project. If enabled, other members can reuse, remix, transform, and build upon the material in this project. Attribution to original Project authors will be included.', 'commons-in-a-box' ),
+				'invite_members_to_group'                => __( 'Invite Members to Project', 'commons-in-a-box' ),
+				'invite_community_members_to_group'      => __( 'Invite Community Members to Project', 'commons-in-a-box' ),
+				'search_for_members_to_invite_to_group'  => __( 'Search for Community Members to invite to your project', 'commons-in-a-box' ),
+				'group_contact'                          => __( 'Project Contact', 'commons-in-a-box' ),
+				'group_contact_help_text'                => __( 'By default, you are the Project Contact. You may add or remove Project Contacts once your Project has more members.', 'commons-in-a-box' ),
+				'group_discussion'                       => __( 'Project Discussion', 'commons-in-a-box' ),
+				'clone_credits_widget_description'       => __( 'A list of Projects that have contributed to your Project.', 'commons-in-a-box' ),
+				'shareable_content_widget_description'   => __( 'Provides a link for others to clone your Project.', 'commons-in-a-box' ),
+				'clone_this_group'                       => __( 'Clone this Project', 'commons-in-a-box' ),
+			),
+			'club'      => array(
+				'singular'                               => __( 'Club', 'commons-in-a-box' ),
+				'plural'                                 => __( 'Clubs', 'commons-in-a-box' ),
+				'allow_joining_private_label'            => __( 'Allow any community member to request membership to this private club', 'commons-in-a-box' ),
+				'allow_joining_public_label'             => __( 'Allow any community member to join this public club', 'commons-in-a-box' ),
+				'create_clone_item'                      => __( 'Create Club', 'commons-in-a-box' ),
+				'item_creation'                          => __( 'Club Creation', 'commons-in-a-box' ),
+				'create_item_help_text'                  => __( 'Set up the name, URL, avatar, and other settings and permissions for your club. These settings affect the club home, discussion, docs, and files.', 'commons-in-a-box' ),
+				'name_help_text'                         => __( 'Please choose your club name carefully. A clear name will make it easier for others to find your club. We recommend keeping the name under 50 characters.', 'commons-in-a-box' ),
+				'avatar_help_text'                       => __( 'Upload an image to use as an avatar for this club. The image will be shown on the club home page, and in search results.', 'commons-in-a-box' ),
+				'avatar_help_text_cant_decide'           => __( 'Can\'t decide? You can upload a photo once the club is created.', 'commons-in-a-box' ),
+				'url_help_text'                          => __( 'Choose a unique URL that will be the home for your club.', 'commons-in-a-box' ),
+				'privacy_help_text'                      => __( 'These settings affect how others view your club.', 'commons-in-a-box' ),
+				'privacy_help_text_new'                  => __( 'You may change these settings later in the club settings.', 'commons-in-a-box' ),
+				'privacy_help_text_public_content'       => __( 'Club and related content and activity, including the membership list, will be visible to the public.', 'commons-in-a-box' ),
+				'privacy_help_text_public_directory'     => __( 'Club will be listed in the "Clubs" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_public_membership'    => __( 'Any community member may join this club.', 'commons-in-a-box' ),
+				'privacy_help_text_private_content'      => __( 'Club content and activity, including the membership list, will only be visible to members of the club.', 'commons-in-a-box' ),
+				'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this club.', 'commons-in-a-box' ),
+				'privacy_help_text_private_directory'    => __( 'Club will NOT be listed in the "Clubs" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_invited_membership'   => __( 'Only community members who are invited may join this club.', 'commons-in-a-box' ),
+				'privacy_membership_settings_private'    => __( 'By default, any community member can request membership in a private club. Uncheck the box below to remove the "Request Membership" button from the Club Profile. When the box is unchecked, club membership will be by invitation only.', 'commons-in-a-box' ),
+				'privacy_membership_settings_public'     => __( 'By default, a public club may be joined by any community member. Uncheck the box below to remove the "Join Club" button from the Club Profile. When the box is unchecked, membership will be by invitation only.', 'commons-in-a-box' ),
+				'group_details'                          => __( 'Club Details', 'commons-in-a-box' ),
+				'my_groups'                              => __( 'My Clubs', 'commons-in-a-box' ),
+				'group_site'                             => __( 'Club Site', 'commons-in-a-box' ),
+				'status_open'                            => __( 'This Club is OPEN.', 'commons-in-a-box' ),
+				'status_open_community_site'             => __( 'This Club is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_open_private_site'               => __( 'This Club is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+				'status_private'                         => __( 'This Club is PRIVATE.', 'commons-in-a-box' ),
+				'status_private_community_site'          => __( 'This Club is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_private_open_site'               => __( 'This Club is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+				'status_private_private_site'            => __( 'This Club is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+				'site_help_text'                         => __( 'Each club can also have an optional associated site. This is a WordPress site that all members of your club can access and contribute to.', 'commons-in-a-box' ),
+				'site_address_help_text'                 => __( 'Take a moment to consider an address for the site associated with your club. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+				'site_feed_check_help_text'              => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the club page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+				'visit_group_site'                       => __( 'Visit Club Site', 'commons-in-a-box' ),
+				'group_home'                             => __( 'Club Home', 'commons-in-a-box' ),
+				'settings_help_text_discussion'          => __( 'These settings enable or disable the discussion forum on your club home page.', 'commons-in-a-box' ),
+				'settings_help_text_calendar'            => __( 'These settings determine who can create an event for your club calendar and for the community-wide calendar.', 'commons-in-a-box' ),
+				'settings_help_text_calendar_members'    => __( 'Any club member may connect events to this club.', 'commons-in-a-box' ),
+				'settings_help_text_calendar_admins'     => __( 'Only administrators and moderators may connect events to this club.', 'commons-in-a-box' ),
+				'settings_help_text_relatedlinks'        => __( 'These settings enable or disable the related links list display on your club home page.', 'commons-in-a-box' ),
+				'settings_help_text_portfoliolist'       => __( 'These settings enable or disable the member portfolio list display on your club home page.', 'commons-in-a-box' ),
+				'settings_help_text_sharing'             => __( 'This setting enables other members to clone your Club. If enabled, other members can reuse, remix, transform, and build upon the material in this club. Attribution to original Club authors will be included.', 'commons-in-a-box' ),
+				'invite_members_to_group'                => __( 'Invite Members to Club', 'commons-in-a-box' ),
+				'invite_community_members_to_group'      => __( 'Invite Community Members to Club', 'commons-in-a-box' ),
+				'search_for_members_to_invite_to_group'  => __( 'Search for Community Members to invite to your club', 'commons-in-a-box' ),
+				'group_contact'                          => __( 'Club Contact', 'commons-in-a-box' ),
+				'group_contact_help_text'                => __( 'By default, you are the Club Contact. You may add or remove Club Contacts once your Club has more members.', 'commons-in-a-box' ),
+				'group_discussion'                       => __( 'Club Discussion', 'commons-in-a-box' ),
+				'clone_credits_widget_description'       => __( 'A list of Clubs that have contributed to your Club.', 'commons-in-a-box' ),
+				'shareable_content_widget_description'   => __( 'Provides a link for others to clone your Club.', 'commons-in-a-box' ),
+				'clone_this_group'                       => __( 'Clone this Club', 'commons-in-a-box' ),
+			),
+			'portfolio' => array(
+				'singular'                               => __( 'Portfolio', 'commons-in-a-box' ),
+				'plural'                                 => __( 'Portfolios', 'commons-in-a-box' ),
+				'allow_joining_private_label'            => __( 'Allow any community member to request membership to this private portfolio', 'commons-in-a-box' ),
+				'allow_joining_public_label'             => __( 'Allow any community member to join this public portfolio', 'commons-in-a-box' ),
+				'create_clone_item'                      => __( 'Create Portfolio', 'commons-in-a-box' ),
+				'item_creation'                          => __( 'Portfolio Creation', 'commons-in-a-box' ),
+				'create_item_help_text'                  => __( 'Set up the name, URL, avatar, and other settings and permissions for your portfolio. These settings affect the portfolio home, discussion, docs, and files.', 'commons-in-a-box' ),
+				'name_help_text'                         => __( 'Choose a name for your Portfolio. You may use your name ("Jane Smith\'s Portfolio"), or any descriptive title you\'d like.', 'commons-in-a-box' ),
+				'avatar_help_text'                       => __( 'Upload an image to use as an avatar for this portfolio. The image will be shown on the portfolio home page, and in search results.', 'commons-in-a-box' ),
+				'avatar_help_text_cant_decide'           => __( 'Can\'t decide? You can upload a photo once the portfolio is created.', 'commons-in-a-box' ),
+				'url_help_text'                          => __( 'Choose a unique URL that will be the home for your portfolio.', 'commons-in-a-box' ),
+				'privacy_help_text'                      => __( 'These settings affect how others view your portfolio.', 'commons-in-a-box' ),
+				'privacy_help_text_new'                  => __( 'You may change these settings later in the portfolio settings.', 'commons-in-a-box' ),
+				'privacy_help_text_public_content'       => __( 'Portfolio and related content and activity, including the membership list, will be visible to the public.', 'commons-in-a-box' ),
+				'privacy_help_text_public_directory'     => __( 'Portfolio will be listed in the "Portfolios" directory, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_public_membership'    => __( 'Any community member may join this portfolio.', 'commons-in-a-box' ),
+				'privacy_help_text_private_content'      => __( 'Portfolio content and activity, including the membership list, will only be visible to members of the portfolio.', 'commons-in-a-box' ),
+				'privacy_help_text_byrequest_membership' => __( 'Only community members who request membership and are accepted may join this portfolio.', 'commons-in-a-box' ),
+				'privacy_help_text_private_directory'    => __( 'Portfolio will NOT be listed in the "Portfolios" directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+				'privacy_help_text_invited_membership'   => __( 'Only community members who are invited may join this portfolio.', 'commons-in-a-box' ),
+				'privacy_membership_settings_private'    => __( 'By default, any community member can request membership in a private portfolio. Uncheck the box below to remove the "Request Membership" button from the Portfolio Profile. When the box is unchecked, portfolio membership will be by invitation only.', 'commons-in-a-box' ),
+				'privacy_membership_settings_public'     => __( 'By default, a public portfolio may be joined by any community member. Uncheck the box below to remove the "Join Portfolio" button from the Portfolio Profile. When the box is unchecked, membership will be by invitation only.', 'commons-in-a-box' ),
+				'create_item'                            => __( 'Create Portfolio', 'commons-in-a-box' ),
+				'group_details'                          => __( 'Portfolio Details', 'commons-in-a-box' ),
+				'my_portfolio'                           => __( 'My Portfolio', 'commons-in-a-box' ),
+				'my_portfolio_site'                      => __( 'My Portfolio Site', 'commons-in-a-box' ),
+				'status_open'                            => __( 'This Portfolio is OPEN.', 'commons-in-a-box' ),
+				'status_open_community_site'             => __( 'This Portfolio is OPEN, but only logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_open_private_site'               => __( 'This Portfolio is OPEN, but the corresponding Site is PRIVATE.', 'commons-in-a-box' ),
+				'status_private'                         => __( 'This Portfolio is PRIVATE.', 'commons-in-a-box' ),
+				'status_private_community_site'          => __( 'This Portfolio is PRIVATE, but all logged-in community members may view the corresponding Site.', 'commons-in-a-box' ),
+				'status_private_open_site'               => __( 'This Portfolio is PRIVATE, but the corresponding Site is OPEN to all visitors.', 'commons-in-a-box' ),
+				'status_private_private_site'            => __( 'This Portfolio is PRIVATE, and you must be a member to view the corresponding Site.', 'commons-in-a-box' ),
+				'visit_portfolio_site'                   => __( 'Visit Portfolio Site', 'commons-in-a-box' ),
+				'visit_group_site'                       => __( 'Visit Portfolio Site', 'commons-in-a-box' ),
+				'site_help_text'                         => __( 'Each portfolio is associated with a WordPress site. The site is where portfolio owners display their work and accomplishments.', 'commons-in-a-box' ),
+				'site_address_help_text'                 => __( 'Take a moment to consider an address for the site associated with your portfolio. You will not be able to change it once you\'ve created it.', 'commons-in-a-box' ),
+				'site_feed_check_help_text'              => __( 'Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to the portfolio page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.', 'commons-in-a-box' ),
+				'group_site'                             => __( 'Portfolio Site', 'commons-in-a-box' ),
+				'group_home'                             => __( 'Portfolio Home', 'commons-in-a-box' ),
+				'settings_help_text_relatedlinks'        => __( 'These settings enable or disable the related links list display on your portfolio home page.', 'commons-in-a-box' ),
+				'settings_help_text_add_to_portfolio'    => __( 'The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site.', 'commons-in-a-box' ),
+				'invite_members_to_group'                => __( 'Invite Members to Portfolio', 'commons-in-a-box' ),
+				'invite_community_members_to_group'      => __( 'Invite Community Members to Portfolio', 'commons-in-a-box' ),
+				'search_for_members_to_invite_to_group'  => __( 'Search for Community Members to invite to your portfolio', 'commons-in-a-box' ),
+				'group_contact'                          => __( 'Porfolio Contact', 'commons-in-a-box' ),
+				'group_contact_help_text'                => __( 'By default, you are the Portfolio Contact. You may add or remove Portfolio Contacts once your Portfolio has more members.', 'commons-in-a-box' ),
+				'group_discussion'                       => __( 'Portfolio Discussion', 'commons-in-a-box' ),
+				'clone_credits_widget_description'       => __( 'A list of Portfolios that have contributed to your Portfolio.', 'commons-in-a-box' ),
+				'shareable_content_widget_description'   => __( 'Provides a link for others to clone your Portfolio.', 'commons-in-a-box' ),
+				'clone_this_group'                       => __( 'Clone this Portfolio', 'commons-in-a-box' ),
+				'add_to_portfolio'                       => __( 'Add to Portfolio', 'commons-in-a-box' ),
+				'added_to_my_portfolio'                  => __( 'Added to my Portfolio', 'commons-in-a-box' ),
+			),
+		];
+	}
+
+	/**
+	 * Gets the default labels for a given group type.
+	 *
+	 * @param string $group_type_slug
+	 * @return array
+	 */
+	public static function get_group_type_default_labels( $group_type_slug ) {
+		$all_labels = self::get_all_group_type_default_labels();
+
+		if ( array_key_exists( $group_type_slug, $all_labels ) ) {
+			return $all_labels[ $group_type_slug ];
+		}
+
+		return [];
+	}
+
+	/**
+	 * Gets the default value of a specific label for a given group type.
+	 *
+	 * @param string $group_type_slug
+	 * @param string $label_key
+	 * @return string
+	 */
+	public static function get_group_type_default_label( $group_type_slug, $label_key ) {
+		$labels = self::get_group_type_default_labels( $group_type_slug );
+
+		if ( array_key_exists( $label_key, $labels ) ) {
+			return $labels[ $label_key ];
+		}
+
+		return '';
 	}
 }
