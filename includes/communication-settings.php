@@ -108,6 +108,26 @@ function cboxol_communication_admin_page_member_communications() {
 
 	?>
 	<div class="cboxol-admin-content">
+		<div>
+			<h3><?php esc_html_e( 'Main Site Banner', 'commons-in-a-box' ); ?></h3>
+
+			<p>
+				<?php
+					printf(
+						// translators: %s is a link to the Customizer section for the Main Site Banner.
+						esc_html__( 'You can edit the Main Site Banner in the Customizer: %s', 'commons-in-a-box' ),
+						sprintf(
+							'<a href="%s" class="cboxol-customize-link">%s</a>',
+							esc_url( admin_url( 'customize.php?autofocus[section]=openlab_section_sitewide_notice' ) ),
+							esc_html__( 'Customize Main Site Banner', 'commons-in-a-box' )
+						)
+					);
+				?>
+			</p>
+		</div>
+
+		<br />
+
 		<div class="cboxol-dashboard-panels-config">
 			<h3><?php esc_html_e( 'Dashboard Panel', 'commons-in-a-box' ); ?></h3>
 
