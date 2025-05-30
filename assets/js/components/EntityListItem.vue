@@ -711,16 +711,17 @@
 					// Case 1: current default is invalid
 					if ( ! currentIsValid ) {
 						// Prefer restoring original if valid and user hasn't changed anything
-						if ( originalIsValid && ! this.isDefaultDirty ) {
-							this.setEntityProp( 'defaultPrivacyOption', original );
-						} else {
-							this.setEntityProp( 'defaultPrivacyOption', newOptions[0] || '' );
+						const newDefault = originalIsValid && ! this.isDefaultDirty ? original : newOptions[0] || '';
+						if ( this.defaultPrivacy !== newDefault ) {
+							this.setEntityProp( 'defaultPrivacyOption', newDefault );
 						}
 					}
 
 					// Case 2: current is valid, but original just became valid again
 					else if ( originalIsValid && ! this.isDefaultDirty && currentDefault !== original ) {
-						this.setEntityProp( 'defaultPrivacyOption', original );
+						if ( this.defaultPrivacy !== original ) {
+							this.setEntityProp( 'defaultPrivacyOption', original );
+						}
 					}
 				},
 				deep: false,
@@ -736,17 +737,18 @@
 
 					// Case 1: current default is invalid
 					if ( ! currentIsValid ) {
-						// Prefer restoring original if valid and user hasn't changed anything
-						if ( originalIsValid && ! this.isSiteDefaultDirty ) {
-							this.setEntityProp( 'defaultSitePrivacyOption', original );
-						} else {
-							this.setEntityProp( 'defaultSitePrivacyOption', newOptions[0] || '' );
+						const newDefault = originalIsValid && ! this.isSiteDefaultDirty ? original : newOptions[0] || '';
+
+						if ( this.defaultSitePrivacy !== newDefault ) {
+							this.setEntityProp( 'defaultSitePrivacyOption', newDefault );
 						}
 					}
 
 					// Case 2: current is valid, but original just became valid again
 					else if ( originalIsValid && ! this.isSiteDefaultDirty && currentDefault !== original ) {
-						this.setEntityProp( 'defaultSitePrivacyOption', original );
+						if ( this.defaultSitePrivacy !== original ) {
+							this.setEntityProp( 'defaultSitePrivacyOption', original );
+						}
 					}
 				},
 				deep: false,
