@@ -84,10 +84,7 @@ function cboxol_init() {
 		require CBOXOL_PLUGIN_DIR . 'plugins/pressforward.php';
 	}
 
-	$ver = get_site_option( 'cboxol_ver' );
-	if ( ! empty( $ver ) ) {
-		require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
-	}
+	require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
 
 	// Must wait until WP is set up.
 	remove_action( 'after_switch_theme', '_wp_sidebars_changed' );
