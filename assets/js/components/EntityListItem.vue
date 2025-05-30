@@ -314,6 +314,7 @@
 	import AssociatedTypeDropdowns from './settings/AssociatedTypeDropdowns.vue'
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
 	import MayChangeMemberTypeTo from './settings/MayChangeMemberTypeTo.vue'
+	import MayImportGroupUsers from './settings/MayImportGroupUsers.vue'
 	import Order from './settings/Order.vue'
 
 	export default {
@@ -324,6 +325,7 @@
 			OnOffSwitch,
 			MayCreateCourses,
 			MayChangeMemberTypeTo,
+			MayImportGroupUsers,
 			Order,
 			TypeLabel
 		},

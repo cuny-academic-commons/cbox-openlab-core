@@ -157,6 +157,7 @@ function cboxol_register_assets() {
 
 				// @todo This probably will not translate.
 				'mayChangeMemberTypeToLegend'          => __( 'Members may change Type to', 'commons-in-a-box' ),
+				'mayImportGroupUsersLegend'            => __( 'Members may bulk-import users into groups', 'commons-in-a-box' ),
 				'memberType'                           => __( 'Member Type', 'commons-in-a-box' ),
 
 				'name'                                 => _x( 'Name', 'table header', 'commons-in-a-box' ),
