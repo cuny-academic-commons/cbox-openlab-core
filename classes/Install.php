@@ -70,48 +70,52 @@ class Install {
 	public function install_default_member_types() {
 		$types_data = array(
 			'student' => array(
-				'name'               => __( 'Students', 'commons-in-a-box' ),
-				'labels'             => array(
+				'name'                   => __( 'Students', 'commons-in-a-box' ),
+				'labels'                 => array(
 					'singular' => __( 'Student', 'commons-in-a-box' ),
 					'plural'   => __( 'Students', 'commons-in-a-box' ),
 				),
-				'can_create_courses' => false,
-				'selectable_types'   => array( 'student', 'alumni' ),
-				'is_enabled'         => true,
-				'order'              => 1,
+				'can_create_courses'     => false,
+				'can_import_group_users' => false,
+				'selectable_types'       => array( 'student', 'alumni' ),
+				'is_enabled'             => true,
+				'order'                  => 1,
 			),
 			'faculty' => array(
-				'name'               => __( 'Faculty', 'commons-in-a-box' ),
-				'labels'             => array(
+				'name'                   => __( 'Faculty', 'commons-in-a-box' ),
+				'labels'                 => array(
 					'singular' => __( 'Faculty', 'commons-in-a-box' ),
 					'plural'   => __( 'Faculty', 'commons-in-a-box' ),
 				),
-				'can_create_courses' => true,
-				'selectable_types'   => array(),
-				'is_enabled'         => true,
-				'order'              => 2,
+				'can_create_courses'     => true,
+				'can_import_group_users' => true,
+				'selectable_types'       => array(),
+				'is_enabled'             => true,
+				'order'                  => 2,
 			),
 			'staff'   => array(
-				'name'               => __( 'Staff', 'commons-in-a-box' ),
-				'labels'             => array(
+				'name'                   => __( 'Staff', 'commons-in-a-box' ),
+				'labels'                 => array(
 					'singular' => __( 'Staff', 'commons-in-a-box' ),
 					'plural'   => __( 'Staff', 'commons-in-a-box' ),
 				),
-				'can_create_courses' => false,
-				'selectable_types'   => array(),
-				'is_enabled'         => true,
-				'order'              => 3,
+				'can_create_courses'     => false,
+				'can_import_group_users' => true,
+				'selectable_types'       => array(),
+				'is_enabled'             => true,
+				'order'                  => 3,
 			),
 			'alumni'  => array(
-				'name'               => __( 'Alumni', 'commons-in-a-box' ),
-				'labels'             => array(
+				'name'                   => __( 'Alumni', 'commons-in-a-box' ),
+				'labels'                 => array(
 					'singular' => __( 'Alumni', 'commons-in-a-box' ),
 					'plural'   => __( 'Alumni', 'commons-in-a-box' ),
 				),
-				'can_create_courses' => false,
-				'selectable_types'   => array( 'student', 'alumni' ),
-				'is_enabled'         => true,
-				'order'              => 4,
+				'can_create_courses'     => false,
+				'can_import_group_users' => false,
+				'selectable_types'       => array( 'student', 'alumni' ),
+				'is_enabled'             => true,
+				'order'                  => 4,
 			),
 		);
 
