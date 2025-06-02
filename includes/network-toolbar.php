@@ -352,7 +352,7 @@ class OpenLab_Admin_Bar {
 			}
 
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
-			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
+			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_notifications_hook' ), 5 );
