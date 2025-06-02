@@ -211,6 +211,7 @@ class Install {
 				'can_be_cloned'                    => true,
 				'directory_filters'                => array( 'term' ),
 				'default_joining_setting'          => true,
+				'default_collaboration_tools'      => [],
 				'enable_portfolio_list_by_default' => true,
 				'enable_site_by_default'           => true,
 				'is_course'                        => true, // for "Can create course" member type field.
@@ -233,6 +234,7 @@ class Install {
 				'can_be_cloned'                    => true,
 				'directory_filters'                => array( 'category' ),
 				'default_joining_setting'          => true,
+				'default_collaboration_tools'      => [ 'discussion', 'docs', 'files' ],
 				'enable_portfolio_list_by_default' => false,
 				'enable_site_by_default'           => false,
 				'is_course'                        => false,
@@ -257,6 +259,7 @@ class Install {
 				'enable_portfolio_list_by_default' => false,
 				'enable_site_by_default'           => false,
 				'default_joining_setting'          => true,
+				'default_collaboration_tools'      => [ 'discussion', 'docs', 'files' ],
 				'is_course'                        => false,
 				'is_portfolio'                     => false,
 
@@ -313,6 +316,7 @@ class Install {
 				'enable_portfolio_list_by_default' => false,
 				'enable_site_by_default'           => true,
 				'default_joining_setting'          => true,
+				'default_collaboration_tools'      => [],
 				'is_course'                        => false,
 				'is_portfolio'                     => true,
 
@@ -363,6 +367,7 @@ class Install {
 			$type->set_directory_filters( $type_data['directory_filters'] );
 			$type->set_enable_portfolio_list_by_default( $type_data['enable_portfolio_list_by_default'] );
 			$type->set_default_joining_setting( $type_data['default_joining_setting'] );
+			$type->set_default_collaboration_tools( $type_data['default_collaboration_tools'] );
 			$type->set_enable_site_by_default( $type_data['enable_site_by_default'] );
 			$type->set_is_course( $type_data['is_course'] );
 			$type->set_is_portfolio( $type_data['is_portfolio'] );

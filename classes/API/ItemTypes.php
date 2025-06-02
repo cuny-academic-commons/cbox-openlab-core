@@ -111,6 +111,7 @@ class ItemTypes extends WP_REST_Controller {
 			$type->set_default_joining_setting( $type_data['defaultJoiningSetting'] );
 			$type->set_default_privacy_option( $type_data['defaultPrivacyOption'] );
 			$type->set_default_site_privacy_option( $type_data['defaultSitePrivacyOption'] );
+			$type->set_default_collaboration_tools( $type_data['defaultCollaborationTools'] );
 		}
 
 		$type->save();

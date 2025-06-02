@@ -288,6 +288,48 @@
 				</label>
 			</div>
 
+			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.defaultCollaborationToolsSettings }}</h3>
+
+				<p>{{ strings.defaultCollaborationToolsDescription }}</p>
+
+				<fieldset>
+					<legend class="screen-reader-text">{{ strings.defaultCollaborationTools }}</legend>
+					<div class="cboxol-group-type-collaboration-tool">
+						<label>
+							<input
+								type="checkbox"
+								value="discussion"
+								v-model="selectedCollaborationTools"
+								:name="`group-selected-collaboration-tools-${slug}`"
+							> <span><strong>{{ strings.discussion }}</strong>: {{ strings.discussionGloss }}</span>
+						</label>
+					</div>
+
+					<div class="cboxol-group-type-collaboration-tool">
+						<label>
+							<input
+								type="checkbox"
+								value="docs"
+								v-model="selectedCollaborationTools"
+								:name="`group-selected-collaboration-tools-${slug}`"
+							> <span><strong>{{ strings.docs }}</strong>: {{ strings.docsGloss }}</span>
+						</label>
+					</div>
+
+					<div class="cboxol-group-type-collaboration-tool">
+						<label>
+							<input
+								type="checkbox"
+								value="files"
+								v-model="selectedCollaborationTools"
+								:name="`group-selected-collaboration-tools-${slug}`"
+							> <span><strong>{{ strings.fileLibrary }}</strong>: {{ strings.fileLibraryGloss }}</span>
+						</label>
+					</div>
+				</fieldset>
+			</div>
+
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
@@ -346,6 +388,14 @@
 		computed: {
 			addNewPlaceholder() {
 				return this.getEntityTypeProp( 'addNewPlaceholder' )
+			},
+
+			allCollaborationToolsOptions() {
+				return new Map([
+					[ 'discussion', this.strings.discussion, this.strings.discussionGloss ],
+					[ 'docs', this.strings.docs, this.strings.docsGloss ],
+					[ 'files', this.strings.fileLibrary, this.strings.fileLibraryGloss ]
+				]);
 			},
 
 			allSiteBlogPublicOptions() {
@@ -444,6 +494,27 @@
 				set( value ) {
 					this.isModified = true
 					this.setEntityProp( 'siteTemplateId', value )
+				}
+			},
+
+			selectedCollaborationTools: {
+				get() {
+					const rawOptions = this.entityData.defaultCollaborationTools || [];
+					const optionOrder = [ 'discussion', 'docs', 'files' ];
+
+					// Sort the options based on the order defined in optionOrder
+					const sortedOptions = optionOrder.reduce((acc, option) => {
+						if (rawOptions.includes(option)) {
+							acc.push(option);
+						}
+						return acc;
+					}, []);
+
+					return sortedOptions;
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'defaultCollaborationTools', value )
 				}
 			},
 

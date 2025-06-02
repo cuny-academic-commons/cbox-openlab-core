@@ -25,6 +25,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		'available_site_privacy_options'   => [ '1', '0', '-1', '-2', '-3' ],
 		'default_privacy_option'           => 'public',
 		'default_site_privacy_option'      => '1',
+		'default_collaboration_tools'      => [ 'discussion', 'docs', 'files' ],
 		'requires_site'                    => false,
 		'supports_course_information'      => false,
 		'supports_mol_link'                => false,
@@ -64,6 +65,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$default_joining_setting     = '' === $raw_default_joining_setting || '1' === $raw_default_joining_setting;
 		$type->set_default_joining_setting( $default_joining_setting );
 
+		$raw_default_collaboration_tools = get_post_meta( $post->ID, 'cboxol_group_type_default_collaboration_tools', true );
+		if ( ! is_array( $raw_default_collaboration_tools ) ) {
+			if ( $type->get_is_course() || $type->get_is_portfolio() ) {
+				$raw_default_collaboration_tools = [];
+			} else {
+				$raw_default_collaboration_tools = [ 'discussion', 'docs', 'files' ];
+			}
+		}
+		$type->set_default_collaboration_tools( $raw_default_collaboration_tools );
+
 		return $type;
 	}
 
@@ -81,6 +92,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 			'defaultJoiningSetting'       => $this->get_default_joining_setting(),
 			'defaultPrivacyOption'        => $this->get_default_privacy_option(),
 			'defaultSitePrivacyOption'    => $this->get_default_site_privacy_option(),
+			'defaultCollaborationTools'   => $this->get_default_collaboration_tools(),
 			'id'                          => $this->get_wp_post_id(),
 			'isCollapsed'                 => true,
 			'isCourse'                    => $this->get_is_course(),
@@ -184,6 +196,21 @@ class GroupType extends ItemTypeBase implements ItemType {
 		}
 
 		return $this->data['default_site_privacy_option'];
+	}
+
+	/**
+	 * Gets the default collaboration tools.
+	 *
+	 * @return array
+	 */
+	public function get_default_collaboration_tools() {
+		$default_collaboration_tools = $this->data['default_collaboration_tools'];
+
+		if ( ! is_array( $default_collaboration_tools ) ) {
+			$default_collaboration_tools = [ 'discussion', 'docs', 'files' ];
+		}
+
+		return $default_collaboration_tools;
 	}
 
 	public function get_template_site_id() {
@@ -542,6 +569,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		update_post_meta( $wp_post_id, 'cboxol_group_type_default_privacy_option', $this->get_default_privacy_option() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_default_site_privacy_option', $this->get_default_site_privacy_option() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_default_joining_setting', $this->get_default_joining_setting() ? '1' : '0' );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_default_collaboration_tools', $this->get_default_collaboration_tools() );
 	}
 
 	public static function get_dummy() {
@@ -1193,6 +1221,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 	 */
 	public function set_default_site_privacy_option( $default_site_privacy_option ) {
 		$this->data['default_site_privacy_option'] = $default_site_privacy_option;
+	}
+
+	/**
+	 * Sets the default collaboration tools for this group type.
+	 *
+	 * @param array $default_collaboration_tools
+	 * @return void
+	 */
+	public function set_default_collaboration_tools( $default_collaboration_tools ) {
+		$this->data['default_collaboration_tools'] = $default_collaboration_tools;
 	}
 
 	/**
