@@ -273,6 +273,19 @@
 							</label>
 						</div>
 				</fieldset>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.joining }}</h4>
+
+				<p>{{ strings.joiningDescription }}</p>
+
+				<label>
+					<input
+						type="checkbox"
+						v-model="defaultJoiningSetting"
+						:name="`group-default-joining-setting-${slug}`"
+					/>
+					<span>{{ strings.joiningLabel }}</span>
+				</label>
 			</div>
 
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
@@ -468,6 +481,16 @@
 				set( value ) {
 					this.isModified = true
 					this.setEntityProp( 'availableSitePrivacyOptions', value )
+				}
+			},
+
+			defaultJoiningSetting: {
+				get() {
+					return this.entityData.defaultJoiningSetting || false;
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'defaultJoiningSetting', value )
 				}
 			},
 

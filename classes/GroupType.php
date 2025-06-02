@@ -15,6 +15,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 
 	protected $defaults = array(
 		'can_be_cloned'                    => false,
+		'default_joining_setting'          => true,
 		'directory_filters'                => array(),
 		'enable_portfolio_list_by_default' => false,
 		'enable_site_by_default'           => false,
@@ -59,6 +60,10 @@ class GroupType extends ItemTypeBase implements ItemType {
 		$type->set_default_privacy_option( get_post_meta( $post->ID, 'cboxol_group_type_default_privacy_option', true ) );
 		$type->set_default_site_privacy_option( get_post_meta( $post->ID, 'cboxol_group_type_default_site_privacy_option', true ) );
 
+		$raw_default_joining_setting = get_post_meta( $post->ID, 'cboxol_group_type_default_joining_setting', true );
+		$default_joining_setting     = '' === $raw_default_joining_setting || '1' === $raw_default_joining_setting;
+		$type->set_default_joining_setting( $default_joining_setting );
+
 		return $type;
 	}
 
@@ -73,6 +78,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		return array(
 			'availablePrivacyOptions'     => $this->get_available_privacy_options(),
 			'availableSitePrivacyOptions' => $this->get_available_site_privacy_options(),
+			'defaultJoiningSetting'       => $this->get_default_joining_setting(),
 			'defaultPrivacyOption'        => $this->get_default_privacy_option(),
 			'defaultSitePrivacyOption'    => $this->get_default_site_privacy_option(),
 			'id'                          => $this->get_wp_post_id(),
@@ -133,6 +139,21 @@ class GroupType extends ItemTypeBase implements ItemType {
 		}
 
 		return array_intersect( $available_privacy_options, $possible_options );
+	}
+
+	/**
+	 * Gets the default joining setting.
+	 *
+	 * @return bool
+	 */
+	public function get_default_joining_setting() {
+		$default_joining_setting = $this->data['default_joining_setting'];
+
+		if ( ! is_bool( $default_joining_setting ) ) {
+			$default_joining_setting = true;
+		}
+
+		return $default_joining_setting;
 	}
 
 	/**
@@ -520,6 +541,7 @@ class GroupType extends ItemTypeBase implements ItemType {
 		update_post_meta( $wp_post_id, 'cboxol_group_type_available_site_privacy_options', $this->get_available_site_privacy_options() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_default_privacy_option', $this->get_default_privacy_option() );
 		update_post_meta( $wp_post_id, 'cboxol_group_type_default_site_privacy_option', $this->get_default_site_privacy_option() );
+		update_post_meta( $wp_post_id, 'cboxol_group_type_default_joining_setting', $this->get_default_joining_setting() ? '1' : '0' );
 	}
 
 	public static function get_dummy() {
@@ -1141,6 +1163,16 @@ class GroupType extends ItemTypeBase implements ItemType {
 	 */
 	public function set_available_site_privacy_options( $available_site_privacy_options ) {
 		$this->data['available_site_privacy_options'] = $available_site_privacy_options;
+	}
+
+	/**
+	 * Sets the default joining setting.
+	 *
+	 * @param bool $default_joining_setting
+	 * @return void
+	 */
+	public function set_default_joining_setting( $default_joining_setting ) {
+		$this->data['default_joining_setting'] = $default_joining_setting;
 	}
 
 	/**
