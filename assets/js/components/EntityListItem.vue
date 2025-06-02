@@ -144,7 +144,7 @@
 				</div>
 			</div>
 
-			<div class="cboxol-entity-content-section item-type-default-privacy-settings">
+			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.defaultPrivacySettings }}</h3>
 
 				<p>{{ strings.defaultPrivacySettingsDescription }}</p>
