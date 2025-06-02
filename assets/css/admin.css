@@ -189,6 +189,10 @@ a .action-arrow {
 	overflow: hidden;
 }
 
+.cboxol-entity-content-section-subheader {
+	margin-top: 40px;
+}
+
 .cboxol-entity-content-section-header {
 	display: block;
 	font-size: 12pt;
@@ -371,6 +375,10 @@ a .action-arrow {
 	list-style-type: circle;
 	padding-left: 30px;
 	margin-bottom: 16px;
+}
+
+.cboxol-group-type-privacy-level ul:last-child {
+	margin-bottom: 0;
 }
 
 .cboxol-group-type-default-radio {
