@@ -334,6 +334,8 @@ class OpenLab_Admin_Bar {
 		// for hamburger menu on mobile
 		add_action( 'admin_bar_menu', array( $this, 'openlab_hamburger_menu' ), 1 );
 
+		remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 9999 );
+
 		// Logged-in only
 		if ( is_user_logged_in() ) {
 
