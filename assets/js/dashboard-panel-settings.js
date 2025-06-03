@@ -110,4 +110,14 @@
 
 	onAllEditorsReady(disableableEditorIds, maybeDisableOptions);
 	enabledCheckbox.addEventListener( 'change', () => { maybeDisableOptions() } );
+
+	const dashboardPanelToggle = document.getElementById( 'cboxol-dashboard-panel-toggle' );
+	const dashboardPanelDismissableToggle = document.getElementById( 'cboxol-dashboard-panel-allow-dismissal' );
+	if ( dashboardPanelToggle && dashboardPanelDismissableToggle ) {
+		dashboardPanelToggle.addEventListener( 'change', () => {
+			if ( dashboardPanelToggle.checked ) {
+				dashboardPanelDismissableToggle.checked = true;
+			}
+		});
+	}
 })();
