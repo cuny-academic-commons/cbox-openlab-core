@@ -111,11 +111,13 @@ function cboxol_communication_admin_page_member_communications() {
 		<div>
 			<h3><?php esc_html_e( 'Main Site Banner', 'commons-in-a-box' ); ?></h3>
 
+			<p><?php esc_html_e( 'The Main Site Banner adds a custom notice that appears for logged-in site members across the top of all pages of the main site (homepage, group directories, and a group’s home). It will not appear on group sites.', 'commons-in-a-box' ); ?></p>
+
 			<p>
 				<?php
 					printf(
 						// translators: %s is a link to the Customizer section for the Main Site Banner.
-						esc_html__( 'You can edit the Main Site Banner in the Customizer: %s', 'commons-in-a-box' ),
+						esc_html__( 'You can edit the Main Site Banner and view a preview in the Customizer:: %s', 'commons-in-a-box' ),
 						sprintf(
 							'<a href="%s" class="cboxol-customize-link">%s</a>',
 							esc_url( admin_url( 'customize.php?autofocus[section]=openlab_section_sitewide_notice' ) ),
