@@ -101,9 +101,18 @@ function cboxol_communication_admin_page_member_communications() {
 	$dashboard_panel_settings = \CBOX\OL\DashboardPanel\get_dashboard_panel_settings();
 
 	$panels = [
-		'panel_1' => __( 'Left panel', 'commons-in-a-box' ),
-		'panel_2' => __( 'Middle panel', 'commons-in-a-box' ),
-		'panel_3' => __( 'Right panel', 'commons-in-a-box' ),
+		'panel_1' => [
+			'heading'     => __( 'Left column', 'commons-in-a-box' ),
+			'description' => __( 'Please choose the text and icon that will appear in the left column below the banner.', 'commons-in-a-box' ),
+		],
+		'panel_2' => [
+			'heading'     => __( 'Middle column', 'commons-in-a-box' ),
+			'description' => __( 'Please choose the text and icon that will appear in the middle column below the banner.', 'commons-in-a-box' ),
+		],
+		'panel_3' => [
+			'heading'     => __( 'Right column', 'commons-in-a-box' ),
+			'description' => __( 'Please choose the text and icon that will appear in the right column below the banner.', 'commons-in-a-box' ),
+		],
 	];
 
 	?>
@@ -152,10 +161,16 @@ function cboxol_communication_admin_page_member_communications() {
 					</label>
 				</p>
 
-				<p>
-					<?php esc_html_e( 'Please choose the heading text and tagline that will appear in the top banner portion.', 'commons-in-a-box' ); ?>
-
+				<div class="dashboard-panel-settings-subsection">
 					<table class="form-table">
+						<tr>
+							<th colspan="2" class="dashboard-panel-settings-subsection-header">
+								<h4 class="dashboard-panel-settings-subsection-heading"><?php esc_html_e( 'Top Banner', 'commons-in-a-box' ); ?></h4>
+
+								<p><?php esc_html_e( 'Please choose the heading text and tagline that will appear in the top banner portion.', 'commons-in-a-box' ); ?></p>
+							</th>
+						</tr>
+
 						<tr>
 							<th>
 								<label for="primary-heading">
@@ -168,7 +183,7 @@ function cboxol_communication_admin_page_member_communications() {
 							</td>
 						</tr>
 
-						<tr>
+						<tr class="dashboard-panel-settings-editor-row">
 							<th>
 								<label for="tagline">
 									<?php esc_html_e( 'Tagline', 'commons-in-a-box' ); ?>
@@ -197,30 +212,29 @@ function cboxol_communication_admin_page_member_communications() {
 
 						</tr>
 					</table>
-				</p>
+				</div>
 
-				<p>
-					<?php esc_html_e( 'Please choose the text and icon for each of the three panels that appear below the banner.', 'commons-in-a-box' ); ?>
-				</p>
-
-				<?php foreach ( $panels as $panel_id => $panel_name ) : ?>
+				<?php foreach ( $panels as $panel_id => $panel_labels ) : ?>
 					<?php
 					$panel_heading = $dashboard_panel_settings[ $panel_id . '_heading' ];
 					$panel_text    = $dashboard_panel_settings[ $panel_id . '_text' ];
 					?>
 
-					<div class="cboxol-dashboard-panel-single-panel-settings">
+					<div class="cboxol-dashboard-panel-single-panel-settings dashboard-panel-settings-subsection">
 						<table class="form-table">
 							<tr>
-								<th colspan="2">
-									<h4><?php echo esc_html( $panel_name ); ?></h4>
+								<th colspan="2" class="dashboard-panel-settings-subsection-header">
+									<h4 class="dashboard-panel-settings-subsection-heading"><?php echo esc_html( $panel_labels['heading'] ); ?></h4>
+									<p>
+										<?php echo esc_html( $panel_labels['description'] ); ?>
+									</p>
 								</th>
 							</tr>
 
 							<tr>
 								<th>
 									<label for="<?php echo esc_attr( $panel_id ); ?>-heading">
-										<?php esc_html_e( 'Heading text', 'commons-in-a-box' ); ?>
+										<?php esc_html_e( 'Heading', 'commons-in-a-box' ); ?>
 									</label>
 								</th>
 
@@ -229,7 +243,7 @@ function cboxol_communication_admin_page_member_communications() {
 								</td>
 							</tr>
 
-							<tr>
+							<tr class="dashboard-panel-settings-editor-row">
 								<th>
 									<label for="<?php echo esc_attr( $panel_id ); ?>-text">
 										<?php esc_html_e( 'Body Text (the suggested limit is 300 characters)', 'commons-in-a-box' ); ?>

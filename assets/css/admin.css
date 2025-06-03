@@ -404,8 +404,12 @@ a .action-arrow {
 	max-width: 1000px;
 }
 
-.dashboard-panel-settings-form.feature-disabled table {
+.dashboard-panel-settings-form.feature-disabled .dashboard-panel-settings-subsection {
 	opacity: .7;
+}
+
+.form-table th.dashboard-panel-settings-subsection-header {
+	padding-bottom: 0;
 }
 
 .dashboard-panel-settings-form label {
@@ -420,7 +424,15 @@ a .action-arrow {
 	margin-bottom: 20px;
 }
 
-.cboxol-dashboard-panel-single-panel-settings h4 {
+h4.dashboard-panel-settings-subsection-heading {
 	font-size: 1.2em;
 	margin-bottom: 0;
+}
+
+.cboxol-dashboard-panel-single-panel-settings .form-table th p {
+	font-weight: normal;
+}
+
+.dashboard-panel-settings-editor-row th {
+	padding-top: 45px;
 }
