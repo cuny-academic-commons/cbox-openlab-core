@@ -117,7 +117,7 @@ function cboxol_communication_admin_page_member_communications() {
 				<?php
 					printf(
 						// translators: %s is a link to the Customizer section for the Main Site Banner.
-						esc_html__( 'You can edit the Main Site Banner and view a preview in the Customizer:: %s', 'commons-in-a-box' ),
+						esc_html__( 'You can edit the Main Site Banner and view a preview in the Customizer: %s', 'commons-in-a-box' ),
 						sprintf(
 							'<a href="%s" class="cboxol-customize-link">%s</a>',
 							esc_url( admin_url( 'customize.php?autofocus[section]=openlab_section_sitewide_notice' ) ),
