@@ -23,7 +23,7 @@ function get_dashboard_panel_settings() {
 		'allow_dismissal' => false,
 		'enabled'         => false,
 		'heading'         => '',
-		'tagline'         => 'foobar',
+		'tagline'         => '',
 		'panel_1_heading' => '',
 		'panel_1_text'    => '',
 		'panel_2_heading' => '',
