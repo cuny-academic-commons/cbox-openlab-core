@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function get_dashboard_panel_settings() {
 	$defaults = [
-		'allow_dismissal' => true,
+		'allow_dismissal' => false,
 		'enabled'         => false,
 		'heading'         => '',
 		'tagline'         => 'foobar',
