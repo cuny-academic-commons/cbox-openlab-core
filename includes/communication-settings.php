@@ -133,7 +133,7 @@ function cboxol_communication_admin_page_member_communications() {
 		<div class="cboxol-dashboard-panels-config">
 			<h3><?php esc_html_e( 'Dashboard Panel', 'commons-in-a-box' ); ?></h3>
 
-			<p><?php esc_html_e( 'Add a notice that will appear for logged-in site members across the top of all areas of the main site (homepage, group directories, and group home).', 'commons-in-a-box' ); ?></p>
+			<p><?php esc_html_e( 'Below you can customize a panel that will appear on the Dashboard of all group sites. For reference, below is an example of what the Dashboard Panel looks like.', 'commons-in-a-box' ); ?></p>
 
 			<img src="<?php echo esc_url( CBOXOL_PLUGIN_URL . 'assets/img/dashboard-panel.png' ); ?>" alt="<?php esc_attr_e( 'Dashboard Panel', 'commons-in-a-box' ); ?>" class="cboxol-dashboard-panel-example" />
 
