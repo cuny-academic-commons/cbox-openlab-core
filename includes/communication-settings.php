@@ -115,6 +115,8 @@ function cboxol_communication_admin_page_member_communications() {
 		],
 	];
 
+	$icons = \CBOX\OL\DashboardPanel\get_dashboard_panel_icons();
+
 	?>
 	<div class="cboxol-admin-content">
 		<div>
@@ -218,6 +220,7 @@ function cboxol_communication_admin_page_member_communications() {
 					<?php
 					$panel_heading = $dashboard_panel_settings[ $panel_id . '_heading' ];
 					$panel_text    = $dashboard_panel_settings[ $panel_id . '_text' ];
+					$panel_icon    = isset( $dashboard_panel_settings[ $panel_id . '_icon' ] ) ? $dashboard_panel_settings[ $panel_id . '_icon' ] : 'check-circle';
 					?>
 
 					<div class="cboxol-dashboard-panel-single-panel-settings dashboard-panel-settings-subsection">
@@ -269,7 +272,31 @@ function cboxol_communication_admin_page_member_communications() {
 										?>
 									</div>
 								</td>
+							</tr>
 
+							<tr>
+								<th>
+									<?php esc_html_e( 'Icon', 'commons-in-a-box' ); ?>
+								</th>
+
+								<td>
+									<fieldset class="cboxo-dashboard-panel-icons-radios">
+										<legend class="screen-reader-text">
+											<?php esc_html_e( 'Select an icon for this panel', 'commons-in-a-box' ); ?>
+										</legend>
+
+										<?php foreach ( $icons as $icon_slug => $icon_data ) : ?>
+											<label class="cboxol-dashboard-panel-icon-label">
+												<input type="radio" name="<?php echo esc_attr( $panel_id ); ?>-icon" value="<?php echo esc_attr( $icon_slug ); ?>" <?php checked( $icon_slug, $panel_icon ); ?> class="disabled-when-disabled" />
+												<span class="cboxol-dashboard-panel-icon-preview">
+													<?php /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>
+													<?php echo $icon_data['svg']; ?>
+												</span>
+												<span class="cboxol-dashboard-panel-icon-name"><?php echo esc_html( $icon_data['name'] ); ?></span>
+											</label>
+										<?php endforeach; ?>
+									</fieldset>
+								</td>
 							</tr>
 						</table>
 					</div>
@@ -312,11 +339,12 @@ function cboxol_save_dashboard_panel_settings() {
 	foreach ( [ 'panel_1', 'panel_2', 'panel_3' ] as $panel_id ) {
 		$settings[ $panel_id . '_heading' ] = sanitize_text_field( wp_unslash( $_POST[ $panel_id . '-heading' ] ) );
 		$settings[ $panel_id . '_text' ]    = wp_kses_post( wp_unslash( $_POST[ $panel_id . '-text' ] ) );
+		$settings[ $panel_id . '_icon' ]    = isset( $_POST[ $panel_id . '-icon' ] ) ? sanitize_text_field( wp_unslash( $_POST[ $panel_id . '-icon' ] ) ) : '';
 	}
 
 	update_site_option( 'cboxol_dashboard_panel_settings', $settings );
 
-	wp_redirect(
+	wp_safe_redirect(
 		add_query_arg(
 			array(
 				'settings-updated' => 1,

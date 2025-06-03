@@ -436,3 +436,53 @@ h4.dashboard-panel-settings-subsection-heading {
 .dashboard-panel-settings-editor-row th {
 	padding-top: 45px;
 }
+
+.cboxo-dashboard-panel-icons-radios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 2rem;
+  margin-top: 1rem;
+  max-width: 600px;
+}
+
+.form-table td fieldset label.cboxol-dashboard-panel-icon-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cboxol-dashboard-panel-icon-label input[type="radio"] {
+  margin: 0;
+}
+
+.cboxol-dashboard-panel-icon-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.cboxol-dashboard-panel-icon-preview svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+.cboxol-dashboard-panel-icon-preview svg.dashboard-panel-icon-check-circle {
+	width: 28px;
+	height: 28px;
+}
+
+.cboxol-dashboard-panel-icon-preview svg.dashboard-panel-icon-plus {
+	width: 36px;
+	height: 36px;
+}
+
+.cboxol-dashboard-panel-icon-name {
+  font-size: 0.875rem;
+  color: #333;
+  text-align: left;
+}

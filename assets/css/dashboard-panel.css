@@ -75,8 +75,19 @@
 	text-decoration: none;
 }
 
-.openlab-news-panel-content .panel-icon {
-	font-size: 34px;
+.openlab-news-panel-content .panel-icon svg {
+	width: 48px;
+	height: 48px;
+}
+
+.openlab-news-panel-content .panel-icon svg.dashboard-panel-icon-check-circle {
+	width: 44px;
+	height: 44px;
+}
+
+.openlab-news-panel-content .panel-icon svg.dashboard-panel-icon-plus {
+	width: 52px;
+	height: 52px;
 }
 
 .openlab-news-panel-content .panel-dismiss {
