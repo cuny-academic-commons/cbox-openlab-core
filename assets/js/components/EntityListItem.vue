@@ -288,7 +288,7 @@
 				</label>
 			</div>
 
-			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
+			<div v-if="'group' === objectType && 'groupType' === entityType && ! isPortfolio" class="cboxol-entity-content-section item-type-template">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.defaultCollaborationToolsSettings }}</h3>
 
 				<p>{{ strings.defaultCollaborationToolsDescription }}</p>
@@ -447,6 +447,15 @@
 				}
 
 				return hasSettings
+			},
+
+			/**
+			 * Is this the portfolio group type?
+			 *
+			 * @returns {boolean}
+			 */
+			isPortfolio() {
+				return this.entityData.hasOwnProperty( 'isPortfolio' ) && this.entityData.isPortfolio
 			},
 
 			itemClass() {
