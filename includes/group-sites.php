@@ -1819,41 +1819,9 @@ function cboxol_copy_blog_page( $group_id ) {
 					}
 				}
 
-				// Updated custom nav menu items
-				$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
-				$locations       = get_theme_mod( 'nav_menu_locations' );
-				$menu_id         = isset( $locations[ $primary_nav_key ] ) ? (int) $locations[ $primary_nav_key ] : 0;
-				$nav_items       = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
+				update_option( 'cboxol_process_navigation_placeholders', time() );
 
-				if ( $menu_id && ! empty( $nav_items ) ) {
-					$group_type = cboxol_get_group_group_type( $group_id );
-
-					// Update Group Profile URL.
-					wp_update_nav_menu_item(
-						$menu_id,
-						$nav_items['group'],
-						array(
-							'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
-							'menu-item-url'      => bp_get_group_url( $group ),
-							'menu-item-status'   => 'publish',
-							'menu-item-position' => -2,
-							'menu-item-classes'  => 'group-profile-link',
-						)
-					);
-
-					// Update home URL.
-					wp_update_nav_menu_item(
-						$menu_id,
-						$nav_items['home'],
-						array(
-							'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
-							'menu-item-url'      => home_url( '/' ),
-							'menu-item-status'   => 'publish',
-							'menu-item-position' => -1,
-							'menu-item-classes'  => 'home',
-						)
-					);
-				}
+				openlab_process_navigation_blocks_during_clone( $src_id, $new_id );
 
 				restore_current_blog();
 				$msg = __( 'Blog Copied', 'commons-in-a-box' );
@@ -1914,6 +1882,167 @@ function cboxol_clone_options_to_skip( $source_site_id = null ) {
 	 * @param string[] $options Option names.
 	 */
 	return apply_filters( 'cboxol_clone_options_to_skip', $options );
+}
+
+/**
+ * Set up initial navigation after a site is cloned.
+ */
+function cboxol_setup_navigation_on_newly_created_site() {
+	if ( ! get_option( 'cboxol_process_navigation_placeholders' ) ) {
+		return;
+	}
+
+	delete_option( 'cboxol_process_navigation_placeholders' );
+
+	// Updated custom nav menu items
+	$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
+	$locations       = get_theme_mod( 'nav_menu_locations' );
+	$menu_id         = isset( $locations[ $primary_nav_key ] ) ? (int) $locations[ $primary_nav_key ] : 0;
+	$nav_items       = get_term_meta( $menu_id, 'cboxol_custom_menus', true );
+
+	if ( ! $menu_id || empty( $nav_items ) ) {
+		// No menu or nav items, nothing to do.
+		return;
+	}
+
+	$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	$group_type = cboxol_get_group_group_type( $group_id );
+
+	if ( ! $group_type || is_wp_error( $group_type ) ) {
+		// No group type, nothing to do.
+		return;
+	}
+
+	// Update Group Profile URL.
+	wp_update_nav_menu_item(
+		$menu_id,
+		$nav_items['group'],
+		array(
+			'menu-item-title'    => '[ ' . $group_type->get_label( 'group_home' ) . ' ]',
+			'menu-item-url'      => bp_get_group_url( $group_id ),
+			'menu-item-status'   => 'publish',
+			'menu-item-position' => -2,
+			'menu-item-classes'  => 'group-profile-link',
+		)
+	);
+
+	// Update home URL.
+	wp_update_nav_menu_item(
+		$menu_id,
+		$nav_items['home'],
+		array(
+			'menu-item-title'    => __( 'Home', 'cbox-openlab-core' ),
+			'menu-item-url'      => home_url( '/' ),
+			'menu-item-status'   => 'publish',
+			'menu-item-position' => -1,
+			'menu-item-classes'  => 'home',
+		)
+	);
+}
+add_action( 'init', 'cboxol_setup_navigation_on_newly_created_site' );
+
+/**
+ * Process navigation blocks during a site clone.
+ *
+ * This function will look for navigation blocks in the source blog's
+ * `wp_navigation` posts and convert any placeholder links
+ * to concrete URLs based on the target blog ID.
+ *
+ * @since 1.7.0
+ *
+ * @param int $source_blog_id The ID of the source blog from which the navigation blocks are cloned.
+ * @param int $target_blog_id The ID of the target blog where the navigation blocks are cloned to.
+ */
+function openlab_process_navigation_blocks_during_clone( $source_blog_id, $target_blog_id ) {
+	// Get all wp_navigation posts from source
+	$nav_posts = get_posts(
+		[
+			'post_type'   => 'wp_navigation',
+			'post_status' => 'publish',
+			'numberposts' => -1,
+		]
+	);
+
+	foreach ( $nav_posts as $nav_post ) {
+		$blocks   = parse_blocks( $nav_post->post_content );
+		$modified = false;
+
+		$processed_blocks = openlab_convert_placeholder_links(
+			$blocks,
+			$target_blog_id,
+			$modified
+		);
+
+		if ( $modified ) {
+			// Update the cloned navigation post with concrete URLs
+			wp_update_post(
+				[
+					'ID'           => $nav_post->ID, // or the cloned post ID
+					'post_content' => serialize_blocks( $processed_blocks ),
+				]
+			);
+		}
+	}
+}
+
+/**
+ * Convert placeholder links in navigation blocks to concrete URLs.
+ *
+ * This function will look for navigation link blocks that have a specific class
+ * (`openlab-group-profile-link`) and convert them to the actual group URL
+ * based on the target blog ID.
+ *
+ * @since 1.7.0
+ *
+ * @param array  $blocks         The blocks to process.
+ * @param int    $target_blog_id The ID of the target blog where the links should point.
+ * @param bool   &$modified       Reference to a boolean that indicates if any modifications were made.
+ * @return array The modified blocks with placeholder links converted to concrete URLs.
+ */
+function openlab_convert_placeholder_links( $blocks, $target_blog_id, &$modified ) {
+	foreach ( $blocks as &$block ) {
+		if ( 'core/navigation-link' === $block['blockName'] &&
+			isset( $block['attrs']['className'] ) &&
+			strpos( $block['attrs']['className'], 'openlab-group-profile-link' ) !== false ) {
+
+			$group_id = openlab_get_group_id_by_blog_id( $target_blog_id );
+			if ( $group_id ) {
+				$block['attrs']['url'] = bp_get_group_url( $group_id );
+
+				// Remove the marker class since it's no longer needed
+				$block['attrs']['className'] = str_replace(
+					'openlab-group-profile-link',
+					'',
+					$block['attrs']['className']
+				);
+				$block['attrs']['className'] = trim( $block['attrs']['className'] );
+
+				if ( empty( $block['attrs']['className'] ) ) {
+					unset( $block['attrs']['className'] );
+				}
+
+				$group_type = cboxol_get_group_group_type( $group_id );
+				if ( $group_type && ! is_wp_error( $group_type ) ) {
+					$new_title = '[' . $group_type->get_label( 'group_home' ) . ']';
+
+					$block['attrs']['title'] = $new_title;
+					$block['attrs']['label'] = $new_title;
+				}
+
+				$modified = true;
+			}
+		}
+
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			$block['innerBlocks'] = openlab_convert_placeholder_links(
+				$block['innerBlocks'],
+				$target_blog_id,
+				$modified
+			);
+		}
+	}
+
+	return $blocks;
 }
 
 /**
@@ -2261,6 +2390,31 @@ function cboxol_customizer_nav_menu_items( $items = [], $type = '', $object = ''
 	return $items;
 }
 add_filter( 'customize_nav_menu_available_items', 'cboxol_customizer_nav_menu_items', 10, 4 );
+
+/**
+ * Register navigation link variation for the block editor.
+ *
+ * This variation allows users to add a custom link to the navigation block
+ * that points to the group profile page, using the current blog's group ID.
+ *
+ * @since 1.7.0
+ *
+ * @return void
+ */
+function openlab_register_navigation_link_variation() {
+	if ( ! current_theme_supports( 'block-templates' ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'openlab-navigation-variations',
+		CBOXOL_PLUGIN_URL . 'build/navigation-variations.js',
+		[ 'wp-blocks', 'wp-dom-ready' ],
+		CBOXOL_PLUGIN_VER,
+		true
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'openlab_register_navigation_link_variation' );
 
 /**
  * Indicates whether the specified site should display the WP toolbar to logged-out users.
