@@ -691,6 +691,9 @@ class Install {
 				),
 			)
 		);
+
+		// Default color scheme.
+		set_theme_mod( 'openlab_color_scheme', 'blue' );
 	}
 
 	/**
