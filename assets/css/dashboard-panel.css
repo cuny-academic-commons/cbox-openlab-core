@@ -76,16 +76,6 @@
 	height: 48px;
 }
 
-.openlab-news-panel-content .panel-icon svg.dashboard-panel-icon-check-circle {
-	width: 44px;
-	height: 44px;
-}
-
-.openlab-news-panel-content .panel-icon svg.dashboard-panel-icon-plus {
-	width: 52px;
-	height: 52px;
-}
-
 .openlab-news-panel-content .panel-dismiss {
 	position: absolute;
 	right: 25px;

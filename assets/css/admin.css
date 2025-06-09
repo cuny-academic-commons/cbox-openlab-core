@@ -471,16 +471,6 @@ h4.dashboard-panel-settings-subsection-heading {
   fill: currentColor;
 }
 
-.cboxol-dashboard-panel-icon-preview svg.dashboard-panel-icon-check-circle {
-	width: 28px;
-	height: 28px;
-}
-
-.cboxol-dashboard-panel-icon-preview svg.dashboard-panel-icon-plus {
-	width: 36px;
-	height: 36px;
-}
-
 .cboxol-dashboard-panel-icon-name {
   font-size: 0.875rem;
   color: #333;
