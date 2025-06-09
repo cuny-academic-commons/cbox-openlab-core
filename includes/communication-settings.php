@@ -98,6 +98,8 @@ function cboxol_communication_admin_page_member_communications() {
 		true
 	);
 
+	$color_scheme = openlab_get_color_scheme();
+
 	$dashboard_panel_settings = \CBOX\OL\DashboardPanel\get_dashboard_panel_settings();
 
 	$panels = [
@@ -146,7 +148,7 @@ function cboxol_communication_admin_page_member_communications() {
 
 			<p><?php esc_html_e( 'Below you can customize a panel that will appear on the Dashboard of all group sites. For reference, below is an example of what the Dashboard Panel looks like.', 'commons-in-a-box' ); ?></p>
 
-			<img src="<?php echo esc_url( CBOXOL_PLUGIN_URL . 'assets/img/dashboard-panel.png' ); ?>" alt="<?php esc_attr_e( 'Dashboard Panel', 'commons-in-a-box' ); ?>" class="cboxol-dashboard-panel-example" />
+			<img src="<?php echo esc_url( CBOXOL_PLUGIN_URL . 'assets/img/dashboard-panel-' . $color_scheme . '.png' ); ?>" alt="<?php esc_attr_e( 'Dashboard Panel', 'commons-in-a-box' ); ?>" class="cboxol-dashboard-panel-example" />
 
 			<form class="dashboard-panel-settings-form" id="dashboard-panel-settings-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<p>
