@@ -113,6 +113,16 @@ function display() {
 		'before'
 	);
 
+	wp_add_inline_style(
+		'cboxol-dashboard-panel',
+		sprintf(
+			'.openlab-news-panel-content a { color: %s; }
+			.openlab-news-panel-content .panel-dismiss::before { color: %s; }',
+			esc_attr( $text_color ),
+			esc_attr( $text_color )
+		)
+	);
+
 	$hidden_class = $panel_is_visible ? '' : ' hidden';
 
 	$panels = [ 'panel_1', 'panel_2', 'panel_3' ];

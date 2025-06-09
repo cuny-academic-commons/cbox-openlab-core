@@ -27,10 +27,6 @@
 	padding-top: 50px;
 }
 
-.openlab-news-panel-content .panel-header a {
-	color: #000;
-}
-
 .openlab-news-panel-content .panel-header p {
 	font-size: 1.2em;
 }
@@ -91,7 +87,6 @@
 }
 
 .openlab-news-panel-content .panel-dismiss {
-	color: #000;
 	position: absolute;
 	right: 25px;
 	top: 25px;
