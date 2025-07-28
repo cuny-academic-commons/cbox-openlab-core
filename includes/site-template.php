@@ -546,6 +546,10 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 		return;
 	}
 
+	if ( get_option( 'cboxol_installing' ) ) {
+		return;
+	}
+
 	if ( 'cboxol_site_template' !== $post->post_type ) {
 		return;
 	}
