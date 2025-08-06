@@ -1,7 +1,7 @@
 /* global ajaxurl, CBOXOLDashboardPanel */
 
 // Create 'Screen options' checkbox for OpenLab News panel.
-const { backgroundColor, panelIsVisible, textColor } = CBOXOLDashboardPanel;
+const { allowDismissal, backgroundColor, panelIsVisible, textColor } = CBOXOLDashboardPanel;
 const checkboxEl = document.createElement( 'input' );
 checkboxEl.setAttribute( 'type', 'checkbox' );
 checkboxEl.setAttribute( 'id', 'openlab_news_panel-hide' );
@@ -33,15 +33,17 @@ const dashboardWidgetsWrap = document.querySelector( '#dashboard-widgets-wrap' )
 dashboardWidgetsWrap.before( openlabNewsPanel );
 
 // Add a Dismiss link to the panel.
-const openlabNewsPanelDismiss = document.createElement( 'a' );
-openlabNewsPanelDismiss.setAttribute( 'href', '#' );
-openlabNewsPanelDismiss.setAttribute( 'class', 'panel-dismiss' );
-openlabNewsPanelDismiss.textContent = 'Dismiss'; // @todo i18n
-openlabNewsPanel.prepend( openlabNewsPanelDismiss );
-openlabNewsPanelDismiss.addEventListener( 'click', ( e ) => {
-	e.preventDefault();
-	openlabNewsPanelDismissHandler( false );
-} );
+if ( allowDismissal ) {
+	const openlabNewsPanelDismiss = document.createElement( 'a' );
+	openlabNewsPanelDismiss.setAttribute( 'href', '#' );
+	openlabNewsPanelDismiss.setAttribute( 'class', 'panel-dismiss' );
+	openlabNewsPanelDismiss.textContent = 'Dismiss'; // @todo i18n
+	openlabNewsPanel.prepend( openlabNewsPanelDismiss );
+	openlabNewsPanelDismiss.addEventListener( 'click', ( e ) => {
+		e.preventDefault();
+		openlabNewsPanelDismissHandler( false );
+	} );
+}
 
 // Hide OpenLab News panel if checkbox is checked.
 const openlabNewsPanelShow = document.querySelector( '#openlab_news_panel-hide' );

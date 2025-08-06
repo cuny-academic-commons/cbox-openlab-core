@@ -105,6 +105,7 @@ function display() {
 		'cboxol-dashboard-panel',
 		'const CBOXOLDashboardPanel = ' . wp_json_encode(
 			[
+				'allowDismissal'  => (bool) $settings['allow_dismissal'],
 				'backgroundColor' => $background_color,
 				'panelIsVisible'  => (bool) $panel_is_visible,
 				'textColor'       => $text_color,
