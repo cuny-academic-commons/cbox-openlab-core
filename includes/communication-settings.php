@@ -85,6 +85,280 @@ function cboxol_communication_admin_page_invitations() {
 }
 
 /**
+ * Member Communications settings panel under Communication Settings.
+ *
+ * @since 1.7.0
+ */
+function cboxol_communication_admin_page_member_communications() {
+	wp_enqueue_script(
+		'cboxol-dashboard-panel-settings',
+		CBOXOL_PLUGIN_URL . 'assets/js/dashboard-panel-settings.js',
+		[],
+		CBOXOL_PLUGIN_VER,
+		true
+	);
+
+	$color_scheme = openlab_get_color_scheme();
+
+	$dashboard_panel_settings = \CBOX\OL\DashboardPanel\get_dashboard_panel_settings();
+
+	$panels = [
+		'panel_1' => [
+			'heading'     => __( 'Left column', 'commons-in-a-box' ),
+			'description' => __( 'Please choose the text and icon that will appear in the left column below the banner.', 'commons-in-a-box' ),
+		],
+		'panel_2' => [
+			'heading'     => __( 'Middle column', 'commons-in-a-box' ),
+			'description' => __( 'Please choose the text and icon that will appear in the middle column below the banner.', 'commons-in-a-box' ),
+		],
+		'panel_3' => [
+			'heading'     => __( 'Right column', 'commons-in-a-box' ),
+			'description' => __( 'Please choose the text and icon that will appear in the right column below the banner.', 'commons-in-a-box' ),
+		],
+	];
+
+	$icons = \CBOX\OL\DashboardPanel\get_dashboard_panel_icons();
+
+	?>
+	<div class="cboxol-admin-content">
+		<div>
+			<h3><?php esc_html_e( 'Main Site Banner', 'commons-in-a-box' ); ?></h3>
+
+			<p><?php esc_html_e( 'The Main Site Banner adds a custom notice that appears for logged-in site members across the top of all pages of the main site (homepage, group directories, and a group’s home). It will not appear on group sites.', 'commons-in-a-box' ); ?></p>
+
+			<p>
+				<?php
+					printf(
+						// translators: %s is a link to the Customizer section for the Main Site Banner.
+						esc_html__( 'You can edit the Main Site Banner and view a preview in the Customizer: %s', 'commons-in-a-box' ),
+						sprintf(
+							'<a href="%s" class="cboxol-customize-link">%s</a>',
+							esc_url( admin_url( 'customize.php?autofocus[section]=openlab_section_sitewide_notice' ) ),
+							esc_html__( 'Customize Main Site Banner', 'commons-in-a-box' )
+						)
+					);
+				?>
+			</p>
+		</div>
+
+		<br />
+
+		<div class="cboxol-dashboard-panels-config">
+			<h3><?php esc_html_e( 'Dashboard Panel', 'commons-in-a-box' ); ?></h3>
+
+			<p><?php esc_html_e( 'Below you can customize a panel that will appear on the Dashboard of all group sites. For reference, below is an example of what the Dashboard Panel looks like.', 'commons-in-a-box' ); ?></p>
+
+			<img src="<?php echo esc_url( CBOXOL_PLUGIN_URL . 'assets/img/dashboard-panel-' . $color_scheme . '.png' ); ?>" alt="<?php esc_attr_e( 'Dashboard Panel', 'commons-in-a-box' ); ?>" class="cboxol-dashboard-panel-example" />
+
+			<form class="dashboard-panel-settings-form" id="dashboard-panel-settings-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<p>
+					<label for="cboxol-dashboard-panel-toggle">
+						<input type="checkbox" id="cboxol-dashboard-panel-toggle" name="enabled" value="1" <?php checked( $dashboard_panel_settings['enabled'] ); ?> />
+						<?php esc_html_e( 'Enable Dashboard panel', 'commons-in-a-box' ); ?>
+					</label>
+				</p>
+
+				<p>
+					<label for="cboxol-dashboard-panel-allow-dismissal">
+						<input type="checkbox" class="disabled-when-disabled" id="cboxol-dashboard-panel-allow-dismissal" name="allow-dismissal" value="1" <?php checked( $dashboard_panel_settings['allow_dismissal'] ); ?> />
+						<?php esc_html_e( 'Allow members to dismiss this notice ', 'commons-in-a-box' ); ?>
+					</label>
+				</p>
+
+				<div class="dashboard-panel-settings-subsection">
+					<table class="form-table">
+						<tr>
+							<th colspan="2" class="dashboard-panel-settings-subsection-header">
+								<h4 class="dashboard-panel-settings-subsection-heading"><?php esc_html_e( 'Top Banner', 'commons-in-a-box' ); ?></h4>
+
+								<p><?php esc_html_e( 'Please choose the heading text and tagline that will appear in the top banner portion.', 'commons-in-a-box' ); ?></p>
+							</th>
+						</tr>
+
+						<tr>
+							<th>
+								<label for="primary-heading">
+									<?php esc_html_e( 'Heading', 'commons-in-a-box' ); ?>
+								</label>
+							</th>
+
+							<td>
+								<input type="text" id="primary-heading" name="primary-heading" value="<?php echo esc_attr( $dashboard_panel_settings['heading'] ); ?>" class="disabled-when-disabled regular-text form-control" />
+							</td>
+						</tr>
+
+						<tr class="dashboard-panel-settings-editor-row">
+							<th>
+								<label for="tagline">
+									<?php esc_html_e( 'Tagline', 'commons-in-a-box' ); ?>
+								</label>
+							</th>
+
+							<td>
+								<div class="editor-wrap">
+									<?php
+									wp_editor(
+										$dashboard_panel_settings['tagline'],
+										'tagline',
+										array(
+											'editor_class'  => 'disabled-when-disabled',
+											'media_buttons' => false,
+											'textarea_rows' => 3,
+											'teeny'         => true,
+											'quicktags'     => array(
+												'buttons' => 'strong,em,link',
+											),
+										)
+									);
+									?>
+								</div>
+							</td>
+
+						</tr>
+					</table>
+				</div>
+
+				<?php foreach ( $panels as $panel_id => $panel_labels ) : ?>
+					<?php
+					$panel_heading = $dashboard_panel_settings[ $panel_id . '_heading' ];
+					$panel_text    = $dashboard_panel_settings[ $panel_id . '_text' ];
+					$panel_icon    = isset( $dashboard_panel_settings[ $panel_id . '_icon' ] ) ? $dashboard_panel_settings[ $panel_id . '_icon' ] : 'check-circle';
+					?>
+
+					<div class="cboxol-dashboard-panel-single-panel-settings dashboard-panel-settings-subsection">
+						<table class="form-table">
+							<tr>
+								<th colspan="2" class="dashboard-panel-settings-subsection-header">
+									<h4 class="dashboard-panel-settings-subsection-heading"><?php echo esc_html( $panel_labels['heading'] ); ?></h4>
+									<p>
+										<?php echo esc_html( $panel_labels['description'] ); ?>
+									</p>
+								</th>
+							</tr>
+
+							<tr>
+								<th>
+									<label for="<?php echo esc_attr( $panel_id ); ?>-heading">
+										<?php esc_html_e( 'Heading', 'commons-in-a-box' ); ?>
+									</label>
+								</th>
+
+								<td>
+									<input type="text" id="<?php echo esc_attr( $panel_id ); ?>-heading" name="<?php echo esc_attr( $panel_id ); ?>-heading" value="<?php echo esc_attr( $panel_heading ); ?>" class="disabled-when-disabled regular-text form-control" />
+								</td>
+							</tr>
+
+							<tr class="dashboard-panel-settings-editor-row">
+								<th>
+									<label for="<?php echo esc_attr( $panel_id ); ?>-text">
+										<?php esc_html_e( 'Body Text (the suggested limit is 300 characters)', 'commons-in-a-box' ); ?>
+									</label>
+								</th>
+
+								<td>
+									<div class="editor-wrap">
+										<?php
+										wp_editor(
+											$panel_text,
+											$panel_id . '-text',
+											array(
+												'editor_class'  => 'disabled-when-disabled',
+												'media_buttons' => false,
+												'textarea_rows' => 3,
+												'teeny'         => true,
+												'quicktags'     => array(
+													'buttons' => 'strong,em,link',
+												),
+											)
+										);
+										?>
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<th>
+									<?php esc_html_e( 'Icon', 'commons-in-a-box' ); ?>
+								</th>
+
+								<td>
+									<fieldset class="cboxo-dashboard-panel-icons-radios">
+										<legend class="screen-reader-text">
+											<?php esc_html_e( 'Select an icon for this panel', 'commons-in-a-box' ); ?>
+										</legend>
+
+										<?php foreach ( $icons as $icon_slug => $icon_data ) : ?>
+											<label class="cboxol-dashboard-panel-icon-label">
+												<input type="radio" name="<?php echo esc_attr( $panel_id ); ?>-icon" value="<?php echo esc_attr( $icon_slug ); ?>" <?php checked( $icon_slug, $panel_icon ); ?> class="disabled-when-disabled" />
+												<span class="cboxol-dashboard-panel-icon-preview">
+													<?php /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>
+													<?php echo $icon_data['svg']; ?>
+												</span>
+												<span class="cboxol-dashboard-panel-icon-name"><?php echo esc_html( $icon_data['name'] ); ?></span>
+											</label>
+										<?php endforeach; ?>
+									</fieldset>
+								</td>
+							</tr>
+						</table>
+					</div>
+				<?php endforeach; ?>
+
+				<p>
+					<input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'commons-in-a-box' ); ?>" />
+				</p>
+
+				<?php wp_nonce_field( 'cboxol_dashboard_panel' ); ?>
+				<input type="hidden" name="action" value="cboxol_dashboard_panel" />
+			</form>
+		</div>
+	</div>
+
+	<?php
+}
+
+/**
+ * Save callback for the Dashboard Panel settings.
+ *
+ * @return void
+ */
+function cboxol_save_dashboard_panel_settings() {
+	if ( ! isset( $_POST['action'] ) || 'cboxol_dashboard_panel' !== $_POST['action'] ) {
+		return;
+	}
+
+	if ( ! check_admin_referer( 'cboxol_dashboard_panel' ) ) {
+		return;
+	}
+
+	$settings = array(
+		'enabled'         => isset( $_POST['enabled'] ),
+		'allow_dismissal' => isset( $_POST['allow-dismissal'] ),
+		'heading'         => sanitize_text_field( wp_unslash( $_POST['primary-heading'] ) ),
+		'tagline'         => wp_kses_post( wp_unslash( $_POST['tagline'] ) ),
+	);
+
+	foreach ( [ 'panel_1', 'panel_2', 'panel_3' ] as $panel_id ) {
+		$settings[ $panel_id . '_heading' ] = sanitize_text_field( wp_unslash( $_POST[ $panel_id . '-heading' ] ) );
+		$settings[ $panel_id . '_text' ]    = wp_kses_post( wp_unslash( $_POST[ $panel_id . '-text' ] ) );
+		$settings[ $panel_id . '_icon' ]    = isset( $_POST[ $panel_id . '-icon' ] ) ? sanitize_text_field( wp_unslash( $_POST[ $panel_id . '-icon' ] ) ) : '';
+	}
+
+	update_site_option( 'cboxol_dashboard_panel_settings', $settings );
+
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'settings-updated' => 1,
+			),
+			admin_url( 'admin.php?page=cbox-ol-communication-settings&cboxol-section=member-communications' )
+		)
+	);
+	exit;
+}
+add_action( 'admin_post_cboxol_dashboard_panel', 'cboxol_save_dashboard_panel_settings' );
+
+/**
  * Badges settings panel under Communication Settings.
  *
  * @since 1.2.0

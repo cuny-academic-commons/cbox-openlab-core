@@ -339,6 +339,10 @@ const store = new Vuex.Store(
 				state.types[ payload.slug ].settings.MayCreateCourses.data = payload.value === 'yes'
 			},
 
+			setMayImportGroupUsers( state, payload ) {
+				state.types[ payload.slug ].settings.MayImportGroupUsers.data = payload.value === 'yes'
+			},
+
 			setLabel( state, payload ) {
 				state[ payload.itemsKey ][ payload.typeSlug ].labels[ payload.labelSlug ].value = payload.value
 			},
@@ -447,6 +451,12 @@ const store = new Vuex.Store(
 				const { itemsKey, slug } = payload
 
 				state[ itemsKey ][ slug ].isCollapsed = ! state[ itemsKey ][ slug ].isCollapsed
+			},
+
+			updateEntityPrivacyOptions( state, { key, slug, options } ) {
+				if ( state[ key ] && state[ key ][ slug ] ) {
+					Vue.set( state[ key ][ slug ], 'availablePrivacyOptions', options );
+				}
 			}
 		}
 	}

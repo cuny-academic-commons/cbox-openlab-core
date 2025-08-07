@@ -100,11 +100,18 @@ class ItemTypes extends WP_REST_Controller {
 
 		if ( 'member' === $object_type ) {
 			$type->set_can_create_courses( $type_data['settings']['MayCreateCourses']['data'] );
+			$type->set_can_import_group_users( $type_data['settings']['MayImportGroupUsers']['data'] );
 			$type->set_selectable_types( $type_data['settings']['MayChangeMemberTypeTo']['data']['selectableTypes'] );
 		}
 
 		if ( 'group' === $object_type ) {
 			$type->set_site_template_id( $type_data['siteTemplateId'] );
+			$type->set_available_privacy_options( $type_data['availablePrivacyOptions'] );
+			$type->set_available_site_privacy_options( $type_data['availableSitePrivacyOptions'] );
+			$type->set_default_joining_setting( $type_data['defaultJoiningSetting'] );
+			$type->set_default_privacy_option( $type_data['defaultPrivacyOption'] );
+			$type->set_default_site_privacy_option( $type_data['defaultSitePrivacyOption'] );
+			$type->set_default_collaboration_tools( $type_data['defaultCollaborationTools'] );
 		}
 
 		$type->save();

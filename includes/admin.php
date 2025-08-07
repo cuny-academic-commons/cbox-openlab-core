@@ -111,8 +111,17 @@ function cboxol_register_assets() {
 				'confirmationText'                     => __( 'Confirmation Text', 'commons-in-a-box' ),
 				'confirmationTextLegend'               => __( 'The text that appears just above the "Complete Sign Up" button on the registration form.', 'commons-in-a-box' ),
 				'count'                                => _x( 'Count', 'Column header', 'commons-in-a-box' ),
+				'defaultCollaborationTools'            => __( 'Default Collaboration Tools', 'commons-in-a-box' ),
+				'defaultCollaborationToolsSettings'    => __( 'Default Collaboration Tools Settings', 'commons-in-a-box' ),
+				'defaultCollaborationToolsDescription' => __( 'Choose whether the following collaboration tools will be enabled by default during group creation. Group admins can choose to enable or disable any of the tools in settings.', 'commons-in-a-box' ),
+				'defaultPrivacySettings'               => __( 'Default Privacy Settings', 'commons-in-a-box' ),
+				'defaultPrivacySettingsDescription'    => __( 'Changes made to these settings will only apply to groups and sites created after the changes are saved. Existing groups and sites will not be changed.', 'commons-in-a-box' ),
 				'delete'                               => __( 'Delete', 'commons-in-a-box' ),
 				'deleteConfirm'                        => __( 'Are you sure you want to delete this content?', 'commons-in-a-box' ),
+				'discussion'                           => _x( 'Discussion', 'group collaboration tool', 'commons-in-a-box' ),
+				'discussionGloss'                      => __( 'Add a discussion forum to the group Home', 'commons-in-a-box' ),
+				'docs'                                 => _x( 'Docs', 'group collaboration tool', 'commons-in-a-box' ),
+				'docsGloss'                            => __( 'Add collaborative docs that group members can create and edit together', 'commons-in-a-box' ),
 				'domain'                               => _x( 'Domain', 'Domain from email domain whitelist', 'commons-in-a-box' ),
 				'dragToSort'                           => __( 'Drag to sort', 'commons-in-a-box' ),
 				'edit'                                 => __( 'Edit', 'commons-in-a-box' ),
@@ -120,17 +129,44 @@ function cboxol_register_assets() {
 				'emailDomainWhitelist'                 => __( 'Email Domain Whitelist', 'commons-in-a-box' ),
 				'emailDomainWhitelistLegend'           => __( 'To limit new user registrations to one or multiple email domains, include them here. Only users with emails matching the whitelisted domain(s) will be allowed to register for accounts. Wildcards are supported for multiple formats of the same base domain (e.g. *.schoolname.edu).', 'commons-in-a-box' ),
 				'enterSignupCode'                      => __( 'Enter Signup Code', 'commons-in-a-box' ),
+				'fileLibrary'                          => _x( 'File Library', 'group collaboration tool', 'commons-in-a-box' ),
+				'fileLibraryGloss'                     => __( 'Upload and add links to files on the group Home.', 'commons-in-a-box' ),
 				'formCustomization'                    => __( 'Form Customization', 'commons-in-a-box' ),
 				'formCustomizationLegend'              => __( 'Use these settings to customize the registration form.', 'commons-in-a-box' ),
 				'formCustomizationSave'                => __( 'Save Form Customization Settings', 'commons-in-a-box' ),
 				'group'                                => _x( 'Group', 'Column header for signup code table', 'commons-in-a-box' ),
+				'groupContentIsPublic'                 => __( 'Group and related content and activity, including the membership list, will be visible to the public.', 'commons-in-a-box' ),
+				'groupContentIsPrivate'                => __( 'Group content and activity, including the membership list, will only be visible to members of the group.', 'commons-in-a-box' ),
+				'groupDirectoryIsPublic'               => __( 'Group will be listed in the directory for this group, in search results, and may be displayed on the community home page.', 'commons-in-a-box' ),
+				'groupDirectoryIsPrivate'              => __( 'Group will NOT be listed in the directory, in search results, or on the community home page.', 'commons-in-a-box' ),
+				'groupJoiningIsPublic'                 => __( 'Any community member may join this group.', 'commons-in-a-box' ),
+				'groupJoiningIsPrivate'                => __( 'Only community members who request membership and are accepted may join this group.', 'commons-in-a-box' ),
+				'groupJoiningInviteOnly'               => __( 'Only community members who are invited may join this group.', 'commons-in-a-box' ),
+				'groupHomeAvailableOptionsHeading'     => __( 'Group Home: Available Options', 'commons-in-a-box' ),
+				'groupHomeAvailableOptionsDescription' => __( 'Below you can choose the privacy settings for the Group Home that will be available for group admins to choose when they create a new group or edit its settings.', 'commons-in-a-box' ),
+				'groupHomeDefaultOptionHeading'        => __( 'Group Home: Default Option', 'commons-in-a-box' ),
+				'groupHomeDefaultOptionDescription'    => __( 'Choose the setting from those selected above that will be the default during group creation:', 'commons-in-a-box' ),
+				'groupSiteAvailableOptionsHeading'     => __( 'Group Site: Available Options', 'commons-in-a-box' ),
+				'groupSiteAvailableOptionsDescription' => __( 'Below you can choose the privacy settings for the Group Site that will be available for group admins to choose when they create a new group or edit its settings. ', 'commons-in-a-box' ),
+				'groupSiteBlogPublic1'                 => __( 'Allow search engines to index this site. The site will show up in web search results.', 'commons-in-a-box' ),
+				'groupSiteBlogPublic0'                 => __( 'Ask search engines not to index this site. The site should not show up in web search results. Note: This option will NOT block access to the site. It is up to search engines to honor your request.', 'commons-in-a-box' ),
+				'groupSiteBlogPublicNegative1'         => __( 'I would like the site to be visible only to members of this community.', 'commons-in-a-box' ),
+				'groupSiteBlogPublicNegative2'         => __( 'I would like the site to be visible to community members with a role on the associated site.', 'commons-in-a-box' ),
+				'groupSiteBlogPublicNegative3'         => __( 'I would like my site to be visible only to those members with an administrator role on the associated site.', 'commons-in-a-box' ),
+				'groupSiteDefaultOptionHeading'        => __( 'Group Site: Default Option', 'commons-in-a-box' ),
+				'groupSiteDefaultOptionDescription'    => __( 'Choose the setting from those selected above that will be the default during group creation:', 'commons-in-a-box' ),
+				'hidden'                               => _x( 'Hidden', 'group privacy level', 'commons-in-a-box' ),
 				'itemTypeNameLabel'                    => _x( 'Name', 'item type Name label', 'commons-in-a-box' ),
+				'joining'                              => _x( 'Joining', 'group type privacy label', 'commons-in-a-box' ),
+				'joiningDescription'                   => __( 'Below you can choose the default setting that controls whether any member of your CBOX OpenLab community can join or request membership for this group type. Group admins can change this setting if they wish.', 'commons-in-a-box' ),
+				'joiningLabel'                         => __( 'Allow any CBOX OpenLab community member to join a public group or request membership in a private group.', 'commons-in-a-box' ),
 				'labels'                               => _x( 'Labels', 'subheader for item type labels', 'commons-in-a-box' ),
 				'links'                                => _x( 'Links', 'column header for template site settings section', 'commons-in-a-box' ),
 				'mayCreateCoursesLegend'               => __( 'Members may create courses', 'commons-in-a-box' ),
 
 				// @todo This probably will not translate.
 				'mayChangeMemberTypeToLegend'          => __( 'Members may change Type to', 'commons-in-a-box' ),
+				'mayImportGroupUsersLegend'            => __( 'Members may bulk-import users into groups', 'commons-in-a-box' ),
 				'memberType'                           => __( 'Member Type', 'commons-in-a-box' ),
 
 				'name'                                 => _x( 'Name', 'table header', 'commons-in-a-box' ),
@@ -145,6 +181,8 @@ function cboxol_register_assets() {
 				'orderDescription'                     => __( 'Used when displaying lists of types throughout the site.', 'commons-in-a-box' ),
 				'orderLegend'                          => __( 'Order', 'commons-in-a-box' ),
 				'parent'                               => __( 'Parent', 'commons-in-a-box' ),
+				'private'                              => _x( 'Private', 'group privacy level', 'commons-in-a-box' ),
+				'public'                               => _x( 'Public', 'group privacy level', 'commons-in-a-box' ),
 				'required'                             => __( 'Required', 'commons-in-a-box' ),
 				'save'                                 => __( 'Save', 'commons-in-a-box' ),
 				'saveChanges'                          => __( 'Save Changes', 'commons-in-a-box' ),
@@ -172,6 +210,35 @@ function cboxol_register_assets() {
 			),
 		)
 	);
+
+	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+	if ( $group_id ) {
+		$group_type = cboxol_get_group_group_type( $group_id );
+		if ( $group_type && ! is_wp_error( $group_type ) ) {
+			wp_register_script(
+				'cboxol-options-reading',
+				CBOXOL_PLUGIN_URL . 'assets/js/options-reading.js',
+				[],
+				cboxol_get_asset_version(),
+				true
+			);
+
+			wp_add_inline_script(
+				'cboxol-options-reading',
+				'const cboxolOptionsReading = ' . wp_json_encode(
+					array(
+						'availableSitePrivacyOptions' => $group_type->get_available_site_privacy_options(),
+					)
+				) . ';',
+				'before'
+			);
+		}
+
+		$screen = get_current_screen();
+		if ( $screen && 'options-reading' === $screen->id ) {
+			wp_enqueue_script( 'cboxol-options-reading' );
+		}
+	}
 
 	wp_register_style( 'cbox-ol-admin', CBOXOL_PLUGIN_URL . 'assets/css/admin.css', array(), cboxol_get_asset_version() );
 	// @todo More specific.
@@ -306,6 +373,9 @@ function cboxol_admin_subpage_label( $parent_page, $page ) {
 
 				case 'invitations':
 					return _x( 'Invitations', 'Communication Settings admin label', 'commons-in-a-box' );
+
+				case 'member-communications':
+					return _x( 'Member Communications', 'Communication Settings admin label', 'commons-in-a-box' );
 			}
 
 			break;
@@ -435,6 +505,11 @@ function cboxol_get_admin_tabs( $parent_page ) {
 					'name'  => 'invitations',
 					'label' => cboxol_admin_subpage_label( 'communication-settings', 'invitations' ),
 				),
+				'2' => array(
+					'href'  => add_query_arg( 'cboxol-section', 'member-communications', $base ),
+					'name'  => 'member-communications',
+					'label' => cboxol_admin_subpage_label( 'communication-settings', 'member-communications' ),
+				),
 			);
 	}
 
@@ -492,6 +567,10 @@ function cboxol_admin_section_content( $parent_page, $sub_page ) {
 
 				case 'invitations':
 					cboxol_communication_admin_page_invitations();
+					break;
+
+				case 'member-communications':
+					cboxol_communication_admin_page_member_communications();
 					break;
 			}
 			break;

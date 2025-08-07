@@ -144,6 +144,192 @@
 				</div>
 			</div>
 
+			<div v-if="'group' === objectType && 'groupType' === entityType" class="cboxol-entity-content-section item-type-template">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.defaultPrivacySettings }}</h3>
+
+				<p>{{ strings.defaultPrivacySettingsDescription }}</p>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupHomeAvailableOptionsHeading }}</h4>
+
+				<p>{{ strings.groupHomeAvailableOptionsDescription }}</p>
+
+				<fieldset>
+					<legend class="screen-reader-text">{{ strings.groupHomeAvailableOptions }}</legend>
+
+					<div class="cboxol-group-type-privacy-level">
+						<label>
+							<input
+								type="checkbox"
+								value="public"
+								:checked="selectedPrivacyOptions.includes('public')"
+								@change="togglePrivacy('public')"
+							>
+							{{ strings.public }}
+						</label>
+
+						<ul>
+							<li>{{ strings.groupContentIsPublic }}</li>
+							<li>{{ strings.groupDirectoryIsPublic }}</li>
+							<li>{{ strings.groupJoiningIsPublic }} </li>
+						</ul>
+					</div>
+
+					<div class="cboxol-group-type-privacy-level">
+						<label>
+							<input
+								type="checkbox"
+								value="private"
+								:checked="selectedPrivacyOptions.includes('private')"
+								@change="togglePrivacy('private')"
+							>
+							{{ strings.private }}
+						</label>
+
+						<ul>
+							<li>{{ strings.groupContentIsPrivate }}</li>
+							<li>{{ strings.groupDirectoryIsPublic }}</li>
+							<li>{{ strings.groupJoiningIsPrivate }}</li>
+						</ul>
+					</div>
+
+					<div class="cboxol-group-type-privacy-level">
+						<label>
+							<input
+								type="checkbox"
+								value="hidden"
+								:checked="selectedPrivacyOptions.includes('hidden')"
+								@change="togglePrivacy('hidden')"
+							>
+							{{ strings.hidden }}
+						</label>
+
+						<ul>
+							<li>{{ strings.groupContentIsPrivate }}</li>
+							<li>{{ strings.groupDirectoryIsPrivate }}</li>
+							<li>{{ strings.groupJoiningInviteOnly }}</li>
+						</ul>
+					</div>
+				</fieldset>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupHomeDefaultOptionHeading }}</h4>
+
+				<fieldset>
+					<legend>{{ strings.groupHomeDefaultOptionDescription }}</legend>
+						<div
+							v-for="option in selectedPrivacyOptions"
+							:key="option"
+							class="cboxol-group-type-default-radio"
+						>
+							<label>
+								<input
+									type="radio"
+									:value="option"
+									v-model="defaultPrivacy"
+									:name="`group-default-privacy-${slug}`"
+									:checked="defaultPrivacy === option"
+								>
+								{{ privacyLabel(option) }}
+							</label>
+						</div>
+				</fieldset>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupSiteAvailableOptionsHeading }}</h4>
+
+				<p>{{ strings.groupSiteAvailableOptionsDescription }}</p>
+
+				<div
+					v-for="[ value, text ] in allSiteBlogPublicOptions"
+					:key="value"
+					class="cboxol-group-type-site-privacy-level"
+				>
+					<label>
+						<input
+							type="checkbox"
+							:value="value"
+							v-model="selectedSitePrivacyOptions"
+							:name="`group-selected-site-privacy-options-${slug}`"
+						> <span>{{ text }}</span>
+					</label>
+				</div>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.groupSiteDefaultOptionHeading }}</h4>
+
+				<fieldset>
+					<legend>{{ strings.groupSiteDefaultOptionDescription }}</legend>
+						<div
+							v-for="option in selectedSitePrivacyOptions"
+							:key="option"
+							class="cboxol-group-type-default-radio"
+						>
+							<label>
+								<input
+									type="radio"
+									:value="option"
+									v-model="defaultSitePrivacy"
+									:name="`group-site-default-privacy-${slug}`"
+									:checked="defaultSitePrivacy === option"
+								>
+								{{ sitePrivacyLabel( option ) }}
+							</label>
+						</div>
+				</fieldset>
+
+				<h4 class="cboxol-entity-content-section-subheader">{{ strings.joining }}</h4>
+
+				<p>{{ strings.joiningDescription }}</p>
+
+				<label>
+					<input
+						type="checkbox"
+						v-model="defaultJoiningSetting"
+						:name="`group-default-joining-setting-${slug}`"
+					/>
+					<span>{{ strings.joiningLabel }}</span>
+				</label>
+			</div>
+
+			<div v-if="'group' === objectType && 'groupType' === entityType && ! isPortfolio" class="cboxol-entity-content-section item-type-template">
+				<h3 class="cboxol-entity-content-section-header">{{ strings.defaultCollaborationToolsSettings }}</h3>
+
+				<p>{{ strings.defaultCollaborationToolsDescription }}</p>
+
+				<fieldset>
+					<legend class="screen-reader-text">{{ strings.defaultCollaborationTools }}</legend>
+					<div class="cboxol-group-type-collaboration-tool">
+						<label>
+							<input
+								type="checkbox"
+								value="discussion"
+								v-model="selectedCollaborationTools"
+								:name="`group-selected-collaboration-tools-${slug}`"
+							> <span><strong>{{ strings.discussion }}</strong>: {{ strings.discussionGloss }}</span>
+						</label>
+					</div>
+
+					<div class="cboxol-group-type-collaboration-tool">
+						<label>
+							<input
+								type="checkbox"
+								value="docs"
+								v-model="selectedCollaborationTools"
+								:name="`group-selected-collaboration-tools-${slug}`"
+							> <span><strong>{{ strings.docs }}</strong>: {{ strings.docsGloss }}</span>
+						</label>
+					</div>
+
+					<div class="cboxol-group-type-collaboration-tool">
+						<label>
+							<input
+								type="checkbox"
+								value="files"
+								v-model="selectedCollaborationTools"
+								:name="`group-selected-collaboration-tools-${slug}`"
+							> <span><strong>{{ strings.fileLibrary }}</strong>: {{ strings.fileLibraryGloss }}</span>
+						</label>
+					</div>
+				</fieldset>
+			</div>
+
 			<div class="cboxol-entity-content-section item-type-labels" v-if="showLabels">
 				<h3 class="cboxol-entity-content-section-header">{{ strings.labels }}</h3>
 
@@ -183,6 +369,7 @@
 	import AssociatedTypeDropdowns from './settings/AssociatedTypeDropdowns.vue'
 	import MayCreateCourses from './settings/MayCreateCourses.vue'
 	import MayChangeMemberTypeTo from './settings/MayChangeMemberTypeTo.vue'
+	import MayImportGroupUsers from './settings/MayImportGroupUsers.vue'
 	import Order from './settings/Order.vue'
 
 	export default {
@@ -193,6 +380,7 @@
 			OnOffSwitch,
 			MayCreateCourses,
 			MayChangeMemberTypeTo,
+			MayImportGroupUsers,
 			Order,
 			TypeLabel
 		},
@@ -200,6 +388,24 @@
 		computed: {
 			addNewPlaceholder() {
 				return this.getEntityTypeProp( 'addNewPlaceholder' )
+			},
+
+			allCollaborationToolsOptions() {
+				return new Map([
+					[ 'discussion', this.strings.discussion, this.strings.discussionGloss ],
+					[ 'docs', this.strings.docs, this.strings.docsGloss ],
+					[ 'files', this.strings.fileLibrary, this.strings.fileLibraryGloss ]
+				]);
+			},
+
+			allSiteBlogPublicOptions() {
+				return new Map([
+					[  '1', this.strings.groupSiteBlogPublic1 ],
+					[  '0', this.strings.groupSiteBlogPublic0 ],
+					[ '-1', this.strings.groupSiteBlogPublicNegative1 ],
+					[ '-2', this.strings.groupSiteBlogPublicNegative2 ],
+					[ '-3', this.strings.groupSiteBlogPublicNegative3 ]
+				]);
 			},
 
 			entityData() {
@@ -241,6 +447,15 @@
 				}
 
 				return hasSettings
+			},
+
+			/**
+			 * Is this the portfolio group type?
+			 *
+			 * @returns {boolean}
+			 */
+			isPortfolio() {
+				return this.entityData.hasOwnProperty( 'isPortfolio' ) && this.entityData.isPortfolio
 			},
 
 			itemClass() {
@@ -291,6 +506,96 @@
 				}
 			},
 
+			selectedCollaborationTools: {
+				get() {
+					const rawOptions = this.entityData.defaultCollaborationTools || [];
+					const optionOrder = [ 'discussion', 'docs', 'files' ];
+
+					// Sort the options based on the order defined in optionOrder
+					const sortedOptions = optionOrder.reduce((acc, option) => {
+						if (rawOptions.includes(option)) {
+							acc.push(option);
+						}
+						return acc;
+					}, []);
+
+					return sortedOptions;
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'defaultCollaborationTools', value )
+				}
+			},
+
+			selectedPrivacyOptions() {
+				const rawOptions = this.entityData.availablePrivacyOptions || [];
+				const optionOrder = [ 'public', 'private', 'hidden' ];
+
+				// Sort the options based on the order defined in optionOrder
+				const sortedOptions = optionOrder.reduce((acc, option) => {
+					if (rawOptions.includes(option)) {
+						acc.push(option);
+					}
+					return acc;
+				}, []);
+
+				return sortedOptions;
+			},
+
+			selectedSitePrivacyOptions: {
+				get() {
+					const rawOptions = this.entityData.availableSitePrivacyOptions || [];
+					// These are numeric strings and should be ordered in descending order.
+					const optionOrder = [ '1', '0', '-1', '-2', '-3' ];
+
+					// Sort the options based on the order defined in optionOrder
+					const sortedOptions = optionOrder.reduce((acc, option) => {
+						if (rawOptions.includes(option.toString())) {
+							acc.push(option);
+						}
+						return acc;
+					}, []);
+
+					return sortedOptions;
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'availableSitePrivacyOptions', value )
+				}
+			},
+
+			defaultJoiningSetting: {
+				get() {
+					return this.entityData.defaultJoiningSetting || false;
+				},
+				set( value ) {
+					this.isModified = true
+					this.setEntityProp( 'defaultJoiningSetting', value )
+				}
+			},
+
+			defaultPrivacy: {
+				get() {
+					return this.entityData.defaultPrivacyOption || '';
+				},
+				set( value ) {
+					this.isDefaultDirty = true
+					this.isModified = true
+					this.setEntityProp( 'defaultPrivacyOption', value )
+				}
+			},
+
+			defaultSitePrivacy: {
+				get() {
+					return this.entityData.defaultSitePrivacyOption || '';
+				},
+				set( value ) {
+					this.isSiteDefaultDirty = true
+					this.isModified = true
+					this.setEntityProp( 'defaultSitePrivacyOption', value )
+				}
+			},
+
 			supportsAssociatedWithMemberTypes() {
 				return this.itemsKey === 'academicUnitTypes'
 			},
@@ -316,6 +621,15 @@
 			}
 		},
 
+		data() {
+			return {
+				originalDefault: '',
+				originalSiteDefault: '',
+				isDefaultDirty: false,
+				isSiteDefaultDirty: false
+			};
+		},
+
 		methods: {
 			onAccordionClick: function( event ) {
 				event.preventDefault()
@@ -331,6 +645,40 @@
 
 			isDefaultTemplate: ( siteId ) => {
 				return siteId === this.entityData.siteTemplate
+			},
+
+			privacyLabel( option ) {
+				// Customize labels however you want, or localize from `this.strings`
+				const labels = {
+					public: this.strings.public,
+					private: this.strings.private,
+					hidden: this.strings.hidden
+				};
+
+				return labels[option] || option;
+			},
+
+			sitePrivacyLabel( option ) {
+				return this.allSiteBlogPublicOptions.get( String( option ) ) || '';
+			},
+
+			togglePrivacy(option) {
+				this.isModified = true;
+
+				const current = this.selectedPrivacyOptions.slice(); // shallow copy
+
+				const index = current.indexOf(option);
+				if (index > -1) {
+					current.splice(index, 1); // remove
+				} else {
+					current.push(option); // add
+				}
+
+				this.$store.commit( 'updateEntityPrivacyOptions', {
+					key: this.itemsKey,
+					slug: this.slug,
+					options: current
+				} );
 			},
 
 			onDeleteClick: function( event ) {
@@ -443,11 +791,74 @@
 			i18nTools
 		],
 
+		mounted() {
+			// Capture the initial default when the component mounts
+			this.originalDefault = this.defaultPrivacy;
+			this.originalSiteDefault = this.defaultSitePrivacy;
+		},
+
 		props: [
 			'entityType',
 			'isSortable',
 			'isToggleable',
 			'slug'
-		]
+		],
+
+		watch: {
+			selectedPrivacyOptions: {
+				handler( newOptions ) {
+					const currentDefault = this.defaultPrivacy;
+					const original = this.originalDefault;
+
+					const currentIsValid = newOptions.includes( currentDefault );
+					const originalIsValid = newOptions.includes( original );
+
+					// Case 1: current default is invalid
+					if ( ! currentIsValid ) {
+						// Prefer restoring original if valid and user hasn't changed anything
+						const newDefault = originalIsValid && ! this.isDefaultDirty ? original : newOptions[0] || '';
+						if ( this.defaultPrivacy !== newDefault ) {
+							this.setEntityProp( 'defaultPrivacyOption', newDefault );
+						}
+					}
+
+					// Case 2: current is valid, but original just became valid again
+					else if ( originalIsValid && ! this.isDefaultDirty && currentDefault !== original ) {
+						if ( this.defaultPrivacy !== original ) {
+							this.setEntityProp( 'defaultPrivacyOption', original );
+						}
+					}
+				},
+				deep: false,
+				immediate: true
+			},
+			selectedSitePrivacyOptions: {
+				handler( newOptions ) {
+					const currentDefault = this.defaultSitePrivacy;
+					const original = this.originalSiteDefault;
+
+					const currentIsValid = newOptions.includes( currentDefault );
+					const originalIsValid = newOptions.includes( original );
+
+					// Case 1: current default is invalid
+					if ( ! currentIsValid ) {
+						const newDefault = originalIsValid && ! this.isSiteDefaultDirty ? original : newOptions[0] || '';
+
+						if ( this.defaultSitePrivacy !== newDefault ) {
+							this.setEntityProp( 'defaultSitePrivacyOption', newDefault );
+						}
+					}
+
+					// Case 2: current is valid, but original just became valid again
+					else if ( originalIsValid && ! this.isSiteDefaultDirty && currentDefault !== original ) {
+						if ( this.defaultSitePrivacy !== original ) {
+							this.setEntityProp( 'defaultSitePrivacyOption', original );
+						}
+					}
+				},
+				deep: false,
+				immediate: true
+			},
+		}
 	}
 </script>

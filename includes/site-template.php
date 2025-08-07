@@ -546,6 +546,10 @@ function cboxol_create_site_template( $post_id, \WP_Post $post ) {
 		return;
 	}
 
+	if ( get_option( 'cboxol_installing' ) ) {
+		return;
+	}
+
 	if ( 'cboxol_site_template' !== $post->post_type ) {
 		return;
 	}
@@ -615,7 +619,6 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 			'domain'  => $domain,
 			'path'    => $path,
 			'user_id' => get_current_user_id(),
-			/* translators: Site template name */
 			'title'   => $name,
 		]
 	);
@@ -624,9 +627,231 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 		return;
 	}
 
-	switch_to_blog( $site_id );
+	// Save template ID for syncing.
+	update_site_meta( $site_id, '_site_template_id', $template_id );
+
+	// Save template site ID for syncing.
+	update_post_meta( $template_id, '_template_site_id', $site_id );
+
+	// Set the timestamp flag
+	update_blog_option( $site_id, 'cboxol_needs_navigation_setup', time() );
+
+	// Send an async, non-blocking request to set up the template site.
+	$async_url = add_query_arg(
+		[
+			'action' => 'cboxol_setup_template_site',
+		],
+		get_admin_url( $site_id, 'admin-ajax.php' )
+	);
+
+	$result = wp_remote_get(
+		$async_url,
+		[
+			'blocking' => false, // Non-blocking request.
+			'timeout'  => 0.01, // Very short timeout.
+		]
+	);
+
+	return $site_id;
+}
+
+/**
+ * Callback function for cboxol_setup_template_site.
+ */
+function cboxol_setup_template_site_ajax_cb() {
+	cboxol_setup_template_site_navigation();
+	wp_send_json_success();
+}
+add_action( 'wp_ajax_nopriv_cboxol_setup_template_site', 'cboxol_setup_template_site_cb' );
+
+/**
+ * Runs the navigation setup for template sites.
+ *
+ * The primary point of entry should be the AJAX callback. We run
+ * on 'admin_init' as well, in case the AJAX request fails.
+ */
+function cboxol_setup_template_site_navigation() {
+	// Only run if we have the setup flag
+	$needs_setup = get_option( 'cboxol_needs_navigation_setup' );
+	if ( ! $needs_setup ) {
+		return;
+	}
+
+	cboxol_setup_default_template_navigation_for_block_themes();
+	cboxol_setup_default_template_navigation_for_classic_themes();
+}
+add_action( 'admin_init', 'cboxol_setup_template_site_navigation' );
+
+/**
+ * Sets up default template navigation for block themes.
+ *
+ * @since 1.7.0
+ *
+ * @return void
+ */
+function cboxol_setup_default_template_navigation_for_block_themes() {
+	// Only run if we have the setup flag
+	$needs_setup = get_option( 'cboxol_needs_navigation_setup' );
+	if ( ! $needs_setup ) {
+		return;
+	}
+
+	// Only run on block themes
+	if ( ! current_theme_supports( 'block-templates' ) ) {
+		return;
+	}
+
+	// Create a navigation post with our items
+	$group_home_block = [
+		'blockName'    => 'core/navigation-link',
+		'attrs'        => [
+			'label'     => __( '[ Group Home ]', 'commons-in-a-box' ),
+			'url'       => '#group-home-placeholder',
+			'kind'      => 'custom',
+			'className' => 'openlab-group-profile-link',
+		],
+		'innerBlocks'  => [],
+		'innerHTML'    => '',
+		'innerContent' => [],
+	];
+
+	$home_block = [
+		'blockName'    => 'core/navigation-link',
+		'attrs'        => [
+			'label' => __( 'Home', 'commons-in-a-box' ),
+			'url'   => home_url( '/' ),
+			'kind'  => 'custom',
+		],
+		'innerBlocks'  => [],
+		'innerHTML'    => '',
+		'innerContent' => [],
+	];
+
+	// Get the default fallback blocks and prepend ours
+	$fallback_blocks = block_core_navigation_get_fallback_blocks();
+	$all_blocks      = array_merge( [ $group_home_block, $home_block ], $fallback_blocks );
+
+	// Create the navigation post
+	$nav_post_id = wp_insert_post(
+		[
+			'post_title'   => __( 'Main Navigation', 'commons-in-a-box' ),
+			'post_content' => serialize_blocks( $all_blocks ),
+			'post_status'  => 'publish',
+			'post_type'    => 'wp_navigation',
+		]
+	);
+
+	if ( ! is_wp_error( $nav_post_id ) ) {
+		// Update any navigation blocks in templates to reference this new post
+		cboxol_assign_navigation_to_templates( $nav_post_id );
+	}
+
+	// Clean up the flag
+	delete_option( 'cboxol_needs_navigation_setup' );
+}
+
+/**
+ * Assigns the newly created navigation post to all templates and template parts.
+ *
+ * @since 1.7.0
+ *
+ * @param int $nav_post_id The ID of the newly created navigation post.
+ * @return void
+ */
+function cboxol_assign_navigation_to_templates( $nav_post_id ) {
+	// Get all templates and template parts
+	$template_types = [ 'wp_template', 'wp_template_part' ];
+
+	foreach ( $template_types as $template_type ) {
+		$templates = get_posts(
+			[
+				'post_type'   => $template_type,
+				'post_status' => 'publish',
+				'numberposts' => -1,
+			]
+		);
+
+		foreach ( $templates as $template ) {
+			$blocks = parse_blocks( $template->post_content );
+			$modified = false;
+
+			$updated_blocks = cboxol_update_navigation_refs_in_blocks(
+				$blocks,
+				$nav_post_id,
+				$modified
+			);
+
+			if ( $modified ) {
+				wp_update_post(
+					[
+						'ID'           => $template->ID,
+						'post_content' => serialize_blocks( $updated_blocks ),
+					]
+				);
+			}
+		}
+	}
+}
+
+/**
+ * Recursively updates navigation block references in a set of blocks.
+ *
+ * @since 1.7.0
+ *
+ * @param array $blocks The blocks to process.
+ * @param int   $nav_post_id The ID of the new navigation post to reference.
+ * @param bool  $modified Reference to a boolean that will be set to true if any block was modified.
+ * @return array The updated blocks with navigation references updated.
+ */
+function cboxol_update_navigation_refs_in_blocks( $blocks, $nav_post_id, &$modified ) {
+	foreach ( $blocks as &$block ) {
+		if ( 'core/navigation' === $block['blockName'] ) {
+			// If the navigation block has no ref (using fallback) or
+			// if you want to replace existing refs, set it to your new nav post
+			if ( ! isset( $block['attrs']['ref'] ) ) {
+				$block['attrs']['ref'] = $nav_post_id;
+				$modified              = true;
+			}
+		}
+
+		// Recursively process inner blocks
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			$block['innerBlocks'] = cboxol_update_navigation_refs_in_blocks(
+				$block['innerBlocks'],
+				$nav_post_id,
+				$modified
+			);
+		}
+	}
+
+	return $blocks;
+}
+
+/**
+ * Sets up the default template navigation for classic themes.
+ *
+ * @since 1.7.0
+ */
+function cboxol_setup_default_template_navigation_for_classic_themes() {
+	// Only run if we have the setup flag
+	$needs_setup = get_option( 'cboxol_needs_navigation_setup' );
+	if ( ! $needs_setup ) {
+		return;
+	}
+
+	// Only run on classic themes (block themes are handled by the fallback filter)
+	if ( current_theme_supports( 'block-templates' ) ) {
+		return;
+	}
 
 	// Create default menu items.
+	// If the theme has no nav menu locations, this is likely a block theme.
+	$menu_locations  = get_registered_nav_menus();
+	$primary_nav_key = cboxol_get_theme_primary_nav_menu_location();
+	if ( ! $menu_locations || ! $primary_nav_key || ! isset( $menu_locations[ $primary_nav_key ] ) ) {
+		return;
+	}
+
 	$menu_name = wp_slash( __( 'Main Menu', 'commons-in-a-box' ) );
 	$menu_id   = wp_create_nav_menu( $menu_name );
 
@@ -634,7 +859,7 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 		$menu_id,
 		0,
 		array(
-			'menu-item-title'   => __( 'Group Home', 'commons-in-a-box' ),
+			'menu-item-title'   => __( '[ Group Home ]', 'commons-in-a-box' ),
 			'menu-item-url'     => home_url( '/group-profile' ),
 			'menu-item-status'  => 'publish',
 			'menu-item-type'    => 'custom',
@@ -665,21 +890,13 @@ function cboxol_create_site_for_template( $template_id, $slug, $name ) {
 		true
 	);
 
-	$primary_nav_key               = cboxol_get_theme_primary_nav_menu_location();
-	$locations                     = get_theme_mod( 'nav_menu_locations' );
+	$locations                     = get_nav_menu_locations();
 	$locations[ $primary_nav_key ] = $menu_id;
 	set_theme_mod( 'nav_menu_locations', $locations );
 
-	restore_current_blog();
-
-	// Save template ID for syncing.
-	update_site_meta( $site_id, '_site_template_id', $template_id );
-
-	// Save template site ID for syncing.
-	update_post_meta( $template_id, '_template_site_id', $site_id );
-
-	return $site_id;
+	delete_option( 'cboxol_needs_navigation_setup' );
 }
+add_action( 'init', 'cboxol_setup_default_template_navigation_for_classic_themes' );
 
 /**
  * Set template site status as "Deleted".

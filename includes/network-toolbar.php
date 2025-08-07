@@ -334,6 +334,8 @@ class OpenLab_Admin_Bar {
 		// for hamburger menu on mobile
 		add_action( 'admin_bar_menu', array( $this, 'openlab_hamburger_menu' ), 1 );
 
+		remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 9999 );
+
 		// Logged-in only
 		if ( is_user_logged_in() ) {
 
@@ -350,7 +352,7 @@ class OpenLab_Admin_Bar {
 			}
 
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
-			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
+			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 9999 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_notifications_hook' ), 5 );
@@ -399,11 +401,14 @@ class OpenLab_Admin_Bar {
 				add_action( 'admin_bar_menu', array( $this, 'add_custom_content_menu' ), 70 );
 			}
 
-						remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
-						add_action( 'admin_bar_menu', array( $this, 'add_custom_edit_menu' ), 80 );
+			remove_action( 'admin_bar_menu', 'wp_admin_bar_edit_menu', 80 );
+			add_action( 'admin_bar_menu', array( $this, 'add_custom_edit_menu' ), 80 );
 
-						//for cleanning up any plugin add ons
-						add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
+			// Remove BP's bp-notifications item.
+			add_action( 'admin_bar_menu', [ $this, 'remove_bp_notifications_item' ], 100 );
+
+			//for cleanning up any plugin add ons
+			add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
 		} else {
 			add_action( 'admin_bar_menu', array( $this, 'add_signup_item' ), 30 );
 			add_action( 'admin_bar_menu', array( $this, 'fix_tabindex' ), 999 );
@@ -895,9 +900,9 @@ HTML;
 		 * INVITATIONS
 		 */
 
-				$title = 'Invitations';
+		$title = __( 'Invitations', 'commons-in-a-box' );
 		if ( ! empty( $invites['groups'] ) ) {
-			$title .= '<span class="see-all pull-right"><a class="regular" href="' . esc_attr( bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_groups_slug(), 'invites' ] ) ) ) . '">' . __( 'See All Invites', 'commons-in-a-box' ) . '</a></span>';
+			$title .= '<span class="see-all pull-right"><a class="regular" href="' . esc_attr( bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_groups_slug(), 'invites' ] ) ) ) . '">' . esc_html__( 'See All Invites', 'commons-in-a-box' ) . '</a></span>';
 		}
 		// "Invitations" title
 		$wp_admin_bar->add_node(
@@ -921,20 +926,20 @@ HTML;
 			foreach ( (array) $invites['groups'] as $group ) {
 				if ( $group_counter < 3 ) {
 					// avatar
-					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_group_permalink( $group ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+					$title = '<div class="row"><div class="col-sm-6"><div class="item-avatar"><a href="' . esc_url( bp_get_group_url( $group ) ) . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
 						array(
 							'item_id' => $group->id,
 							'object'  => 'group',
 							'type'    => 'full',
 							'html'    => false,
 						)
-					) . '" alt="Profile picture of ' . stripslashes( $group->name ) . '"/></a></div></div>';
+					) . '" alt="Profile picture of ' . esc_attr( stripslashes( $group->name ) ) . '"/></a></div></div>';
 
 					// name link
-					$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $group ) . '">' . stripslashes( $group->name ) . '</a></p>';
+					$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . esc_url( bp_get_group_url( $group ) ) . '">' . esc_html( stripslashes( $group->name ) ) . '</a></p>';
 
 					// accept/reject buttons
-					$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . bp_get_group_accept_invite_link( $group ) . '">' . __( 'Accept', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . __( 'Reject', 'commons-in-a-box' ) . '</a></p></div></div>';
+					$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . esc_url( bp_get_group_accept_invite_link( $group ) ) . '">' . __( 'Accept', 'commons-in-a-box' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . bp_get_group_reject_invite_link( $group ) . '">' . esc_html__( 'Reject', 'commons-in-a-box' ) . '</a></p></div></div>';
 
 					$wp_admin_bar->add_node(
 						array(
@@ -956,7 +961,7 @@ HTML;
 				array(
 					'parent' => 'invites',
 					'id'     => 'group-invites-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>No new invitations.</p></div></div>',
+					'title'  => '<div class="row"><div class="col-sm-24"><p>' . esc_html__( 'No new invitations.', 'commons-in-a-box' ) . '</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-no-items nav-content-item',
 					),
@@ -979,7 +984,7 @@ HTML;
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'messages',
-				'title' => '<span class="toolbar-item-icon fa fa-envelope" aria-hidden="true"></span><span class="sr-only">Messages</span>' . $total_count,
+				'title' => '<span class="toolbar-item-icon fa fa-envelope" aria-hidden="true"></span><span class="sr-only">' . esc_html__( 'Messages', 'commons-in-a-box' ) . '</span>' . $total_count,
 				'meta'  => array(
 					'class'    => 'hidden-xs',
 					'tabindex' => 0,
@@ -1011,16 +1016,16 @@ HTML;
 					) . '" alt="Profile picture of ' . $messages_template->thread->last_sender_id . '"/></a></div></div>';
 
 					// subject
-					$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . bp_get_message_thread_view_link() . '">' . bp_create_excerpt( bp_get_message_thread_subject(), 30 ) . '</a>';
+					$title .= '<div class="col-sm-18"><p class="item"><a class="bold" href="' . esc_url( bp_get_message_thread_view_link() ) . '">' . esc_html( bp_create_excerpt( bp_get_message_thread_subject(), 30 ) ) . '</a>';
 
 					// last sender
-					$title .= '<span class="last-sender"><a href="' . bp_members_get_user_url( $messages_template->thread->last_sender_id ) . '">' . bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) . '</a></span></p>';
+					$title .= '<span class="last-sender"><a href="' . esc_url( bp_members_get_user_url( $messages_template->thread->last_sender_id ) ) . '">' . esc_html( bp_core_get_user_displayname( $messages_template->thread->last_sender_id ) ) . '</a></span></p>';
 
 					// date and time
 					$title .= '<p class="message-excerpt">' . bp_format_time( strtotime( $messages_template->thread->last_message_date ) ) . '<br />';
 
 					// Message excerpt
-					$title .= wp_strip_all_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) . ' <a class="message-excerpt-see-more" href="' . bp_get_message_thread_view_link() . '">' . __( 'See More', 'commons-in-a-box' ) . '<span class="sr-only">' . bp_create_excerpt( bp_get_message_thread_subject(), 30 ) . '</span></a></p></div></div>';
+					$title .= esc_html( wp_strip_all_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) ) . ' <a class="message-excerpt-see-more" href="' . esc_url( bp_get_message_thread_view_link() ) . '">' . esc_html__( 'See More', 'commons-in-a-box' ) . '<span class="sr-only">' . esc_html( bp_create_excerpt( bp_get_message_thread_subject(), 30 ) ) . '</span></a></p></div></div>';
 
 					$wp_admin_bar->add_node(
 						array(
@@ -1043,7 +1048,7 @@ HTML;
 				array(
 					'parent' => 'messages',
 					'id'     => 'messages-none',
-					'title'  => '<div class="row"><div class="col-sm-24"><p>' . __( 'No new messages.', 'commons-in-a-box' ) . '</p></div></div>',
+					'title'  => '<div class="row"><div class="col-sm-24"><p>' . esc_html__( 'No new messages.', 'commons-in-a-box' ) . '</p></div></div>',
 					'meta'   => array(
 						'class' => 'nav-content-item nav-no-items',
 					),
@@ -1056,7 +1061,7 @@ HTML;
 			array(
 				'parent' => 'messages',
 				'id'     => 'messages-more',
-				'title'  => '<span class="see-all">' . __( 'See All Messages', 'commons-in-a-box' ) . '</span>',
+				'title'  => '<span class="see-all">' . esc_html__( 'See All Messages', 'commons-in-a-box' ) . '</span>',
 				'href'   => trailingslashit( bp_loggedin_user_url( bp_members_get_path_chunks( [ bp_get_messages_slug() ] ) ) ),
 				'meta'   => array(
 					'class' => 'menu-bottom-link',
@@ -1072,7 +1077,7 @@ HTML;
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'activity',
-				'title' => sprintf( '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">%s</span>', __( 'Activity', 'commons-in-a-box' ) ),
+				'title' => sprintf( '<span class="toolbar-item-name fa fa-bullhorn" aria-hidden="true"></span><span class="sr-only">%s</span>', esc_html__( 'Activity', 'commons-in-a-box' ) ),
 				'meta'  => array(
 					'class'    => 'hidden-xs',
 					'tabindex' => 0,
@@ -1307,6 +1312,17 @@ HTML;
 				}
 			}
 		}
+	}
+
+	/**
+	 * Removes BP's 'bp-notifications' admin bar item.
+	 *
+	 * We show our notifications elsewhere in the toolbar.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar
+	 */
+	public function remove_bp_notifications_item( $wp_admin_bar ) {
+		$wp_admin_bar->remove_node( 'bp-notifications' );
 	}
 
 	/**

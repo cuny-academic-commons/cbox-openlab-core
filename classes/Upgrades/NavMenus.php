@@ -87,7 +87,7 @@ class NavMenus extends Upgrade {
 			$site_id    = cboxol_get_group_site_id( $group_id );
 			$group      = groups_get_group( $group_id );
 			$group_type = cboxol_get_group_group_type( $group_id );
-			$home_url   = bp_get_group_permalink( $group );
+			$home_url   = bp_get_group_url( $group );
 		} else {
 			$site_id    = $item->get_value( 'site_id' );
 			$group_type = cboxol_get_group_type( $item->get_value( 'group_type' ) );

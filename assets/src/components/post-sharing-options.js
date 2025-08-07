@@ -109,7 +109,20 @@ function PostSharingChoice( { instanceId, value, label, info, ...props } ) {
 	);
 }
 
-registerPlugin(
-	'post-sharing-options',
-	{ render: PostSharingOptions }
-)
+const OpenlabPostVisibilityPlugin = () => {
+  const isSiteEditor = useSelect( ( select ) => {
+    const editSite = select( 'core/edit-site' );
+    return !!editSite;
+  }, [] );
+
+  return !isSiteEditor && <PostSharingOptions />;
+};
+
+const registerPostVisibility = () => {
+  registerPlugin( 'post-sharing-options', {
+    render: OpenlabPostVisibilityPlugin,
+    icon: 'visibility',
+  } );
+};
+
+wp.domReady( registerPostVisibility );

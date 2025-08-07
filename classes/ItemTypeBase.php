@@ -45,10 +45,18 @@ class ItemTypeBase {
 		return $this->data['name'];
 	}
 
+	/**
+	 * Gets a label.
+	 *
+	 * @param string $label_type The label type.
+	 * @return string The label value.
+	 */
 	public function get_label( $label_type ) {
-		$label = null;
-		if ( isset( $this->data['labels'][ $label_type ] ) ) {
-			$label = $this->data['labels'][ $label_type ];
+		$label = '';
+
+		$all_labels = $this->get_labels();
+		if ( isset( $all_labels[ $label_type ] ) ) {
+			$label = $all_labels[ $label_type ]['value'];
 		}
 
 		return $label;

@@ -8,14 +8,16 @@ class MemberType extends ItemTypeBase implements ItemType {
 	protected $post_type = 'cboxol_member_type';
 
 	protected $defaults = array(
-		'can_create_courses'   => false,
-		'can_be_deleted'       => true,
-		'requires_signup_code' => null,
-		'selectable_types'     => array(),
+		'can_be_deleted'         => true,
+		'can_create_courses'     => false,
+		'can_import_group_users' => false,
+		'requires_signup_code'   => null,
+		'selectable_types'       => array(),
 	);
 
 	protected $boolean_props = array(
 		'can_create_courses',
+		'can_import_group_users',
 	);
 
 	public function __construct() {
@@ -90,6 +92,17 @@ class MemberType extends ItemTypeBase implements ItemType {
 		$can_create_courses    = 'yes' === $can_create_courses_db;
 		$type->set_can_create_courses( $can_create_courses );
 
+		// If there's no value, default to false if the slug is 'faculty' or 'staff'.
+		// This is to ensure the proper default when upgrading from an earlier version.
+		$can_import_group_users_db = get_post_meta( $post->ID, 'cboxol_member_type_can_import_group_users', true );
+		if ( ! $can_import_group_users_db ) {
+			$can_import_group_users = in_array( $type->get_slug(), [ 'faculty', 'staff' ], true );
+		} else {
+			$can_import_group_users = 'yes' === $can_import_group_users_db;
+		}
+
+		$type->set_can_import_group_users( $can_import_group_users );
+
 		// Selectable types ("Member may change Type to...").
 		$selectable_types_db = get_post_meta( $post->ID, 'cboxol_member_type_selectable_types', true );
 		$type->set_selectable_types( $selectable_types_db );
@@ -124,6 +137,10 @@ class MemberType extends ItemTypeBase implements ItemType {
 			'isModified'   => false,
 			'canBeDeleted' => $this->get_can_be_deleted(),
 			'settings'     => array(
+				'MayImportGroupUsers'   => array(
+					'component' => 'MayImportGroupUsers',
+					'data'      => $this->get_can_import_group_users(),
+				),
 				'MayChangeMemberTypeTo' => array(
 					'component' => 'MayChangeMemberTypeTo',
 					'data'      => array(
@@ -165,6 +182,9 @@ class MemberType extends ItemTypeBase implements ItemType {
 		if ( $this->get_can_create_courses() ) {
 			add_post_meta( $wp_post_id, 'cboxol_member_type_can_create_courses', 'yes' );
 		}
+
+		$can_import_group_users = $this->get_can_import_group_users() ? 'yes' : 'no';
+		update_post_meta( $wp_post_id, 'cboxol_member_type_can_import_group_users', $can_import_group_users );
 	}
 
 	public function set_selectable_types( $types ) {
