@@ -51,10 +51,9 @@ function get_dashboard_panel_settings() {
  * @return void
  */
 function display() {
-	global $pagenow;
-
 	// Only enqueue on the main Dashboard page.
-	if ( 'index.php' !== $pagenow ) {
+	$screen = get_current_screen();
+	if ( ! $screen || 'dashboard' !== $screen->id ) {
 		return;
 	}
 
