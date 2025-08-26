@@ -1865,6 +1865,7 @@ function cboxol_clone_options_to_skip( $source_site_id = null ) {
 		'siteurl',
 		'upload_path',
 		'upload_url_path',
+		'wp-piwik-site_id', // #543
 		'wsblc_options', // #443
 	];
 
