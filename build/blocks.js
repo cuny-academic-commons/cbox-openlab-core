@@ -119,11 +119,13 @@ function PostSharingChoice(_ref2) {
   }, info));
 }
 const OpenlabPostVisibilityPlugin = () => {
-  const isSiteEditor = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.useSelect)(select => {
-    const editSite = select('core/edit-site');
-    return !!editSite;
+  const isPostEditor = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.useSelect)(select => {
+    // Check if we're in the post editor by looking for the editor store
+    // and verifying we have a current post
+    const editor = select('core/editor');
+    return editor && editor.getCurrentPostId && editor.getCurrentPostId();
   }, []);
-  return !isSiteEditor && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(PostSharingOptions, null);
+  return isPostEditor ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(PostSharingOptions, null) : null;
 };
 const registerPostVisibility = () => {
   (0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__.registerPlugin)('post-sharing-options', {
