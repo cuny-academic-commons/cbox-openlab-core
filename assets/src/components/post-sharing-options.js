@@ -110,12 +110,14 @@ function PostSharingChoice( { instanceId, value, label, info, ...props } ) {
 }
 
 const OpenlabPostVisibilityPlugin = () => {
-  const isSiteEditor = useSelect( ( select ) => {
-    const editSite = select( 'core/edit-site' );
-    return !!editSite;
+  const isPostEditor = useSelect( ( select ) => {
+    // Check if we're in the post editor by looking for the editor store
+    // and verifying we have a current post
+    const editor = select( 'core/editor' );
+    return editor && editor.getCurrentPostId && editor.getCurrentPostId();
   }, [] );
 
-  return !isSiteEditor && <PostSharingOptions />;
+  return isPostEditor ? <PostSharingOptions /> : null;
 };
 
 const registerPostVisibility = () => {
