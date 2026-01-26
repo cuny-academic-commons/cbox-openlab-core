@@ -382,7 +382,7 @@ class OpenLab_Admin_Bar {
 
 			//removing the default account information item and menu so we can a custom Bootstrap-style one
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
-			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_item' ), 7 );
+			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_item' ), 9992 );
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
 			add_action( 'admin_bar_menu', array( $this, 'openlab_custom_my_account_menu' ), 0 );
 
