@@ -68,8 +68,8 @@
 	margin-top: 4px;
 }
 
-.openlab-news-panel-content .panel-column-container a {
-	color: #000;
+.openlab-news-panel-content .panel-header-content a {
+	color: inherit;
 }
 
 .openlab-news-panel-content .panel-column-container a:hover {

@@ -116,7 +116,7 @@ function display() {
 	wp_add_inline_style(
 		'cboxol-dashboard-panel',
 		sprintf(
-			'.openlab-news-panel-content a { color: %s; }
+			'.openlab-news-panel-content .panel-dismiss { color: %s; }
 			.openlab-news-panel-content .panel-dismiss::before { color: %s; }',
 			esc_attr( $text_color ),
 			esc_attr( $text_color )
