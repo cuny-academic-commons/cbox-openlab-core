@@ -3,6 +3,11 @@
 	position: relative;
 }
 
+.openlab-news-panel-content ul {
+	list-style: inherit;
+	padding-left: 20px;
+}
+
 .openlab-news-panel-content .panel-header {
 	background: #63e0d2;
 	background-size: auto 160px;
