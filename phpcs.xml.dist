@@ -25,6 +25,9 @@
 	<!-- Exclude scripts -->
 	<exclude-pattern>bin/*</exclude-pattern>
 
+	<!-- Exclude built agents file -->
+	<exclude-pattern>includes/ai-crawlers/knownagents-user-agents.php</exclude-pattern>
+
 	<!-- Check for PHP cross-version compatibility. -->
 	<config name="testVersion" value="5.6-"/>
 
