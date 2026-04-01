@@ -201,11 +201,11 @@ function cboxol_communication_admin_page_member_communications() {
 										$dashboard_panel_settings['tagline'],
 										'tagline',
 										array(
-											'editor_class'  => 'disabled-when-disabled',
+											'editor_class' => 'disabled-when-disabled',
 											'media_buttons' => false,
 											'textarea_rows' => 3,
-											'teeny'         => true,
-											'quicktags'     => array(
+											'teeny'        => true,
+											'quicktags'    => array(
 												'buttons' => 'strong,em,link',
 											),
 										)
@@ -262,11 +262,11 @@ function cboxol_communication_admin_page_member_communications() {
 											$panel_text,
 											$panel_id . '-text',
 											array(
-												'editor_class'  => 'disabled-when-disabled',
+												'editor_class' => 'disabled-when-disabled',
 												'media_buttons' => false,
 												'textarea_rows' => 3,
-												'teeny'         => true,
-												'quicktags'     => array(
+												'teeny' => true,
+												'quicktags' => array(
 													'buttons' => 'strong,em,link',
 												),
 											)

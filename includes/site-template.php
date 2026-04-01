@@ -772,7 +772,7 @@ function cboxol_assign_navigation_to_templates( $nav_post_id ) {
 		);
 
 		foreach ( $templates as $template ) {
-			$blocks = parse_blocks( $template->post_content );
+			$blocks   = parse_blocks( $template->post_content );
 			$modified = false;
 
 			$updated_blocks = cboxol_update_navigation_refs_in_blocks(

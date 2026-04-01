@@ -88,8 +88,8 @@ function build_group_ai_robots_directives() {
 					'value' => '1',
 				],
 			],
-			'per_page' => -1,
-			'fields'   => 'all',
+			'per_page'   => -1,
+			'fields'     => 'all',
 		]
 	);
 
@@ -100,7 +100,7 @@ function build_group_ai_robots_directives() {
 	$group_paths = [];
 
 	foreach ( $groups['groups'] as $group ) {
-		$url = bp_get_group_url( $group );
+		$url  = bp_get_group_url( $group );
 		$path = wp_parse_url( $url, PHP_URL_PATH );
 
 		if ( empty( $path ) ) {
