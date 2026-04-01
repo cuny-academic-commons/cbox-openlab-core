@@ -171,10 +171,10 @@ final class KnownAgentsRobotsBuilder {
 
 		return <<<PHP
 <?php
-declare(strict_types=1);
-
 /**
- * Generated file. Do not edit by hand.
+ * Generated from Known Agents.
+ * Do not edit manually.
+ * Refresh with: php tools/build-known-agents.php --preset=training-only ...
  */
 
 return {$export};
