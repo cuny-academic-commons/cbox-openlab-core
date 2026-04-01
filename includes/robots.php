@@ -6,7 +6,7 @@
  * @package cbox-openlab-core
  */
 
-namespace CBOX\OL;
+namespace CBOX\OL\Robots;
 
 /**
  * Adds AI-specific directives to robots.txt.
@@ -112,13 +112,13 @@ function ai_robots_checkbox_markup( $checked ) {
 	?>
 
 	<div class="block-ai-crawlers-wrapper">
-		<input type="hidden" name="openlab_block_ai_crawlers" value="0" />
+		<input type="hidden" name="cboxol_block_ai_robots" value="0" />
 		<label for="block-ai-crawlers">
 			<input type="checkbox" name="cboxol_block_ai_robots" id="block-ai-crawlers" value="1" <?php checked( $checked, true ); ?> />
 			<?php esc_html_e( 'Ask AI crawlers not to access this site.', 'cbox-openlab-core' ); ?>
 		</label>
 
-		<p class="description">
+		<p class="description group-settings-note italics note">
 			<?php esc_html_e( 'Note: This option will NOT block access to the site. It is up to AI crawlers to honor your request.', 'cbox-openlab-core' ); ?>
 		</p>
 	</div>
