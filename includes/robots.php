@@ -8,6 +8,8 @@
 
 namespace CBOX\OL\Robots;
 
+const GROUP_AI_ROBOTS_CACHE_KEY = 'cboxol_group_ai_robots_directives';
+
 /**
  * Adds AI-specific directives to robots.txt.
  *
@@ -18,7 +20,7 @@ function add_ai_robots_directives( $data ) {
 		return $data;
 	}
 
-	$agents_data = require CBOXOL_PLUGIN_DIR . 'build/knownagents-user-agents.php';
+	$agents_data = require CBOXOL_PLUGIN_DIR . 'includes/ai-crawlers/knownagents-user-agents.php';
 
 	foreach ( $agents_data['user_agents'] as $agent ) {
 		$data .= "\n";
@@ -29,6 +31,138 @@ function add_ai_robots_directives( $data ) {
 	return $data;
 }
 add_filter( 'robots_txt', __NAMESPACE__ . '\\add_ai_robots_directives' );
+
+/**
+ * Adds group-related AI-specific directives to robots.txt on the primary site.
+ *
+ * @since 1.8.0
+ *
+ * @param string $data Existing robots.txt contents.
+ * @return string
+ */
+function add_group_ai_robots_directives( $data ) {
+	if ( ! cbox_is_main_site() ) {
+		return $data;
+	}
+
+	// If the block option is enabled on the main site, no further action is necessary.
+	// The blog-level directive will ipso facto apply to all groups.
+	if ( is_block_ai_robots_enabled() ) {
+		return $data;
+	}
+
+	$directives = get_site_transient( GROUP_AI_ROBOTS_CACHE_KEY );
+
+	if ( false === $directives ) {
+		$directives = build_group_ai_robots_directives();
+		set_site_transient( GROUP_AI_ROBOTS_CACHE_KEY, $directives, DAY_IN_SECONDS );
+	}
+
+	if ( '' === $directives ) {
+		return $data;
+	}
+
+	return $data . $directives;
+}
+add_filter( 'robots_txt', __NAMESPACE__ . '\\add_group_ai_robots_directives' );
+
+/**
+ * Builds group-related AI-specific directives for robots.txt.
+ *
+ * @since 1.8.0
+ *
+ * @return string
+ */
+function build_group_ai_robots_directives() {
+	$agents_data = require CBOXOL_PLUGIN_DIR . 'includes/ai-crawlers/knownagents-user-agents.php';
+
+	if ( empty( $agents_data['user_agents'] ) ) {
+		return '';
+	}
+
+	$groups = groups_get_groups(
+		[
+			'meta_query' => [
+				[
+					'key'   => 'cboxol_block_ai_robots',
+					'value' => '1',
+				],
+			],
+			'per_page' => -1,
+			'fields'   => 'all',
+		]
+	);
+
+	if ( empty( $groups['groups'] ) ) {
+		return '';
+	}
+
+	$group_paths = [];
+
+	foreach ( $groups['groups'] as $group ) {
+		$url = bp_get_group_url( $group );
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+
+		if ( empty( $path ) ) {
+			continue;
+		}
+
+		$group_paths[] = trailingslashit( $path );
+	}
+
+	$group_paths = array_values( array_unique( $group_paths ) );
+
+	if ( empty( $group_paths ) ) {
+		return '';
+	}
+
+	$data = "\n";
+
+	foreach ( $agents_data['user_agents'] as $agent ) {
+		$data .= "User-agent: {$agent}\n";
+
+		foreach ( $group_paths as $group_path ) {
+			$data .= "Disallow: {$group_path}\n";
+		}
+
+		$data .= "\n";
+	}
+
+	return $data;
+}
+
+/**
+ * Invalidates group AI robots cache when group setting changes.
+ *
+ * @since 1.8.0
+ *
+ * @param int    $group_id   Group ID.
+ * @param string $meta_key   Meta key.
+ * @param mixed  $meta_value Meta value.
+ * @return void
+ */
+function maybe_invalidate_group_ai_robots_cache( $group_id, $meta_key, $meta_value ) {
+	unset( $group_id, $meta_value );
+
+	if ( 'cboxol_block_ai_robots' !== $meta_key ) {
+		return;
+	}
+
+	clear_group_ai_robots_directives_cache();
+}
+add_action( 'groups_update_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 3 );
+add_action( 'groups_delete_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 3 );
+
+/**
+ * Clears cached group AI robots directives.
+ *
+ * @since 1.8.0
+ *
+ * @return void
+ */
+function clear_group_ai_robots_directives_cache() {
+	delete_site_transient( GROUP_AI_ROBOTS_CACHE_KEY );
+}
 
 /**
  * Is the option to block AI crawlers enabled for a given site?
