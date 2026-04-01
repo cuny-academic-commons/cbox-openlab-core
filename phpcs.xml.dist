@@ -22,6 +22,9 @@
 	<exclude-pattern>lib/bp-customizable-group-categories/includes/imported/*</exclude-pattern>
 	<exclude-pattern>lib/bp-customizable-group-categories/parts/*</exclude-pattern>
 
+	<!-- Exclude scripts -->
+	<exclude-pattern>bin/*</exclude-pattern>
+
 	<!-- Check for PHP cross-version compatibility. -->
 	<config name="testVersion" value="5.6-"/>
 
