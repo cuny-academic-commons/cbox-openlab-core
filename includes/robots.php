@@ -44,6 +44,35 @@ function is_block_ai_robots_enabled( $site_id = null ) {
 }
 
 /**
+ * Is the option to block AI crawlers enabled for the BP root site?
+ *
+ * @since 1.8.0
+ *
+ * @return bool True if the option is enabled, false otherwise.
+ */
+function is_block_ai_robots_enabled_on_root_site() {
+	return is_block_ai_robots_enabled( cbox_get_main_site_id() );
+}
+
+/**
+ * Is the option to block AI crawlers enabled for a given group?
+ *
+ * @since 1.8.0
+ *
+ * @param int|null $group_id Optional group ID to check. Defaults to current group.
+ * @return bool True if the option is enabled, false otherwise.
+ */
+function is_block_ai_robots_enabled_for_group( $group_id = null ) {
+	$group_id = $group_id ? (int) $group_id : bp_get_current_group_id();
+	if ( ! $group_id ) {
+		return false;
+	}
+
+	$group_option = groups_get_groupmeta( $group_id, 'cboxol_block_ai_robots', true );
+	return (bool) $group_option;
+}
+
+/**
  * Registers setting for blocking AI crawlers.
  *
  * @since 1.8.0
