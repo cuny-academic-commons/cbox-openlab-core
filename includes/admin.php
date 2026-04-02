@@ -246,6 +246,26 @@ function cboxol_register_assets() {
 }
 
 /**
+ * Registers dashboard widgets.
+ *
+ * @since 1.8.0
+ *
+ * @return void
+ */
+function cboxol_register_dashboard_widgets() {
+	$dashboard_widgets = [
+		'\CBOX\OL\DashboardWidget\GroupSite',
+	];
+
+	foreach ( $dashboard_widgets as $widget_class ) {
+		if ( class_exists( $widget_class ) && method_exists( $widget_class, 'register' ) ) {
+			call_user_func( [ $widget_class, 'register' ] );
+		}
+	}
+}
+add_action( 'admin_init', 'cboxol_register_dashboard_widgets' );
+
+/**
  * Registers assets needed for the block editor across all sites.
  *
  * @since 1.6.0
