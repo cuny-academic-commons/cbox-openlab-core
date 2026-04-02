@@ -159,7 +159,8 @@ class GroupSite {
 				<p>
 					<?php
 					printf(
-						__( 'This site is connected to the group: %s', 'commons-in-a-box' ),
+						// translators: %s is replaced with the name of the group, linked to the group home page.
+						esc_html__( 'This site is connected to the group: %s', 'commons-in-a-box' ),
 						'<a href="' . esc_url( bp_get_group_permalink( $group ) ) . '">' . esc_html( $group->name ) . '</a>'
 					);
 					?>
