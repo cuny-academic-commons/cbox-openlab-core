@@ -255,6 +255,7 @@ function cboxol_register_assets() {
 function cboxol_register_dashboard_widgets() {
 	$dashboard_widgets = [
 		'\CBOX\OL\DashboardWidget\GroupSite',
+		'\CBOX\OL\DashboardWidget\Privacy',
 	];
 
 	foreach ( $dashboard_widgets as $widget_class ) {
