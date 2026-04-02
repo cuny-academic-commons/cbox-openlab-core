@@ -96,6 +96,40 @@ class GroupSite {
 				border-color: #373737;
 				max-width: 100%;
 			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link {
+				display: inline-block;
+				position: relative;
+				padding-left: 20px;
+			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link:before {
+				font-family: 'Dashicons';
+				font-size: 16px;
+				position: absolute;
+				left: 0;
+				top: -2px;
+			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link.link-home:before {
+				content: "\f102";
+			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link.link-edit-description:before {
+				content: "\f464";
+			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link.link-users:before {
+				content: "\f110";
+			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link.link-email:before {
+				content: "\f465";
+			}
+
+			.cboxol-group-site-dashboard-widget .dashicons-link.link-privacy:before {
+				content: "\f194";
+			}
 		</style>
 
 		<div class="cboxol-group-site-dashboard-widget">
@@ -133,32 +167,32 @@ class GroupSite {
 
 				<ul class="cboxol-group-site-dashboard-widget-links">
 					<li>
-						<a href="<?php echo esc_url( bp_get_group_permalink( $group ) ); ?>">
+						<a class="dashicons-link link-home" href="<?php echo esc_url( bp_get_group_permalink( $group ) ); ?>">
 							<?php echo esc_html( $group_type->get_label( 'group_home' ) ); ?>
 						</a>
 					</li>
 
 					<?php if ( $user_is_admin ) : ?>
 						<li>
-							<a href="<?php echo esc_url( bp_get_group_manage_url( $group ) ); ?>#panel-details">
+							<a class="dashicons-link link-edit-description" href="<?php echo esc_url( bp_get_group_manage_url( $group ) ); ?>#panel-details">
 								<?php esc_html_e( 'Edit Description', 'commons-in-a-box' ); ?>
 							</a>
 						</li>
 
 						<li>
-							<a href="<?php echo esc_url( bp_get_group_manage_url( $group, bp_groups_get_path_chunks( array( 'manage-members' ), 'settings' ) ) ); ?>">
+							<a class="dashicons-link link-users" href="<?php echo esc_url( bp_get_group_manage_url( $group, bp_groups_get_path_chunks( array( 'manage-members' ), 'settings' ) ) ); ?>">
 								<?php esc_html_e( 'Manage Users', 'commons-in-a-box' ); ?>
 							</a>
 						</li>
 
 						<li>
-							<a href="<?php echo esc_url( bp_get_group_manage_url( $group, bp_groups_get_path_chunks( array( 'notifications' ), 'settings' ) ) ); ?>">
+							<a class="dashicons-link link-email" href="<?php echo esc_url( bp_get_group_manage_url( $group, bp_groups_get_path_chunks( array( 'notifications' ), 'settings' ) ) ); ?>">
 								<?php esc_html_e( 'Email Members', 'commons-in-a-box' ); ?>
 							</a>
 						</li>
 
 						<li>
-							<a href="<?php echo esc_url( bp_get_group_manage_url( $group ) ); ?>#panel-privacy">
+							<a class="dashicons-link link-privacy" href="<?php echo esc_url( bp_get_group_manage_url( $group ) ); ?>#panel-privacy">
 								<?php esc_html_e( 'Manage Visibility/Privacy on Homepage and Directory', 'commons-in-a-box' ); ?>
 							</a>
 						</li>
