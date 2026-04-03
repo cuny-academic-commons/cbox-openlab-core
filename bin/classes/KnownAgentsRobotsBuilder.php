@@ -174,7 +174,7 @@ final class KnownAgentsRobotsBuilder {
 /**
  * Generated from Known Agents.
  * Do not edit manually.
- * Refresh with: php tools/build-known-agents.php --preset=training-only ...
+ * Refresh with: php bin/build-known-agents.php --preset=training-only ...
  */
 
 return {$export};
