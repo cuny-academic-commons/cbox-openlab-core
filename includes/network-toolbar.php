@@ -184,14 +184,12 @@ class OpenLab_Admin_Bar {
 	 * Add the main OpenLab logo link.
 	 */
 	public function add_openlab_logo_link( $wp_admin_bar ) {
-		ob_start();
-		include WPMU_PLUGIN_DIR . '/parts/persistent/svg-logo.php';
-		$openlab_logo = ob_get_clean();
+		$logo = openlab_get_logo_url();
 
 		$title = sprintf(
-			'<span class="screen-reader-text">%s</span> <span class="logo-wrapper">%s</span>',
+			'<span class="screen-reader-text">%s</span> <span class="logo-wrapper"><img src="%s" alt="" /></span>',
 			esc_html( get_blog_option( 1, 'blogname' ) ),
-			$openlab_logo
+			$logo
 		);
 
 		$wp_admin_bar->add_node(
@@ -210,7 +208,7 @@ class OpenLab_Admin_Bar {
 		if ( ! is_user_logged_in() ) {
 			$mobile_title = sprintf(
 				'<span class="logo-wrapper"><img class="openlab-logo" src="%s" alt="OpenLab at City Tech" /></span>',
-				home_url( 'wp-content/mu-plugins/img/openlab-notext-circle.svg' )
+				esc_url( $logo )
 			);
 
 			$wp_admin_bar->add_node(
