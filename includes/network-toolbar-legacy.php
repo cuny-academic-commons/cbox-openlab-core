@@ -1956,7 +1956,7 @@ function cboxol_enqueue_global_styles() {
 
 	$color_scheme = openlab_get_color_scheme();
 
-	$openlab_toolbar_url = content_url( '/themes/openlab-theme/css/color-schemes/toolbar-' . $color_scheme . '.css' );
+	$openlab_toolbar_url = content_url( '/themes/openlab-theme/css/color-schemes/toolbar-' . $color_scheme . '-legacy.css' );
 	$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
 	wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), $ver );
