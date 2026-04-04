@@ -289,7 +289,7 @@ class OpenLab_Admin_Bar {
 	 * Modifies the 'Howdy' link, changing it to 'Hi', adding the My OpenLab logo, and changing the link.
 	 */
 	public function modify_howdy( $wp_admin_bar ) {
-		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
+		$my_openlab_logo_url = CBOXOL_PLUGIN_URL . '/assets/img/my-openlab-icon.png';
 
 		$title = sprintf(
 			'<span class="howdy hidden-xs">Hi, %s</span> <img class="my-openlab-logo hidden-xs" src="%s" alt="My OpenLab" />',
