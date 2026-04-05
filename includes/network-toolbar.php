@@ -270,7 +270,7 @@ class OpenLab_Admin_Bar {
 			array(
 				'parent' => 'user-actions',
 				'id'     => 'my-openlab-link',
-				'title'  => 'My OpenLab',
+				'title'  => __( 'My Profile', 'commons-in-a-box' ),
 				'href'   => $my_openlab_url,
 			)
 		);
@@ -279,7 +279,7 @@ class OpenLab_Admin_Bar {
 			array(
 				'parent' => 'user-actions',
 				'id'     => 'my-account-logout-link',
-				'title'  => 'Sign Out',
+				'title'  => __( 'Sign Out', 'commons-in-a-box' ),
 				'href'   => wp_logout_url( bp_get_root_domain() ),
 			)
 		);
@@ -292,9 +292,11 @@ class OpenLab_Admin_Bar {
 		$my_openlab_logo_url = CBOXOL_PLUGIN_URL . '/assets/img/my-openlab-icon.png';
 
 		$title = sprintf(
-			'<span class="howdy hidden-xs">Hi, %s</span> <img class="my-openlab-logo hidden-xs" src="%s" alt="My OpenLab" />',
-			bp_get_loggedin_user_fullname(),
-			$my_openlab_logo_url
+			'<span class="howdy hidden-xs">%s</span> <img class="my-openlab-logo hidden-xs" src="%s" alt="%s" />',
+			// Translators: 1. The user's full name.
+			esc_html( sprintf( __( 'Hi, %s', 'commons-in-a-box' ), bp_get_loggedin_user_fullname() ) ),
+			esc_url( $my_openlab_logo_url ),
+			esc_attr__( 'My Profile', 'commons-in-a-box' )
 		);
 
 		$wp_admin_bar->add_node(
