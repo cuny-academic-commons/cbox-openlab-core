@@ -60,3 +60,40 @@ export function buildQueryString( data ) {
 	// accounting for the case that the string may in-fact be empty.
 	return string.substr( 1 );
 }
+
+/**
+ * Processes HTML content to make anchor links open in a new window.
+ *
+ * Adds target="_blank" and rel="noopener noreferrer" to all anchor elements,
+ * and appends a "new window" icon after each link.
+ *
+ * @param {string} html The HTML content to process.
+ * @return {string} The processed HTML with modified links.
+ */
+export function processDescriptionLinks( html ) {
+	if ( ! html ) {
+		return html;
+	}
+
+	const container = document.createElement( 'div' );
+	container.innerHTML = html;
+
+	const links = container.querySelectorAll( 'a' );
+	const newWindowIcon = `<svg class="site-template-new-window-icon" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+
+	links.forEach( ( link ) => {
+		link.setAttribute( 'target', '_blank' );
+		link.setAttribute( 'rel', 'noopener noreferrer' );
+
+		// Add screen reader text for accessibility.
+		const srText = document.createElement( 'span' );
+		srText.className = 'screen-reader-text';
+		srText.textContent = ' (opens in a new tab)';
+		link.appendChild( srText );
+
+		// Insert the icon after the link.
+		link.insertAdjacentHTML( 'afterend', newWindowIcon );
+	} );
+
+	return container.innerHTML;
+}

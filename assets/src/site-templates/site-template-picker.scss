@@ -74,6 +74,45 @@
 .site-template-component__description {
 	margin-top: 10px;
 	line-height: 1.4;
+
+	a {
+		color: #0073aa;
+		text-decoration: underline;
+		position: relative;
+		z-index: 2;
+
+		&:hover,
+		&:focus {
+			color: #005177;
+			text-decoration: none;
+		}
+
+		&:focus {
+			outline: 2px solid #0073aa;
+			outline-offset: 2px;
+		}
+
+		.screen-reader-text {
+			border: 0;
+			clip: rect(1px, 1px, 1px, 1px);
+			clip-path: inset(50%);
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			width: 1px;
+			word-wrap: normal !important;
+		}
+	}
+}
+
+.site-template-new-window-icon {
+	color: #0073aa;
+	margin-left: 4px;
+	position: relative;
+	top: 1px;
+	vertical-align: baseline;
 }
 
 .site-template-component__meta {

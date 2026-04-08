@@ -2,6 +2,7 @@
  * Internal dependencies
  */
 import { getSiteTemplates } from './api';
+import { processDescriptionLinks } from './util';
 
 import './site-template-picker.scss'
 
@@ -25,6 +26,7 @@ const defaultTemplate = defaultTemplateForGroupType ? defaultTemplateForGroupTyp
 function renderTemplate( { id, siteId, title, excerpt, image, categories } ) {
 	const buttonId = `site-template-button-${ id }`;
 	const descId = `site-template-desc-${ id }`;
+	const processedExcerpt = processDescriptionLinks( excerpt );
 
 	return `
 	<div class="site-template-component" data-template-id="${ id }" data-template-site-id="${ siteId }">
@@ -39,7 +41,7 @@ function renderTemplate( { id, siteId, title, excerpt, image, categories } ) {
 			<button type="button" id="${ buttonId }" class="site-template-component__button" aria-describedby="${ descId }">
 				${ title }
 			</button>
-			<div id="${ descId }" class="site-template-component__description">${ excerpt }</div>
+			<div id="${ descId }" class="site-template-component__description">${ processedExcerpt }</div>
 		</div>
 	</div>
 	`;
