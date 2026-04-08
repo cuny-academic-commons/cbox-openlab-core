@@ -6,7 +6,7 @@
 
 .site-template-component {
 	background: none;
-	border: none;
+	border: 3px solid transparent;
 	box-shadow: none;
 	text-align: left;
 	cursor: pointer;
@@ -14,7 +14,7 @@
 	flex-direction: column;
 	position: relative;
 
-	&:focus,
+	&:focus-within,
 	&.is-selected {
 		border: 3px solid #66afe9;
 		box-shadow: none;
@@ -31,7 +31,25 @@
 		  background-color: #000;
 		  opacity: 0.02;
 		  z-index: 1;
+		  pointer-events: none;
 		}
+	}
+}
+
+.site-template-component__button {
+	background: none;
+	border: none;
+	box-shadow: none;
+	color: #050505;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	margin-top: 2px;
+	padding: 0;
+	text-align: left;
+
+	&:focus {
+		outline: none;
 	}
 }
 
@@ -71,13 +89,6 @@
 	font-size: 12px;
 	font-weight: 500;
 	opacity: 0.5;
-}
-
-.site-template-component__name {
-	color: #050505;
-	font-size: 16px;
-	font-weight: 600;
-	margin-top: 2px;
 }
 
 .site-template-pagination {
