@@ -315,10 +315,19 @@ class OpenLab_Admin_Bar {
 	 * Adds the Sign In menu.
 	 */
 	public function add_sign_in_menu( $wp_admin_bar ) {
-		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.svg' );
-		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.svg' );
+		$my_openlab_logo_url = CBOXOL_PLUGIN_URL . '/assets/img/my-openlab-icon.png';
+		$openlab_logo_url    = openlab_get_logo_url();
 
-		$title = "<span>Sign In</span> <img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
+		$main_site_title   = get_blog_option( 1, 'blogname' );
+		$main_site_url     = get_blog_option( 1, 'siteurl' );
+		$main_site_tagline = get_blog_option( 1, 'blogdescription' );
+
+		$title = sprintf(
+			'<span>%s</span> <img class="my-openlab-logo hidden-xs" src="%s" alt="%s" />',
+			esc_html__( 'Sign In', 'commons-in-a-box' ),
+			esc_url( $my_openlab_logo_url ),
+			esc_html( $main_site_title )
+		);
 
 		$wp_admin_bar->add_node(
 			array(
@@ -340,23 +349,27 @@ class OpenLab_Admin_Bar {
 
 		$info_title = sprintf(
 			'<div class="openlab-sign-in-info-container">
-				<div class="openlab-sign-in-info-logo"><span class="openlab-sign-in-info-logo-wrap"><img src="%s" alt="OpenLab at City Tech" /></span></div>
+				<div class="openlab-sign-in-info-logo"><span class="openlab-sign-in-info-logo-wrap"><img src="%s" alt="%s" /></span></div>
 				<div class="openlab-sign-in-info-text">
-					<div class="openlab-sign-in-info-sitename"><a href="https://openlab.citytech.cuny.edu">OpenLab at City Tech</a></div>
-					<div class="openlab-sign-in-info-tagline">A place to learn, work, and share</div>
+					<div class="openlab-sign-in-info-sitename"><a href="%s">%s</a></div>
+					<div class="openlab-sign-in-info-tagline">%s</div>
 
 					<div class="openlab-sign-in-info-signin">
-						<a href="%s">Sign In</a>
+						<a href="%s">%s</a>
 					</div>
 
-					<div class="openlab-sign-up-info-sign-up">
-						Need an account? <a href="%s">Sign Up</a>
-					</div>
+					<div class="openlab-sign-up-info-sign-up">%s</div>
 				</div>
 			</div>',
 			$openlab_logo_url,
+			esc_attr( $main_site_title ),
+			esc_url( $main_site_url ),
+			esc_html( $main_site_title ),
+			esc_html( $main_site_tagline ),
 			wp_login_url( home_url() ),
-			bp_get_signup_page()
+			__( 'Sign In', 'commons-in-a-box' ),
+			// Translators: 1. Link to the BP registration page.
+			wp_kses_post( sprintf( __( 'Need an account? <a href="%s">Sign Up</a>', 'commons-in-a-box' ), bp_get_signup_page() ) )
 		);
 
 		$wp_admin_bar->add_node(
