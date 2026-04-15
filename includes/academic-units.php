@@ -622,7 +622,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 									name="academic-units[]"
 									type="checkbox"
 									value="<?php echo esc_attr( $unit->get_slug() ); ?>"
-								/> <label for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $unit->get_name() ); ?>
+								/> <label for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $unit->get_name() ); ?></label>
 							</li>
 						<?php endforeach; ?>
 					</ul>
