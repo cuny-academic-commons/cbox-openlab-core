@@ -6,7 +6,7 @@
 
 .site-template-component {
 	background: none;
-	border: none;
+	border: 3px solid transparent;
 	box-shadow: none;
 	text-align: left;
 	cursor: pointer;
@@ -14,7 +14,7 @@
 	flex-direction: column;
 	position: relative;
 
-	&:focus,
+	&:focus-within,
 	&.is-selected {
 		border: 3px solid #66afe9;
 		box-shadow: none;
@@ -31,7 +31,25 @@
 		  background-color: #000;
 		  opacity: 0.02;
 		  z-index: 1;
+		  pointer-events: none;
 		}
+	}
+}
+
+.site-template-component__button {
+	background: none;
+	border: none;
+	box-shadow: none;
+	color: #050505;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	margin-top: 2px;
+	padding: 0;
+	text-align: left;
+
+	&:focus {
+		outline: none;
 	}
 }
 
@@ -56,6 +74,45 @@
 .site-template-component__description {
 	margin-top: 10px;
 	line-height: 1.4;
+
+	a {
+		color: #0073aa;
+		text-decoration: underline;
+		position: relative;
+		z-index: 2;
+
+		&:hover,
+		&:focus {
+			color: #005177;
+			text-decoration: none;
+		}
+
+		&:focus {
+			outline: 2px solid #0073aa;
+			outline-offset: 2px;
+		}
+
+		.screen-reader-text {
+			border: 0;
+			clip: rect(1px, 1px, 1px, 1px);
+			clip-path: inset(50%);
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			width: 1px;
+			word-wrap: normal !important;
+		}
+	}
+}
+
+.site-template-new-window-icon {
+	color: #0073aa;
+	margin-left: 4px;
+	position: relative;
+	top: 1px;
+	vertical-align: baseline;
 }
 
 .site-template-component__meta {
@@ -71,13 +128,6 @@
 	font-size: 12px;
 	font-weight: 500;
 	opacity: 0.5;
-}
-
-.site-template-component__name {
-	color: #050505;
-	font-size: 16px;
-	font-weight: 600;
-	margin-top: 2px;
 }
 
 .site-template-pagination {

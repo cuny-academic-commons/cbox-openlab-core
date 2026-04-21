@@ -600,10 +600,20 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 			continue;
 		}
 
+		$is_required_for_type = false;
+		if ( $r['member_type'] && $academic_unit_type->is_required_for_member_type( $r['member_type'] ) ) {
+			$is_required_for_type = true;
+		} elseif ( $r['group_type'] && $academic_unit_type->is_required_for_group_type( $r['group_type'] ) ) {
+			$is_required_for_type = true;
+		}
+
+		// translators: %s is the name of an academic unit type, e.g. "Department".
+		$field_legend = $is_required_for_type ? sprintf( _x( '%s (required)', 'Academic Unit Type label with required notice', 'commons-in-a-box' ), $academic_unit_type->get_name() ) : $academic_unit_type->get_name();
+
 		?>
 		<div class="cboxol-academic-unit-selector-for-type cboxol-academic-unit-selector-for-type-<?php echo esc_attr( $academic_unit_type->get_slug() ); ?>">
 			<fieldset>
-				<legend aria-live="polite"><?php echo esc_html( $academic_unit_type->get_name() ); ?> <span class="academic-unit-type-required-label"></span></legend>
+				<legend aria-live="polite"><?php echo esc_html( $field_legend ); ?> <span class="academic-unit-type-required-label"></span></legend>
 
 				<div class="cboxol-units-of-type">
 					<ul>
@@ -622,7 +632,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 									name="academic-units[]"
 									type="checkbox"
 									value="<?php echo esc_attr( $unit->get_slug() ); ?>"
-								/> <label for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $unit->get_name() ); ?>
+								/> <label for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $unit->get_name() ); ?></label>
 							</li>
 						<?php endforeach; ?>
 					</ul>

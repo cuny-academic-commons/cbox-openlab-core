@@ -165,6 +165,13 @@ function cboxol_communication_admin_page_member_communications() {
 					</label>
 				</p>
 
+				<p>
+					<label for="cboxol-dashboard-panel-disable-welcome-panel">
+						<input type="checkbox" class="disabled-when-disabled" id="cboxol-dashboard-panel-disable-welcome-panel" name="disable-welcome-panel" value="1" <?php checked( $dashboard_panel_settings['disable_welcome_panel'] ); ?> />
+						<?php esc_html_e( 'Disable WordPress default Welcome Banner', 'commons-in-a-box' ); ?>
+					</label>
+				</p>
+
 				<div class="dashboard-panel-settings-subsection">
 					<table class="form-table">
 						<tr>
@@ -332,10 +339,11 @@ function cboxol_save_dashboard_panel_settings() {
 	}
 
 	$settings = array(
-		'enabled'         => isset( $_POST['enabled'] ),
-		'allow_dismissal' => isset( $_POST['allow-dismissal'] ),
-		'heading'         => sanitize_text_field( wp_unslash( $_POST['primary-heading'] ) ),
-		'tagline'         => wp_kses_post( wp_unslash( $_POST['tagline'] ) ),
+		'enabled'               => isset( $_POST['enabled'] ),
+		'allow_dismissal'       => isset( $_POST['allow-dismissal'] ),
+		'disable_welcome_panel' => isset( $_POST['disable-welcome-panel'] ),
+		'heading'               => sanitize_text_field( wp_unslash( $_POST['primary-heading'] ) ),
+		'tagline'               => wp_kses_post( wp_unslash( $_POST['tagline'] ) ),
 	);
 
 	foreach ( [ 'panel_1', 'panel_2', 'panel_3' ] as $panel_id ) {
