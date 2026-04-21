@@ -51,12 +51,6 @@
 				typeObject = CBOXOLAcademicTypes.typesByMemberType[ memberType ][ i ];
 				$selector  = $( '.cboxol-academic-unit-selector-for-type-' + typeObject.slug );
 				$selector.show();
-
-				if ( 'required' === typeObject.status ) {
-					$selector.find( '.academic-unit-type-required-label' ).html( CBOXOLAcademicTypes.requiredLabel );
-				} else {
-					$selector.find( '.academic-unit-type-required-label' ).html( '' );
-				}
 			}
 		}
 	}

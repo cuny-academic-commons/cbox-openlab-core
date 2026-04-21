@@ -613,7 +613,7 @@ function cboxol_get_academic_unit_selector( $args = array() ) {
 		?>
 		<div class="cboxol-academic-unit-selector-for-type cboxol-academic-unit-selector-for-type-<?php echo esc_attr( $academic_unit_type->get_slug() ); ?>">
 			<fieldset>
-				<legend aria-live="polite"><?php echo esc_html( $field_legend ); ?> <span class="academic-unit-type-required-label"></span></legend>
+				<legend aria-live="polite"><?php echo esc_html( $field_legend ); ?></legend>
 
 				<div class="cboxol-units-of-type">
 					<ul>
