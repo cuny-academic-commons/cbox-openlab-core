@@ -7,16 +7,19 @@
 .site-template-component {
 	background: none;
 	border: 3px solid transparent;
+	border-bottom: 2px solid #eee;
 	box-shadow: none;
 	text-align: left;
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	padding: 12px 0;
+	margin-bottom: 12px;
 
 	&:focus-within,
 	&.is-selected {
-		border: 3px solid #66afe9;
+		border: 3px solid #66afe9 !important;
 		box-shadow: none;
 	}
 
@@ -33,6 +36,12 @@
 		  z-index: 1;
 		  pointer-events: none;
 		}
+	}
+
+	&:last-child {
+		border-bottom: inherit;
+		margin-bottom: 0;
+		padding-bottom: 0;
 	}
 }
 
@@ -142,6 +151,10 @@
 @media (min-width: 768px) {
 	.site-template-picker {
 		grid-template-columns: repeat(2, minmax(150px, 1fr));
+	}
+
+	.site-template-component {
+		border-bottom: 3px solid transparent;
 	}
 }
 
