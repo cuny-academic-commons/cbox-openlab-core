@@ -10,11 +10,9 @@
     "classnames": "^2.3.1",
     "es6-promise": "^4.2.5",
     "isomorphic-fetch": "^3.0.0",
-    "vue-template-compiler": "^2.5.21",
     "vue2-autocomplete-js": "0.0.4",
     "vuedraggable": "^2.24.3",
-    "vuex": "^2.5.0",
-    "watchify": "^4.0.0"
+    "vuex": "^2.5.0"
   },
   "devDependencies": {
     "@wordpress/scripts": "^23.0.0",
@@ -24,7 +22,9 @@
     "babel-runtime": "^6.26.0",
     "babelify": "^7.3.0",
     "vue": "^2.5.21",
-    "vueify": "^9.4.1"
+    "vue-template-compiler": "^2.5.21",
+    "vueify": "^9.4.1",
+    "watchify": "^4.0.0"
   },
   "scripts": {
     "build": "npm run build-js && npm run build-js:site-templates",
