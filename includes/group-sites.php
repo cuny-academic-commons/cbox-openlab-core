@@ -841,6 +841,17 @@ function openlab_validate_groupblog_url() {
 			bp_core_add_message( $validated['error'], 'error' );
 			bp_core_redirect( bp_get_requested_url() );
 		}
+
+		// When the template picker is shown (multiple templates available), a selection is required.
+		if ( 'new' === $new_or_old && $group_type && ! is_wp_error( $group_type ) ) {
+			$site_templates = $group_type->get_site_templates();
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$source_blog = isset( $_POST['source_blog'] ) ? intval( $_POST['source_blog'] ) : 0;
+			if ( count( $site_templates ) > 1 && ! $source_blog ) {
+				bp_core_add_message( __( 'Please select a site template before continuing.', 'commons-in-a-box' ), 'error' );
+				bp_core_redirect( bp_get_requested_url() );
+			}
+		}
 	}
 }
 add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
@@ -1657,13 +1668,10 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$title = $group->name;
 
-	$msg = '';
 	if ( ! $src_id ) {
-		$msg = __( 'Select a source blog.', 'commons-in-a-box' );
-	}
-
-	if ( $msg ) {
-		return $msg;
+		bp_core_add_message( __( 'Please select a site template before continuing.', 'commons-in-a-box' ), 'error' );
+		bp_core_redirect( bp_get_requested_url() );
+		return;
 	}
 
 	$wpdb->hide_errors();

@@ -60,8 +60,13 @@ function updateTemplates( category, page ) {
 		const compiled = templates.map( ( template ) => renderTemplate( template ) ).join('');
 		templatePicker.innerHTML = compiled;
 
-		// Restore template to default value.
-		setSelectedTemplateId( defaultTemplate )
+		if ( templates.length === 1 ) {
+			// Auto-select the only available template.
+			setSelectedTemplateId( defaultTemplate );
+		} else {
+			// Clear any PHP-initialized value so the user must choose explicitly.
+			templateToClone.value = '';
+		}
 
 		updatePagination( prev, next );
 
@@ -134,8 +139,11 @@ function togglePanel( display = false ) {
 
 	templatePanel.classList.add( 'hidden' );
 
-	// Restore template to default value.
-	setSelectedTemplateId( defaultTemplate )
+	// Clear any selection when the panel is hidden.
+	templatePicker.querySelectorAll( '.site-template-component' ).forEach( ( template ) => {
+		template.classList.remove( 'is-selected' );
+	} );
+	templateToClone.value = '';
 }
 
 function setSelectedTemplateId( selectedId ) {
@@ -148,6 +156,12 @@ function setSelectedTemplateId( selectedId ) {
 			template.classList.add( 'is-selected' )
 
 			templateToClone.value = template.dataset.templateSiteId;
+
+			// Remove any "template required" error once a selection is made.
+			const errorEl = document.querySelector( '.site-template-required-error' );
+			if ( errorEl ) {
+				errorEl.remove();
+			}
 		} else {
 			template.classList.remove( 'is-selected' )
 		}
