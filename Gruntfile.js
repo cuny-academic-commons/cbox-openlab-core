@@ -1,7 +1,6 @@
 module.exports = function( grunt ) {
 
 	'use strict';
-	var banner = '/**\n * <%= pkg.homepage %>\n * Copyright (c) <%= grunt.template.today("yyyy") %>\n * This file is generated automatically. Do not edit.\n */\n';
 	// Project configuration
 
 	var timestamp = new Date().getTime();
@@ -38,27 +37,6 @@ module.exports = function( grunt ) {
 				}
 			},
 
-			less: {
-				development: {
-					options: {
-						compress: true,
-						optimization: 2
-					},
-					files: {
-						"assets/css/openlab-toolbar.css": "assets/css/openlab-toolbar.less"
-					}
-				}
-			},
-
-			watch: {
-				styles: {
-					files: ['assets/css/*.less'],
-					tasks: ['less'],
-					options: {
-						nospawn: true
-					}
-				},
-			},
 			setPHPConstant: {
 				assetVersion: {
 					constant: 'CBOXOL_ASSET_VER',
@@ -75,8 +53,6 @@ module.exports = function( grunt ) {
 	);
 
 	grunt.loadNpmTasks( 'grunt-wp-i18n' );
-	grunt.loadNpmTasks( 'grunt-contrib-less' );
-	grunt.loadNpmTasks( 'grunt-contrib-watch' );
 	grunt.loadNpmTasks( 'grunt-php-set-constant' );
 
 	grunt.registerTask( 'i18n', ['addtextdomain', 'makepot'] );
