@@ -292,7 +292,7 @@ class OpenLab_Admin_Bar {
 		$my_openlab_logo_url = CBOXOL_PLUGIN_URL . '/assets/img/my-openlab-icon.png';
 
 		$title = sprintf(
-			'<span class="howdy hidden-xs">%s</span> <img class="my-openlab-logo hidden-xs" src="%s" alt="%s" />',
+			'<span class="howdy hidden-xs">%s</span> <img class="my-openlab-logo" src="%s" alt="%s" />',
 			// Translators: 1. The user's full name.
 			esc_html( sprintf( __( 'Hi, %s', 'commons-in-a-box' ), bp_get_loggedin_user_fullname() ) ),
 			esc_url( $my_openlab_logo_url ),
