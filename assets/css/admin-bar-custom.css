@@ -81,10 +81,6 @@
 	display: block;
 }
 
-#wpadminbar .quicklinks > ul > li > a {
-	padding: 0 8px 0 7px;
-}
-
 #wpadminbar .menupop .ab-sub-wrapper,
 #wpadminbar .shortlink-input {
 	margin: 0;
@@ -170,7 +166,6 @@
 	position: relative;
 	float: left;
 	speak: none;
-	padding: 4px 0;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	background-image: none !important;
