@@ -275,14 +275,6 @@
 	min-width: 198px;
 }
 
-#wp-admin-bar-my-account > .ab-item:before {
-	content: "\f110";
-	top: 2px;
-	float: right;
-	margin-left: 6px;
-	margin-right: 0;
-}
-
 #wp-admin-bar-my-account.with-avatar > .ab-item:before {
 	display: none;
 	content: none;
@@ -397,8 +389,7 @@
 	margin: 6px 8px 0 -2px;
 }
 
-#wpadminbar #wp-admin-bar-my-sites > .ab-item:before,
-#wpadminbar #wp-admin-bar-site-name > .ab-item:before {
+#wpadminbar #wp-admin-bar-my-sites > .ab-item:before {
 	content: '\f112';
 	top: 2px;
 }
@@ -407,12 +398,6 @@
 	content: '\f327';
 	top: 2px;
 }
-
-#wpadminbar #wp-admin-bar-site-name > .ab-item:before {
-	content: "\f102";
-}
-
-
 
 /**
  * Comments
