@@ -453,6 +453,7 @@ class OpenLab_Admin_Bar {
 	 * place
 	 */
 	public function remove_notifications_hook( $wp_admin_bar ) {
+		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu_priority', 6 );
 		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
 	}
 
