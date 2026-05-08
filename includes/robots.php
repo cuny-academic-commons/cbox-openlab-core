@@ -253,13 +253,14 @@ function build_site_ai_robots_directives() {
  *
  * @since 1.8.0
  *
+ * @param int    $meta_id    Meta ID.
  * @param int    $group_id   Group ID.
  * @param string $meta_key   Meta key.
  * @param mixed  $meta_value Meta value.
  * @return void
  */
-function maybe_invalidate_group_ai_robots_cache( $group_id, $meta_key, $meta_value ) {
-	unset( $group_id, $meta_value );
+function maybe_invalidate_group_ai_robots_cache( $meta_id, $group_id, $meta_key, $meta_value ) {
+	unset( $meta_id, $group_id, $meta_value );
 
 	if ( 'cboxol_block_ai_robots' !== $meta_key ) {
 		return;
@@ -267,8 +268,8 @@ function maybe_invalidate_group_ai_robots_cache( $group_id, $meta_key, $meta_val
 
 	clear_group_ai_robots_directives_cache();
 }
-add_action( 'groups_update_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 3 );
-add_action( 'groups_delete_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 3 );
+add_action( 'updated_group_meta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 4 );
+add_action( 'deleted_group_meta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 4 );
 
 /**
  * Clears cached group AI robots directives.
