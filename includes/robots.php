@@ -161,7 +161,23 @@ add_action( 'groups_delete_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group
  * @return void
  */
 function clear_group_ai_robots_directives_cache() {
+	/*
+	 * BuddyPress filters the 'query' hook to replace the meta ID column name
+	 * in group meta queries. Because the current callback is hooked during
+	 * the process of updating/deleting group meta, the filter is still in place,
+	 * which causes the `delete_site_transient()` call to fail since it relies
+	 * on a direct query to the options table.
+	 */
+	$has_bp_filter_metaid_column_name = has_filter( 'query', 'bp_filter_metaid_column_name' );
+	if ( $has_bp_filter_metaid_column_name ) {
+		remove_filter( 'query', 'bp_filter_metaid_column_name' );
+	}
+
 	delete_site_transient( GROUP_AI_ROBOTS_CACHE_KEY );
+
+	if ( $has_bp_filter_metaid_column_name ) {
+		add_filter( 'query', 'bp_filter_metaid_column_name' );
+	}
 }
 
 /**
