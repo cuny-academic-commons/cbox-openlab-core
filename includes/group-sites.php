@@ -1641,6 +1641,7 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
  * @todo Merge with course copy code, which is better than this.
  *
  * @param int $group_id
+ * @return bool|WP_Error
  */
 function cboxol_copy_blog_page( $group_id ) {
 	global $bp, $wpdb, $current_site, $user_email;
@@ -1649,7 +1650,7 @@ function cboxol_copy_blog_page( $group_id ) {
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
 
 	if ( empty( $blog['domain'] ) ) {
-		return;
+		return new WP_Error( 'blog_domain_required', __( 'A blog domain is required.', 'commons-in-a-box' ) );
 	}
 
 	$current_user = wp_get_current_user();
@@ -1837,7 +1838,7 @@ function cboxol_copy_blog_page( $group_id ) {
 		}
 	}
 
-	return $msg;
+	return true;
 }
 
 /**
