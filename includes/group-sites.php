@@ -1661,7 +1661,7 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$error_codes = $validate['errors']->get_error_codes();
 	if ( ! empty( $error_codes ) ) {
-		return $validate;
+		return $validate['errors'];
 	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -2115,6 +2115,50 @@ function cboxol_allow_extended_blogname_charset( $retval ) {
 	return $retval;
 }
 add_filter( 'wpmu_validate_blog_signup', 'cboxol_allow_extended_blogname_charset' );
+
+/**
+ * Validation of blog signup values.
+ *
+ * @since 1.8.0
+ *
+ * @param array $retval Validation results from wpmu_validate_blog_signup.
+ * @return array Validation results, potentially modified to allow additional characters in blogname.
+ */
+function cboxol_validate_blog_signup( $retval ) {
+	// Check path and domain against blogs table schema.
+	global $wpdb;
+	$describe = $wpdb->get_results( "DESCRIBE {$wpdb->blogs}" );
+
+	if ( $describe ) {
+		$path_max_length   = 0;
+		$domain_max_length = 0;
+
+		foreach ( $describe as $column ) {
+			if ( 'path' === $column->Field ) {
+				preg_match( '/\((\d+)\)/', $column->Type, $matches );
+				if ( isset( $matches[1] ) ) {
+					$path_max_length = (int) $matches[1];
+				}
+			} elseif ( 'domain' === $column->Field ) {
+				preg_match( '/\((\d+)\)/', $column->Type, $matches );
+				if ( isset( $matches[1] ) ) {
+					$domain_max_length = (int) $matches[1];
+				}
+			}
+		}
+
+		if ( strlen( $retval['path'] ) > $path_max_length ) {
+			$retval['errors']->add( 'blogname', sprintf( __( 'Site path cannot be longer than %d characters.', 'commons-in-a-box' ), $path_max_length ) );
+		}
+
+		if ( strlen( $retval['domain'] ) > $domain_max_length ) {
+			$retval['errors']->add( 'blogname', sprintf( __( 'Site domain cannot be longer than %d characters.', 'commons-in-a-box' ), $domain_max_length ) );
+		}
+	}
+
+	return $retval;
+}
+add_filter( 'wpmu_validate_blog_signup', 'cboxol_validate_blog_signup', 20 );
 
 /**
  * Validate a blogname.
