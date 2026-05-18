@@ -2134,13 +2134,18 @@ function cboxol_validate_blog_signup( $retval ) {
 		$domain_max_length = 0;
 
 		foreach ( $describe as $column ) {
-			if ( 'path' === $column->Field ) {
-				preg_match( '/\((\d+)\)/', $column->Type, $matches );
+			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$column_field = $column->Field;
+			$column_type  = $column->Type;
+			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+
+			if ( 'path' === $column_field ) {
+				preg_match( '/\((\d+)\)/', $column_type, $matches );
 				if ( isset( $matches[1] ) ) {
 					$path_max_length = (int) $matches[1];
 				}
-			} elseif ( 'domain' === $column->Field ) {
-				preg_match( '/\((\d+)\)/', $column->Type, $matches );
+			} elseif ( 'domain' === $column_field ) {
+				preg_match( '/\((\d+)\)/', $column_type, $matches );
 				if ( isset( $matches[1] ) ) {
 					$domain_max_length = (int) $matches[1];
 				}
@@ -2148,10 +2153,12 @@ function cboxol_validate_blog_signup( $retval ) {
 		}
 
 		if ( strlen( $retval['path'] ) > $path_max_length ) {
+			// translators: %d is the maximum number of characters allowed in a site path.
 			$retval['errors']->add( 'blogname', sprintf( __( 'Site path cannot be longer than %d characters.', 'commons-in-a-box' ), $path_max_length ) );
 		}
 
 		if ( strlen( $retval['domain'] ) > $domain_max_length ) {
+			// translators: %d is the maximum number of characters allowed in a site domain.
 			$retval['errors']->add( 'blogname', sprintf( __( 'Site domain cannot be longer than %d characters.', 'commons-in-a-box' ), $domain_max_length ) );
 		}
 	}
