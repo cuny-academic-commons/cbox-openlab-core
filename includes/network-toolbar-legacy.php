@@ -282,14 +282,14 @@ add_action( 'wp_default_styles', 'openlab_remove_admin_bar_default_css', 99999 )
 /**
  * Bootstrap
  */
-add_action( 'add_admin_bar_menus', array( 'OpenLab_Admin_Bar', 'init' ) );
+add_action( 'add_admin_bar_menus', array( 'OpenLab_Admin_Bar_Legacy', 'init' ) );
 
-class OpenLab_Admin_Bar {
+class OpenLab_Admin_Bar_Legacy {
 	public static function init() {
 		static $instance;
 
 		if ( empty( $instance ) ) {
-			$instance = new OpenLab_Admin_Bar();
+			$instance = new OpenLab_Admin_Bar_Legacy();
 		}
 	}
 
