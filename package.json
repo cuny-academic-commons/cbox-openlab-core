@@ -1,6 +1,6 @@
 {
   "name": "cbox-openlab-core",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Functionality plugin for the OpenLab package of Commons In A Box",
   "main": "assets/js/app.js",
   "directories": {
@@ -9,33 +9,31 @@
   "dependencies": {
     "classnames": "^2.3.1",
     "es6-promise": "^4.2.5",
-    "grunt-php-set-constant": "0.0.15",
     "isomorphic-fetch": "^3.0.0",
-    "vue-template-compiler": "^2.5.21",
     "vue2-autocomplete-js": "0.0.4",
     "vuedraggable": "^2.24.3",
-    "vuex": "^2.5.0",
-    "watchify": "^4.0.0"
+    "vuex": "^2.5.0"
   },
   "devDependencies": {
-    "@wordpress/scripts": "^23.0.0",
+    "@wordpress/scripts": "^32.0.0",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-runtime": "^6.26.0",
     "babelify": "^7.3.0",
-    "grunt": "^1.4.0",
-    "grunt-contrib-less": "^2.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-wp-i18n": "^1.0.2",
     "vue": "^2.5.21",
-    "vueify": "^9.4.1"
+    "vue-template-compiler": "^2.5.21",
+    "vueify": "^9.4.1",
+    "watchify": "^4.0.0"
   },
   "scripts": {
+    "build": "npm run build-js && npm run build-js:site-templates",
     "build-js": "browserify -t vueify -e assets/js/app.js -o assets/js/build.js",
     "build-js:site-templates": "wp-scripts build assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js assets/src/site-templates-default-category.js assets/src/blocks.js assets/src/navigation-variations.js",
     "watch-js": "watchify -v -t vueify -e assets/js/app.js -o assets/js/build.js",
-    "watch-js:site-templates": "wp-scripts start assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js assets/src/site-templates-default-category.js assets/src/blocks.js assets/src/navigation-variations.js"
+    "watch-js:site-templates": "wp-scripts start assets/src/site-templates/site-templates.js assets/src/site-templates-admin.js assets/src/site-templates-default-category.js assets/src/blocks.js assets/src/navigation-variations.js",
+    "set-version": "node scripts/set-version.js",
+    "i18n": "wp i18n make-pot . languages/cbox-openlab-core.pot --exclude=node_modules,vendor,tests,bin"
   },
   "repository": {
     "type": "git",

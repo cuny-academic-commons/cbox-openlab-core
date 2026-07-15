@@ -5,15 +5,15 @@
  * Description:     Core functionality for CBOX-OpenLab
  * Text Domain:     cbox-openlab-core
  * Domain Path:     /languages
- * Version:         1.7.0
+ * Version:         1.8.0
  * Network:         true
  */
 
 define( 'CBOXOL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CBOXOL_PLUGIN_ROOT_FILE', __FILE__ );
-define( 'CBOXOL_PLUGIN_VER', '1.7.0-1754576756485' );
-define( 'CBOXOL_ASSET_VER', '1.7.0-1754576756485' );
+define( 'CBOXOL_PLUGIN_VER', '1.8.0-1784126302463' );
+define( 'CBOXOL_ASSET_VER', '1.8.0-1784126302463' );
 
 // @todo Organize this in a meaningful way.
 function cboxol_init() {
@@ -84,7 +84,11 @@ function cboxol_init() {
 		require CBOXOL_PLUGIN_DIR . 'plugins/pressforward.php';
 	}
 
-	require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
+	if ( cbox_is_main_site() ) {
+		require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar-legacy.php';
+	} else {
+		require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar.php';
+	}
 
 	// Must wait until WP is set up.
 	remove_action( 'after_switch_theme', '_wp_sidebars_changed' );

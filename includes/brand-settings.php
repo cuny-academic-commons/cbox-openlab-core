@@ -94,6 +94,9 @@ function cboxol_get_brand_pages() {
 	}
 
 	$page_ids = get_site_option( 'cboxol_brand_page_ids' );
+	if ( ! is_array( $page_ids ) ) {
+		$page_ids = array();
+	}
 
 	$main_site_id = cboxol_get_main_site_id();
 	$switched     = false;
@@ -103,8 +106,12 @@ function cboxol_get_brand_pages() {
 	}
 
 	foreach ( $page_ids as $page_type => $page_id ) {
+		if ( ! isset( $pages[ $page_type ] ) ) {
+			continue;
+		}
+
 		$page = get_page( $page_id );
-		if ( ! $page || 'page' !== $page->post_type ) {
+		if ( ! $page || 'page' !== $page->post_type || 'publish' !== $page->post_status ) {
 			continue;
 		}
 

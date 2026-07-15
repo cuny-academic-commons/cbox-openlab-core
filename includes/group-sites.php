@@ -841,6 +841,17 @@ function openlab_validate_groupblog_url() {
 			bp_core_add_message( $validated['error'], 'error' );
 			bp_core_redirect( bp_get_requested_url() );
 		}
+
+		// When the template picker is shown (multiple templates available), a selection is required.
+		if ( 'new' === $new_or_old && $group_type && ! is_wp_error( $group_type ) ) {
+			$site_templates = $group_type->get_site_templates();
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$source_blog = isset( $_POST['source_blog'] ) ? intval( $_POST['source_blog'] ) : 0;
+			if ( count( $site_templates ) > 1 && ! $source_blog ) {
+				bp_core_add_message( __( 'Please select a site template before continuing.', 'commons-in-a-box' ), 'error' );
+				bp_core_redirect( bp_get_requested_url() );
+			}
+		}
 	}
 }
 add_action( 'bp_actions', 'openlab_validate_groupblog_url', 1 );
@@ -1630,6 +1641,7 @@ function openlab_add_widget_to_main_sidebar( $widget ) {
  * @todo Merge with course copy code, which is better than this.
  *
  * @param int $group_id
+ * @return bool|WP_Error
  */
 function cboxol_copy_blog_page( $group_id ) {
 	global $bp, $wpdb, $current_site, $user_email;
@@ -1638,7 +1650,7 @@ function cboxol_copy_blog_page( $group_id ) {
 	$blog = isset( $_POST['blog'] ) ? $_POST['blog'] : array();
 
 	if ( empty( $blog['domain'] ) ) {
-		return;
+		return new WP_Error( 'blog_domain_required', __( 'A blog domain is required.', 'commons-in-a-box' ) );
 	}
 
 	$current_user = wp_get_current_user();
@@ -1649,7 +1661,7 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$error_codes = $validate['errors']->get_error_codes();
 	if ( ! empty( $error_codes ) ) {
-		return $validate;
+		return $validate['errors'];
 	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -1657,13 +1669,10 @@ function cboxol_copy_blog_page( $group_id ) {
 
 	$title = $group->name;
 
-	$msg = '';
 	if ( ! $src_id ) {
-		$msg = __( 'Select a source blog.', 'commons-in-a-box' );
-	}
-
-	if ( $msg ) {
-		return $msg;
+		bp_core_add_message( __( 'Please select a site template before continuing.', 'commons-in-a-box' ), 'error' );
+		bp_core_redirect( bp_get_requested_url() );
+		return;
 	}
 
 	$wpdb->hide_errors();
@@ -1829,7 +1838,7 @@ function cboxol_copy_blog_page( $group_id ) {
 		}
 	}
 
-	return $msg;
+	return true;
 }
 
 /**
@@ -1865,6 +1874,7 @@ function cboxol_clone_options_to_skip( $source_site_id = null ) {
 		'siteurl',
 		'upload_path',
 		'upload_url_path',
+		'wp-piwik-site_id', // #543
 		'wsblc_options', // #443
 	];
 
@@ -2105,6 +2115,57 @@ function cboxol_allow_extended_blogname_charset( $retval ) {
 	return $retval;
 }
 add_filter( 'wpmu_validate_blog_signup', 'cboxol_allow_extended_blogname_charset' );
+
+/**
+ * Validation of blog signup values.
+ *
+ * @since 1.8.0
+ *
+ * @param array $retval Validation results from wpmu_validate_blog_signup.
+ * @return array Validation results, potentially modified to allow additional characters in blogname.
+ */
+function cboxol_validate_blog_signup( $retval ) {
+	// Check path and domain against blogs table schema.
+	global $wpdb;
+	$describe = $wpdb->get_results( "DESCRIBE {$wpdb->blogs}" );
+
+	if ( $describe ) {
+		$path_max_length   = 0;
+		$domain_max_length = 0;
+
+		foreach ( $describe as $column ) {
+			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$column_field = $column->Field;
+			$column_type  = $column->Type;
+			// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+
+			if ( 'path' === $column_field ) {
+				preg_match( '/\((\d+)\)/', $column_type, $matches );
+				if ( isset( $matches[1] ) ) {
+					$path_max_length = (int) $matches[1];
+				}
+			} elseif ( 'domain' === $column_field ) {
+				preg_match( '/\((\d+)\)/', $column_type, $matches );
+				if ( isset( $matches[1] ) ) {
+					$domain_max_length = (int) $matches[1];
+				}
+			}
+		}
+
+		if ( strlen( $retval['path'] ) > $path_max_length ) {
+			// translators: %d is the maximum number of characters allowed in a site path.
+			$retval['errors']->add( 'blogname', sprintf( __( 'Site path cannot be longer than %d characters.', 'commons-in-a-box' ), $path_max_length ) );
+		}
+
+		if ( strlen( $retval['domain'] ) > $domain_max_length ) {
+			// translators: %d is the maximum number of characters allowed in a site domain.
+			$retval['errors']->add( 'blogname', sprintf( __( 'Site domain cannot be longer than %d characters.', 'commons-in-a-box' ), $domain_max_length ) );
+		}
+	}
+
+	return $retval;
+}
+add_filter( 'wpmu_validate_blog_signup', 'cboxol_validate_blog_signup', 20 );
 
 /**
  * Validate a blogname.

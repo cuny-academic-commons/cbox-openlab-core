@@ -3,6 +3,11 @@
 	position: relative;
 }
 
+.openlab-news-panel-content ul {
+	list-style: inherit;
+	padding-left: 20px;
+}
+
 .openlab-news-panel-content .panel-header {
 	background: #63e0d2;
 	background-size: auto 160px;
@@ -63,8 +68,8 @@
 	margin-top: 4px;
 }
 
-.openlab-news-panel-content .panel-column-container a {
-	color: #000;
+.openlab-news-panel-content .panel-header-content a {
+	color: inherit;
 }
 
 .openlab-news-panel-content .panel-column-container a:hover {

@@ -493,13 +493,13 @@ function openlab_get_credits( $group_id ) {
 							}
 
 							return sprintf(
-								'<a href="%s">%s</a>',
+								'<li><a href="%s">%s</a></li>',
 								esc_attr( bp_members_get_user_url( $user->ID ) ),
 								esc_html( bp_core_get_user_displayname( $user->ID ) )
 							);
 
 						case 'non-member':
-							return esc_html( $creator['non-member-name'] );
+							return '<li>' . esc_html( $creator['non-member-name'] ) . '</li>';
 					}
 				},
 				$group_creators

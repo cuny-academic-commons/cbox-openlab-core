@@ -20,19 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function get_dashboard_panel_settings() {
 	$defaults = [
-		'allow_dismissal' => false,
-		'enabled'         => false,
-		'heading'         => '',
-		'tagline'         => '',
-		'panel_1_heading' => '',
-		'panel_1_text'    => '',
-		'panel_1_icon'    => 'check-circle',
-		'panel_2_heading' => '',
-		'panel_2_text'    => '',
-		'panel_2_icon'    => 'check-circle',
-		'panel_3_heading' => '',
-		'panel_3_text'    => '',
-		'panel_3_icon'    => 'check-circle',
+		'allow_dismissal'       => false,
+		'disable_welcome_panel' => false,
+		'enabled'               => false,
+		'heading'               => '',
+		'tagline'               => '',
+		'panel_1_heading'       => '',
+		'panel_1_text'          => '',
+		'panel_1_icon'          => 'check-circle',
+		'panel_2_heading'       => '',
+		'panel_2_text'          => '',
+		'panel_2_icon'          => 'check-circle',
+		'panel_3_heading'       => '',
+		'panel_3_text'          => '',
+		'panel_3_icon'          => 'check-circle',
 	];
 
 	$settings = get_site_option( 'cboxol_dashboard_panel_settings' );
@@ -116,7 +117,7 @@ function display() {
 	wp_add_inline_style(
 		'cboxol-dashboard-panel',
 		sprintf(
-			'.openlab-news-panel-content a { color: %s; }
+			'.openlab-news-panel-content .panel-dismiss { color: %s; }
 			.openlab-news-panel-content .panel-dismiss::before { color: %s; }',
 			esc_attr( $text_color ),
 			esc_attr( $text_color )
@@ -234,6 +235,52 @@ function is_panel_visible_for_user( $user_id = 0, $site_id = 0 ) {
 
 	return (bool) $panel_is_visible;
 }
+
+/**
+ * Implements the 'disable welcome panel' by filtering the 'show_welcome_panel' user meta value.
+ *
+ * Because WP does not have a purpose-built filter for this, and because
+ * WP does not even have a generic filter for user meta values, we have to
+ * use a trick: filter `get_user_metadata` - which is a short-circuit "pre"
+ * filter - and then query for the raw usermeta value for comparison.
+ *
+ * @since 1.8.0
+ *
+ * @param mixed  $retval    The value to return instead of the metadata value. Default null.
+ * @param int    $user_id   User ID.
+ * @param string $meta_key  Meta key.
+ * @param bool   $single    Whether to return a single value.
+ * @return mixed The user meta value, or the original $retval if the meta key is not 'show_welcome_panel' or if the setting is not enabled.
+ */
+function maybe_hide_welcome_panel( $retval, $user_id, $meta_key, $single ) {
+	global $wpdb;
+
+	if ( 'show_welcome_panel' !== $meta_key ) {
+		return $retval;
+	}
+
+	$dashboard_panel_settings = get_dashboard_panel_settings();
+	if ( ! $dashboard_panel_settings['disable_welcome_panel'] ) {
+		return $retval;
+	}
+
+	// Fetch directly to avoid recursion.
+	$option = $wpdb->get_var(
+		$wpdb->prepare(
+			"SELECT meta_value FROM $wpdb->usermeta WHERE user_id = %d AND meta_key = %s",
+			$user_id,
+			'show_welcome_panel'
+		)
+	);
+
+	if ( '1' === $option || '0' === $option ) {
+		return $option;
+	}
+
+	// Values of 2 or null indicate the user has not made a choice, so we hide the welcome panel for them.
+	return '0';
+}
+add_filter( 'get_user_metadata', __NAMESPACE__ . '\\maybe_hide_welcome_panel', 10, 4 );
 
 /**
  * Gets a dashboard panel SVG icon.

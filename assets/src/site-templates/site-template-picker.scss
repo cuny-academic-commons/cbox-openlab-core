@@ -6,17 +6,20 @@
 
 .site-template-component {
 	background: none;
-	border: none;
+	border: 3px solid transparent;
+	border-bottom: 2px solid #eee;
 	box-shadow: none;
 	text-align: left;
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	padding: 12px 0;
+	margin-bottom: 12px;
 
-	&:focus,
+	&:focus-within,
 	&.is-selected {
-		border: 3px solid #66afe9;
+		border: 3px solid #66afe9 !important;
 		box-shadow: none;
 	}
 
@@ -31,7 +34,31 @@
 		  background-color: #000;
 		  opacity: 0.02;
 		  z-index: 1;
+		  pointer-events: none;
 		}
+	}
+
+	&:last-child {
+		border-bottom: inherit;
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+}
+
+.site-template-component__button {
+	background: none;
+	border: none;
+	box-shadow: none;
+	color: #050505;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	margin-top: 2px;
+	padding: 0;
+	text-align: left;
+
+	&:focus {
+		outline: none;
 	}
 }
 
@@ -56,6 +83,45 @@
 .site-template-component__description {
 	margin-top: 10px;
 	line-height: 1.4;
+
+	a {
+		color: #0073aa;
+		text-decoration: underline;
+		position: relative;
+		z-index: 2;
+
+		&:hover,
+		&:focus {
+			color: #005177;
+			text-decoration: none;
+		}
+
+		&:focus {
+			outline: 2px solid #0073aa;
+			outline-offset: 2px;
+		}
+
+		.screen-reader-text {
+			border: 0;
+			clip: rect(1px, 1px, 1px, 1px);
+			clip-path: inset(50%);
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			width: 1px;
+			word-wrap: normal !important;
+		}
+	}
+}
+
+.site-template-new-window-icon {
+	color: #0073aa;
+	margin-left: 4px;
+	position: relative;
+	top: 1px;
+	vertical-align: baseline;
 }
 
 .site-template-component__meta {
@@ -73,13 +139,6 @@
 	opacity: 0.5;
 }
 
-.site-template-component__name {
-	color: #050505;
-	font-size: 16px;
-	font-weight: 600;
-	margin-top: 2px;
-}
-
 .site-template-pagination {
 	display: flex;
 	margin-top: 20px;
@@ -92,6 +151,10 @@
 @media (min-width: 768px) {
 	.site-template-picker {
 		grid-template-columns: repeat(2, minmax(150px, 1fr));
+	}
+
+	.site-template-component {
+		border-bottom: 3px solid transparent;
 	}
 }
 

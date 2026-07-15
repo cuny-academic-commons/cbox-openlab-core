@@ -109,20 +109,30 @@ function PostSharingChoice( { instanceId, value, label, info, ...props } ) {
 	);
 }
 
-const OpenlabPostVisibilityPlugin = () => {
-  const isSiteEditor = useSelect( ( select ) => {
-    const editSite = select( 'core/edit-site' );
-    return !!editSite;
-  }, [] );
+const templateEditorPostTypes = [ 'wp_template', 'wp_template_part' ]
 
-  return !isSiteEditor && <PostSharingOptions />;
-};
+const OpenlabPostVisibilityPlugin = () => {
+	const isPostEditor = useSelect( ( select ) => {
+		const editPost = select( 'core/edit-post' )
+		const editor = select( 'core/editor' )
+
+		if ( ! editPost || ! editor || ! editor.getCurrentPostType ) {
+			return false
+		}
+
+		const postType = editor.getCurrentPostType()
+
+		return !! postType && ! templateEditorPostTypes.includes( postType )
+	}, [] )
+
+	return isPostEditor ? <PostSharingOptions /> : null
+}
 
 const registerPostVisibility = () => {
-  registerPlugin( 'post-sharing-options', {
-    render: OpenlabPostVisibilityPlugin,
-    icon: 'visibility',
-  } );
-};
+	registerPlugin( 'post-sharing-options', {
+		render: OpenlabPostVisibilityPlugin,
+		icon: 'visibility',
+	} )
+}
 
 wp.domReady( registerPostVisibility );
