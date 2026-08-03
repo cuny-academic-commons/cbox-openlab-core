@@ -84,6 +84,10 @@ function cboxol_init() {
 		require CBOXOL_PLUGIN_DIR . 'plugins/pressforward.php';
 	}
 
+	if ( class_exists( 'GFForms' ) ) {
+		require CBOXOL_PLUGIN_DIR . 'plugins/gravityforms.php';
+	}
+
 	if ( cbox_is_main_site() ) {
 		require CBOXOL_PLUGIN_DIR . 'includes/network-toolbar-legacy.php';
 	} else {
