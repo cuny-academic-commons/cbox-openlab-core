@@ -822,7 +822,7 @@ HTML;
 		$wp_admin_bar->add_menu(
 			array(
 				'id'    => 'invites',
-				'title' => '<span class="toolbar-item-icon fa fa-user" aria-hidden="true"></span><span class="sr-only">Invitations and Friend Requests</span>' . $total_count,
+				'title' => '<span class="toolbar-item-icon fa fa-user" aria-hidden="true"></span><span class="sr-only">' . __( 'Invitations and Friend Requests', 'commons-in-a-box' ) . '</span>' . $total_count,
 				'meta'  => array(
 					'class' => 'hidden-xs',
 				),
@@ -838,7 +838,7 @@ HTML;
 			array(
 				'parent' => 'invites',
 				'id'     => 'friend-requests-title',
-				'title'  => 'Friend Requests',
+				'title'  => __( 'Friend Requests', 'commons-in-a-box' ),
 				'meta'   => array(
 					'class' => 'submenu-title bold',
 				),
